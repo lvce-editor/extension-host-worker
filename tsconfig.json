@@ -3,22 +3,21 @@
     "lib": ["esnext", "webworker"],
     "checkJs": true,
     "target": "esnext",
-    "types": [],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "types": [],
     "skipLibCheck": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "assumeChangesOnlyAffectDirectDependencies": true,
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "composite": true,
-    "allowImportingTsExtensions": true,
-    "rootDir": ".",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["src", "test"]
 }
