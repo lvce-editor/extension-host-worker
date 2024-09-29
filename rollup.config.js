@@ -12,6 +12,7 @@ const options = {
     propertyReadSideEffects: false,
   },
   output: {
+    inlineDynamicImports: true,
     file: 'dist/dist/extensionHostWorkerMain.js',
     format: 'es',
     freeze: false,

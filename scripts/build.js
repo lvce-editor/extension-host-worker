@@ -74,6 +74,3 @@ await cp(join(root, 'LICENSE'), join(dist, 'LICENSE'))
 await mkdir(join(root, 'dist', 'dist', 'api'), {
   recursive: true,
 })
-await cp(join(root, 'src', 'parts', 'Api', 'Api.ts'), join(root, 'dist', 'dist', 'api', 'api.d.ts'))
-
-await writeFile(join(root, 'dist', 'dist', 'api', 'api.js'), '')
