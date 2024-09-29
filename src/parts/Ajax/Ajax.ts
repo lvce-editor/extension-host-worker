@@ -1,9 +1,8 @@
-import * as LoadKy from '../LoadKy/LoadKy.ts'
+import ky from 'ky'
 import { VError } from '../VError/VError.ts'
 
 export const getText = async (url, options = {}) => {
   try {
-    const { default: ky } = await LoadKy.loadKy()
     return await ky(url, options).text()
   } catch (error) {
     if (error && error instanceof TypeError && error.message === 'Failed to fetch') {

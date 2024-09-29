@@ -1,11 +1,9 @@
-import * as AssetDir from '../AssetDir/AssetDir.ts'
+import ky from 'ky'
 
 /**
  *
  * @returns {Promise<any>}
  */
 export const loadKy = async () => {
-  const url = `${AssetDir.assetDir}/js/ky.js`
-  const module = await import(url)
-  return module
+  return ky
 }
