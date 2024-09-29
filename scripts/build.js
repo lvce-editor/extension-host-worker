@@ -63,6 +63,9 @@ delete packageJson.scripts
 delete packageJson.devDependencies
 delete packageJson.prettier
 delete packageJson.jest
+delete packageJson.xo
+delete packageJson.nodemonConfig
+delete packageJson.directories
 packageJson.version = version
 packageJson.main = 'dist/extensionHostWorkerMain.js'
 
