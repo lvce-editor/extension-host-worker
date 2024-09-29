@@ -1,7 +1,7 @@
 {
   "name": "@lvce-editor/extension-host-worker",
   "version": "0.0.0-dev",
-  "description": "",
+  "description": "Webworker for the extension host functionality in Lvce Editor.",
   "main": "src/extensionHostWorkerMain.ts",
   "type": "module",
   "directories": {
@@ -15,8 +15,10 @@
     "build:watch": "nodemon",
     "build": "node scripts/build.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "web-worker"
+  ],
+  "author": "Lvce Editor",
   "license": "MIT",
   "xo": {
     "rules": {
