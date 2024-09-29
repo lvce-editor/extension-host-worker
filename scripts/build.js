@@ -64,7 +64,7 @@ delete packageJson.devDependencies
 delete packageJson.prettier
 delete packageJson.jest
 packageJson.version = version
-packageJson.main = 'dist/testWorkerMain.js'
+packageJson.main = 'dist/extensionHostWorkerMain.js'
 
 await writeJson(join(dist, 'package.json'), packageJson)
 
