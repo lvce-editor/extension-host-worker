@@ -1,13 +1,12 @@
 import * as Assert from '../Assert/Assert.ts'
-import * as CreateRpcWithId from '../CreateRpcWithId/CreateRpcWithId.ts'
 import * as ExtensionHostSubWorkerUrl from '../ExtensionHostSubWorkerUrl/ExtensionHostSubWorkerUrl.ts'
 import * as ExtensionHostWorkerContentSecurityPolicy from '../ExtensionHostWorkerContentSecurityPolicy/ExtensionHostWorkerContentSecurityPolicy.ts'
+import * as GetOrCreateRpcWithId from '../GetOrCreateRpcWithId/GetOrCreateRpcWithId.ts'
 import * as IpcParent from '../IpcParent/IpcParent.ts'
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
 import * as RpcParent from '../RpcParent/RpcParent.ts'
 import * as RpcParentType from '../RpcParentType/RpcParentType.ts'
 import { VError } from '../VError/VError.ts'
-import * as GetOrCreateRpcWithId from '../GetOrCreateRpcWithId/GetOrCreateRpcWithId.ts'
 
 const defaultExecute = () => {
   throw new Error('not implemented')
