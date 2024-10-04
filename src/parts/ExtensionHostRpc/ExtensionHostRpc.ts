@@ -12,32 +12,38 @@ const defaultExecute = () => {
   throw new Error('not implemented')
 }
 
-export const createRpc = async ({ id, url, name, execute = defaultExecute, contentSecurityPolicy }) => {
+/**
+ *
+ * @deprecated
+ */
+const createLegacyRpc = async ({ url, name, execute = defaultExecute, contentSecurityPolicy }) => {
+  Assert.string(url)
+  Assert.string(name)
+  Assert.fn(execute)
+  if (contentSecurityPolicy) {
+    await ExtensionHostWorkerContentSecurityPolicy.set(url, contentSecurityPolicy)
+  }
+  const ipc = await IpcParent.create({
+    method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
+    url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
+    name,
+  })
+  const rpc = await RpcParent.create({
+    ipc,
+    method: RpcParentType.JsonRpc,
+    execute,
+  })
+  await rpc.invoke('LoadFile.loadFile', url)
+  return rpc
+}
+
+export const createRpc = ({ id, url, name, execute = defaultExecute, contentSecurityPolicy }) => {
   try {
     if (id) {
       Assert.string(id)
       return GetOrCreateRpcWithId.createRpcWithId({ id, execute })
     }
-
-    // deprecated
-    Assert.string(url)
-    Assert.string(name)
-    Assert.fn(execute)
-    if (contentSecurityPolicy) {
-      await ExtensionHostWorkerContentSecurityPolicy.set(url, contentSecurityPolicy)
-    }
-    const ipc = await IpcParent.create({
-      method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
-      url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
-      name,
-    })
-    const rpc = await RpcParent.create({
-      ipc,
-      method: RpcParentType.JsonRpc,
-      execute,
-    })
-    await rpc.invoke('LoadFile.loadFile', url)
-    return rpc
+    return createLegacyRpc({ url, name, execute, contentSecurityPolicy })
   } catch (error) {
     throw new VError(error, `Failed to create webworker rpc`)
   }
