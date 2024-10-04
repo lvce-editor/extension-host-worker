@@ -7,14 +7,8 @@ import * as RpcParent from '../RpcParent/RpcParent.ts'
 import * as RpcParentType from '../RpcParentType/RpcParentType.ts'
 import * as RpcState from '../RpcState/RpcState.ts'
 
-export const createRpcWithId = async ({ id, execute }: { id: string; execute: any }) => {
-  const getOrCreateIpc = () => {}
-  const lazyIpc = {
-    invoke(method, ...params) {
-      const rpc = rpcs[id]
-    },
-  }
-  Assert.string(id)
+const createRpc = async (id: string) => {
+  const fn = RpcState.acquire(id)
   const info = ExtensionHostRpcState.get(id)
   if (!info) {
     throw new Error(`rpc with id ${id} not found`)
@@ -24,11 +18,32 @@ export const createRpcWithId = async ({ id, execute }: { id: string; execute: an
     url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
     name: info.name,
   })
-  const rpc = await RpcParent.create({
+  const newRpc = await RpcParent.create({
     ipc,
     method: RpcParentType.JsonRpc,
-    execute,
+    execute: fn,
   })
-  await rpc.invoke('LoadFile.loadFile', info.url)
-  return rpc
+  await newRpc.invoke('LoadFile.loadFile', info.url)
+  RpcState.set(id, newRpc)
+  return newRpc
+}
+
+const getOrCreateRpc = async (id: string) => {
+  const rpc = RpcState.get(id)
+  if (!rpc) {
+    RpcState.set(id, createRpc(id))
+  }
+  return RpcState.get(id)
+}
+
+export const createRpcWithId = async ({ id, execute }: { id: string; execute: any }) => {
+  Assert.string(id)
+  RpcState.register(id, execute)
+  const lazyRpc = {
+    async invoke(method, ...params) {
+      const rpc = await getOrCreateRpc(id)
+      await rpc.invoke(method, ...params)
+    },
+  }
+  return lazyRpc
 }
