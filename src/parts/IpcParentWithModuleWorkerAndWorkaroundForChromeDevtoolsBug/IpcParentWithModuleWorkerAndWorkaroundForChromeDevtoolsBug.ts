@@ -7,7 +7,7 @@ export const create = async ({ url, name }) => {
   Assert.string(url)
   Assert.string(name)
   const { port1, port2 } = GetPortTuple.getPortTuple()
-  await Rpc.invokeAndTransfer([port1], 'IpcParent.create', {
+  await Rpc.invokeAndTransfer('IpcParent.create', {
     method: RendererWorkerIpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
     url,
     name,
