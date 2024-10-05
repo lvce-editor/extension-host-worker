@@ -1,11 +1,5 @@
 import * as ExtensionHostRpcState from '../ExtensionHostRpcState/ExtensionHostRpcState.ts'
-
-const getUrlPrefix = (extensionPath) => {
-  if (extensionPath.startsWith('http://') || extensionPath.startsWith('https://')) {
-    return extensionPath
-  }
-  return `/remote/${extensionPath}`
-}
+import * as GetUrlPrefix from '../GetUrlPrefix/GetUrlPrefix.ts'
 
 export const handleRpcInfos = (extension) => {
   try {
@@ -13,7 +7,7 @@ export const handleRpcInfos = (extension) => {
       return
     }
     const rpcs = extension.rpc
-    const urlPrefix = getUrlPrefix(extension.path)
+    const urlPrefix = GetUrlPrefix.getUrlPrefix(extension.path)
 
     if (!rpcs) {
       return
