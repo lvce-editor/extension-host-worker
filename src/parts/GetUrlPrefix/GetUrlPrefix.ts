@@ -9,5 +9,5 @@ export const getUrlPrefix = (extensionPath: string) => {
   if (Platform.platform === PlatformType.Web) {
     return `${AssetDir.assetDir}${extensionPath}`
   }
-  return `/remote/${extensionPath}`
+  return `/remote${extensionPath}`
 }
