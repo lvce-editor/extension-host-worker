@@ -8,5 +8,8 @@ export const getUrlPrefix = (extensionPath: string) => {
   if (Platform.platform === PlatformType.Web) {
     return extensionPath
   }
-  return `/remote${extensionPath}`
+  if (extensionPath.startsWith('/')) {
+    return `/remote${extensionPath}`
+  }
+  return `/remote/${extensionPath}`
 }
