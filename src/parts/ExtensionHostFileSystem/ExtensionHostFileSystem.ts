@@ -1,29 +1,17 @@
-import { VError } from '../VError/VError.ts'
+import * as FileSystemProviderState from '../FileSystemProviderState/FileSystemProviderState.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
-
-export const state = {
-  fileSystemProviderMap: Object.create(null),
-}
-
-const getFileSystemProvider = (protocol) => {
-  const provider = state.fileSystemProviderMap[protocol]
-  if (!provider) {
-    // @ts-ignore
-    throw new VError(`no file system provider for protocol "${protocol}" found`)
-  }
-  return provider
-}
+import { VError } from '../VError/VError.ts'
 
 export const registerFileSystemProvider = (fileSystemProvider) => {
   if (!fileSystemProvider.id) {
     throw new Error('Failed to register file system provider: missing id')
   }
-  state.fileSystemProviderMap[fileSystemProvider.id] = fileSystemProvider
+  FileSystemProviderState.set(fileSystemProvider.id, fileSystemProvider)
 }
 
 export const readDirWithFileTypes = async (protocol, path) => {
   try {
-    const provider = getFileSystemProvider(protocol)
+    const provider = FileSystemProviderState.get(protocol)
     return await provider.readDirWithFileTypes(path)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
@@ -32,7 +20,7 @@ export const readDirWithFileTypes = async (protocol, path) => {
 
 export const readFile = async (protocol, path) => {
   try {
-    const provider = getFileSystemProvider(protocol)
+    const provider = FileSystemProviderState.get(protocol)
     return await provider.readFile(path)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
@@ -52,7 +40,7 @@ export const readFileExternal = async (path) => {
 
 export const remove = async (protocol, path) => {
   try {
-    const provider = getFileSystemProvider(protocol)
+    const provider = FileSystemProviderState.get(protocol)
     return await provider.remove(path)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
@@ -61,7 +49,7 @@ export const remove = async (protocol, path) => {
 
 export const rename = async (protocol, oldUri, newUri) => {
   try {
-    const provider = getFileSystemProvider(protocol)
+    const provider = FileSystemProviderState.get(protocol)
     return await provider.rename(oldUri, newUri)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
@@ -70,7 +58,7 @@ export const rename = async (protocol, oldUri, newUri) => {
 
 export const writeFile = async (protocol, uri, content) => {
   try {
-    const provider = getFileSystemProvider(protocol)
+    const provider = FileSystemProviderState.get(protocol)
     return await provider.writeFile(uri, content)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
@@ -79,7 +67,7 @@ export const writeFile = async (protocol, uri, content) => {
 
 export const getPathSeparator = (protocol) => {
   try {
-    const provider = getFileSystemProvider(protocol)
+    const provider = FileSystemProviderState.get(protocol)
     return provider.pathSeparator
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
