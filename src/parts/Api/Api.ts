@@ -13,7 +13,6 @@ import * as ExtensionHostDialog from '../ExtensionHostDialog/ExtensionHostDialog
 import * as ExtensionHostEnv from '../ExtensionHostEnv/ExtensionHostEnv.ts'
 import * as ExtensionHostExec from '../ExtensionHostExec/ExtensionHostExec.ts'
 import * as ExtensionHostFileSystem from '../ExtensionHostFileSystem/ExtensionHostFileSystem.ts'
-import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ExtensionHostGetOffset from '../ExtensionHostGetOffset/ExtensionHostGetOffset.ts'
 import * as ExtensionHostGetPosition from '../ExtensionHostGetPosition/ExtensionHostGetPosition.ts'
@@ -31,9 +30,10 @@ import * as ExtensionHostTabCompletion from '../ExtensionHostTabCompletion/Exten
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHostTextSearch.ts'
 import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/ExtensionHostTypeDefinition.ts'
+import * as ExtensionHostUrl from '../ExtensionHostUrl/ExtensionHostUrl.ts'
+import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorker from '../ExtensionHostWorker/ExtensionHostWorker.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
-import * as ExtensionHostUrl from '../ExtensionHostUrl/ExtensionHostUrl.ts'
 import { FormattingError } from '../FormattingError/FormattingError.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 import { VError } from '../VError/VError.ts'
@@ -92,6 +92,7 @@ export const api = {
   // File System
   registerFileSystemProvider: ExtensionHostFileSystem.registerFileSystemProvider,
   readFile: ExtensionHostFileSystem.readFileExternal,
+  readDirWithFileType: ExtensionHostFileSystem.readDirWithFileTypes,
 
   // Formatting
   registerFormattingProvider: ExtensionHostFormatting.registerFormattingProvider,
