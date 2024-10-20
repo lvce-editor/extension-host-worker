@@ -1,8 +1,9 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 import * as ExtensionHostFileSystem from '../src/parts/ExtensionHostFileSystem/ExtensionHostFileSystem.ts'
+import * as FileSystemProviderState from '../src/parts/FileSystemProviderState/FileSystemProviderState.ts'
 
 beforeEach(() => {
-  ExtensionHostFileSystem.state.fileSystemProviderMap = Object.create(null)
+  FileSystemProviderState.clear()
 })
 
 test('registerFileSystemProvider - error - missing id', () => {
@@ -16,7 +17,7 @@ test('registerFileSystemProvider - error - missing id', () => {
           },
         ]
       },
-    }),
+    })
   ).toThrow(new Error('Failed to register file system provider: missing id'))
 })
 
@@ -48,7 +49,7 @@ test('readDirWithFileTypes - when file system provider throws error', async () =
     },
   })
   await expect(ExtensionHostFileSystem.readDirWithFileTypes('memfs', 'memfs://abc')).rejects.toThrow(
-    new Error('Failed to execute file system provider: x is not a function'),
+    new Error('Failed to execute file system provider: x is not a function')
   )
 })
 
@@ -70,7 +71,7 @@ test('readFile - when file system provider throws error', async () => {
     },
   })
   await expect(ExtensionHostFileSystem.readFile('memfs', 'memfs://abc.txt')).rejects.toThrow(
-    new Error('Failed to execute file system provider: x is not a function'),
+    new Error('Failed to execute file system provider: x is not a function')
   )
 })
 
@@ -92,7 +93,7 @@ test('remove - when file system provider throws error', async () => {
     },
   })
   await expect(ExtensionHostFileSystem.remove('memfs', 'memfs://abc.txt')).rejects.toThrow(
-    new Error('Failed to execute file system provider: x is not a function'),
+    new Error('Failed to execute file system provider: x is not a function')
   )
 })
 
@@ -114,13 +115,13 @@ test('rename - when file system provider throws error', async () => {
     },
   })
   await expect(ExtensionHostFileSystem.rename('memfs', 'memfs://abc.txt', 'memfs://def.txt')).rejects.toThrow(
-    new Error('Failed to execute file system provider: x is not a function'),
+    new Error('Failed to execute file system provider: x is not a function')
   )
 })
 
 test('rename - when file system provider is not registered', async () => {
   await expect(ExtensionHostFileSystem.rename('memfs', 'memfs://abc.txt', 'memfs://def.txt')).rejects.toThrow(
-    new Error('Failed to execute file system provider: no file system provider for protocol "memfs" found'),
+    new Error('Failed to execute file system provider: no file system provider for protocol "memfs" found')
   )
 })
 
