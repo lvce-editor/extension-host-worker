@@ -38,6 +38,17 @@ export const readFileExternal = async (path) => {
   return content
 }
 
+export const readDirWithFileTypesExternal = async (path) => {
+  // TODO when file is local,
+  // don't ask renderer worker
+  // instead read file directly from shared process
+  // this avoid parsing the potentially large message
+  // and improve performance by not blocking the renderer worker
+  // when reading / writing large files
+  const content = await Rpc.invoke('FileSystem.readDirWithFileTypes', path)
+  return content
+}
+
 export const remove = async (protocol, path) => {
   try {
     const provider = FileSystemProviderState.get(protocol)
