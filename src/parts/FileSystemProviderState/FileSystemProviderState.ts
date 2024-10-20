@@ -17,3 +17,9 @@ export const set = (id, provider) => {
   }
   fileSystemProviderMap[id] = provider
 }
+
+export const clear = () => {
+  for (const key in fileSystemProviderMap) {
+    delete fileSystemProviderMap[key]
+  }
+}
