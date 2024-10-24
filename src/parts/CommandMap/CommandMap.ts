@@ -27,6 +27,7 @@ import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebV
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
+import * as SaveState from '../SaveState/SaveState.ts'
 
 export const commandMap = {
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
@@ -45,6 +46,7 @@ export const commandMap = {
   ['ExtensionHostWebView.load']: ExtensionHostWebView.load,
   ['HandleBeforeUnload.handleBeforeUnload']: HandleBeforeUnload.handleBeforeUnload,
   ['HandleMessagePort.handleMessagePort']: HandleMessagePort.handleMessagePort,
+  ['SaveState.saveState']: SaveState.saveState,
   [ExtensionHostCommandType.BraceCompletionExecuteBraceCompletionProvider]: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
   [ExtensionHostCommandType.ClosingTagExecuteClosingTagProvider]: ExtensionHostClosingTag.executeClosingTagProvider,
   [ExtensionHostCommandType.CommandExecute]: ExtensionHostCommand.executeCommand,
