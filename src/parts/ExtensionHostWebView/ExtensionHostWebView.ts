@@ -54,9 +54,9 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
   ExtensionHostWebViewState.setWebView(providerId, rpc)
 }
 
-export const load = async (providerId) => {
+export const load = async (providerId, savedState) => {
   const rpc = ExtensionHostWebViewState.getWebView(providerId)
-  await rpc.provider.create(rpc, rpc.uri)
+  await rpc.provider.create(rpc, rpc.uri, savedState)
 }
 
 export const disposeWebView = (id) => {
