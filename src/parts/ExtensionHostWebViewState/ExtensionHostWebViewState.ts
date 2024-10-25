@@ -16,3 +16,7 @@ export const getWebView = (id) => {
 export const setWebView = (id, webView) => {
   webViews[id] = webView
 }
+
+export const getWebViews = () => {
+  return webViews
+}
