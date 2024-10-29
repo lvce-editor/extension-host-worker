@@ -31,8 +31,8 @@ import * as SaveState from '../SaveState/SaveState.ts'
 import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
 
 export const commandMap = {
-  'ExensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
-  'ExensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
+  'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
+  'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
