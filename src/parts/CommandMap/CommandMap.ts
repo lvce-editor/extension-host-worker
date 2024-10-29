@@ -28,8 +28,11 @@ import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHost
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
+import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
 
 export const commandMap = {
+  'ExensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
+  'ExensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
