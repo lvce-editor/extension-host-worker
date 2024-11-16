@@ -22,7 +22,7 @@ export const executeTextSearchProvider = async (scheme, query) => {
   try {
     const textSearchProvider = state.textSearchProviders[scheme]
     if (!textSearchProvider) {
-      throw new Error(`no text search provider for ${scheme} found`)
+      throw new Error(`No text search provider for ${scheme} found`)
     }
     const results = await textSearchProvider.provideTextSearchResults(query)
     return results
