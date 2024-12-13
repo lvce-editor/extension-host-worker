@@ -29,10 +29,16 @@ import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
 import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
+import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 
 export const commandMap = {
-  'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
+  'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
+  'IndexedDb.addHandle': IndexedDb.addHandle,
+  'IndexedDb.getHandle': IndexedDb.getHandle,
+  'IndexedDb.getValues': IndexedDb.getValues,
+  'IndexedDb.getValuesByIndexName': IndexedDb.getValuesByIndexName,
+  'IndexedDb.saveValue': IndexedDb.saveValue,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
