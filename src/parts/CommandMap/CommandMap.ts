@@ -16,6 +16,7 @@ import * as ExtensionHostImplementation from '../ExtensionHostImplementation/Ext
 import * as ExtensionHostMockExec from '../ExtensionHostMockExec/ExtensionHostMockExec.ts'
 import * as ExtensionHostMockRpc from '../ExtensionHostMockRpc/ExtensionHostMockRpc.ts'
 import * as ExtensionHostReference from '../ExtensionHostReference/ExtensionHostReference.ts'
+import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
 import * as ExtensionHostSelection from '../ExtensionHostSelection/ExtensionHostSelection.ts'
 import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
 import * as ExtensionHostStatusBar from '../ExtensionHostStatusBar/ExtensionHostStatusBar.ts'
@@ -27,18 +28,20 @@ import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebV
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
-import * as SaveState from '../SaveState/SaveState.ts'
-import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
+import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
+import * as SaveState from '../SaveState/SaveState.ts'
 
 export const commandMap = {
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'IndexedDb.addHandle': IndexedDb.addHandle,
+  'IndexedDb.get': IndexedDbKeyValueStorage.get,
   'IndexedDb.getHandle': IndexedDb.getHandle,
   'IndexedDb.getValues': IndexedDb.getValues,
   'IndexedDb.getValuesByIndexName': IndexedDb.getValuesByIndexName,
   'IndexedDb.saveValue': IndexedDb.saveValue,
+  'IndexedDb.set': IndexedDbKeyValueStorage.set,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
