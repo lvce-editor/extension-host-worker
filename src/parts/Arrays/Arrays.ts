@@ -18,18 +18,6 @@ export const push = <T>(array: T[], newItems: readonly T[]): void => {
   insertInto(array, array.length, newItems)
 }
 
-export const isLastIndex = <T>(array: readonly T[], index: number): boolean => {
-  return index === array.length - 1
-}
-
-export const lastIndex = <T>(array: readonly T[]): number => {
-  return array.length - 1
-}
-
-export const remove = <T>(array: readonly T[], index: number, deleteCount: number): readonly T[] => {
-  return array.toSpliced(index, deleteCount)
-}
-
 export const fromAsync = async (asyncIterable: any): Promise<any[]> => {
   const children: any[] = []
   for await (const value of asyncIterable) {
