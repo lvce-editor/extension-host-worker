@@ -31,6 +31,7 @@ import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
+import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch.ts'
 import * as SearchFileWithHtml from '../SearchFileWithHtml/SearchFileWithHtml.ts'
 import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
@@ -45,6 +46,7 @@ export const commandMap = {
   'IndexedDb.getValuesByIndexName': IndexedDb.getValuesByIndexName,
   'IndexedDb.saveValue': IndexedDb.saveValue,
   'IndexedDb.set': IndexedDbKeyValueStorage.set,
+  'SearchFileWithFetch.searchFileWithFetch': SearchFileWithFetch.searchFile,
   'SearchFileWithHtml.searchFileWithHtml': SearchFileWithHtml.searchFile,
   'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
   'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
