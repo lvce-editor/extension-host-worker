@@ -28,12 +28,13 @@ import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebV
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
-import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
-import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
+import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch.ts'
+import * as SearchFileWithHtml from '../SearchFileWithHtml/SearchFileWithHtml.ts'
 import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
+import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 
 export const commandMap = {
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
@@ -46,6 +47,7 @@ export const commandMap = {
   'IndexedDb.saveValue': IndexedDb.saveValue,
   'IndexedDb.set': IndexedDbKeyValueStorage.set,
   'SearchFileWithFetch.searchFileWithFetch': SearchFileWithFetch.searchFile,
+  'SearchFileWithHtml.searchFileWithHtml': SearchFileWithHtml.searchFile,
   'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
   'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
