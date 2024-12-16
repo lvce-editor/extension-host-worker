@@ -32,6 +32,7 @@ import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
+import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 
 export const commandMap = {
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
@@ -44,6 +45,7 @@ export const commandMap = {
   'IndexedDb.saveValue': IndexedDb.saveValue,
   'IndexedDb.set': IndexedDbKeyValueStorage.set,
   'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
+  'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
