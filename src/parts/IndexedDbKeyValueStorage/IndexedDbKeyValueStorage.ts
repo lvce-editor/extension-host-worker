@@ -10,7 +10,7 @@ interface State {
   cachedDb: IDBPDatabase | undefined
 }
 
-export const state: State = {
+const state: State = {
   databases: Object.create(null),
   dbVersion: 2,
   cachedDb: undefined,

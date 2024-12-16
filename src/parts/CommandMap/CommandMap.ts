@@ -31,6 +31,7 @@ import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
+import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 
 export const commandMap = {
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
@@ -42,6 +43,7 @@ export const commandMap = {
   'IndexedDb.getValuesByIndexName': IndexedDb.getValuesByIndexName,
   'IndexedDb.saveValue': IndexedDb.saveValue,
   'IndexedDb.set': IndexedDbKeyValueStorage.set,
+  'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
