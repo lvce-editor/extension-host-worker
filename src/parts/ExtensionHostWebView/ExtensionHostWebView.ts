@@ -1,3 +1,4 @@
+import * as Callback from '../Callback/Callback.ts'
 import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/ExtensionHostWebViewState.ts'
 import * as WaitForFirstMessage from '../WaitForFirstMessage/WaitForFirstMessage.ts'
 
@@ -24,12 +25,14 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
     if (provider && provider.commands && provider.commands[method]) {
       const fn = provider.commands[method]
       const result = await fn(...params)
-      if (id) {
+      if (id && method) {
         target.postMessage({
           jsonrpc: '2.0',
           id,
           result,
         })
+      } else if (id) {
+        Callback.resolve(id, data)
       }
     }
   }
@@ -40,13 +43,17 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
     provider,
     uid,
     origin,
-    invoke(method, ...params) {
+    async invoke(method, ...params) {
       // TODO return promise with result
+      const { id, promise } = Callback.registerPromise()
       port.postMessage({
         jsonrpc: '2.0',
+        id,
         method,
         params,
       })
+      const result = await promise
+      console.log({ result })
     },
   }
   // TODO allow creating multiple webviews per provider
