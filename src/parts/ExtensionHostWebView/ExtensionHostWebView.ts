@@ -1,4 +1,5 @@
 import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/ExtensionHostWebViewState.ts'
+import * as WaitForFirstMessage from '../WaitForFirstMessage/WaitForFirstMessage.ts'
 
 // TODO pass uuid to allow having multiple webviews open at the same time
 export const createWebView = async (providerId: string, port: MessagePort, uri: string, uid: number, origin: string) => {
@@ -10,9 +11,7 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
   // TODO cancel promise when webview is disposed before sending message
   // TODO handle case when webview doesn't send ready message
   // TODO handle error
-  const firstMessage = await new Promise((resolve) => {
-    port.onmessage = resolve
-  })
+  const firstMessage = await WaitForFirstMessage.waitForFirstMessage(port)
   // @ts-ignore
   if (firstMessage.data !== 'ready') {
     // TODO handle error
