@@ -1,1 +1,1 @@
-export { resolve } from '../JsonRpc/JsonRpc.ts'
+export { resolve, registerPromise } from '../JsonRpc/JsonRpc.ts'
