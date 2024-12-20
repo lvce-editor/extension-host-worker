@@ -22,6 +22,10 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
   const handlePortMessage = async (event) => {
     const { data, target } = event
     const { method, params, id } = data
+    if (id && !method) {
+      Callback.resolve(id, data)
+      return
+    }
     if (provider && provider.commands && provider.commands[method]) {
       const fn = provider.commands[method]
       const result = await fn(...params)
@@ -31,8 +35,6 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
           id,
           result,
         })
-      } else if (id) {
-        Callback.resolve(id, data)
       }
     }
   }
@@ -44,7 +46,6 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
     uid,
     origin,
     async invoke(method, ...params) {
-      // TODO return promise with result
       const { id, promise } = Callback.registerPromise()
       port.postMessage({
         jsonrpc: '2.0',
@@ -53,7 +54,10 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
         params,
       })
       const result = await promise
-      console.log({ result })
+      if (result.error) {
+        throw new Error(`Error: ${result.error.message}`)
+      }
+      return result.result
     },
   }
   // TODO allow creating multiple webviews per provider
