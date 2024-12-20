@@ -64,6 +64,7 @@ export const commandMap = {
   ['ExtensionHostWebView.create']: ExtensionHostWebView.createWebView,
   ['ExtensionHostWebView.dispose']: ExtensionHostWebView.disposeWebView,
   ['ExtensionHostWebView.load']: ExtensionHostWebView.load,
+  ['ExtensionHostWebView.getWebViewInfo']: ExtensionHostWebView.getWebViewInfo,
   ['HandleBeforeUnload.handleBeforeUnload']: HandleBeforeUnload.handleBeforeUnload,
   ['HandleMessagePort.handleMessagePort']: HandleMessagePort.handleMessagePort,
   ['SaveState.saveState']: SaveState.saveState,

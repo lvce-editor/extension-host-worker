@@ -77,3 +77,12 @@ export const disposeWebView = (id) => {
 export const registerWebViewProvider = (provider) => {
   ExtensionHostWebViewState.setProvider(provider.id, provider)
 }
+
+export const getWebViewInfo = (providerId: string) => {
+  const webView = ExtensionHostWebViewState.getWebView(providerId)
+  return {
+    uid: webView.uid,
+    origin: webView.origin,
+    uri: webView.uri,
+  }
+}
