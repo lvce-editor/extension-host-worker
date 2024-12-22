@@ -9,7 +9,13 @@ const getOutput = (error: any) => {
   return prefix
 }
 
-export const handleUnhandledRejection = (error: any) => {
-  const output = getOutput(error)
+export const handleUnhandledRejection = (event: PromiseRejectionEvent | any) => {
+  if (event instanceof PromiseRejectionEvent) {
+    event.preventDefault()
+    const output = getOutput(event.reason)
+    console.error(output)
+    return
+  }
+  const output = getOutput(event)
   console.error(output)
 }
