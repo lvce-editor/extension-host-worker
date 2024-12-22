@@ -8,7 +8,7 @@ beforeEach(() => {
 
 test('registerFileSystemProvider - error - missing id', () => {
   expect(() =>
-    ExtensionHostFileSystem.registerFileSystemProvider({
+    { ExtensionHostFileSystem.registerFileSystemProvider({
       async readDirWithFileTypes() {
         return [
           {
@@ -17,7 +17,7 @@ test('registerFileSystemProvider - error - missing id', () => {
           },
         ]
       },
-    })
+    }); }
   ).toThrow(new Error('Failed to register file system provider: missing id'))
 })
 

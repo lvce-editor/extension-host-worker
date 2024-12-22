@@ -1,6 +1,6 @@
 import { test, expect, jest } from '@jest/globals'
-import { getJson } from '../src/parts/GetJson/GetJson.ts'
 import { VError } from '@lvce-editor/verror'
+import { getJson } from '../src/parts/GetJson/GetJson.ts'
 
 test('getJson - should fetch and parse json successfully', async () => {
   const mockData = { test: 'data' }

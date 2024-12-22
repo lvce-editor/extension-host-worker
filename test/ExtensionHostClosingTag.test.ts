@@ -4,7 +4,7 @@ import * as TextDocument from '../src/parts/ExtensionHostTextDocument/ExtensionH
 
 test('registerClosingTagProvider - no argument provided', () => {
   // @ts-expect-error
-  expect(() => ExtensionHostClosingTag.registerClosingTagProvider()).toThrow(new Error("Cannot read properties of undefined (reading 'languageId')"))
+  expect(() => { ExtensionHostClosingTag.registerClosingTagProvider(); }).toThrow(new Error("Cannot read properties of undefined (reading 'languageId')"))
 })
 
 test('executeClosingTagProvider - when closing tag provider has no result', async () => {
