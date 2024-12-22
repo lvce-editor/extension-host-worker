@@ -1,13 +1,15 @@
-import * as HandleError from '../HandleError/HandleError.ts'
+import * as ProcessName from '../ProcessName/ProcessName.ts'
 
-/**
- * @param {PromiseRejectionEvent} event
- */
-export const handleUnhandledRejection = async (event) => {
-  try {
-    event.preventDefault()
-    await HandleError.handleError(event.reason)
-  } catch {
-    console.error(event.reason)
+const getOutput = (error: any) => {
+  const errorMessage = error && error.message ? error.message : String(error)
+  const prefix = `[${ProcessName.processName}] Unhandled Rejection: ${errorMessage}`
+  if (error && error.stack) {
+    return `${prefix}\n${error.stack}`
   }
+  return prefix
+}
+
+export const handleUnhandledRejection = (error: any) => {
+  const output = getOutput(error)
+  console.error(output)
 }
