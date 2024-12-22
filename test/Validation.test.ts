@@ -2,7 +2,7 @@ import { expect, test } from '@jest/globals'
 import * as Validation from '../src/parts/Validation/Validation.ts'
 
 test('validate - item must be of type object but is of type function', () => {
-  const item = () => {}
+  const item = (): void => {}
   const shape = {
     type: 'object',
   }
