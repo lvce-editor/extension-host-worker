@@ -1,7 +1,6 @@
 import * as Callback from '../Callback/Callback.ts'
 import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/ExtensionHostWebViewState.ts'
 import * as WaitForFirstMessage from '../WaitForFirstMessage/WaitForFirstMessage.ts'
-
 // TODO pass uuid to allow having multiple webviews open at the same time
 export const createWebView = async (providerId: string, port: MessagePort, uri: string, uid: number, origin: string) => {
   const provider = ExtensionHostWebViewState.getProvider(providerId)

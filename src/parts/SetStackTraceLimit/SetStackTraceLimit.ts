@@ -1,5 +1,5 @@
-export const setStackTraceLimit = (value) => {
-  if (Error.stackTraceLimit && Error.stackTraceLimit < value) {
-    Error.stackTraceLimit = value
+export const setStackTraceLimit = (errorConstructor: any, value: number): void => {
+  if (errorConstructor.stackTraceLimit && errorConstructor.stackTraceLimit < value) {
+    errorConstructor.stackTraceLimit = value
   }
 }
