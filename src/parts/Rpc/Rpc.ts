@@ -13,6 +13,11 @@ export const invoke = (method: string, ...params: any[]): Promise<any> => {
   return rpc.invoke(method, ...params)
 }
 
+export const send = (method: string, ...params: any[]): void => {
+  const rpc = state.rpc
+  return rpc.send(method, ...params)
+}
+
 export const invokeAndTransfer = (method: string, ...params: any[]): Promise<any> => {
   const rpc = state.rpc
   return rpc.invokeAndTransfer(method, ...params)
