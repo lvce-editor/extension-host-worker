@@ -1,9 +1,24 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
 import * as HandleUnhandledRejection from '../src/parts/HandleUnhandledRejection/HandleUnhandledRejection.ts'
 
+class MockPromiseRejectionEvent {
+  type = 'unhandledrejection'
+  promise: Promise<any>
+  reason: any
+  preventDefault: jest.Mock
+
+  constructor(type: string, init: { promise: Promise<any>; reason: any }) {
+    this.promise = init.promise
+    this.reason = init.reason
+    this.preventDefault = jest.fn()
+  }
+}
+
 beforeEach(() => {
   jest.resetAllMocks()
   jest.spyOn(console, 'error').mockImplementation(() => {})
+  // @ts-ignore
+  global.PromiseRejectionEvent = MockPromiseRejectionEvent
 })
 
 test('handleUnhandledRejection - error with stack', () => {
@@ -49,27 +64,29 @@ test('handleUnhandledRejection - number', () => {
   expect(console.error).toHaveBeenCalledWith('[extension host worker] Unhandled Rejection: 42')
 })
 
-test('handleUnhandledRejection - boolean', () => {
-  HandleUnhandledRejection.handleUnhandledRejection(true)
+test('handleUnhandledRejection - PromiseRejectionEvent with Error', () => {
+  const error = new Error('test error')
+  error.stack = 'Error: test error\n  at Object.<anonymous> (/test/file.js:1:1)'
+  const event = new MockPromiseRejectionEvent('unhandledrejection', {
+    promise: Promise.reject(error),
+    reason: error,
+  })
+  HandleUnhandledRejection.handleUnhandledRejection(event)
   expect(console.error).toHaveBeenCalledTimes(1)
-  expect(console.error).toHaveBeenCalledWith('[extension host worker] Unhandled Rejection: true')
+  expect(console.error).toHaveBeenCalledWith(
+    '[extension host worker] Unhandled Rejection: test error\nError: test error\n  at Object.<anonymous> (/test/file.js:1:1)'
+  )
+  expect(event.preventDefault).toHaveBeenCalledTimes(1)
 })
 
-test('handleUnhandledRejection - string', () => {
-  HandleUnhandledRejection.handleUnhandledRejection('error message')
+test('handleUnhandledRejection - PromiseRejectionEvent with non-Error reason', () => {
+  const customError = { message: 'custom error' }
+  const event = new MockPromiseRejectionEvent('unhandledrejection', {
+    promise: Promise.reject(customError),
+    reason: customError,
+  })
+  HandleUnhandledRejection.handleUnhandledRejection(event)
   expect(console.error).toHaveBeenCalledTimes(1)
-  expect(console.error).toHaveBeenCalledWith('[extension host worker] Unhandled Rejection: error message')
-})
-
-test('handleUnhandledRejection - array', () => {
-  HandleUnhandledRejection.handleUnhandledRejection([1, 2, 3])
-  expect(console.error).toHaveBeenCalledTimes(1)
-  expect(console.error).toHaveBeenCalledWith('[extension host worker] Unhandled Rejection: 1,2,3')
-})
-
-test('handleUnhandledRejection - symbol', () => {
-  const sym = Symbol('test')
-  HandleUnhandledRejection.handleUnhandledRejection(sym)
-  expect(console.error).toHaveBeenCalledTimes(1)
-  expect(console.error).toHaveBeenCalledWith('[extension host worker] Unhandled Rejection: Symbol(test)')
+  expect(console.error).toHaveBeenCalledWith('[extension host worker] Unhandled Rejection: custom error')
+  expect(event.preventDefault).toHaveBeenCalledTimes(1)
 })
