@@ -1,23 +1,23 @@
-import * as HandleIpc from '../HandleIpc/HandleIpc.ts'
-import * as IpcState from '../IpcState/IpcState.ts'
-import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
+import type { Rpc } from '@lvce-editor/rpc'
 
-export const send = (method, ...params) => {
-  const ipc = IpcState.get()
-  JsonRpc.send(ipc, method, ...params)
+interface State {
+  rpc: any
 }
 
-export const invoke = (method, ...params) => {
-  const ipc = IpcState.get()
-  return JsonRpc.invoke(ipc, method, ...params)
+const state: State = {
+  rpc: undefined,
 }
 
-export const invokeAndTransfer = (method, ...params) => {
-  const ipc = IpcState.get()
-  return JsonRpc.invokeAndTransfer(ipc, method, ...params)
+export const invoke = (method: string, ...params: any[]): Promise<any> => {
+  const rpc = state.rpc
+  return rpc.invoke(method, ...params)
 }
 
-export const listen = (ipc) => {
-  HandleIpc.handleIpc(ipc)
-  IpcState.set(ipc)
+export const invokeAndTransfer = (method: string, ...params: any[]): Promise<any> => {
+  const rpc = state.rpc
+  return rpc.invokeAndTransfer(method, ...params)
+}
+
+export const setRpc = (rpc: Rpc): void => {
+  state.rpc = rpc
 }

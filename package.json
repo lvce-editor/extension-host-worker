@@ -94,6 +94,7 @@
     "@lvce-editor/command": "^1.2.0",
     "@lvce-editor/ipc": "^12.2.0",
     "@lvce-editor/json-rpc": "^5.4.0",
+    "@lvce-editor/rpc": "^1.13.0",
     "@lvce-editor/verror": "^1.6.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-node-resolve": "^16.0.0",
