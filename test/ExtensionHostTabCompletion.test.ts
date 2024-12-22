@@ -18,7 +18,7 @@ test('registerTabCompletionProvider - no argument provided', () => {
     },
   ])
   // @ts-expect-error
-  expect(() => ExtensionHostTabCompletion.registerTabCompletionProvider()).toThrow(
+  expect(() => { ExtensionHostTabCompletion.registerTabCompletionProvider(); }).toThrow(
     new Error("Cannot read properties of undefined (reading 'languageId')"),
   )
 })

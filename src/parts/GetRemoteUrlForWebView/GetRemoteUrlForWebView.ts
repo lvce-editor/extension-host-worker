@@ -1,5 +1,5 @@
-import * as CreateWebViewIpc from '../CreateWebViewIpc/CreateWebViewIpc.ts'
 import type { GetRemoteUrlOptions } from '../ExtensionHostRemoteUrlOptions/ExtensionHostRemoteUrlOptions.ts'
+import * as CreateWebViewIpc from '../CreateWebViewIpc/CreateWebViewIpc.ts'
 import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/ExtensionHostWebViewState.ts'
 import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
 import * as Rpc from '../Rpc/Rpc.ts'

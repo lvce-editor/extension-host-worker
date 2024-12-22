@@ -1,7 +1,7 @@
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import { NoProviderFoundError } from '../NoProviderFoundError/NoProviderFoundError.ts'
-import { VError } from '../VError/VError.ts'
 import * as Validation from '../Validation/Validation.ts'
+import { VError } from '../VError/VError.ts'
 
 const RE_UPPERCASE_LETTER = /[A-Z]/g
 const RE_PROPERTY = /item\..*must be of type/
@@ -88,7 +88,7 @@ const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound
           // @ts-ignore
           throw new VError(`Failed to execute ${spacedOutName} provider: VError: ${camelCaseName}Provider.${methodName} is not a function`)
         }
-        const message = actualError.name === 'Error' ? `${actualError.message}` : `${actualError.name}: ${actualError.message}`
+        const message = actualError.name === 'Error' ? actualError.message : `${actualError.name}: ${actualError.message}`
         actualError.message = `Failed to execute ${spacedOutName} provider: ${message}`
       }
       throw actualError

@@ -1,6 +1,6 @@
 import { expect, jest, test } from '@jest/globals'
-import { getText } from '../src/parts/GetText/GetText.ts'
 import { VError } from '@lvce-editor/verror'
+import { getText } from '../src/parts/GetText/GetText.ts'
 
 test('getText fetches text from URL', async () => {
   const mockUrl = 'https://example.com/text'

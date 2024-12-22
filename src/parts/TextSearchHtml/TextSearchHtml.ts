@@ -1,9 +1,9 @@
-import { FileNotFoundError } from '../FileNotFoundError/FileNotFoundError.ts'
+import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import * as Assert from '../Assert/Assert.ts'
 import * as FileHandleType from '../FileHandleType/FileHandleType.ts'
+import { FileNotFoundError } from '../FileNotFoundError/FileNotFoundError.ts'
 import * as FileSystemHtml from '../FileSystemHtml/FileSystemHtml.ts'
 import * as GetDirectoryHandle from '../GetDirectoryHandle/GetDirectoryHandle.ts'
-import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import * as TextSearchInFile from '../TextSearchInFile/TextSearchInFile.ts'
 
 const textSearchRecursively = async (all: SearchResult[], parent: string, handle: FileSystemHandle, query: string): Promise<void> => {
