@@ -30,6 +30,7 @@ import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
+import * as LoadWebView from '../LoadWebView/LoadWebView.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
 import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch.ts'
 import * as SearchFileWithHtml from '../SearchFileWithHtml/SearchFileWithHtml.ts'
@@ -63,7 +64,7 @@ export const commandMap = {
   ['ExtensionHostDebug.stepOver']: ExtensionHostDebug.stepOver,
   ['ExtensionHostWebView.create']: ExtensionHostWebView.createWebView,
   ['ExtensionHostWebView.dispose']: ExtensionHostWebView.disposeWebView,
-  ['ExtensionHostWebView.load']: ExtensionHostWebView.load,
+  ['ExtensionHostWebView.load']: LoadWebView.loadWebView,
   ['ExtensionHostWebView.getWebViewInfo']: ExtensionHostWebView.getWebViewInfo,
   ['HandleBeforeUnload.handleBeforeUnload']: HandleBeforeUnload.handleBeforeUnload,
   ['HandleMessagePort.handleMessagePort']: HandleMessagePort.handleMessagePort,
