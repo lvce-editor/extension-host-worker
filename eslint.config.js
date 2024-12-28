@@ -56,6 +56,7 @@ export default tseslint.config(
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       '@typescript-eslint/no-implied-eval': 'off',
       '@typescript-eslint/no-dynamic-delete': 'off',
+      'no-empty': 'off',
     },
   },
   {
