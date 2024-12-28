@@ -59,6 +59,7 @@ export default tseslint.config(
       'no-empty': 'off',
       'no-useless-escape': 'off',
       '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
     },
   },
   {
