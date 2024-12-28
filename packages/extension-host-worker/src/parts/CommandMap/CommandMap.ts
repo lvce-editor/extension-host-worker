@@ -30,6 +30,7 @@ import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
+import * as LaunchIframeWorker from '../LaunchIframeWorker/LaunchIframeWorker.ts'
 import * as LoadWebView from '../LoadWebView/LoadWebView.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
 import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch.ts'
@@ -38,6 +39,7 @@ import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 
 export const commandMap = {
+  'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'IndexedDb.addHandle': IndexedDb.addHandle,
