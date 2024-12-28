@@ -5,9 +5,8 @@ import * as Rpc from '../Rpc/Rpc.ts'
 export const createWebViewIpc = async (webView: any): Promise<any> => {
   const { uid, origin } = webView
   const { port1, port2 } = GetPortTuple.getPortTuple()
-  const promise = new Promise((resolve) => {
-    port2.onmessage = resolve
-  })
+  const { resolve, promise } = Promise.withResolvers()
+  port2.onmessage = resolve
   const portType = 'test'
   await Rpc.invokeAndTransfer('WebView.setPort', uid, port1, origin, portType)
   const event = await promise
