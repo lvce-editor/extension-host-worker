@@ -1,3 +1,4 @@
+import { IpcParentWithMessagePort } from '@lvce-editor/ipc'
 import * as GetPortTuple from '../GetPortTuple/GetPortTuple.ts'
 import * as HandleIpc from '../HandleIpc/HandleIpc.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
@@ -5,15 +6,13 @@ import * as Rpc from '../Rpc/Rpc.ts'
 export const createWebViewIpc = async (webView: any): Promise<any> => {
   const { uid, origin } = webView
   const { port1, port2 } = GetPortTuple.getPortTuple()
-  const { resolve, promise } = Promise.withResolvers()
-  port2.onmessage = resolve
+  const readyPromse = IpcParentWithMessagePort.create({
+    messagePort: port2,
+    isMessagePortOpen: false,
+  })
   const portType = 'test'
   await Rpc.invokeAndTransfer('WebView.setPort', uid, port1, origin, portType)
-  const event = await promise
-  // @ts-ignore
-  if (event.data !== 'ready') {
-    throw new Error('unexpected first message')
-  }
+  await readyPromse
   const ipc = {
     addEventListener(type, listener) {
       const that = this
