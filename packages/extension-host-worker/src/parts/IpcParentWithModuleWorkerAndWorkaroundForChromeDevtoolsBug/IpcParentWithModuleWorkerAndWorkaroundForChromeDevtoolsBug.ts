@@ -13,7 +13,7 @@ const sendPort = async ({ url, name, port }: { url: string; name: string; port: 
   })
 }
 
-export const create = async ({ url, name }) => {
+export const create = async ({ url, name }: { url: string; name: string }): Promise<MessagePort> => {
   Assert.string(url)
   Assert.string(name)
   const port2 = IpcParentWithModuleWorkerAndWorkaroundForChromeDevtoolsBug.create({
@@ -21,45 +21,26 @@ export const create = async ({ url, name }) => {
     name,
     sendPort,
   })
+  // @ts-ignore
   return port2
 }
 
-export const wrap = (port) => {
+export const wrap = (port: MessagePort) => {
+  // @ts-ignore
+  const wrapped = IpcParentWithModuleWorkerAndWorkaroundForChromeDevtoolsBug.wrap(port)
   return {
-    port,
-    /**
-     * @type {any}
-     */
-    handleMessage: undefined,
-    get onmessage() {
-      return this.handleMessage
-    },
+    wrapped,
     set onmessage(listener) {
-      if (listener) {
+      this.wrapped.addEventListener('message', (event) => {
         // @ts-ignore
-        this.handleMessage = (event) => {
-          // TODO why are some events not instance of message event?
-          if (event instanceof MessageEvent) {
-            const message = event.data
-            // @ts-ignore
-            listener(message, event)
-          } else {
-            // @ts-ignore
-
-            listener(event)
-          }
-        }
-      } else {
-        // @ts-ignore
-        this.handleMessage = null
-      }
-      this.port.onmessage = this.handleMessage
+        listener(event.data)
+      })
     },
     send(message) {
-      this.port.postMessage(message)
+      this.wrapped.send(message)
     },
     sendAndTransfer(message, transfer) {
-      this.port.postMessage(message, transfer)
+      this.wrapped.sendAndTransfer(message, transfer)
     },
   }
 }
