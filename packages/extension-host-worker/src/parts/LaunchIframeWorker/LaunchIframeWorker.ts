@@ -8,7 +8,7 @@ export const launchIframeWorker = async () => {
   const configuredWorkerUrl = GetConfiguredIframeWorkerUrl.getConfiguredIframeWorkerUrl()
   const name = 'Iframe Worker'
   const id = Id.create()
-  let ipc = await IpcParent.create({
+  const ipc = await IpcParent.create({
     method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
     name,
     url: configuredWorkerUrl,
