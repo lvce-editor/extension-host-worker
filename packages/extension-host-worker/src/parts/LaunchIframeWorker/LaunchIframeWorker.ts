@@ -1,6 +1,6 @@
 import * as GetConfiguredIframeWorkerUrl from '../GetConfiguredIframeWorkerUrl/GetConfiguredIframeWorkerUrl.ts'
 import * as HandleIpc from '../HandleIpc/HandleIpc.ts'
-import * as Id from '../Id/Id.js'
+import * as Id from '../Id/Id.ts'
 import * as IpcParent from '../IpcParent/IpcParent.ts'
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
 
