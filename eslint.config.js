@@ -64,6 +64,7 @@ export default tseslint.config(
       '@typescript-eslint/only-throw-error': 'off',
       '@typescript-eslint/no-useless-constructor': 'off',
       '@typescript-eslint/no-redundant-type-constituents': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
     },
   },
   {
