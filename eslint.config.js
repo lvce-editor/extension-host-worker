@@ -46,8 +46,16 @@ export default tseslint.config(
       '@typescript-eslint/no-deprecated': 'off',
       '@typescript-eslint/no-unnecessary-condition': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
+
     },
   },
+  {
+    rules:{
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/restrict-plus-operands':'off'
+
+    }
+  }
   {
     plugins: {
       perfectionist,
