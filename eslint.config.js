@@ -60,6 +60,7 @@ export default tseslint.config(
       'no-useless-escape': 'off',
       '@typescript-eslint/unbound-method': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/only-throw-error': 'off',
     },
   },
   {
