@@ -16,7 +16,7 @@ export const set = async (key: string, value: any): Promise<void> => {
 export const get = async (key: string): Promise<any> => {
   try {
     const db = await GetDbMemoized.getDbMemoized()
-    const value = db.get(storeId, key)
+    const value = await db.get(storeId, key)
     return value
   } catch (error) {
     throw new VError(error, 'Failed to get value from indexed db')
