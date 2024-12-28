@@ -14,7 +14,21 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist', 'coverage', 'scripts', 'rollup.config.js', 'eslint.config.js', 'src/extensionHostWorkerMain.ts'],
+    ignores: [
+      '**/build/**',
+      '**/coverage/**',
+      '**/server/**',
+      '**/e2e/**',
+      '**/memory/**',
+      '**/test-integration/**',
+      '**/test-integration-util/**',
+      'dist',
+      'coverage',
+      'scripts',
+      'rollup.config.js',
+      'eslint.config.js',
+      'src/extensionHostWorkerMain.ts',
+    ],
   },
   {
     ignores: [
