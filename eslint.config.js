@@ -27,7 +27,7 @@ export default tseslint.config(
       'scripts',
       'rollup.config.js',
       'eslint.config.js',
-      'src/extensionHostWorkerMain.ts',
+      'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
     ],
   },
   {
