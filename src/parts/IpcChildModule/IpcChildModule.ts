@@ -1,4 +1,3 @@
-// @ts-ignore
 import { IpcChildWithModuleWorker, IpcChildWithModuleWorkerAndMessagePort, IpcChildWithMessagePort } from '@lvce-editor/ipc'
 import * as IpcChildType from '../IpcChildType/IpcChildType.ts'
 
