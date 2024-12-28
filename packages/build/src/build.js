@@ -1,11 +1,10 @@
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
-import path, { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { execa } from 'execa'
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { bundleJs } from './bundleJs.js'
+import { root } from './root.js'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const root = path.join(__dirname, '..')
-const dist = join(root, 'dist')
+const dist = join(root, '.tmp', 'dist')
 
 const readJson = async (path) => {
   const content = await readFile(path, 'utf8')
@@ -53,19 +52,19 @@ const getVersion = async () => {
 await rm(dist, { recursive: true, force: true })
 await mkdir(dist, { recursive: true })
 
-await execa(`npx`, ['rollup', '-c'])
+await bundleJs()
 
 const version = await getVersion()
 
-const packageJson = await readJson(join(root, 'package.json'))
+const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
 
 delete packageJson.scripts
 delete packageJson.devDependencies
 delete packageJson.prettier
 delete packageJson.jest
 delete packageJson.xo
-delete packageJson.nodemonConfig
 delete packageJson.directories
+delete packageJson.nodemonConfig
 packageJson.version = version
 packageJson.main = 'dist/extensionHostWorkerMain.js'
 
