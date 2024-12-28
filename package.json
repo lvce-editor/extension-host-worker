@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "test": "lerna run test",
     "type-check": "tsc -b",
-    "build:watch": "./packages/build/node_modules/.bin/esbuild --format=esm --bundle --watch packages/extension-host-worker/src/extensionHostWorkerMain.ts --outfile=.tmp/dist/dist/extensionHostWorkerMain.js",
+    "build:watch": "./packages/build/node_modules/.bin/esbuild --external:node:buffer --external:electron --external:ws --external:node:worker_threads --format=esm --bundle --watch packages/extension-host-worker/src/extensionHostWorkerMain.ts --outfile=.tmp/dist/dist/extensionHostWorkerMain.js",
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
     "dev": "node packages/build/src/dev.js",
