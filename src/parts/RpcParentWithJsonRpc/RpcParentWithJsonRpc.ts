@@ -26,5 +26,8 @@ export const create = ({ ipc, execute }) => {
     invoke(method, ...params) {
       return JsonRpc.invoke(this.ipc, method, ...params)
     },
+    invokeAndTransfer(method, ...params) {
+      return JsonRpc.invokeAndTransfer(this.ipc, method, ...params)
+    },
   }
 }

@@ -32,13 +32,14 @@ export const loadWebView = async (providerId, savedState) => {
     console.log({ rpc })
     // TODO
     // await workerRpc.invoke('WebView.setPort', )
+    await workerRpc.invokeAndTransfer('WebView.handlePort', id, port1)
+
     await workerRpc.invoke('WebView.create', {
       webViewId: rpc.webView.id,
       uri: rpc.uri,
       id,
       savedState: {},
     })
-    await workerRpc.invokeAndTransfer('WebView.handlePort', id, port1)
 
     console.log({ workerRpc })
   }

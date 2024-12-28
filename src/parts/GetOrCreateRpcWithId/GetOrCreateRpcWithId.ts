@@ -18,6 +18,10 @@ export const createRpcWithId = ({ id, execute }: { id: string; execute: any }) =
       const rpc = await getOrCreateRpc(id)
       return rpc.invoke(method, ...params)
     },
+    async invokeAndTransfer(method, ...params) {
+      const rpc = await getOrCreateRpc(id)
+      return rpc.invokeAndTransfer(method, ...params)
+    },
   }
   return lazyRpc
 }
