@@ -57,6 +57,8 @@ export default tseslint.config(
       '@typescript-eslint/no-implied-eval': 'off',
       '@typescript-eslint/no-dynamic-delete': 'off',
       'no-empty': 'off',
+      'no-useless-escape': 'off',
+      '@typescript-eslint/unbound-method': 'off',
     },
   },
   {
