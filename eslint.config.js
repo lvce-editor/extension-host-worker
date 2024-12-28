@@ -19,6 +19,7 @@ export default tseslint.config(
       '**/coverage/**',
       '**/server/**',
       '**/e2e/**',
+      '**/.tmp/**',
       '**/memory/**',
       '**/test-integration/**',
       '**/test-integration-util/**',
