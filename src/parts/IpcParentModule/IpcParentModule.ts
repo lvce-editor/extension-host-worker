@@ -2,8 +2,6 @@ import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
 
 export const getModule = (method) => {
   switch (method) {
-    case IpcParentType.WebSocket:
-      return import('../IpcParentWithWebSocket/IpcParentWithWebSocket.ts')
     case IpcParentType.ElectronMessagePort:
       return import('../IpcParentWithNode/IpcParentWithNode.ts')
     case IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug:
