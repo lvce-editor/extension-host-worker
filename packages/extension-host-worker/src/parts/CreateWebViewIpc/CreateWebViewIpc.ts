@@ -13,23 +13,7 @@ export const createWebViewIpc = async (webView: any): Promise<any> => {
   const portType = 'test'
   await Rpc.invokeAndTransfer('WebView.setPort', uid, port1, origin, portType)
   await readyPromse
-  const ipc = {
-    addEventListener(type, listener) {
-      const that = this
-      const wrapped = (event) => {
-        const actualEvent = {
-          target: that,
-          data: event.data,
-        }
-        listener(actualEvent)
-      }
-      port2.addEventListener(type, wrapped)
-    },
-    dispose() {},
-    send(message) {
-      port2.postMessage(message)
-    },
-  }
+  const ipc = IpcParentWithMessagePort.wrap(port2)
   // TODO maybe don't send a message port only to get object url?
   // TODO dispose ipc to avoid memory leak
   HandleIpc.handleIpc(ipc)
