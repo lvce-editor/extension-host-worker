@@ -31,23 +31,6 @@ export default tseslint.config(
     ],
   },
   {
-    ignores: [
-      'dist',
-      '.tmp',
-      '**/build/**',
-      '**/coverage/**',
-      '**/server/**',
-      '**/e2e/**',
-      '**/memory/**',
-      '**/test-integration/**',
-      '**/test-integration-util/**',
-      'scripts',
-      'rollup.config.js',
-      'eslint.config.js',
-      'packages/iframe-worker/src/iframeWorkerMain.ts',
-    ],
-  },
-  {
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
