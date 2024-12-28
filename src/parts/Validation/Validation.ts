@@ -1,4 +1,4 @@
-const getType = (value) => {
+const getType = (value): string => {
   switch (typeof value) {
     case 'number':
       return 'number'
@@ -23,7 +23,7 @@ const getType = (value) => {
   }
 }
 
-const validateResultObject = (result, resultShape) => {
+const validateResultObject = (result, resultShape): string | undefined => {
   if (!resultShape.properties) {
     return undefined
   }
@@ -38,7 +38,7 @@ const validateResultObject = (result, resultShape) => {
   return undefined
 }
 
-const validateResultArray = (result, resultShape) => {
+const validateResultArray = (result, resultShape): string | undefined => {
   for (const item of result) {
     const actualType = getType(item)
     const expectedType = resultShape.items.type
@@ -49,22 +49,22 @@ const validateResultArray = (result, resultShape) => {
   return undefined
 }
 
-const getPreviewObject = (item) => {
+const getPreviewObject = (item): string => {
   return 'object'
 }
 
-const getPreviewArray = (item) => {
+const getPreviewArray = (item): string => {
   if (item.length === 0) {
     return '[]'
   }
   return 'array'
 }
 
-const getPreviewString = (item) => {
+const getPreviewString = (item): string => {
   return `"${item}"`
 }
 
-const getPreview = (item) => {
+const getPreview = (item): string => {
   const type = getType(item)
   switch (type) {
     case 'object':
@@ -78,7 +78,7 @@ const getPreview = (item) => {
   }
 }
 
-export const validate = (item, schema) => {
+export const validate = (item, schema): string | undefined => {
   const actualType = getType(item)
   const expectedType = schema.type
   if (actualType !== expectedType) {

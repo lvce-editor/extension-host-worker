@@ -3,7 +3,7 @@ import { VError } from '../VError/VError.ts'
 
 export const create = async ({ method, ...options }) => {
   try {
-    const module = await IpcParentModule.getModule(method)
+    const module = IpcParentModule.getModule(method)
     // @ts-ignore
     const rawIpc = await module.create(options)
     // @ts-ignore

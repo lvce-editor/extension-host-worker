@@ -7,24 +7,24 @@ beforeEach(() => {
 
 test('registerTextSearchProvider - no argument provided', () => {
   // @ts-expect-error
-  expect(() => ExtensionHostTextSearch.registerTextSearchProvider()).toThrow(
+  expect(() => { ExtensionHostTextSearch.registerTextSearchProvider(); }).toThrow(
     new Error('Failed to register text search provider: textSearchProvider is not defined')
   )
 })
 
 test('registerTextSearchProvider - missing scheme', () => {
   expect(() =>
-    ExtensionHostTextSearch.registerTextSearchProvider({
+    { ExtensionHostTextSearch.registerTextSearchProvider({
       provideTextSearchResults(query) {},
-    })
+    }); }
   ).toThrow(new Error('Failed to register text search provider: textSearchProvider is missing scheme'))
 })
 
 test('registerTextSearchProvider - missing provideTextSearchResults function', () => {
   expect(() =>
-    ExtensionHostTextSearch.registerTextSearchProvider({
+    { ExtensionHostTextSearch.registerTextSearchProvider({
       provideTextSearchResults(query) {},
-    })
+    }); }
   ).toThrow(new Error('Failed to register text search provider: textSearchProvider is missing scheme'))
 })
 

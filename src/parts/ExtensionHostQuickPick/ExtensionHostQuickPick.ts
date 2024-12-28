@@ -1,5 +1,5 @@
-import * as Rpc from '../Rpc/Rpc.ts'
 import * as RendererWorkerCommandType from '../RendererWorkerCommandType/RendererWorkerCommandType.ts'
+import * as Rpc from '../Rpc/Rpc.ts'
 
 export const showQuickPick = async ({ getPicks, toPick }) => {
   const rawPicks = await getPicks()

@@ -1,17 +1,19 @@
-import * as PlatformType from '../PlatformType/PlatformType.ts'
+import * as IpcParentWithElectronMessagePort from '../IpcParentWithElectronMessagePort/IpcParentWithElectronMessagePort.ts'
+import * as IpcParentWithWebSocket from '../IpcParentWithWebSocket/IpcParentWithWebSocket.ts'
 import * as Platform from '../Platform/Platform.ts'
+import * as PlatformType from '../PlatformType/PlatformType.ts'
 
-const getModule = async () => {
+const getModule = () => {
   switch (Platform.platform) {
     case PlatformType.Remote:
-      return import('../IpcParentWithWebSocket/IpcParentWithWebSocket.ts')
+      return IpcParentWithWebSocket
     default:
-      return import('../IpcParentWithElectronMessagePort/IpcParentWithElectronMessagePort.ts')
+      return IpcParentWithElectronMessagePort
   }
 }
 
 export const create = async ({ type, raw }) => {
-  const module = await getModule()
+  const module = getModule()
   const rawIpc = await module.create({ type })
   if (raw) {
     return rawIpc
