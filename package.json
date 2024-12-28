@@ -8,10 +8,15 @@
     "test": "test"
   },
   "scripts": {
+    "postinstall": "lerna bootstrap --ci",
     "lint": "eslint .",
     "test": "lerna run test",
     "type-check": "tsc -b",
-    "build": "node packages/build/src/build.js"
+    "build:watch": "./packages/build/node_modules/.bin/esbuild --format=esm --bundle --watch packages/about-view/src/aboutWorkerMain.ts --outfile=.tmp/dist/dist/aboutWorkerMain.js",
+    "build": "node packages/build/src/build.js",
+    "build:static": "node packages/build/src/build-static.js",
+    "dev": "node packages/build/src/dev.js",
+    "measure": "cd packages/memory && npm run measure"
   },
   "author": "Lvce Editor",
   "license": "MIT",
