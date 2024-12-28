@@ -52,6 +52,8 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/restrict-plus-operands': 'off',
+      '@typescript-eslint/await-thenable': 'off',
+      '@typescript-eslint/prefer-promise-reject-errors': 'off',
     },
   },
   {
