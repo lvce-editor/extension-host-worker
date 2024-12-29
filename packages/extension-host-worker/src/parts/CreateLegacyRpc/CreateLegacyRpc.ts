@@ -8,7 +8,7 @@ import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
  *
  * @deprecated
  */
-export const createLegacyRpc = async ({ url, name, commandMap = {}, contentSecurityPolicy }) => {
+export const createLegacyRpc = async ({ url, name, execute, commandMap = {}, contentSecurityPolicy }) => {
   Assert.string(url)
   Assert.string(name)
   Assert.object(commandMap)
@@ -21,6 +21,11 @@ export const createLegacyRpc = async ({ url, name, commandMap = {}, contentSecur
     name,
     commandMap,
   })
+  if (execute) {
+    // deprecated
+    // @ts-ignore
+    rpc.ipc.execute = execute
+  }
   await rpc.invoke('LoadFile.loadFile', url)
   return rpc
 }
