@@ -4,7 +4,7 @@ import * as IpcParent from '../IpcParent/IpcParent.ts'
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
 import * as RpcState from '../RpcState/RpcState.ts'
 
-export const createRpcWithId = async (id: string, commandMap: any) => {
+export const createRpcWithId = async (id: string, commandMap: any, execute?: any) => {
   const info = ExtensionHostRpcInfos.get(id)
   if (!info) {
     throw new Error(`rpc with id ${id} not found`)
@@ -14,7 +14,12 @@ export const createRpcWithId = async (id: string, commandMap: any) => {
     url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
     name: info.name,
     commandMap,
+    isMessagePortOpen: true,
   })
+  if (execute) {
+    // @ts-ignore
+    rpc.ipc.execute = execute
+  }
   await rpc.invoke('LoadFile.loadFile', info.url)
   RpcState.set(id, rpc)
   return rpc
