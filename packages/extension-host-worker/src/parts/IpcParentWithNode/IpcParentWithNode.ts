@@ -3,8 +3,8 @@ import * as IpcParentWithWebSocket from '../IpcParentWithWebSocket/IpcParentWith
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 
-const getModule = () => {
-  switch (Platform.platform) {
+const getModule = (platform: string) => {
+  switch (platform) {
     case PlatformType.Remote:
       return IpcParentWithWebSocket
     default:
@@ -13,7 +13,7 @@ const getModule = () => {
 }
 
 export const create = async ({ type, raw }) => {
-  const module = getModule()
+  const module = getModule(Platform.platform)
   const rpc = await module.create({ type })
   return rpc
 }

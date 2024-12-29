@@ -3,8 +3,7 @@
   "version": "0.0.0-dev",
   "type": "module",
   "scripts": {
-    "measure": "echo ok",
-    "#measure": "node --experimental-strip-types src/measureMemory.ts",
+    "measure": "node --experimental-strip-types src/measureMemory.ts",
     "measure:visible": "node --experimental-strip-types src/measureMemory.ts --no-headless"
   },
   "devDependencies": {

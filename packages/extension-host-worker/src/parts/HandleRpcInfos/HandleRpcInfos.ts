@@ -1,5 +1,6 @@
 import * as ExtensionHostRpcState from '../ExtensionHostRpcState/ExtensionHostRpcState.ts'
 import * as GetUrlPrefix from '../GetUrlPrefix/GetUrlPrefix.ts'
+import * as Platform from '../Platform/Platform.ts'
 
 export const handleRpcInfos = (extension) => {
   try {
@@ -7,7 +8,7 @@ export const handleRpcInfos = (extension) => {
       return
     }
     const rpcs = extension.rpc
-    const urlPrefix = GetUrlPrefix.getUrlPrefix(extension.path)
+    const urlPrefix = GetUrlPrefix.getUrlPrefix(Platform.platform, extension.path)
 
     if (!rpcs) {
       return

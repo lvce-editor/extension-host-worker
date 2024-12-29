@@ -1,11 +1,10 @@
-import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 
-export const getUrlPrefix = (extensionPath: string) => {
+export const getUrlPrefix = (platform: string, extensionPath: string) => {
   if (extensionPath.startsWith('http://') || extensionPath.startsWith('https://')) {
     return extensionPath
   }
-  if (Platform.platform === PlatformType.Web) {
+  if (platform === PlatformType.Web) {
     return extensionPath
   }
   if (extensionPath.startsWith('/')) {
