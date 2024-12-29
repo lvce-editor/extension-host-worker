@@ -6,8 +6,8 @@ beforeEach(() => {
 })
 
 test('registerCommand - no argument provided', () => {
-  // @ts-ignore
   expect(() => {
+    // @ts-ignore
     ExtensionHostCommand.registerCommand()
   }).toThrow(new Error('Failed to register command: command is not defined'))
 })
