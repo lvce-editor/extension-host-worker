@@ -27,7 +27,7 @@ test('handleUnhandledRejection - error with stack', () => {
   HandleUnhandledRejection.handleUnhandledRejection(error)
   expect(console.error).toHaveBeenCalledTimes(1)
   expect(console.error).toHaveBeenCalledWith(
-    '[extension host worker] Unhandled Rejection: test error\nError: test error\n  at Object.<anonymous> (/test/file.js:1:1)'
+    '[extension host worker] Unhandled Rejection: test error\nError: test error\n  at Object.<anonymous> (/test/file.js:1:1)',
   )
 })
 
@@ -74,7 +74,7 @@ test('handleUnhandledRejection - PromiseRejectionEvent with Error', () => {
   HandleUnhandledRejection.handleUnhandledRejection(event)
   expect(console.error).toHaveBeenCalledTimes(1)
   expect(console.error).toHaveBeenCalledWith(
-    '[extension host worker] Unhandled Rejection: test error\nError: test error\n  at Object.<anonymous> (/test/file.js:1:1)'
+    '[extension host worker] Unhandled Rejection: test error\nError: test error\n  at Object.<anonymous> (/test/file.js:1:1)',
   )
   expect(event.preventDefault).toHaveBeenCalledTimes(1)
 })

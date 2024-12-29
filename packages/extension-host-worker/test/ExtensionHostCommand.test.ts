@@ -6,24 +6,26 @@ beforeEach(() => {
 })
 
 test('registerCommand - no argument provided', () => {
-  // @ts-ignore
-  expect(() => { ExtensionHostCommand.registerCommand(); }).toThrow(new Error('Failed to register command: command is not defined'))
+  expect(() => {
+    // @ts-ignore
+    ExtensionHostCommand.registerCommand()
+  }).toThrow(new Error('Failed to register command: command is not defined'))
 })
 
 test('registerCommand - missing id', () => {
-  expect(() =>
-    { ExtensionHostCommand.registerCommand({
+  expect(() => {
+    ExtensionHostCommand.registerCommand({
       execute() {},
-    }); },
-  ).toThrow(new Error('Failed to register command: command is missing id'))
+    })
+  }).toThrow(new Error('Failed to register command: command is missing id'))
 })
 
 test('registerCommand - missing execute function', () => {
-  expect(() =>
-    { ExtensionHostCommand.registerCommand({
+  expect(() => {
+    ExtensionHostCommand.registerCommand({
       id: 'test',
-    }); },
-  ).toThrow(new Error('Failed to register command test: command is missing execute function'))
+    })
+  }).toThrow(new Error('Failed to register command test: command is missing execute function'))
 })
 
 test('executeCommand - not found', async () => {

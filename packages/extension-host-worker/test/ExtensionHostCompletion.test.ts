@@ -3,8 +3,10 @@ import * as ExtensionHostCompletion from '../src/parts/ExtensionHostCompletion/E
 import * as TextDocument from '../src/parts/ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 
 test('registerCompletionProvider - no argument provided', () => {
-  // @ts-ignore
-  expect(() => { ExtensionHostCompletion.registerCompletionProvider(); }).toThrow(new Error("Cannot read properties of undefined (reading 'languageId')"))
+  expect(() => {
+    // @ts-ignore
+    ExtensionHostCompletion.registerCompletionProvider()
+  }).toThrow(new Error("Cannot read properties of undefined (reading 'languageId')"))
 })
 
 test('executeCompletionProvider - when completion provider has no result', async () => {
