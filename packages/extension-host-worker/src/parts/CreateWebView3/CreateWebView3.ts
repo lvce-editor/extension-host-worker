@@ -6,12 +6,14 @@ export const createWebView3 = async ({
   isGitpod,
   platform,
   assetDir,
+  webViewScheme,
 }: {
   id: number
   uri: string
   isGitpod: boolean
   platform: number
   assetDir: string
+  webViewScheme: string
 }): Promise<void> => {
   await IframeWorker.invoke('WebView.create3', {
     id,
