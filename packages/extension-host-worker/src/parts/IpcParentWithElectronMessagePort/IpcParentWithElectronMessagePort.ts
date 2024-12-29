@@ -5,7 +5,7 @@ const getPort = async (type) => {
   const { port1, port2 } = GetPortTuple.getPortTuple()
   await SendMessagePortToElectron.sendMessagePortToElectron(
     port1,
-    'HandleMessagePortForExtensionHostHelperProcess.handleMessagePortForExtensionHostHelperProcess',
+    'HandleMessagePortForExtensionHostHelperProcess.handleMessagePortForExtensionHostHelperProcess'
   )
   return port2
 }
