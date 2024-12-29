@@ -42,6 +42,9 @@ export const registerWebViewProvider = (provider) => {
 
 export const getWebViewInfo = (providerId: string) => {
   const webView = ExtensionHostWebViewState.getWebView(providerId)
+  if (!webView) {
+    throw new Error(`Webview not found: ${providerId}`)
+  }
   return {
     uid: webView.uid,
     origin: webView.origin,
