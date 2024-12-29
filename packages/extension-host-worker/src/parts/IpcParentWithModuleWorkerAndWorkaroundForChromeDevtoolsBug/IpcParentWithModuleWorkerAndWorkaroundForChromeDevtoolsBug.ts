@@ -23,6 +23,8 @@ export const create = async ({ url, name, commandMap }: { url: string; name: str
     isMessagePortOpen: true,
     commandMap,
   })
+  // TODO rpc module should start port
+  port2.start()
   await sendPort({ url, name, port: port1 })
   const rpc = await rpcPromise
   return rpc
