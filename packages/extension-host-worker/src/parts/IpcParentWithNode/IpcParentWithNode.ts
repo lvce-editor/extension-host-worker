@@ -14,6 +14,16 @@ const getModule = () => {
 
 export const create = async ({ type, raw }) => {
   const module = getModule()
-  const rpc = await module.create({ type })
-  return rpc
+  const rawIpc = await module.create({ type })
+  if (raw) {
+    return rawIpc
+  }
+  return {
+    module,
+    rawIpc,
+  }
+}
+
+export const wrap = ({ module, rawIpc }) => {
+  return module.wrap(rawIpc)
 }
