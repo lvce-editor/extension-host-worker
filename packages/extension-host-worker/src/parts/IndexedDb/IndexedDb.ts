@@ -85,4 +85,3 @@ export const getHandle = async (uri: string): Promise<any> => {
   const handle = await handleDb.get('file-handles-store', uri)
   return handle
 }
-
