@@ -3,8 +3,11 @@ import * as CreateLegacyRpc from '../CreateLegacyRpc/CreateLegacyRpc.ts'
 import * as GetOrCreateRpcWithId from '../GetOrCreateRpcWithId/GetOrCreateRpcWithId.ts'
 import { VError } from '../VError/VError.ts'
 
-export const createRpc = ({ id, url, name, commandMap = {}, contentSecurityPolicy }) => {
+export const createRpc = ({ id, url, name, commandMap = {}, contentSecurityPolicy, execute }) => {
   try {
+    if (execute) {
+      throw new Error(`The execute function is deprecated. Use the commandMap property instead.`)
+    }
     if (id) {
       Assert.string(id)
       return GetOrCreateRpcWithId.createRpcWithId({ id, commandMap })
