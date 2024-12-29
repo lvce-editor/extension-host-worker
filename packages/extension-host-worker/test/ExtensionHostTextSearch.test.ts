@@ -7,30 +7,30 @@ beforeEach(() => {
 
 test('registerTextSearchProvider - no argument provided', () => {
   // @ts-expect-error
-  expect(() => { ExtensionHostTextSearch.registerTextSearchProvider(); }).toThrow(
-    new Error('Failed to register text search provider: textSearchProvider is not defined')
-  )
+  expect(() => {
+    ExtensionHostTextSearch.registerTextSearchProvider()
+  }).toThrow(new Error('Failed to register text search provider: textSearchProvider is not defined'))
 })
 
 test('registerTextSearchProvider - missing scheme', () => {
-  expect(() =>
-    { ExtensionHostTextSearch.registerTextSearchProvider({
+  expect(() => {
+    ExtensionHostTextSearch.registerTextSearchProvider({
       provideTextSearchResults(query) {},
-    }); }
-  ).toThrow(new Error('Failed to register text search provider: textSearchProvider is missing scheme'))
+    })
+  }).toThrow(new Error('Failed to register text search provider: textSearchProvider is missing scheme'))
 })
 
 test('registerTextSearchProvider - missing provideTextSearchResults function', () => {
-  expect(() =>
-    { ExtensionHostTextSearch.registerTextSearchProvider({
+  expect(() => {
+    ExtensionHostTextSearch.registerTextSearchProvider({
       provideTextSearchResults(query) {},
-    }); }
-  ).toThrow(new Error('Failed to register text search provider: textSearchProvider is missing scheme'))
+    })
+  }).toThrow(new Error('Failed to register text search provider: textSearchProvider is missing scheme'))
 })
 
 test('executeTextSearchProvider - no provider found', async () => {
   await expect(ExtensionHostTextSearch.executeTextSearchProvider('xyz', 'abc')).rejects.toThrow(
-    new Error('Failed to execute text search provider: No text search provider for xyz found')
+    new Error('Failed to execute text search provider: No text search provider for xyz found'),
   )
 })
 
@@ -42,6 +42,6 @@ test('executeTextSearchProvider - error', async () => {
     },
   })
   await expect(ExtensionHostTextSearch.executeTextSearchProvider('xyz', 'abc')).rejects.toThrow(
-    new Error('Failed to execute text search provider: TypeError: x is not a function')
+    new Error('Failed to execute text search provider: TypeError: x is not a function'),
   )
 })
