@@ -1,7 +1,6 @@
 import type { GetRemoteUrlOptions } from '../ExtensionHostRemoteUrlOptions/ExtensionHostRemoteUrlOptions.ts'
 import * as CreateWebViewIpc from '../CreateWebViewIpc/CreateWebViewIpc.ts'
 import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/ExtensionHostWebViewState.ts'
-import * as JsonRpc from '../JsonRpc/JsonRpc.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
 
 // TODO if webViewId is provided,
@@ -16,7 +15,7 @@ export const getRemoteUrlForWebView = async (uri: string, options: GetRemoteUrlO
   if (!webView) {
     throw new Error(`webview ${options.webViewId} not found`)
   }
-  const [ipc, blob] = await Promise.all([CreateWebViewIpc.createWebViewIpc(webView), Rpc.invoke('FileSystem.getBlob', uri)])
-  const objectUrl = await JsonRpc.invoke(ipc, 'createObjectUrl', blob)
+  const [rpc, blob] = await Promise.all([CreateWebViewIpc.createWebViewIpc(webView), Rpc.invoke('FileSystem.getBlob', uri)])
+  const objectUrl = await rpc.invoke('createObjectUrl', blob)
   return objectUrl
 }
