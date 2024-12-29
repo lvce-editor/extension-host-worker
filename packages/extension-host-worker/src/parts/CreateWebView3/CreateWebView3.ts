@@ -21,5 +21,6 @@ export const createWebView3 = async ({
     isGitpod,
     platform,
     assetDir,
+    webViewScheme,
   })
 }
