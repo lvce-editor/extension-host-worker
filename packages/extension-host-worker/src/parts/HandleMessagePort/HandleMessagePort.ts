@@ -1,11 +1,8 @@
-import * as HandleIpc from '../HandleIpc/HandleIpc.ts'
-import * as IpcChildModule from '../IpcChildModule/IpcChildModule.ts'
-import * as IpcChildType from '../IpcChildType/IpcChildType.ts'
+// @ts-ignore
+import { MessagePortRpcClient } from '@lvce-editor/rpc'
 
-export const handleMessagePort = (port: MessagePort) => {
-  const module = IpcChildModule.getModule(IpcChildType.MessagePort)
-  // @ts-ignore
-  const ipc = module.wrap(port)
-  HandleIpc.handleIpc(ipc)
-  ipc.send('ready')
+export const handleMessagePort = async (port: MessagePort) => {
+  await MessagePortRpcClient.create({
+    messagePort: port,
+  })
 }
