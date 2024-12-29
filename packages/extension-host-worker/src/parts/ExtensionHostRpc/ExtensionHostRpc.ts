@@ -6,7 +6,7 @@ import { VError } from '../VError/VError.ts'
 export const createRpc = ({ id, url, name, commandMap, contentSecurityPolicy, execute }) => {
   try {
     if (execute && !commandMap) {
-      console.info(`[extension-host-worker] The execute function is deprecated. Use the commandMap property instead.`)
+      console.info(`[extension-host-worker] The rpc execute function is deprecated. Use the commandMap property instead.`)
     }
     commandMap ||= {}
     if (id) {
