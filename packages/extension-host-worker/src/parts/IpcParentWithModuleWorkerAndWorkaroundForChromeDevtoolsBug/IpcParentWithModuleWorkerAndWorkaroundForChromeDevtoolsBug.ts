@@ -14,15 +14,18 @@ const sendPort = async ({ url, name, port }: { url: string; name: string; port: 
   })
 }
 
-export const create = async ({ url, name }: { url: string; name: string }): Promise<Rpc> => {
+export const create = async ({ url, name, commandMap }: { url: string; name: string; commandMap: any }): Promise<Rpc> => {
   Assert.string(url)
   Assert.string(name)
   const { port1, port2 } = GetPortTuple.getPortTuple()
-  await sendPort({ url, name, port: port1 })
-  const rpc = await MessagePortRpcParent.create({
+  const rpcPromise = MessagePortRpcParent.create({
     messagePort: port2,
     isMessagePortOpen: true,
-    commandMap: {},
+    commandMap,
   })
+  // TODO rpc module should start port
+  port2.start()
+  await sendPort({ url, name, port: port1 })
+  const rpc = await rpcPromise
   return rpc
 }

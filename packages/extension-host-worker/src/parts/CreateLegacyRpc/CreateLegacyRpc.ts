@@ -3,34 +3,29 @@ import * as ExtensionHostSubWorkerUrl from '../ExtensionHostSubWorkerUrl/Extensi
 import * as ExtensionHostWorkerContentSecurityPolicy from '../ExtensionHostWorkerContentSecurityPolicy/ExtensionHostWorkerContentSecurityPolicy.ts'
 import * as IpcParent from '../IpcParent/IpcParent.ts'
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
-import * as RpcParent from '../RpcParent/RpcParent.ts'
-import * as RpcParentType from '../RpcParentType/RpcParentType.ts'
-
-const defaultExecute = () => {
-  throw new Error('not implemented')
-}
 
 /**
  *
  * @deprecated
  */
-export const createLegacyRpc = async ({ url, name, execute = defaultExecute, contentSecurityPolicy }) => {
+export const createLegacyRpc = async ({ url, name, execute, commandMap = {}, contentSecurityPolicy }) => {
   Assert.string(url)
   Assert.string(name)
-  Assert.fn(execute)
+  Assert.object(commandMap)
   if (contentSecurityPolicy) {
     await ExtensionHostWorkerContentSecurityPolicy.set(url, contentSecurityPolicy)
   }
-  const ipc = await IpcParent.create({
+  const rpc = await IpcParent.create({
     method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
     url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
     name,
+    commandMap,
   })
-  const rpc = await RpcParent.create({
-    ipc,
-    method: RpcParentType.JsonRpc,
-    execute,
-  })
+  if (execute) {
+    // deprecated
+    // @ts-ignore
+    rpc.ipc.execute = execute
+  }
   await rpc.invoke('LoadFile.loadFile', url)
   return rpc
 }
