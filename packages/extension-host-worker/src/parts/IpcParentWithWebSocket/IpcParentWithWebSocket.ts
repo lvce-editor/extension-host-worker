@@ -1,16 +1,14 @@
-import { IpcParentWithWebSocket } from '@lvce-editor/ipc'
+import { type Rpc, WebSocketRpcParent } from '@lvce-editor/rpc'
 import * as Assert from '../Assert/Assert.ts'
 import * as GetWebSocketUrl from '../GetWebSocketUrl/GetWebSocketUrl.ts'
 
-export const create = async ({ type }) => {
+export const create = async ({ type }): Promise<Rpc> => {
   Assert.string(type)
   const wsUrl = GetWebSocketUrl.getWebSocketUrl(type)
   const webSocket = new WebSocket(wsUrl)
-  return IpcParentWithWebSocket.create({
+  const rpc = await WebSocketRpcParent.create({
     webSocket,
+    commandMap: {},
   })
-}
-
-export const wrap = (webSocket) => {
-  return IpcParentWithWebSocket.wrap(webSocket)
+  return rpc
 }
