@@ -4,7 +4,7 @@ import * as IpcParent from '../IpcParent/IpcParent.ts'
 import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
 
 export const launchIframeWorker = async () => {
-  const configuredWorkerUrl = GetConfiguredIframeWorkerUrl.getConfiguredIframeWorkerUrl()
+  const configuredWorkerUrl = await GetConfiguredIframeWorkerUrl.getConfiguredIframeWorkerUrl()
   const name = 'Iframe Worker'
   const id = Id.create()
   const rpc = await IpcParent.create({
