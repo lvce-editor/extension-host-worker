@@ -6,10 +6,10 @@ export const createWorker = async ({ method, url, name }) => {
   Assert.string(method)
   Assert.string(url)
   Assert.string(name)
-  const ipc = IpcParent.create({
+  const rpc = IpcParent.create({
     method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
     url,
     name,
   })
-  return ipc
+  return rpc
 }
