@@ -29,7 +29,7 @@ const stringifiedConfig = JSON.stringify(config, null, 2)
 const newContent = indexHtmlContent.replace(
   '</title>',
   `</title>
-  <script type="application/json" id="Config">${stringifiedConfig}</script>`
+  <script type="application/json" id="Config">${stringifiedConfig}</script>`,
 )
 
 await writeFile(indexHtmlPath, newContent)

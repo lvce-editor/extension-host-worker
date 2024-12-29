@@ -17,10 +17,10 @@ test('registerTabCompletionProvider - no argument provided', () => {
       content: '',
     },
   ])
-  // @ts-expect-error
-  expect(() => { ExtensionHostTabCompletion.registerTabCompletionProvider(); }).toThrow(
-    new Error("Cannot read properties of undefined (reading 'languageId')"),
-  )
+  expect(() => {
+    // @ts-expect-error
+    ExtensionHostTabCompletion.registerTabCompletionProvider()
+  }).toThrow(new Error("Cannot read properties of undefined (reading 'languageId')"))
 })
 
 test('execute - when tab completion provider has normal result', async () => {
