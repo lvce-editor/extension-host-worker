@@ -3,6 +3,6 @@ import { MessagePortRpcClient } from '@lvce-editor/rpc'
 
 export const handleMessagePort = async (port: MessagePort) => {
   await MessagePortRpcClient.create({
-    port,
+    messagePort: port,
   })
 }
