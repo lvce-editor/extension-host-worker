@@ -3,17 +3,17 @@ import * as CreateLegacyRpc from '../CreateLegacyRpc/CreateLegacyRpc.ts'
 import * as GetOrCreateRpcWithId from '../GetOrCreateRpcWithId/GetOrCreateRpcWithId.ts'
 import { VError } from '../VError/VError.ts'
 
-const defaultExecute = () => {
-  throw new Error('not implemented')
-}
-
-export const createRpc = ({ id, url, name, execute = defaultExecute, contentSecurityPolicy }) => {
+export const createRpc = ({ id, url, name, commandMap, contentSecurityPolicy, execute }) => {
   try {
+    if (execute && !commandMap) {
+      throw new Error(`The execute function is deprecated. Use the commandMap property instead.`)
+    }
+    commandMap ||= {}
     if (id) {
       Assert.string(id)
-      return GetOrCreateRpcWithId.createRpcWithId({ id, execute })
+      return GetOrCreateRpcWithId.createRpcWithId({ id, commandMap })
     }
-    return CreateLegacyRpc.createLegacyRpc({ url, name, execute, contentSecurityPolicy })
+    return CreateLegacyRpc.createLegacyRpc({ url, name, commandMap, contentSecurityPolicy })
   } catch (error) {
     throw new VError(error, `Failed to create webworker rpc`)
   }
