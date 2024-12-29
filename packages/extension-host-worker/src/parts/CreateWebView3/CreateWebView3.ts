@@ -2,7 +2,7 @@ import { MessagePortRpcParent } from '@lvce-editor/rpc'
 import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/ExtensionHostWebViewState.ts'
 import * as IframeWorker from '../IframeWorker/IframeWorker.ts'
 
-export const createWebView2 = async (id: number, uri: string): Promise<void> => {
+export const createWebView3 = async (id: number, uri: string): Promise<void> => {
   await IframeWorker.invoke('')
   const provider = ExtensionHostWebViewState.getProvider(providerId)
   if (!provider) {
