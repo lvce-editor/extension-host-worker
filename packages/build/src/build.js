@@ -52,7 +52,10 @@ const getVersion = async () => {
 await rm(dist, { recursive: true, force: true })
 await mkdir(dist, { recursive: true })
 
-await bundleJs()
+await bundleJs({
+  inFile: 'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
+  outFile: '.tmp/dist/dist/extensionHostWorkerMain.js',
+})
 
 const version = await getVersion()
 
