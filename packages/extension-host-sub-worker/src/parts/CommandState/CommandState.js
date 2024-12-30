@@ -1,17 +1,7 @@
-const state = {
-  commands: Object.create(null),
-}
-
-const registerCommand = (key, fn) => {
-  state.commands[key] = fn
-}
+import * as CommandMap from '@lvce-editor/command'
 
 export const registerCommands = (commandMap) => {
-  for (const [key, value] of Object.entries(commandMap)) {
-    registerCommand(key, value)
-  }
+  CommandMap.register(commandMap)
 }
 
-export const getCommand = (key) => {
-  return state.commands[key]
-}
+export const execute = CommandMap.execute
