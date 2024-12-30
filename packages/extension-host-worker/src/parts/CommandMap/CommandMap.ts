@@ -1,4 +1,5 @@
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
+import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
@@ -56,6 +57,7 @@ export const commandMap = {
   'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
   'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
   'WebView.create3': CreateWebView3.createWebView3,
+  'WebView.createWebViewWorkerRpc': CreateWebViewRpc.createWebViewWorkerRpc,
   'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
