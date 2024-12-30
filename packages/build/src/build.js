@@ -99,6 +99,11 @@ const version = await getVersion()
 
   await writeJson(join(root, '.tmp', 'extension-host-sub-worker', 'package.json'), packageJson)
 
-  await cp(join(root, 'README.md'), join(root, '.tmp', 'extension-host-sub-worker', 'README.md'))
   await cp(join(root, 'LICENSE'), join(root, '.tmp', 'extension-host-sub-worker', 'LICENSE'))
+  await writeFile(
+    join(root, '.tmp', 'extension-host-sub-worker', 'README.md'),
+    `# Extension Host Sub Worker
+
+Webworker for the extension host functionality in Lvce Editor.`,
+  )
 }
