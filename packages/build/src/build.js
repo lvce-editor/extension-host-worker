@@ -52,26 +52,53 @@ const getVersion = async () => {
 await rm(dist, { recursive: true, force: true })
 await mkdir(dist, { recursive: true })
 
-await bundleJs({
-  inFile: 'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
-  outFile: '.tmp/dist/dist/extensionHostWorkerMain.js',
-})
-
 const version = await getVersion()
 
-const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
+// extension host worker
+{
+  await bundleJs({
+    inFile: 'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
+    outFile: '.tmp/dist/dist/extensionHostWorkerMain.js',
+  })
 
-delete packageJson.scripts
-delete packageJson.devDependencies
-delete packageJson.prettier
-delete packageJson.jest
-delete packageJson.xo
-delete packageJson.directories
-delete packageJson.nodemonConfig
-packageJson.version = version
-packageJson.main = 'dist/extensionHostWorkerMain.js'
+  const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
 
-await writeJson(join(dist, 'package.json'), packageJson)
+  delete packageJson.scripts
+  delete packageJson.devDependencies
+  delete packageJson.prettier
+  delete packageJson.jest
+  delete packageJson.xo
+  delete packageJson.directories
+  delete packageJson.nodemonConfig
+  packageJson.version = version
+  packageJson.main = 'dist/extensionHostWorkerMain.js'
 
-await cp(join(root, 'README.md'), join(dist, 'README.md'))
-await cp(join(root, 'LICENSE'), join(dist, 'LICENSE'))
+  await writeJson(join(dist, 'package.json'), packageJson)
+
+  await cp(join(root, 'README.md'), join(dist, 'README.md'))
+  await cp(join(root, 'LICENSE'), join(dist, 'LICENSE'))
+}
+
+// extension host sub worker
+{
+  await bundleJs({
+    inFile: 'packages/extension-host-sub-worker/src/extensionHostSubWorkerMain.js',
+    outFile: '.tmp/extension-host-sub-worker/dist/extensionHostWorkerMain.js',
+  })
+  const packageJson = await readJson(join(root, 'packages', 'extension-host-sub-worker', 'package.json'))
+
+  delete packageJson.scripts
+  delete packageJson.devDependencies
+  delete packageJson.prettier
+  delete packageJson.jest
+  delete packageJson.xo
+  delete packageJson.directories
+  delete packageJson.nodemonConfig
+  packageJson.version = version
+  packageJson.main = 'dist/extensionHostSubWorkerMain.js'
+
+  await writeJson(join(root, '.tmp', 'extension-host-sub-worker', 'package.json'), packageJson)
+
+  await cp(join(root, 'README.md'), join(root, '.tmp', 'extension-host-sub-worker', 'README.md'))
+  await cp(join(root, 'LICENSE'), join(root, '.tmp', 'extension-host-sub-worker', 'LICENSE'))
+}
