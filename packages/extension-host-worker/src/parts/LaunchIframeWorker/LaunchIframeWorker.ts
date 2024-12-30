@@ -13,6 +13,8 @@ const commandMap = {
   'WebView.compatRendererProcessInvokeAndTransfer': (...args) => Rpc.invokeAndTransfer('WebView.compatRendererProcessInvokeAndTransfer', ...args),
   // @ts-ignore
   'WebView.compatRendererWorkerInvokeAndTransfer': (...args: any[]) => Rpc.invokeAndTransfer(...args),
+  // @ts-ignore
+  'WebView.compatRendererWorkerInvoke': (...args: any[]) => Rpc.invoke(...args),
   'WebView.compatSharedProcessInvoke': (...args) => Rpc.invoke('WebView.compatSharedProcessInvoke', ...args),
   'WebView.getSavedState': (...args) => Rpc.invoke('WebView.getSavedState', ...args),
   'WebView.getWebViewInfo': (...args) => Rpc.invoke('WebView.getWebViewInfo', ...args),
