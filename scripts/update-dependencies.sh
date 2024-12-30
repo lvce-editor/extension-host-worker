@@ -28,7 +28,6 @@ function updateDependencies {
 
                                                        updateDependencies             &&
 cd packages/extension-host-worker                   && updateDependencies && cd ../.. &&
-cd packages/extension-host-sub-worker               && updateDependencies && cd ../.. &&
 cd packages/build                                   && updateDependencies && cd ../.. &&
 cd packages/e2e                                     && updateDependencies && cd ../.. &&
 cd packages/memory                                  && updateDependencies && cd ../.. &&

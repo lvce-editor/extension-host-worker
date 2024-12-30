@@ -6,9 +6,6 @@
       "path": "./packages/extension-host-worker"
     },
     {
-      "path": "./packages/extension-host-sub-worker"
-    },
-    {
       "path": "./packages/build"
     },
     {
