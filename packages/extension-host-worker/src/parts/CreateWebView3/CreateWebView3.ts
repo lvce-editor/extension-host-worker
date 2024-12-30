@@ -15,7 +15,7 @@ export const createWebView3 = async ({
   platform: number
   assetDir: string
   webViewScheme: string
-  useNewWebViewHandler?: boolean
+  useNewWebViewHandler: boolean
 }): Promise<void> => {
   await IframeWorker.invoke('WebView.create3', {
     id,
