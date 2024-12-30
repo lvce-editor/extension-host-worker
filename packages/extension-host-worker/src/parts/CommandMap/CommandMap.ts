@@ -41,8 +41,6 @@ import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 
 export const commandMap = {
-  'WebView.create3': CreateWebView3.createWebView3,
-  'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
@@ -57,6 +55,8 @@ export const commandMap = {
   'SearchFileWithHtml.searchFileWithHtml': SearchFileWithHtml.searchFile,
   'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
   'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
+  'WebView.create3': CreateWebView3.createWebView3,
+  'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
@@ -70,8 +70,8 @@ export const commandMap = {
   ['ExtensionHostDebug.stepOver']: ExtensionHostDebug.stepOver,
   ['ExtensionHostWebView.create']: ExtensionHostWebView.createWebView,
   ['ExtensionHostWebView.dispose']: ExtensionHostWebView.disposeWebView,
-  ['ExtensionHostWebView.load']: LoadWebView.loadWebView,
   ['ExtensionHostWebView.getWebViewInfo']: ExtensionHostWebView.getWebViewInfo,
+  ['ExtensionHostWebView.load']: LoadWebView.loadWebView,
   ['HandleBeforeUnload.handleBeforeUnload']: HandleBeforeUnload.handleBeforeUnload,
   ['HandleMessagePort.handleMessagePort']: HandleMessagePort.handleMessagePort,
   ['SaveState.saveState']: SaveState.saveState,
