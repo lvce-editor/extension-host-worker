@@ -54,56 +54,24 @@ await mkdir(dist, { recursive: true })
 
 const version = await getVersion()
 
-// extension host worker
-{
-  await bundleJs({
-    inFile: 'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
-    outFile: '.tmp/dist/dist/extensionHostWorkerMain.js',
-  })
+await bundleJs({
+  inFile: 'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
+  outFile: '.tmp/dist/dist/extensionHostWorkerMain.js',
+})
 
-  const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
+const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
 
-  delete packageJson.scripts
-  delete packageJson.devDependencies
-  delete packageJson.prettier
-  delete packageJson.jest
-  delete packageJson.xo
-  delete packageJson.directories
-  delete packageJson.nodemonConfig
-  packageJson.version = version
-  packageJson.main = 'dist/extensionHostWorkerMain.js'
+delete packageJson.scripts
+delete packageJson.devDependencies
+delete packageJson.prettier
+delete packageJson.jest
+delete packageJson.xo
+delete packageJson.directories
+delete packageJson.nodemonConfig
+packageJson.version = version
+packageJson.main = 'dist/extensionHostWorkerMain.js'
 
-  await writeJson(join(dist, 'package.json'), packageJson)
+await writeJson(join(dist, 'package.json'), packageJson)
 
-  await cp(join(root, 'README.md'), join(dist, 'README.md'))
-  await cp(join(root, 'LICENSE'), join(dist, 'LICENSE'))
-}
-
-// extension host sub worker
-{
-  await bundleJs({
-    inFile: 'packages/extension-host-sub-worker/src/extensionHostSubWorkerMain.js',
-    outFile: '.tmp/extension-host-sub-worker/dist/extensionHostSubWorkerMain.js',
-  })
-  const packageJson = await readJson(join(root, 'packages', 'extension-host-sub-worker', 'package.json'))
-
-  delete packageJson.scripts
-  delete packageJson.devDependencies
-  delete packageJson.prettier
-  delete packageJson.jest
-  delete packageJson.xo
-  delete packageJson.directories
-  delete packageJson.nodemonConfig
-  packageJson.version = version
-  packageJson.main = 'dist/extensionHostSubWorkerMain.js'
-
-  await writeJson(join(root, '.tmp', 'extension-host-sub-worker', 'package.json'), packageJson)
-
-  await cp(join(root, 'LICENSE'), join(root, '.tmp', 'extension-host-sub-worker', 'LICENSE'))
-  await writeFile(
-    join(root, '.tmp', 'extension-host-sub-worker', 'README.md'),
-    `# Extension Host Sub Worker
-
-Webworker for the extension host functionality in Lvce Editor.`,
-  )
-}
+await cp(join(root, 'README.md'), join(dist, 'README.md'))
+await cp(join(root, 'LICENSE'), join(dist, 'LICENSE'))
