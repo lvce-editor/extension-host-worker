@@ -27,6 +27,7 @@ import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHo
 import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/ExtensionHostTypeDefinition.ts'
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
+import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
@@ -41,6 +42,7 @@ import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 
 export const commandMap = {
   'WebView.create3': CreateWebView3.createWebView3,
+  'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
