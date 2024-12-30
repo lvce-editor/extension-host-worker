@@ -11,6 +11,7 @@ import * as Rpc from '../Rpc/Rpc.ts'
 // 5. provide objectUrl to extension
 
 export const getRemoteUrlForWebView = async (uri: string, options: GetRemoteUrlOptions = {}): Promise<string> => {
+  // TODO webviews should be stored in iframe worker
   const webView = ExtensionHostWebViewState.getWebView(options.webViewId as string)
   if (!webView) {
     throw new Error(`webview ${options.webViewId} not found`)
