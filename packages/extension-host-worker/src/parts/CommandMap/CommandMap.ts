@@ -35,12 +35,14 @@ import * as LaunchIframeWorker from '../LaunchIframeWorker/LaunchIframeWorker.ts
 import * as LoadWebView from '../LoadWebView/LoadWebView.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
 import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch.ts'
+import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as SearchFileWithHtml from '../SearchFileWithHtml/SearchFileWithHtml.ts'
 import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 
 export const commandMap = {
   'WebView.create3': CreateWebView3.createWebView3,
+  'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
