@@ -21,6 +21,7 @@ export default tseslint.config(
       '**/e2e/**',
       '**/.tmp/**',
       '**/memory/**',
+      '**/extension-host-sub-worker/**',
       '**/test-integration/**',
       '**/test-integration-util/**',
       'dist',
