@@ -33,7 +33,7 @@ export const textSearch = async (scheme: string, root: string, query: string): P
   const relativeRoot = root.slice('html://'.length)
   const handle = await GetDirectoryHandle.getDirectoryHandle(relativeRoot)
   if (!handle) {
-    throw new FileNotFoundError(`Folder not found: ${relativeRoot}`)
+    throw new FileNotFoundError(relativeRoot)
   }
   const all: SearchResult[] = []
   await textSearchRecursively(all, '', handle, query)
