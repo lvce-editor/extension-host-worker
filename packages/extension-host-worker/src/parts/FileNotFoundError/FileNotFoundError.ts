@@ -1,6 +1,8 @@
 export class FileNotFoundError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = 'FileNotFoundError'
+  code: string
+
+  constructor(uri: string) {
+    super(`File not found: ${uri}`)
+    this.code = 'ENOENT'
   }
 }
