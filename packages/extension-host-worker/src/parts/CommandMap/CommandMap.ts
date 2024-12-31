@@ -28,6 +28,7 @@ import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHo
 import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/ExtensionHostTypeDefinition.ts'
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
+import * as FileSystemFetch from '../FileSystemFetch/FileSystemFetch.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
@@ -46,6 +47,13 @@ export const commandMap = {
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
+  'FileSystemFetch.chmod': FileSystemFetch.chmod,
+  'FileSystemFetch.getBlob': FileSystemFetch.getBlob,
+  'FileSystemFetch.mkdir': FileSystemFetch.mkdir,
+  'FileSystemFetch.readDirWithFileTypes': FileSystemFetch.readDirWithFileTypes,
+  'FileSystemFetch.readFile': FileSystemFetch.readFile,
+  'FileSystemFetch.remove': FileSystemFetch.remove,
+  'FileSystemFetch.writeFile': FileSystemFetch.writeFile,
   'FileSystemMemory.chmod': FileSystemMemory.chmod,
   'FileSystemMemory.getBlob': FileSystemMemory.getBlob,
   'FileSystemMemory.getBlobUrl': FileSystemMemory.getBlobUrl,
