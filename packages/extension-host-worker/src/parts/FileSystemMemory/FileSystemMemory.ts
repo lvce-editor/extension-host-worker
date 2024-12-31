@@ -1,4 +1,5 @@
 import type { Dirent } from '../Dirent/Dirent.ts'
+import type { InMemoryFile } from '../InMemoryFile/InMemoryFile.ts'
 import * as DirentType from '../DirentType/DirentType.ts'
 import { FileNotFoundError } from '../FileNotFoundError/FileNotFoundError.ts'
 import * as GetContentType from '../GetContentType/GetContentType.ts'
@@ -6,11 +7,15 @@ import * as PathSeparatorType from '../PathSeparatorType/PathSeparatorType.ts'
 
 // TODO move this to an extension?
 
-export const state = {
+interface State {
+  readonly files: Record<string, InMemoryFile>
+}
+
+export const state: State = {
   files: Object.create(null),
 }
 
-const getDirent = (uri: string): any => {
+const getDirent = (uri: string): InMemoryFile => {
   return state.files[uri]
 }
 
@@ -41,6 +46,8 @@ const ensureParentDir = (uri: string): void => {
 export const writeFile = (uri: string, content: string): void => {
   const dirent = getDirent(uri)
   if (dirent) {
+    // TODO create new dirent
+    // @ts-ignore
     dirent.content = content
   } else {
     ensureParentDir(uri)
@@ -132,6 +139,6 @@ export const chmod = (): void => {
   throw new Error('[memfs] chmod not implemented')
 }
 
-export const getFiles = (): any => {
+export const getFiles = (): State['files'] => {
   return state.files
 }
