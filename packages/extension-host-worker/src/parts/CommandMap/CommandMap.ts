@@ -1,3 +1,4 @@
+import * as BulkReplacement from '../BulkReplacement/BulkReplacement.ts'
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
@@ -45,6 +46,7 @@ import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 
 export const commandMap = {
+  'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
