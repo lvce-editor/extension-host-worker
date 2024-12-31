@@ -1,11 +1,24 @@
 import * as Assert from '../Assert/Assert.ts'
+import * as DirentType from '../DirentType/DirentType.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
+import * as TextSearchInText from '../TextSearchInText/TextSearchInText.ts'
 
 export const textSearch = async (scheme: string, root: string, query: string, options: any, assetDir: string): Promise<any> => {
   Assert.string(scheme)
   Assert.string(root)
   Assert.string(query)
   const files = FileSystemMemory.getFiles()
-  console.log({ files })
-  throw new Error('not implemented')
+  const relativeRoot = root.slice('memfs://'.length)
+  const allResults: any[] = []
+  for (const [key, value] of Object.entries(files)) {
+    if (!key.startsWith(relativeRoot)) {
+      continue
+    }
+    if (value.type === DirentType.File) {
+      const relativeUri = key.slice(relativeRoot.length + 1)
+      const results = TextSearchInText.textSearchInText(relativeUri, value.content, query)
+      allResults.push(...results)
+    }
+  }
+  return allResults
 }
