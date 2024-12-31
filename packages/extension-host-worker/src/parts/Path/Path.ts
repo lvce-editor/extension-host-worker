@@ -5,3 +5,11 @@ export const dirname = (pathSeparator: string, path: string): string => {
   }
   return path.slice(0, index)
 }
+
+export const extname = (path: string): string => {
+  const index = path.lastIndexOf('.')
+  if (index === -1) {
+    return ''
+  }
+  return path.slice(index)
+}

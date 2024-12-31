@@ -28,6 +28,7 @@ import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHo
 import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/ExtensionHostTypeDefinition.ts'
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
+import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
@@ -45,6 +46,15 @@ export const commandMap = {
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
+  'FileSystemMemory.chmod': FileSystemMemory.chmod,
+  'FileSystemMemory.getBlob': FileSystemMemory.getBlob,
+  'FileSystemMemory.getBlobUrl': FileSystemMemory.getBlobUrl,
+  'FileSystemMemory.getFiles': FileSystemMemory.getFiles,
+  'FileSystemMemory.mkdir': FileSystemMemory.mkdir,
+  'FileSystemMemory.readDirWithFileTypes': FileSystemMemory.readDirWithFileTypes,
+  'FileSystemMemory.readFile': FileSystemMemory.readFile,
+  'FileSystemMemory.remove': FileSystemMemory.remove,
+  'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
   'IndexedDb.addHandle': IndexedDb.addHandle,
   'IndexedDb.get': IndexedDbKeyValueStorage.get,
   'IndexedDb.getHandle': IndexedDb.getHandle,
