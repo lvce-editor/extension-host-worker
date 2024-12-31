@@ -3,6 +3,7 @@ import * as DirentType from '../src/parts/DirentType/DirentType.ts'
 import * as FileSystemMemory from '../src/parts/FileSystemMemory/FileSystemMemory.ts'
 
 beforeEach(() => {
+  // @ts-ignore
   FileSystemMemory.state.files = Object.create(null)
 })
 
@@ -33,6 +34,7 @@ test('writeFile', () => {
 })
 
 test('readDirWithFileTypes - file', () => {
+  // @ts-ignore
   FileSystemMemory.state.files = {
     '/': {
       type: DirentType.Directory,
@@ -56,6 +58,7 @@ test('readDirWithFileTypes - file', () => {
 })
 
 test('readDirWithFileTypes - directory', () => {
+  // @ts-ignore
   FileSystemMemory.state.files = {
     '/': {
       type: DirentType.Directory,
@@ -79,6 +82,7 @@ test('readDirWithFileTypes - directory', () => {
 })
 
 test('readDirWithFileTypes - mixed content', () => {
+  // @ts-ignore
   FileSystemMemory.state.files = {
     '/': {
       type: DirentType.Directory,
