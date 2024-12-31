@@ -42,6 +42,7 @@ import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch
 import * as SearchFileWithHtml from '../SearchFileWithHtml/SearchFileWithHtml.ts'
 import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
+import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 
 export const commandMap = {
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
@@ -74,6 +75,7 @@ export const commandMap = {
   'SearchFileWithHtml.searchFileWithHtml': SearchFileWithHtml.searchFile,
   'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
   'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
+  'TextSearchMemory.textSearch': TextSearchMemory.textSearch,
   'WebView.create3': CreateWebView3.createWebView3,
   'WebView.createWebViewWorkerRpc': CreateWebViewRpc.createWebViewWorkerRpc,
   'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
