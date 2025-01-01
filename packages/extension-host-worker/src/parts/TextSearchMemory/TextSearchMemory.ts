@@ -3,6 +3,19 @@ import * as DirentType from '../DirentType/DirentType.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
 import * as TextSearchInText from '../TextSearchInText/TextSearchInText.ts'
 
+const matchesUri = (uri: string, relativeRoot: string, include: string, exclude: string): boolean => {
+  if (!uri.startsWith(relativeRoot)) {
+    return false
+  }
+  if (include && typeof include === 'string' && !uri.includes(include)) {
+    return false
+  }
+  if (exclude && typeof exclude === 'string' && uri.includes(exclude)) {
+    return false
+  }
+  return true
+}
+
 export const textSearch = async (scheme: string, root: string, query: string, options: any, assetDir: string): Promise<any> => {
   Assert.string(scheme)
   Assert.string(root)
@@ -11,13 +24,7 @@ export const textSearch = async (scheme: string, root: string, query: string, op
   const relativeRoot = root.slice('memfs://'.length)
   const allResults: any[] = []
   for (const [key, value] of Object.entries(files)) {
-    if (!key.startsWith(relativeRoot)) {
-      continue
-    }
-    if (options.include && typeof options.include === 'string' && !key.includes(options.include)) {
-      continue
-    }
-    if (options.exclude && typeof options.exclude === 'string' && key.includes(options.exclude)) {
+    if (!matchesUri(key, relativeRoot, options.include, options.exclude)) {
       continue
     }
     if (value.type === DirentType.File) {
