@@ -17,7 +17,8 @@ export const getLineMatchRegex = (line: string, lineNumber: number, query: strin
         },
       ]
     }
-  } catch {
+  } catch (error) {
+    console.log({ error })
     // Invalid regex pattern - return empty array
   }
   return []
