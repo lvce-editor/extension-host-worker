@@ -1,5 +1,6 @@
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
-import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
+import * as GetLineMatchRegex from '../GetLineMatchRegex/GetLineMatchRegex.ts'
+import * as GetLineMatchText from '../GetLineMatchText/GetLineMatchText.ts'
 
 export const getLineMatch = (
   line: string,
@@ -9,18 +10,8 @@ export const getLineMatch = (
   useRegularExpression: number,
   matchCase: number,
 ): readonly SearchResult[] => {
-  const results: SearchResult[] = []
-  const lineToQuery = matchCase ? line : line.toLowerCase()
-  const actualQuery = matchCase ? query : queryLower
-  const index = lineToQuery.indexOf(actualQuery)
-  if (index !== -1) {
-    results.push({
-      type: TextSearchResultType.Match,
-      text: line,
-      start: index,
-      end: index + query.length,
-      lineNumber,
-    })
+  if (useRegularExpression) {
+    return GetLineMatchRegex.getLineMatchRegex(line, lineNumber, query, matchCase)
   }
-  return results
+  return GetLineMatchText.getLineMatchText(line, lineNumber, query, queryLower, matchCase)
 }
