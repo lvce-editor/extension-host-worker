@@ -14,6 +14,9 @@ export const textSearch = async (scheme: string, root: string, query: string, op
     if (!key.startsWith(relativeRoot)) {
       continue
     }
+    if (options.include && typeof options.include === 'string' && !key.includes(options.include)) {
+      continue
+    }
     if (options.exclude && typeof options.exclude === 'string' && key.includes(options.exclude)) {
       continue
     }
