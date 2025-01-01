@@ -1,6 +1,6 @@
+import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import * as GetLineMatch from '../GetLineMatch/GetLineMatch.ts'
 import { MatchCase, UseRegularExpression } from '../SearchFlags/SearchFlags.ts'
-import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import * as SplitLines from '../SplitLines/SplitLines.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
