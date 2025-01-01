@@ -2,14 +2,14 @@ import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
 export const getLineMatch = (
-  results: SearchResult[],
   line: string,
   lineNumber: number,
   query: string,
   queryLower: string,
   useRegularExpression: number,
   matchCase: number,
-): void => {
+): readonly SearchResult[] => {
+  const results: SearchResult[] = []
   const lineToQuery = matchCase ? line : line.toLowerCase()
   const actualQuery = matchCase ? query : queryLower
   const index = lineToQuery.indexOf(actualQuery)
@@ -22,4 +22,5 @@ export const getLineMatch = (
       lineNumber,
     })
   }
+  return results
 }
