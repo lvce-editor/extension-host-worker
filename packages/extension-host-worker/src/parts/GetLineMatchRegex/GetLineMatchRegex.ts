@@ -6,13 +6,13 @@ export const getLineMatchRegex = (line: string, lineNumber: number, query: strin
     const flags = matchCase ? '' : 'i'
     const regex = new RegExp(query, flags)
     const match = line.match(regex)
-    if (match) {
+    if (match && typeof match.index === 'number') {
       return [
         {
           type: TextSearchResultType.Match,
           text: line,
-          start: match.index!,
-          end: match.index! + match[0].length,
+          start: match.index,
+          end: match.index + match[0].length,
           lineNumber,
         },
       ]
