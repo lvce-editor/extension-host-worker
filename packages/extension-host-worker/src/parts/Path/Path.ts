@@ -13,3 +13,7 @@ export const extname = (path: string): string => {
   }
   return path.slice(index)
 }
+
+export const join = (pathSeparator, ...parts) => {
+  return parts.join(pathSeparator)
+}

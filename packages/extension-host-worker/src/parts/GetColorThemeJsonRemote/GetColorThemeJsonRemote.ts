@@ -1,5 +1,10 @@
-import * as Rpc from '../Rpc/Rpc.ts'
+import * as FileSystem from '../FileSystem/FileSystem.ts'
+import * as GetColorThemePath from '../GetColorThemePath/GetColorThemePath.ts'
+import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
 
-export const getColorThemeJson = (colorThemeId) => {
-  return Rpc.invoke(/* ExtensionHost.getColorThemeJson */ 'ExtensionHost.getColorThemeJson', /* colorThemeId */ colorThemeId)
+export const getColorThemeJson = async (colorThemeId: string): Promise<any> => {
+  const extensions = await GetExtensions.getExtensions()
+  const colorThemeUri = GetColorThemePath.getColorThemeUri(extensions, colorThemeId)
+  const json = await FileSystem.readJson(colorThemeUri)
+  return json
 }
