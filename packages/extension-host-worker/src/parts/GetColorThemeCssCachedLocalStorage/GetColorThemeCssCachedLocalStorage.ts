@@ -1,4 +1,4 @@
-import * as LocalStorage from '../LocalStorage/LocalStorage.js'
+import * as LocalStorage from '../LocalStorage/LocalStorage.ts'
 
 const getCacheKey = (colorThemeId) => {
   return 'lvce-color-theme-' + colorThemeId
