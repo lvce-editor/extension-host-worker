@@ -47,7 +47,6 @@ import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 
 export const commandMap = {
-  'IconTheme.hydrate': IconTheme.hydrate,
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
@@ -68,6 +67,8 @@ export const commandMap = {
   'FileSystemMemory.readFile': FileSystemMemory.readFile,
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
+  'IconTheme.hydrate': IconTheme.hydrate,
+  'IconTheme.setIconTheme': IconTheme.setIconTheme,
   'IndexedDb.addHandle': IndexedDb.addHandle,
   'IndexedDb.get': IndexedDbKeyValueStorage.get,
   'IndexedDb.getHandle': IndexedDb.getHandle,
