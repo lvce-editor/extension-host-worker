@@ -32,6 +32,7 @@ import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebV
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
 import * as FileSystemFetch from '../FileSystemFetch/FileSystemFetch.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
+import * as GetColorThemeCss from '../GetColorThemeCss/GetColorThemeCss.ts'
 import * as GetIconThemeJson from '../GetIconThemeJson/GetIconThemeJson.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
@@ -51,6 +52,7 @@ import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 
 export const commandMap = {
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
+  'ColorTheme.getColorThemeCssFromJson': GetColorThemeCss.getColorThemeCssFromJson,
   'ColorTheme.hydrate': ColorTheme.hydrate,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
@@ -71,8 +73,8 @@ export const commandMap = {
   'FileSystemMemory.readFile': FileSystemMemory.readFile,
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
-  'IconTheme.getState': IconThemeState.getState,
   'IconTheme.getJson': GetIconThemeJson.getIconThemeJson,
+  'IconTheme.getState': IconThemeState.getState,
   'IconTheme.hydrate': IconTheme.hydrate,
   'IconTheme.setIconTheme': IconTheme.setIconTheme,
   'IndexedDb.addHandle': IndexedDb.addHandle,
