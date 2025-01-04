@@ -70,6 +70,7 @@ export const commandMap = {
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
   'IconTheme.hydrate': IconTheme.hydrate,
+  'IconTheme.setIconTheme': IconTheme.setIconTheme,
   'IndexedDb.addHandle': IndexedDb.addHandle,
   'IndexedDb.get': IndexedDbKeyValueStorage.get,
   'IndexedDb.getHandle': IndexedDb.getHandle,
