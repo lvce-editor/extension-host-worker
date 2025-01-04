@@ -33,9 +33,9 @@ export const getWebExtensions = async () => {
   try {
     switch (Platform.platform) {
       case PlatformType.Web:
-        return getWebExtensionsWeb()
+        return await getWebExtensionsWeb()
       default:
-        return getWebExtensionsDefault()
+        return await getWebExtensionsDefault()
     }
   } catch {
     return ExtensionMetaState.state.webExtensions
