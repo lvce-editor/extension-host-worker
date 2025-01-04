@@ -1,5 +1,4 @@
 import * as GetRemoteSrc from '../GetRemoteSrc/GetRemoteSrc.ts'
-import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
 import * as PathSeparator from '../PathSeparator/PathSeparator.ts'
 
 export const getAbsoluteIconPath = (iconTheme: any, icon: any): any => {
@@ -7,7 +6,7 @@ export const getAbsoluteIconPath = (iconTheme: any, icon: any): any => {
     return ''
   }
   const result = iconTheme.iconDefinitions[icon]
-  const extensionPath = IconThemeState.getExtensionPath()
+  const extensionPath = '' // TODO IconThemeState.getExtensionPath()
   if (result) {
     if (extensionPath.startsWith('http://') || extensionPath.startsWith('https://')) {
       return `${extensionPath}${result}`
