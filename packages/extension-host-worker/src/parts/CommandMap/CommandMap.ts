@@ -1,4 +1,5 @@
 import * as BulkReplacement from '../BulkReplacement/BulkReplacement.ts'
+import * as ColorTheme from '../ColorTheme/ColorTheme.ts'
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
@@ -47,8 +48,8 @@ import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 
 export const commandMap = {
-  'IconTheme.hydrate': IconTheme.hydrate,
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
+  'ColorTheme.hydrate': ColorTheme.hydrate,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
@@ -68,6 +69,7 @@ export const commandMap = {
   'FileSystemMemory.readFile': FileSystemMemory.readFile,
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
+  'IconTheme.hydrate': IconTheme.hydrate,
   'IndexedDb.addHandle': IndexedDb.addHandle,
   'IndexedDb.get': IndexedDbKeyValueStorage.get,
   'IndexedDb.getHandle': IndexedDb.getHandle,
