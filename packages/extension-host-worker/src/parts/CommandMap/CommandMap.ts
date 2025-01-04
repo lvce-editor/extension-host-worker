@@ -37,6 +37,7 @@ import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IconTheme from '../IconTheme/IconTheme.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
+import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
 import * as LaunchIframeWorker from '../LaunchIframeWorker/LaunchIframeWorker.ts'
 import * as LoadWebView from '../LoadWebView/LoadWebView.ts'
@@ -69,6 +70,7 @@ export const commandMap = {
   'FileSystemMemory.readFile': FileSystemMemory.readFile,
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
+  'IconTheme.getState': IconThemeState.getState,
   'IconTheme.hydrate': IconTheme.hydrate,
   'IconTheme.setIconTheme': IconTheme.setIconTheme,
   'IndexedDb.addHandle': IndexedDb.addHandle,
