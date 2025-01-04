@@ -34,6 +34,7 @@ import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
+import * as IconTheme from '../IconTheme/IconTheme.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
 import * as LaunchIframeWorker from '../LaunchIframeWorker/LaunchIframeWorker.ts'
@@ -46,6 +47,7 @@ import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 
 export const commandMap = {
+  'IconTheme.hydrate': IconTheme.hydrate,
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
