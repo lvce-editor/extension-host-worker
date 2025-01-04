@@ -9,7 +9,6 @@ export const getColorThemeUri = (extensions: any, colorThemeId: string): string 
       if (colorTheme.id !== colorThemeId) {
         continue
       }
-      console.log({ extension })
       const absolutePath = Path.join('/', extension.uri, colorTheme.path)
       return absolutePath
     }
