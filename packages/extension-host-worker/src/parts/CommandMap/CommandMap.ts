@@ -31,6 +31,7 @@ import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/Ext
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
 import * as FileSystemFetch from '../FileSystemFetch/FileSystemFetch.ts'
+import * as GetIconThemeJson from '../GetIconThemeJson/GetIconThemeJson.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
@@ -71,6 +72,7 @@ export const commandMap = {
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
   'IconTheme.getState': IconThemeState.getState,
+  'IconTheme.getJson': GetIconThemeJson.getIconThemeJson,
   'IconTheme.hydrate': IconTheme.hydrate,
   'IconTheme.setIconTheme': IconTheme.setIconTheme,
   'IndexedDb.addHandle': IndexedDb.addHandle,
