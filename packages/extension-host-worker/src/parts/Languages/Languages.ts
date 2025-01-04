@@ -1,6 +1,6 @@
-import * as GetExtensions from '../GetExtensions/GetExtensions.js'
-import * as GetLanguagesFromExtension from '../GetLanguagesFromExtension/GetLanguagesFromExtension.js'
-import { VError } from '../VError/VError.js'
+import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
+import * as GetLanguagesFromExtension from '../GetLanguagesFromExtension/GetLanguagesFromExtension.ts'
+import { VError } from '../VError/VError.ts'
 
 export const getLanguages = async () => {
   try {
