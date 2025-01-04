@@ -42,6 +42,7 @@ import * as IconTheme from '../IconTheme/IconTheme.ts'
 import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
+import * as Languages from '../Languages/Languages.ts'
 import * as LaunchIframeWorker from '../LaunchIframeWorker/LaunchIframeWorker.ts'
 import * as LoadWebView from '../LoadWebView/LoadWebView.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
@@ -67,6 +68,7 @@ export const commandMap = {
   'FileSystemFetch.remove': FileSystemFetch.remove,
   'FileSystemFetch.writeFile': FileSystemFetch.writeFile,
   'FileSystemMemory.chmod': FileSystemMemory.chmod,
+  'Languages.getLanguages': Languages.getLanguages,
   'FileSystemMemory.getBlob': FileSystemMemory.getBlob,
   'FileSystemMemory.getBlobUrl': FileSystemMemory.getBlobUrl,
   'FileSystemMemory.getFiles': FileSystemMemory.getFiles,
