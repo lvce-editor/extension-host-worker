@@ -1,7 +1,7 @@
 import * as GetWebExtensions from '../GetWebExtensions/GetWebExtensions.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
-import * as Rpc from '../Rpc/Rpc.js'
+import * as Rpc from '../Rpc/Rpc.ts'
 
 const getSharedProcessExtensions = () => {
   return Rpc.invoke(/* ExtensionManagement.getExtensions */ 'ExtensionManagement.getExtensions')

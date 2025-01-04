@@ -1,6 +1,6 @@
 import * as AssetDir from '../AssetDir/AssetDir.ts'
 import * as ExtensionMetaState from '../ExtensionMetaState/ExtensionMetaState.ts'
-import * as FileSystem from '../FileSystem/FileSystem.js'
+import * as FileSystem from '../FileSystem/FileSystem.ts'
 import * as FindMatchingIconThemeExtension from '../FindMatchingIconThemeExtension/FindMatchingIconThemeExtension.ts'
 import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
 import * as GetIconThemeUrl from '../GetIconThemeUrl/GetIconThemeUrl.ts'
