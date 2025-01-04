@@ -1,10 +1,10 @@
+import * as GetColorThemeCssCachedIndexedDb from '../GetColorThemeCssCachedIndexedDb/GetColorThemeCssCachedIndexedDb.ts'
+import * as GetColorThemeCssCachedLocalStorage from '../GetColorThemeCssCachedLocalStorage/GetColorThemeCssCachedLocalStorage.ts'
+import * as GetColorThemeCssCachedNoop from '../GetColorThemeCssCachedNoop/GetColorThemeCssCachedNoop.ts'
 // TODO make storage configurable via settings as localstorage or indexeddb
 // also allow disabling caching via settings
 // then measure which option could be fastest
 import * as Preferences from '../Preferences/Preferences.ts'
-import * as GetColorThemeCssCachedLocalStorage from '../GetColorThemeCssCachedLocalStorage/GetColorThemeCssCachedLocalStorage.ts'
-import * as GetColorThemeCssCachedIndexedDb from '../GetColorThemeCssCachedIndexedDb/GetColorThemeCssCachedIndexedDb.ts'
-import * as GetColorThemeCssCachedNoop from '../GetColorThemeCssCachedNoop/GetColorThemeCssCachedNoop.ts'
 
 const getCacheFn = (config) => {
   switch (config) {
