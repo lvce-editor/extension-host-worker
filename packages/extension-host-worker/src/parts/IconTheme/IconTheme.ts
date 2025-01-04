@@ -17,7 +17,7 @@ const setIconTheme = async (iconThemeId: string): Promise<void> => {
   }
 }
 
-export const hydrate = async () => {
+export const hydrate = async (): Promise<void> => {
   const iconThemeId = (await Preferences.get('icon-theme')) || 'vscode-icons'
   await setIconTheme(iconThemeId)
 }
