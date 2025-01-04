@@ -1,6 +1,6 @@
 import * as InitialIconTheme from '../InitialIconTheme/InitialIconTheme.ts'
 
-const state = {
+const state: any = {
   seenFiles: [],
   seenFolders: [],
   hasWarned: [],
@@ -16,6 +16,10 @@ export const setTheme = (iconTheme) => {
   state.extensionPath = iconTheme.extensionPath
 }
 
-export const getIconTheme = () => {
+export const getIconTheme = (): any => {
   return state.iconTheme
+}
+
+export const getState = () => {
+  return state
 }
