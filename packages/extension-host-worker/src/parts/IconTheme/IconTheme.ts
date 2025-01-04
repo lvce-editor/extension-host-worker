@@ -4,7 +4,7 @@ import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
 import * as Preferences from '../Preferences/Preferences.ts'
 import { VError } from '../VError/VError.ts'
 
-const setIconTheme = async (iconThemeId) => {
+const setIconTheme = async (iconThemeId: string): Promise<void> => {
   try {
     const iconTheme = await GetIconThemeJson.getIconThemeJson(iconThemeId)
     if (!iconTheme) {
@@ -18,6 +18,6 @@ const setIconTheme = async (iconThemeId) => {
 }
 
 export const hydrate = async () => {
-  const iconThemeId = Preferences.get('icon-theme') || 'vscode-icons'
+  const iconThemeId = (await Preferences.get('icon-theme')) || 'vscode-icons'
   await setIconTheme(iconThemeId)
 }
