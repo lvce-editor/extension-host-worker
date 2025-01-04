@@ -1,6 +1,6 @@
+import * as GetRemoteSrc from '../GetRemoteSrc/GetRemoteSrc.ts'
 import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
 import * as PathSeparator from '../PathSeparator/PathSeparator.ts'
-import * as GetRemoteSrc from '../GetRemoteSrc/GetRemoteSrc.ts'
 
 export const getAbsoluteIconPath = (iconTheme: any, icon: any): any => {
   if (!iconTheme) {
