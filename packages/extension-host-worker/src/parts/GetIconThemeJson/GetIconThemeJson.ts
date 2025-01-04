@@ -4,9 +4,9 @@ import * as FileSystem from '../FileSystem/FileSystem.js'
 import * as FindMatchingIconThemeExtension from '../FindMatchingIconThemeExtension/FindMatchingIconThemeExtension.ts'
 import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
 import * as GetIconThemeUrl from '../GetIconThemeUrl/GetIconThemeUrl.ts'
+import * as GetJson from '../GetJson/GetJson.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
-import * as GetJson from '../GetJson/GetJson.ts'
 
 export const getIconThemeJson = async (iconThemeId) => {
   if (Platform.platform === PlatformType.Web) {
