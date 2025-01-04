@@ -2,7 +2,7 @@ import * as ExtensionMetaState from '../ExtensionMetaState/ExtensionMetaState.ts
 import * as GetJson from '../GetJson/GetJson.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
-import * as Rpc from '../Rpc/Rpc.js'
+import * as Rpc from '../Rpc/Rpc.ts'
 import * as WebExtensionsUrl from '../WebExtensionsUrl/WebExtensionsUrl.ts'
 
 const getSharedProcessExtensions = () => {
