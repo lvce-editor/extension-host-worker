@@ -1,6 +1,6 @@
 import * as Assert from '../Assert/Assert.ts'
 import * as Css from '../Css/Css.ts'
-import * as GetColorThemeCss from '../GetColorThemeCss/GetColorThemeCss.js'
+import * as GetColorThemeCss from '../GetColorThemeCss/GetColorThemeCss.ts'
 import * as GetMetaThemeColor from '../GetMetaThemeColor/GetMetaThemeColor.ts'
 import * as Meta from '../Meta/Meta.ts'
 import * as Platform from '../Platform/Platform.ts'
