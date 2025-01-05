@@ -1,44 +1,20 @@
-import * as AssetDir from '../AssetDir/AssetDir.ts'
-import * as ExtensionMetaState from '../ExtensionMetaState/ExtensionMetaState.ts'
-import * as FileSystem from '../FileSystem/FileSystem.ts'
-import * as FindMatchingIconThemeExtension from '../FindMatchingIconThemeExtension/FindMatchingIconThemeExtension.ts'
-import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
-import * as GetIconThemeUrl from '../GetIconThemeUrl/GetIconThemeUrl.ts'
-import * as GetJson from '../GetJson/GetJson.ts'
-import * as Platform from '../Platform/Platform.ts'
-import * as PlatformType from '../PlatformType/PlatformType.ts'
+import * as CacheEnabled from '../CacheEnabled/CacheEnabled.ts'
+import * as DoGetIconThemeJson from '../DoGetIconThemeJson/DoGetIconThemeJson.ts'
+import * as IconThemeCache from '../IconThemeCache/IconThemeCache.ts'
 
-export const getIconThemeJson = async (iconThemeId) => {
-  if (Platform.platform === PlatformType.Web) {
-    const url = GetIconThemeUrl.getIconThemeUrl(iconThemeId)
-    const json = await GetJson.getJson(url)
-    return {
-      json,
-      extensionPath: `${AssetDir.assetDir}/extensions/builtin.${iconThemeId}`,
-    }
+const getIconThemeCacheFirst = async (iconThemeId: string) => {
+  const cached = await IconThemeCache.get()
+  if (cached) {
+    return cached
   }
-  for (const webExtension of ExtensionMetaState.state.webExtensions) {
-    if (webExtension.iconThemes) {
-      for (const iconTheme of webExtension.iconThemes) {
-        // TODO handle error when icon theme path is not of type string
-        const iconThemeUrl = `${webExtension.path}/${iconTheme.path}`
-        const json = await GetJson.getJson(iconThemeUrl)
-        return {
-          json,
-          extensionPath: webExtension.path,
-        }
-      }
-    }
+  const items = await DoGetIconThemeJson.getIconThemeJson(iconThemeId)
+  await IconThemeCache.set(items)
+  return items
+}
+
+export const getIconThemeJson = async (iconThemeId: string): Promise<any> => {
+  if (CacheEnabled.cacheEnabled) {
+    return getIconThemeCacheFirst(iconThemeId)
   }
-  const extensions = await GetExtensions.getExtensions()
-  const iconTheme = FindMatchingIconThemeExtension.findMatchingIconThemeExtension(extensions, iconThemeId)
-  if (!iconTheme) {
-    return undefined
-  }
-  const iconThemePath = `${iconTheme.extensionPath}/${iconTheme.path}`
-  const iconThemeJson = await FileSystem.readJson(iconThemePath)
-  return {
-    extensionPath: iconTheme.extensionPath,
-    json: iconThemeJson,
-  }
+  return DoGetIconThemeJson.getIconThemeJson(iconThemeId)
 }
