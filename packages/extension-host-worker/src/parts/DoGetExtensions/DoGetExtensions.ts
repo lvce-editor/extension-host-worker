@@ -4,7 +4,7 @@ import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
 
-const getSharedProcessExtensions = () => {
+const getSharedProcessExtensions = (): Promise<readonly any[]> => {
   return Rpc.invoke(/* ExtensionManagement.getExtensions */ 'ExtensionManagement.getExtensions')
 }
 
@@ -16,7 +16,7 @@ export const doGetExtensions = async () => {
   }
   if (Platform.platform === PlatformType.Remote) {
     const sharedProcessExtensions = await getSharedProcessExtensions()
-    return [...sharedProcessExtensions(), ...meta]
+    return [...sharedProcessExtensions, ...meta]
   }
   const extensions = await getSharedProcessExtensions()
   return extensions
