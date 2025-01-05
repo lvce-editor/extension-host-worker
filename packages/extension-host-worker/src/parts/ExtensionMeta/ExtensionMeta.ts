@@ -1,22 +1,21 @@
-import * as GetWebExtensions from '../GetWebExtensions/GetWebExtensions.ts'
-import * as Platform from '../Platform/Platform.ts'
-import * as PlatformType from '../PlatformType/PlatformType.ts'
-import * as Rpc from '../Rpc/Rpc.ts'
+import * as CacheEnabled from '../CacheEnabled/CacheEnabled.ts'
+import * as DoGetExtensions from '../DoGetExtensions/DoGetExtensions.ts'
+import * as GetExtensionsFromCache from '../GetExtensionsFromCache/GetExtensionsFromCache.ts'
+import * as SaveExtensionsInCache from '../SaveExtensionsInCache/SaveExtensionsInCache.ts'
 
-const getSharedProcessExtensions = () => {
-  return Rpc.invoke(/* ExtensionManagement.getExtensions */ 'ExtensionManagement.getExtensions')
+const getExtensionsCacheFirst = async () => {
+  const cached = await GetExtensionsFromCache.getExtensionsFromCache()
+  if (cached) {
+    return cached
+  }
+  const items = await DoGetExtensions.doGetExtensions()
+  await SaveExtensionsInCache.saveExtensionsInCache(items)
+  return items
 }
 
 export const getExtensions = async () => {
-  if (Platform.platform === PlatformType.Web) {
-    const webExtensions = await GetWebExtensions.getWebExtensions()
-    return webExtensions
+  if (CacheEnabled.cacheEnabled) {
+    return getExtensionsCacheFirst()
   }
-  if (Platform.platform === PlatformType.Remote) {
-    const webExtensions = await GetWebExtensions.getWebExtensions()
-    const sharedProcessExtensions = await getSharedProcessExtensions()
-    return [...sharedProcessExtensions, ...webExtensions]
-  }
-  const extensions = await getSharedProcessExtensions()
-  return extensions
+  return DoGetExtensions.doGetExtensions()
 }
