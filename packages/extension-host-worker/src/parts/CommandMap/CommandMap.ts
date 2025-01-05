@@ -37,6 +37,7 @@ import * as GetColorThemeJson from '../GetColorThemeJson/GetColorThemeJson.ts'
 import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
 import * as GetIconThemeJson from '../GetIconThemeJson/GetIconThemeJson.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
+import * as GetWebViews from '../GetWebViews/GetWebViews.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IconTheme from '../IconTheme/IconTheme.ts'
@@ -58,10 +59,10 @@ export const commandMap = {
   'ColorTheme.getColorThemeCssFromJson': GetColorThemeCss.getColorThemeCssFromJson,
   'ColorTheme.getColorThemeJson': GetColorThemeJson.getColorThemeJson,
   'ColorTheme.hydrate': ColorTheme.hydrate,
-  'Extensions.getExtensions': GetExtensions.getExtensions,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
+  'Extensions.getExtensions': GetExtensions.getExtensions,
   'FileSystemFetch.chmod': FileSystemFetch.chmod,
   'FileSystemFetch.getBlob': FileSystemFetch.getBlob,
   'FileSystemFetch.mkdir': FileSystemFetch.mkdir,
@@ -70,7 +71,6 @@ export const commandMap = {
   'FileSystemFetch.remove': FileSystemFetch.remove,
   'FileSystemFetch.writeFile': FileSystemFetch.writeFile,
   'FileSystemMemory.chmod': FileSystemMemory.chmod,
-  'Languages.getLanguages': Languages.getLanguages,
   'FileSystemMemory.getBlob': FileSystemMemory.getBlob,
   'FileSystemMemory.getBlobUrl': FileSystemMemory.getBlobUrl,
   'FileSystemMemory.getFiles': FileSystemMemory.getFiles,
@@ -90,6 +90,7 @@ export const commandMap = {
   'IndexedDb.getValuesByIndexName': IndexedDb.getValuesByIndexName,
   'IndexedDb.saveValue': IndexedDb.saveValue,
   'IndexedDb.set': IndexedDbKeyValueStorage.set,
+  'Languages.getLanguages': Languages.getLanguages,
   'SearchFileWithFetch.searchFileWithFetch': SearchFileWithFetch.searchFile,
   'SearchFileWithHtml.searchFileWithHtml': SearchFileWithHtml.searchFile,
   'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
@@ -98,6 +99,7 @@ export const commandMap = {
   'WebView.create3': CreateWebView3.createWebView3,
   'WebView.createWebViewWorkerRpc': CreateWebViewRpc.createWebViewWorkerRpc,
   'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
+  'WebViews.getWebViews': GetWebViews.getWebViews,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
   ['ExtensionHostDebug.getProperties']: ExtensionHostDebug.getProperties,
   ['ExtensionHostDebug.listProcesses']: ExtensionHostDebug.listProcesses,
