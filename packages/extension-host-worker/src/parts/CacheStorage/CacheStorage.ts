@@ -1,9 +1,12 @@
 import * as CreateResponseFromData from '../CreateResponseFromData/CreateResponseFromData.ts'
 import { VError } from '../VError/VError.ts'
 
+const cacheName = 'Extensions' // TODO
+
 export const getJson = async (cacheKey: string): Promise<any> => {
-  const cache = await caches.open(`Extensions`)
-  const response = await cache.match(cacheKey)
+  const response = await caches.match(cacheKey, {
+    cacheName,
+  })
   if (!response) {
     return undefined
   }
@@ -13,7 +16,7 @@ export const getJson = async (cacheKey: string): Promise<any> => {
 
 export const setJson = async (cacheKey: string, data: any): Promise<void> => {
   try {
-    const cache = await caches.open(`Extensions`)
+    const cache = await caches.open(cacheName)
     const res = CreateResponseFromData.createResponseFromData(data)
     await cache.put(cacheKey, res)
   } catch (error) {
