@@ -1,3 +1,4 @@
+import * as ExtensionMetaState from '../ExtensionMetaState/ExtensionMetaState.ts'
 import * as GetWebExtensions from '../GetWebExtensions/GetWebExtensions.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
@@ -8,14 +9,14 @@ const getSharedProcessExtensions = () => {
 }
 
 export const doGetExtensions = async () => {
+  const meta = ExtensionMetaState.state.webExtensions
   if (Platform.platform === PlatformType.Web) {
     const webExtensions = await GetWebExtensions.getWebExtensions()
-    return webExtensions
+    return [...webExtensions, ...meta]
   }
   if (Platform.platform === PlatformType.Remote) {
-    const webExtensions = await GetWebExtensions.getWebExtensions()
     const sharedProcessExtensions = await getSharedProcessExtensions()
-    return [...sharedProcessExtensions, ...webExtensions]
+    return [...sharedProcessExtensions(), ...meta]
   }
   const extensions = await getSharedProcessExtensions()
   return extensions
