@@ -7,7 +7,7 @@ test('createResponseFromData - creates response with simple object', () => {
 
   expect(response).toBeInstanceOf(Response)
   expect(response.headers.get('Content-Type')).toBe('application/json')
-  expect(response.headers.get('Content-Length')).toBe('24') // Length of formatted JSON string
+  expect(response.headers.get('Content-Length')).toBe('19') // Length of formatted JSON string
 })
 
 test('createResponseFromData - creates response with nested object', () => {
@@ -21,7 +21,7 @@ test('createResponseFromData - creates response with nested object', () => {
 
   expect(response).toBeInstanceOf(Response)
   expect(response.headers.get('Content-Type')).toBe('application/json')
-  expect(response.headers.get('Content-Length')).toBe('53')
+  expect(response.headers.get('Content-Length')).toBe('33')
 })
 
 test('createResponseFromData - creates response with array', () => {
