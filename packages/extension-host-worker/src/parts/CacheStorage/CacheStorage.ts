@@ -1,3 +1,4 @@
+import * as CreateResponseFromData from '../CreateResponseFromData/CreateResponseFromData.ts'
 import { VError } from '../VError/VError.ts'
 
 export const getJson = async (cacheKey: string): Promise<any> => {
@@ -13,13 +14,7 @@ export const getJson = async (cacheKey: string): Promise<any> => {
 export const setJson = async (cacheKey: string, data: any): Promise<void> => {
   try {
     const cache = await caches.open(`Extensions`)
-    const responseString = JSON.stringify(data, null, 2)
-    const res = new Response(responseString, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': `${responseString.length}`,
-      },
-    })
+    const res = CreateResponseFromData.createResponseFromData(data)
     await cache.put(cacheKey, res)
   } catch (error) {
     throw new VError(error, `Failed to add to cache`)
