@@ -13,3 +13,7 @@ export const has = () => {
 export const set = (value) => {
   cache[id] = value
 }
+
+export const clear = () => {
+  delete cache[id]
+}
