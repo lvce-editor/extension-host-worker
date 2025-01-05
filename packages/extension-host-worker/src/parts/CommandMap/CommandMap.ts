@@ -34,6 +34,7 @@ import * as FileSystemFetch from '../FileSystemFetch/FileSystemFetch.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
 import * as GetColorThemeCss from '../GetColorThemeCss/GetColorThemeCss.ts'
 import * as GetColorThemeJson from '../GetColorThemeJson/GetColorThemeJson.ts'
+import * as GetColorThemeNames from '../GetColorThemeNames/GetColorThemeNames.ts'
 import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
 import * as GetIconThemeJson from '../GetIconThemeJson/GetIconThemeJson.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
@@ -58,6 +59,7 @@ export const commandMap = {
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
   'ColorTheme.getColorThemeCssFromJson': GetColorThemeCss.getColorThemeCssFromJson,
   'ColorTheme.getColorThemeJson': GetColorThemeJson.getColorThemeJson,
+  'ColorTheme.getColorThemeNames': GetColorThemeNames.getColorThemeNames,
   'ColorTheme.hydrate': ColorTheme.hydrate,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
