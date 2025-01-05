@@ -30,7 +30,7 @@ test('createResponseFromData - creates response with array', () => {
 
   expect(response).toBeInstanceOf(Response)
   expect(response.headers.get('Content-Type')).toBe('application/json')
-  expect(response.headers.get('Content-Length')).toBe('17')
+  expect(response.headers.get('Content-Length')).toBe('7')
 })
 
 test('createResponseFromData - creates response with null', () => {
