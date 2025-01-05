@@ -17,8 +17,8 @@ export const getJson = async (cacheKey: string): Promise<any> => {
 export const setJson = async (cacheKey: string, data: any): Promise<void> => {
   try {
     const cache = await caches.open(cacheName)
-    const res = CreateResponseFromData.createResponseFromData(data)
-    await cache.put(cacheKey, res)
+    const response = CreateResponseFromData.createResponseFromData(data)
+    await cache.put(cacheKey, response)
   } catch (error) {
     throw new VError(error, `Failed to add to cache`)
   }
