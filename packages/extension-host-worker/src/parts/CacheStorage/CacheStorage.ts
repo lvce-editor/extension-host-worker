@@ -17,6 +17,7 @@ export const setJson = async (cacheKey: string, data: any): Promise<void> => {
     const res = new Response(responseString, {
       headers: {
         'Content-Type': 'application/json',
+        'Content-Length': `${responseString.length}`,
       },
     })
     await cache.put(cacheKey, res)
