@@ -1,3 +1,4 @@
+import * as AddWebExtension from '../AddWebExtension/AddWebExtension.ts'
 import * as BulkReplacement from '../BulkReplacement/BulkReplacement.ts'
 import * as ColorTheme from '../ColorTheme/ColorTheme.ts'
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
@@ -65,6 +66,7 @@ export const commandMap = {
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'Extensions.getExtensions': GetExtensions.getExtensions,
+  'Extensions.addWebExtension': AddWebExtension.addWebExtension,
   'FileSystemFetch.chmod': FileSystemFetch.chmod,
   'FileSystemFetch.getBlob': FileSystemFetch.getBlob,
   'FileSystemFetch.mkdir': FileSystemFetch.mkdir,
