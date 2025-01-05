@@ -1,3 +1,5 @@
+import * as GetRemoteUrl from '../GetRemoteUrl/GetRemoteUrl.ts'
+
 export const getLanguagesFromExtension = (extension: any): readonly any[] => {
   // TODO what if extension is null? should not crash process, handle error gracefully
   // TODO what if extension languages is not of type array?
@@ -22,7 +24,7 @@ export const getLanguagesFromExtension = (extension: any): readonly any[] => {
       return {
         ...language,
         extensionPath,
-        tokenize: `${extensionPath}/${language.tokenize}`,
+        tokenize: GetRemoteUrl.getRemoteUrl(`${extensionPath}/${language.tokenize}`),
       }
     }
     return language
