@@ -1,4 +1,6 @@
 import * as GetRemoteUrl from '../GetRemoteUrl/GetRemoteUrl.ts'
+import * as Platform from '../Platform/Platform.ts'
+import * as PlatformType from '../PlatformType/PlatformType.ts'
 
 export const getLanguagesFromExtension = (extension: any): readonly any[] => {
   // TODO what if extension is null? should not crash process, handle error gracefully
@@ -21,10 +23,13 @@ export const getLanguagesFromExtension = (extension: any): readonly any[] => {
           tokenize: '',
         }
       }
+      const relativePath = `${extensionPath}/${language.tokenize}`
+      const absolutePath = Platform.platform === PlatformType.Web ? relativePath : GetRemoteUrl.getRemoteUrl(relativePath)
+
       return {
         ...language,
         extensionPath,
-        tokenize: GetRemoteUrl.getRemoteUrl(`${extensionPath}/${language.tokenize}`),
+        tokenize: absolutePath,
       }
     }
     return language
