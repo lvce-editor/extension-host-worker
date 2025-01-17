@@ -54,8 +54,8 @@ export const getBabelAstDependencies = (code, ast) => {
   for (const node of body) {
     if (node.type === BabelNodeType.ImportDeclaration || node.type === BabelNodeType.ExportAllDeclaration) {
       const relativePath = node.source.extra.rawValue
-      const start = node.source.start
-      const end = node.source.end
+      const { start } = node.source
+      const { end } = node.source
       // @ts-ignore
       dependencies.push({ relativePath, code, start, end })
     } else if (
@@ -74,8 +74,8 @@ export const getBabelAstDependencies = (code, ast) => {
       node.declarations[0].init.argument.arguments[0].type === BabelNodeType.StringLiteral
     ) {
       const relativePath = node.declarations[0].init.argument.arguments[0].extra.rawValue
-      const start = node.declarations[0].init.argument.arguments[0].start
-      const end = node.declarations[0].init.argument.arguments[0].end
+      const { start } = node.declarations[0].init.argument.arguments[0]
+      const { end } = node.declarations[0].init.argument.arguments[0]
       // @ts-ignore
       dependencies.push({ relativePath, code, start, end })
     }
@@ -92,8 +92,8 @@ export const getBabelAstDependencies = (code, ast) => {
       node.arguments[0].type === BabelNodeType.StringLiteral
     ) {
       const relativePath = node.arguments[0].extra.rawValue
-      const start = node.arguments[0].start
-      const end = node.arguments[0].end
+      const { start } = node.arguments[0]
+      const { end } = node.arguments[0]
       // @ts-ignore
       dependencies.push({ relativePath, code, start, end })
     }

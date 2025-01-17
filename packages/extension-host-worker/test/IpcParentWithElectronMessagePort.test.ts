@@ -48,6 +48,6 @@ test.skip('create', async () => {
     {
       isPort: true,
     },
-    'HandleMessagePortForExtensionHostHelperProcess.handleMessagePortForExtensionHostHelperProcess'
+    'HandleMessagePortForExtensionHostHelperProcess.handleMessagePortForExtensionHostHelperProcess',
   )
 })

@@ -1,4 +1,4 @@
-import { IDBPDatabase } from 'idb'
+import type { IDBPDatabase } from 'idb'
 
 interface State {
   databases: any

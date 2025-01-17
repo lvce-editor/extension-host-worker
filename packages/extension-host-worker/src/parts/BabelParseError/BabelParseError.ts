@@ -14,7 +14,7 @@ export class BabelParseError extends SyntaxError {
     super(message)
     this.name = 'BabelParseError'
     // @ts-ignore
-    const line = error.loc.line
+    const { line } = error.loc
     // @ts-ignore
     const column = error.loc.column + 1
     this.stack = `${message}

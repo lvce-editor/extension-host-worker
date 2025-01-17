@@ -60,7 +60,7 @@ export const createColorThemeFromJson = (colorThemeId, colorThemeJson) => {
     Logger.warn(`color theme json for "${colorThemeId}" cannot be converted to css, it must be of type object but was of type array`)
     return ''
   }
-  const colors = colorThemeJson.colors
+  const { colors } = colorThemeJson
   if (!colors) {
     return ''
   }

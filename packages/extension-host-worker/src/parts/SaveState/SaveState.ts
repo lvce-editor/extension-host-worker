@@ -32,9 +32,12 @@ const serializeWebViews = async (webViews) => {
   return serialized
 }
 
-const getAdditional = () => {
+const getAdditional = async (): Promise<readonly any[]> => {
+  if (!IframeWorker.isActive()) {
+    return []
+  }
   try {
-    return IframeWorker.invoke('WebView.saveState')
+    return await IframeWorker.invoke('WebView.saveState')
   } catch {
     return []
   }

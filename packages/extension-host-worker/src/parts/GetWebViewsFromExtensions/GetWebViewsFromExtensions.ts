@@ -5,7 +5,7 @@ export const getWebViewsFromExtensions = (extensions: readonly any[]): readonly 
   for (const extension of extensions) {
     if (extension && extension.webViews) {
       for (const webView of extension.webViews) {
-        let path = extension.path
+        let { path } = extension
         if (webView && webView.path) {
           path = `${extension.path}/${webView.path}`
         }

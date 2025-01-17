@@ -9,6 +9,10 @@ const ensureWorker = () => {
   return workerPromise
 }
 
+export const isActive = (): boolean => {
+  return Boolean(workerPromise)
+}
+
 export const invoke = async (method, ...params) => {
   const rpc = await ensureWorker()
   return rpc.invoke(method, ...params)

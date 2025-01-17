@@ -1,6 +1,6 @@
 // TODO high memory usage in idb because of transactionDoneMap
 
-import { IDBPDatabase } from 'idb'
+import type { IDBPDatabase } from 'idb'
 import { openDB } from '../Idb/Idb.ts'
 import { state } from '../IndexedDbState/IndexedDbState.ts'
 import * as IsDataCloneError from '../IsDataCloneError/IsDataCloneError.ts'
