@@ -7,7 +7,7 @@ export const setup = ({ global, errorConstructor }: { global: typeof globalThis;
   SetStackTraceLimit.setStackTraceLimit(errorConstructor, 20)
   global.onerror ||= ErrorHandling.handleUnhandledError
   global.onunhandledrejection ||= ErrorHandling.handleUnhandledRejection
-  if ('SecurityPolicyViolationEvent' in self) {
+  if ('SecurityPolicyViolationEvent' in globalThis) {
     global.addEventListener('securitypolicyviolation', HandleContentSecurityPolicyViolation.handleContentSecurityPolicyViolation)
   }
   // @ts-ignore

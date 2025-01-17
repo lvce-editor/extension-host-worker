@@ -1,4 +1,4 @@
-import { Rpc } from '@lvce-editor/rpc'
+import type { Rpc } from '@lvce-editor/rpc'
 import * as IpcParentModule from '../IpcParentModule/IpcParentModule.ts'
 import { VError } from '../VError/VError.ts'
 

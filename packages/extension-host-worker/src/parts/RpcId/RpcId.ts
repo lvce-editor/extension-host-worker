@@ -1,1 +1,1 @@
-export const RendererWorker=1
+export const RendererWorker = 1
