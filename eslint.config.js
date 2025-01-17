@@ -1,18 +1,7 @@
-import eslint from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import perfectionist from 'eslint-plugin-perfectionist'
+import * as config from '@lvce-editor/eslint-config'
 
-export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
+export default [
+  ...config.default,
   {
     ignores: [
       '**/build/**',
@@ -33,8 +22,8 @@ export default tseslint.config(
     ],
   },
   {
+    files: ['**/*.ts'],
     rules: {
-      '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
@@ -48,39 +37,17 @@ export default tseslint.config(
       '@typescript-eslint/no-deprecated': 'off',
       '@typescript-eslint/no-unnecessary-condition': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
-    },
-  },
-  {
-    rules: {
       '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/restrict-plus-operands': 'off',
+      'unicorn/consistent-function-scoping': 'off',
       '@typescript-eslint/await-thenable': 'off',
-      '@typescript-eslint/prefer-promise-reject-errors': 'off',
-      '@typescript-eslint/no-implied-eval': 'off',
-      '@typescript-eslint/no-dynamic-delete': 'off',
-      'no-empty': 'off',
-      'no-useless-escape': 'off',
-      '@typescript-eslint/unbound-method': 'off',
-      '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/only-throw-error': 'off',
-      '@typescript-eslint/no-useless-constructor': 'off',
+      '@typescript-eslint/prefer-readonly-parameter-types': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+      'no-empty': 'off',
+      'no-console': 'off',
       '@typescript-eslint/no-redundant-type-constituents': 'off',
-      '@typescript-eslint/no-this-alias': 'off',
+      '@typescript-eslint/prefer-promise-reject-errors': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
     },
   },
-  {
-    plugins: {
-      perfectionist,
-    },
-    rules: {
-      'perfectionist/sort-imports': [
-        'error',
-        {
-          type: 'natural',
-          order: 'asc',
-          newlinesBetween: 'never',
-        },
-      ],
-    },
-  },
-)
+]

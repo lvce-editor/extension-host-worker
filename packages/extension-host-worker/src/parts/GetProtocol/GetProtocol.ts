@@ -1,4 +1,4 @@
-const RE_PROTOCOL = /^([a-z\-]+):\/\//
+const RE_PROTOCOL = /^([a-z-]+):\/\//
 
 export const getProtocol = (uri) => {
   const protocolMatch = uri.match(RE_PROTOCOL)
