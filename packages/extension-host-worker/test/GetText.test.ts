@@ -5,7 +5,7 @@ import { getText } from '../src/parts/GetText/GetText.ts'
 test('getText fetches text from URL', async () => {
   const mockUrl = 'https://example.com/text'
   // @ts-ignore
-  global.fetch = jest.fn(() =>
+  globalThis.fetch = jest.fn(() =>
     Promise.resolve({
       ok: true,
       statusText: 'OK',
@@ -21,7 +21,7 @@ test('getText throws error on fetch failure', async () => {
   const mockUrl = 'https://example.com/text'
 
   // @ts-ignore
-  global.fetch = jest.fn(() =>
+  globalThis.fetch = jest.fn(() =>
     Promise.resolve({
       ok: false,
       statusText: 'Not Found',

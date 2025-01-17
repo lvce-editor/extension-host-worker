@@ -18,7 +18,7 @@ beforeEach(() => {
   jest.resetAllMocks()
   jest.spyOn(console, 'error').mockImplementation(() => {})
   // @ts-ignore
-  global.PromiseRejectionEvent = MockPromiseRejectionEvent
+  globalThis.PromiseRejectionEvent = MockPromiseRejectionEvent
 })
 
 test('handleUnhandledRejection - error with stack', () => {
