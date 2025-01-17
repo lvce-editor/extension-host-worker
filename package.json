@@ -2,39 +2,36 @@
   "name": "@lvce-editor/extension-host-worker-monorepo",
   "version": "0.0.0-dev",
   "description": "",
-  "main": "src/extensionHostWorkerMain.ts",
+  "license": "MIT",
+  "author": "Lvce Editor",
   "type": "module",
+  "main": "src/extensionHostWorkerMain.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "postinstall": "lerna bootstrap --ci",
-    "lint": "eslint .",
-    "test": "lerna run test",
-    "type-check": "tsc -b",
-    "build:watch": "./packages/build/node_modules/.bin/esbuild --external:node:buffer --external:electron --external:ws --external:node:worker_threads --format=esm --bundle --watch packages/extension-host-worker/src/extensionHostWorkerMain.ts --outfile=.tmp/dist/dist/extensionHostWorkerMain.js",
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
+    "build:watch": "./packages/build/node_modules/.bin/esbuild --external:node:buffer --external:electron --external:ws --external:node:worker_threads --format=esm --bundle --watch packages/extension-host-worker/src/extensionHostWorkerMain.ts --outfile=.tmp/dist/dist/extensionHostWorkerMain.js",
     "dev": "node packages/build/src/dev.js",
     "format": "prettier --write .",
-    "measure": "cd packages/memory && npm run measure"
-  },
-  "author": "Lvce Editor",
-  "license": "MIT",
-  "devDependencies": {
-    "@eslint/js": "^9.18.0",
-    "@lerna/legacy-package-management": "^8.1.9",
-    "@types/eslint__js": "^8.42.3",
-    "eslint": "^9.18.0",
-    "eslint-plugin-perfectionist": "^4.6.0",
-    "lerna": "^8.1.9",
-    "prettier": "^3.4.2",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "lint": "eslint .",
+    "measure": "cd packages/memory && npm run measure",
+    "postinstall": "lerna bootstrap --ci",
+    "test": "lerna run test",
+    "type-check": "tsc -b"
   },
   "prettier": {
     "semi": false,
     "singleQuote": true,
     "printWidth": 150
+  },
+  "devDependencies": {
+    "@lerna/legacy-package-management": "^8.1.9",
+    "@lvce-editor/eslint-config": "^1.15.0",
+    "eslint": "^9.18.0",
+    "lerna": "^8.1.9",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
   }
 }

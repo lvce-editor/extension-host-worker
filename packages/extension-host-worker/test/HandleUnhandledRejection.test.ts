@@ -7,7 +7,7 @@ class MockPromiseRejectionEvent {
   reason: any
   preventDefault: jest.Mock
 
-  constructor(type: string, init: { promise: Promise<any>; reason: any }) {
+  constructor(type: string, init: { readonly promise: Promise<any>; readonly reason: any }) {
     this.promise = init.promise
     this.reason = init.reason
     this.preventDefault = jest.fn()

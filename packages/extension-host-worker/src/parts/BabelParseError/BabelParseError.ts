@@ -1,4 +1,4 @@
-const RE_LINE_COLUMN = /(.*)(?:\(\d+\:\d+\))/
+const RE_LINE_COLUMN = /(.*)(?:\(\d+:\d+\))/
 
 const getBabelErrorMessage = (message) => {
   const match = message.match(RE_LINE_COLUMN)
