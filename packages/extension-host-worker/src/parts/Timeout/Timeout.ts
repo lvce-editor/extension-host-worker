@@ -1,6 +1,5 @@
-export const sleep = (duration) => {
-  const promiseCallback = (resolve, reject) => {
-    setTimeout(resolve, duration)
-  }
-  return new Promise(promiseCallback)
+export const sleep = (duration: number): Promise<void> => {
+  const { resolve, promise } = Promise.withResolvers<undefined>()
+  setTimeout(resolve, duration)
+  return promise
 }
