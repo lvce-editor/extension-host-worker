@@ -9,9 +9,10 @@ export const getLineMatch = (
   queryLower: string,
   useRegularExpression: number,
   matchCase: number,
+  matchWholeWord: number,
 ): readonly SearchResult[] => {
   if (useRegularExpression) {
     return GetLineMatchRegex.getLineMatchRegex(line, lineNumber, query, matchCase)
   }
-  return GetLineMatchText.getLineMatchText(line, lineNumber, query, queryLower, matchCase)
+  return GetLineMatchText.getLineMatchText(line, lineNumber, query, queryLower, matchCase, matchWholeWord)
 }
