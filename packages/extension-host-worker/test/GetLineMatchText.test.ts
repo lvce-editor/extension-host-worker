@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals'
 import * as GetLineMatchText from '../src/parts/GetLineMatchText/GetLineMatchText.ts'
-import { MatchCase } from '../src/parts/SearchFlags/SearchFlags.ts'
+import { MatchCase, MatchWholeWord } from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('getLineMatchText - basic match', () => {
@@ -25,6 +25,63 @@ test('getLineMatchText - case insensitive match', () => {
       start: 0,
       end: 5,
       lineNumber: 1,
+    },
+  ])
+})
+
+test('getLineMatchText - match whole word, no match', () => {
+  const results = GetLineMatchText.getLineMatchText('test', 1, 'st', 'st', 0, MatchWholeWord)
+  expect(results).toEqual([])
+})
+
+test('getLineMatchText - match whole word, match at start of line', () => {
+  const results = GetLineMatchText.getLineMatchText('test', 1, 'test', 'test', 0, MatchWholeWord)
+  expect(results).toEqual([
+    {
+      end: 4,
+      lineNumber: 1,
+      start: 0,
+      text: 'test',
+      type: 2,
+    },
+  ])
+})
+
+test('getLineMatchText - match whole word, match before space', () => {
+  const results = GetLineMatchText.getLineMatchText(' test', 1, 'test', 'test', 0, MatchWholeWord)
+  expect(results).toEqual([
+    {
+      end: 5,
+      lineNumber: 1,
+      start: 1,
+      text: ' test',
+      type: 2,
+    },
+  ])
+})
+
+test('getLineMatchText - match whole word, match before tab', () => {
+  const results = GetLineMatchText.getLineMatchText('\ttest', 1, 'test', 'test', 0, MatchWholeWord)
+  expect(results).toEqual([
+    {
+      end: 5,
+      lineNumber: 1,
+      start: 1,
+      text: '\ttest',
+      type: 2,
+    },
+  ])
+})
+
+test('getLineMatchText - match whole word, match before dash', () => {
+  const results = GetLineMatchText.getLineMatchText('-test', 1, 'test', 'test', 0, MatchWholeWord)
+  expect(results).toEqual([
+    {
+      end: 5,
+      lineNumber: 1,
+      start: 1,
+      text: '-test',
+      type: 2,
     },
   ])
 })
