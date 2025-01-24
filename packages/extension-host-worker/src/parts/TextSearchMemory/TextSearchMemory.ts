@@ -1,8 +1,8 @@
 import * as Assert from '../Assert/Assert.ts'
 import * as DirentType from '../DirentType/DirentType.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
-import * as TextSearchInText from '../TextSearchInText/TextSearchInText.ts'
 import * as MatchesUri from '../MatchesUri/MatchesUri.ts'
+import * as TextSearchInText from '../TextSearchInText/TextSearchInText.ts'
 
 export const textSearch = async (scheme: string, root: string, query: string, options: any, assetDir: string): Promise<any> => {
   Assert.string(scheme)
