@@ -2,6 +2,7 @@ import * as AddWebExtension from '../AddWebExtension/AddWebExtension.ts'
 import * as BulkReplacement from '../BulkReplacement/BulkReplacement.ts'
 import * as ColorTheme from '../ColorTheme/ColorTheme.ts'
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
+import * as CreateWebViewRpc2 from '../CreateWebViewRpc2/CreateWebViewRpc2.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
@@ -104,6 +105,7 @@ export const commandMap = {
   'TextSearchMemory.textSearch': TextSearchMemory.textSearch,
   'WebView.create3': CreateWebView3.createWebView3,
   'WebView.createWebViewWorkerRpc': CreateWebViewRpc.createWebViewWorkerRpc,
+  'WebView.createWebViewWorkerRpc2': CreateWebViewRpc2.createWebViewWorkerRpc2,
   'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
   'WebViews.getWebViews': GetWebViews.getWebViews,
   ['ExtensionHostDebug.evaluate']: ExtensionHostDebug.evaluate,
