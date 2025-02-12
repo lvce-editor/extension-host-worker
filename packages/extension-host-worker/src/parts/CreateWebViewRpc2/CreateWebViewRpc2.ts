@@ -1,11 +1,7 @@
-import * as ExtensionHostSubWorkerUrl from '../ExtensionHostSubWorkerUrl/ExtensionHostSubWorkerUrl.ts'
 import * as RendererWorkerIpcParentType from '../RendererWorkerIpcParentType/RendererWorkerIpcParentType.ts'
 import * as ParentRpc from '../Rpc/Rpc.ts'
 
-/**
- * @deprecated use createWebViewWorkerRpc2 which passes the worker url as a parameter
- */
-export const createWebViewWorkerRpc = async (rpcInfo: any, port: MessagePort): Promise<void> => {
+export const createWebViewWorkerRpc2 = async (rpcInfo: any, port: MessagePort): Promise<void> => {
   // TODO this function is called from the iframe worker to create a direct
   // connection between a webview/iframe and it's webworker. For this to work
   // the iframe worker creates a messagechannel and sends one messageport to the webview
@@ -16,7 +12,7 @@ export const createWebViewWorkerRpc = async (rpcInfo: any, port: MessagePort): P
   // host subworker doesn't need to import the other file
   await ParentRpc.invokeAndTransfer('IpcParent.create', {
     method: RendererWorkerIpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
-    url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
+    url: rpcInfo.url,
     name: rpcInfo.name,
     raw: true,
     port,
