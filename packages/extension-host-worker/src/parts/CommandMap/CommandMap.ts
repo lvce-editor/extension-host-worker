@@ -41,6 +41,7 @@ import * as GetExtension from '../GetExtension/GetExtension.ts'
 import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
 import * as GetIconThemeJson from '../GetIconThemeJson/GetIconThemeJson.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
+import * as GetWebViewInfo2 from '../GetWebViewInfo2/GetWebViewInfo2.ts'
 import * as GetWebViews from '../GetWebViews/GetWebViews.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
@@ -56,7 +57,6 @@ import * as SearchFileWithFetch from '../SearchFileWithFetch/SearchFileWithFetch
 import * as SearchFileWithHtml from '../SearchFileWithHtml/SearchFileWithHtml.ts'
 import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
-import * as GetWebViewInfo2 from '../GetWebViewInfo2/GetWebViewInfo2.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 
 export const commandMap = {
