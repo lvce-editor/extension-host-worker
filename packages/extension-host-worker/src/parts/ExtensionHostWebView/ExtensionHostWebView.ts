@@ -2,6 +2,10 @@ import { MessagePortRpcParent } from '@lvce-editor/rpc'
 import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/ExtensionHostWebViewState.ts'
 
 // TODO pass uuid to allow having multiple webviews open at the same time
+
+/**
+ * @deprecated use iframe worker instead of creating and querying webviews
+ */
 export const createWebView = async (providerId: string, port: MessagePort, uri: string, uid: number, origin: string, webView: any): Promise<void> => {
   const provider = ExtensionHostWebViewState.getProvider(providerId)
   if (!provider) {
@@ -36,10 +40,16 @@ export const disposeWebView = (id) => {
   // const webView=webViews[id]
 }
 
+/**
+ * @deprecated use iframe worker instead of creating and querying webviews
+ */
 export const registerWebViewProvider = (provider) => {
   ExtensionHostWebViewState.setProvider(provider.id, provider)
 }
 
+/**
+ * @deprecated use iframe worker instead of creating and querying webviews
+ */
 export const getWebViewInfo = (providerId: string) => {
   const webView = ExtensionHostWebViewState.getWebView(providerId)
   if (!webView) {
