@@ -127,6 +127,6 @@ export const chmod = (): void => {
   throw new Error('[memfs] chmod not implemented')
 }
 
-export const getFiles = (): any => {
+export const getFiles = (): FileSystemMemoryState.Files => {
   return FileSystemMemoryState.getAll()
 }
