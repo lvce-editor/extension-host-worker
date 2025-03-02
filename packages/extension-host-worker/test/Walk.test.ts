@@ -1,6 +1,6 @@
 import { expect, test, jest } from '@jest/globals'
-import * as Walk from '../src/parts/Walk/Walk.ts'
 import * as BabelNodeType from '../src/parts/BabelNodeType/BabelNodeType.ts'
+import * as Walk from '../src/parts/Walk/Walk.ts'
 
 test('walk - empty node', () => {
   const visitor = jest.fn()
