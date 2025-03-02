@@ -1,19 +1,19 @@
-const state = {
-  /**
-   * @type {any[]}
-   */
+interface State {
+  errors: readonly any[]
+}
+
+const state: State = {
   errors: [],
 }
 
-export const addError = (error) => {
-  // @ts-ignore
-  state.errors.push(error)
+export const addError = (error: any): void => {
+  state.errors = [...state.errors, error]
 }
 
-export const hasRecentErrors = () => {
+export const hasRecentErrors = (): boolean => {
   return state.errors.length > 0
 }
 
-export const getRecentError = () => {
+export const getRecentError = (): any => {
   state.errors.at(-1)
 }

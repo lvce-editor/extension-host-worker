@@ -1,3 +1,3 @@
-export const getOrigin = () => {
+export const getOrigin = (): string => {
   return location.origin
 }

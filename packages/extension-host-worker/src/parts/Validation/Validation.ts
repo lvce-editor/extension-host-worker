@@ -1,27 +1,4 @@
-const getType = (value): string => {
-  switch (typeof value) {
-    case 'number':
-      return 'number'
-    case 'function':
-      return 'function'
-    case 'string':
-      return 'string'
-    case 'object':
-      if (value === null) {
-        return 'null'
-      }
-      if (Array.isArray(value)) {
-        return 'array'
-      }
-      return 'object'
-    case 'boolean':
-      return 'boolean'
-    case 'undefined':
-      return 'undefined'
-    default:
-      return 'unknown'
-  }
-}
+import * as GetType from '../GetType/GetType.ts'
 
 const validateResultObject = (result, resultShape): string | undefined => {
   if (!resultShape.properties) {
@@ -30,7 +7,7 @@ const validateResultObject = (result, resultShape): string | undefined => {
   for (const [key, value] of Object.entries(resultShape.properties)) {
     // @ts-ignore
     const expectedType = value.type
-    const actualType = getType(result[key])
+    const actualType = GetType.getType(result[key])
     if (expectedType !== actualType) {
       return `item.${key} must be of type ${expectedType}`
     }
@@ -40,7 +17,7 @@ const validateResultObject = (result, resultShape): string | undefined => {
 
 const validateResultArray = (result, resultShape): string | undefined => {
   for (const item of result) {
-    const actualType = getType(item)
+    const actualType = GetType.getType(item)
     const expectedType = resultShape.items.type
     if (actualType !== expectedType) {
       return `expected result to be of type ${expectedType} but was of type ${actualType}`
@@ -65,7 +42,7 @@ const getPreviewString = (item): string => {
 }
 
 const getPreview = (item): string => {
-  const type = getType(item)
+  const type = GetType.getType(item)
   switch (type) {
     case 'object':
       return getPreviewObject(item)
@@ -79,7 +56,7 @@ const getPreview = (item): string => {
 }
 
 export const validate = (item, schema): string | undefined => {
-  const actualType = getType(item)
+  const actualType = GetType.getType(item)
   const expectedType = schema.type
   if (actualType !== expectedType) {
     if (schema.allowUndefined && (item === undefined || item === null)) {
