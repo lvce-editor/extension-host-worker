@@ -3,6 +3,7 @@
 import type { IDBPDatabase } from 'idb'
 import { openDB } from '../Idb/Idb.ts'
 import { state } from '../IndexedDbState/IndexedDbState.ts'
+
 const getHandleDb = async (): Promise<IDBPDatabase> => {
   const db = await openDB('handle', state.dbVersion, {
     async upgrade(db, oldVersion) {

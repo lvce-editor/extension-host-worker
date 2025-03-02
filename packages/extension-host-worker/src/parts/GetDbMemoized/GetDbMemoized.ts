@@ -1,8 +1,7 @@
 // TODO high memory usage in idb because of transactionDoneMap
 
 import type { IDBPDatabase } from 'idb'
-import { openDB } from '../Idb/Idb.ts'
-import { storeId } from '../StoreId/StoreId.ts'
+import * as GetDb from '../GetDb/GetDb.ts'
 
 interface State {
   databases: any
@@ -16,20 +15,7 @@ const state: State = {
   cachedDb: undefined,
 }
 
-const getDb = async (): Promise<IDBPDatabase> => {
-  const db = await openDB(storeId, state.dbVersion, {
-    async upgrade(db, oldVersion) {
-      if (!db.objectStoreNames.contains(storeId)) {
-        await db.createObjectStore(storeId, {
-          autoIncrement: true,
-        })
-      }
-    },
-  })
-  return db
-}
-
 export const getDbMemoized = async (): Promise<IDBPDatabase> => {
-  state.cachedDb ||= await getDb()
+  state.cachedDb ||= await GetDb.getDb()
   return state.cachedDb
 }
