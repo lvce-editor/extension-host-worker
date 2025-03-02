@@ -14,6 +14,6 @@ export const extname = (path: string): string => {
   return path.slice(index)
 }
 
-export const join = (pathSeparator, ...parts) => {
+export const join = (pathSeparator: string, ...parts: readonly string[]): string => {
   return parts.join(pathSeparator)
 }
