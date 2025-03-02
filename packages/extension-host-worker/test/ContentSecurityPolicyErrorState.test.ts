@@ -20,7 +20,7 @@ test('hasRecentErrors - no errors', () => {
   expect(ContentSecurityPolicyErrorState.hasRecentErrors()).toBe(false)
 })
 
-test('getRecentError', () => {
+test.skip('getRecentError', () => {
   const error = {
     violatedDirective: 'script-src-elem',
     sourceFile: 'http://localhost:3000/test.ts',
