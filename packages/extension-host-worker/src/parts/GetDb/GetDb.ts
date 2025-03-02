@@ -2,8 +2,8 @@
 
 import type { IDBPDatabase } from 'idb'
 import { openDB } from '../Idb/Idb.ts'
-import { storeId } from '../StoreId/StoreId.ts'
 import { state } from '../IndexedDbState/IndexedDbState.ts'
+import { storeId } from '../StoreId/StoreId.ts'
 
 export const getDb = async (): Promise<IDBPDatabase> => {
   const db = await openDB(storeId, state.dbVersion, {
