@@ -55,21 +55,19 @@ test('readDirWithFileTypes - file', () => {
 })
 
 test('readDirWithFileTypes - directory', () => {
-  // @ts-ignore
-  FileSystemMemory.state.files = {
-    '/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/test/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/test/file.txt': {
-      content: 'test content',
-      type: DirentType.File,
-    },
-  }
+  FileSystemMemoryState.setDirent('/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+
+  FileSystemMemoryState.setDirent('/test/file.txt', {
+    content: 'test content',
+    type: DirentType.File,
+  })
   expect(FileSystemMemory.readDirWithFileTypes('/')).toEqual([
     {
       name: 'test',
