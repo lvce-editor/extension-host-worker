@@ -32,6 +32,7 @@ import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHo
 import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/ExtensionHostTypeDefinition.ts'
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
+import * as FileSearchMemory from '../FileSearchMemory/FileSearchMemory.ts'
 import * as FileSystemFetch from '../FileSystemFetch/FileSystemFetch.ts'
 import * as FileSystemMemory from '../FileSystemMemory/FileSystemMemory.ts'
 import * as GetColorThemeCss from '../GetColorThemeCss/GetColorThemeCss.ts'
@@ -87,6 +88,7 @@ export const commandMap = {
   'Extensions.addWebExtension': AddWebExtension.addWebExtension,
   'Extensions.getExtension': GetExtension.getExtension,
   'Extensions.getExtensions': GetExtensions.getExtensions,
+  'FileSearchMemory.fileSearch': FileSearchMemory.fileSearch,
   'FileSystemFetch.chmod': FileSystemFetch.chmod,
   'FileSystemFetch.getBlob': FileSystemFetch.getBlob,
   'FileSystemFetch.mkdir': FileSystemFetch.mkdir,
