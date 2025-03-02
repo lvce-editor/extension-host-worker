@@ -6,6 +6,10 @@ const state: State = {
   errors: [],
 }
 
+export const reset = (): void => {
+  state.errors = []
+}
+
 export const addError = (error: any): void => {
   state.errors = [...state.errors, error]
 }

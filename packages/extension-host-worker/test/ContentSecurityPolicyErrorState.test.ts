@@ -1,5 +1,9 @@
-import { expect, test } from '@jest/globals'
+import { beforeEach, expect, test } from '@jest/globals'
 import * as ContentSecurityPolicyErrorState from '../src/parts/ContentSecurityPolicyErrorState/ContentSecurityPolicyErrorState.ts'
+
+beforeEach(() => {
+  ContentSecurityPolicyErrorState.reset()
+})
 
 test('addError', () => {
   const error = {
