@@ -19,3 +19,9 @@ export const getAll = () => {
 export const remove = (uri: string): void => {
   delete files[uri]
 }
+
+export const reset = (): void => {
+  for (const key of Object.keys(files)) {
+    remove(key)
+  }
+}
