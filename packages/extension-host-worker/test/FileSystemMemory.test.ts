@@ -1,23 +1,23 @@
 import { beforeEach, expect, test } from '@jest/globals'
 import * as DirentType from '../src/parts/DirentType/DirentType.ts'
 import * as FileSystemMemory from '../src/parts/FileSystemMemory/FileSystemMemory.ts'
+import * as FileSystemMemoryState from '../src/parts/FileSystemMemoryState/FileSystemMemoryState.ts'
 
 beforeEach(() => {
-  // @ts-ignore
-  FileSystemMemory.state.files = Object.create(null)
+  FileSystemMemoryState.reset()
 })
 
 test('readFile', () => {
-  FileSystemMemory.state.files['/test/file.txt'] = {
+  FileSystemMemoryState.setDirent('/test/file.txt', {
     type: DirentType.File,
     content: 'test content',
-  }
+  })
   expect(FileSystemMemory.readFile('/test/file.txt')).toBe('test content')
 })
 
 test('writeFile', () => {
   FileSystemMemory.writeFile('/test/file.txt', 'test content')
-  expect(FileSystemMemory.state.files).toEqual({
+  expect(FileSystemMemoryState.getAll()).toEqual({
     '/': {
       type: DirentType.Directory,
       content: '',
@@ -34,21 +34,18 @@ test('writeFile', () => {
 })
 
 test('readDirWithFileTypes - file', () => {
-  // @ts-ignore
-  FileSystemMemory.state.files = {
-    '/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/test/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/test/file.txt': {
-      content: 'test content',
-      type: DirentType.File,
-    },
-  }
+  FileSystemMemoryState.setDirent('/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test/file.txt', {
+    content: 'test content',
+    type: DirentType.File,
+  })
   expect(FileSystemMemory.readDirWithFileTypes('/test')).toEqual([
     {
       name: 'file.txt',
@@ -58,21 +55,19 @@ test('readDirWithFileTypes - file', () => {
 })
 
 test('readDirWithFileTypes - directory', () => {
-  // @ts-ignore
-  FileSystemMemory.state.files = {
-    '/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/test/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/test/file.txt': {
-      content: 'test content',
-      type: DirentType.File,
-    },
-  }
+  FileSystemMemoryState.setDirent('/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+
+  FileSystemMemoryState.setDirent('/test/file.txt', {
+    content: 'test content',
+    type: DirentType.File,
+  })
   expect(FileSystemMemory.readDirWithFileTypes('/')).toEqual([
     {
       name: 'test',
@@ -82,41 +77,38 @@ test('readDirWithFileTypes - directory', () => {
 })
 
 test('readDirWithFileTypes - mixed content', () => {
-  // @ts-ignore
-  FileSystemMemory.state.files = {
-    '/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/languages/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/sample-folder/': {
-      type: DirentType.Directory,
-      content: '',
-    },
-    '/test.txt': {
-      type: DirentType.File,
-      content: 'div',
-    },
-    '/languages/index.html': {
-      type: DirentType.File,
-      content: 'div',
-    },
-    '/sample-folder/a.txt': {
-      type: DirentType.File,
-      content: '',
-    },
-    '/sample-folder/b.txt': {
-      type: DirentType.File,
-      content: '',
-    },
-    '/sample-folder/c.txt': {
-      type: DirentType.File,
-      content: '',
-    },
-  }
+  FileSystemMemoryState.setDirent('/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/languages/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/sample-folder/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test.txt', {
+    type: DirentType.File,
+    content: 'div',
+  })
+  FileSystemMemoryState.setDirent('/languages/index.html', {
+    type: DirentType.File,
+    content: 'div',
+  })
+  FileSystemMemoryState.setDirent('/sample-folder/a.txt', {
+    type: DirentType.File,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/sample-folder/b.txt', {
+    type: DirentType.File,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/sample-folder/c.txt', {
+    type: DirentType.File,
+    content: '',
+  })
   expect(FileSystemMemory.readDirWithFileTypes('/')).toEqual([
     {
       name: 'languages',

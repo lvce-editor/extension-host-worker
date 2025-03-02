@@ -1,26 +1,14 @@
 import type { Dirent } from '../Dirent/Dirent.ts'
-import type { InMemoryFile } from '../InMemoryFile/InMemoryFile.ts'
 import * as DirentType from '../DirentType/DirentType.ts'
 import { FileNotFoundError } from '../FileNotFoundError/FileNotFoundError.ts'
+import * as FileSystemMemoryState from '../FileSystemMemoryState/FileSystemMemoryState.ts'
 import * as GetContentType from '../GetContentType/GetContentType.ts'
 import * as PathSeparatorType from '../PathSeparatorType/PathSeparatorType.ts'
 
 // TODO move this to an extension?
 
-interface State {
-  readonly files: Record<string, InMemoryFile>
-}
-
-export const state: State = {
-  files: Object.create(null),
-}
-
-const getDirent = (uri: string): InMemoryFile => {
-  return state.files[uri]
-}
-
 export const readFile = (uri: string): string => {
-  const dirent = getDirent(uri)
+  const dirent = FileSystemMemoryState.getDirent(uri)
   if (!dirent) {
     throw new FileNotFoundError(uri)
   }
@@ -35,26 +23,26 @@ const ensureParentDir = (uri: string): void => {
   let endIndex = uri.indexOf(PathSeparatorType.Slash)
   while (endIndex >= 0) {
     const part = uri.slice(startIndex, endIndex + 1)
-    state.files[part] = {
+    FileSystemMemoryState.setDirent(part, {
       type: DirentType.Directory,
       content: '',
-    }
+    })
     endIndex = uri.indexOf(PathSeparatorType.Slash, endIndex + 1)
   }
 }
 
 export const writeFile = (uri: string, content: string): void => {
-  const dirent = getDirent(uri)
+  const dirent = FileSystemMemoryState.getDirent(uri)
   if (dirent) {
     // TODO create new dirent
     // @ts-ignore
     dirent.content = content
   } else {
     ensureParentDir(uri)
-    state.files[uri] = {
+    FileSystemMemoryState.setDirent(uri, {
       type: DirentType.File,
       content,
-    }
+    })
   }
 }
 
@@ -63,10 +51,10 @@ export const mkdir = (uri: string): void => {
     uri += PathSeparatorType.Slash
   }
   ensureParentDir(uri)
-  state.files[uri] = {
+  FileSystemMemoryState.setDirent(uri, {
     type: DirentType.Directory,
     content: '',
-  }
+  })
 }
 
 export const getPathSeparator = (): string => {
@@ -75,13 +63,13 @@ export const getPathSeparator = (): string => {
 
 export const remove = (uri: string): void => {
   const toDelete: string[] = []
-  for (const key of Object.keys(state.files)) {
+  for (const key of Object.keys(FileSystemMemoryState.getAll())) {
     if (key.startsWith(uri)) {
       toDelete.push(key)
     }
   }
   for (const key of toDelete) {
-    delete state.files[key]
+    FileSystemMemoryState.remove(key)
   }
 }
 
@@ -90,7 +78,7 @@ export const readDirWithFileTypes = (uri: string): readonly Dirent[] => {
     uri += PathSeparatorType.Slash
   }
   const dirents: Dirent[] = []
-  for (const [key, value] of Object.entries(state.files)) {
+  for (const [key, value] of Object.entries(FileSystemMemoryState.getAll())) {
     if (key.startsWith(uri)) {
       // @ts-ignore
       switch (value.type) {
@@ -139,6 +127,6 @@ export const chmod = (): void => {
   throw new Error('[memfs] chmod not implemented')
 }
 
-export const getFiles = (): State['files'] => {
-  return state.files
+export const getFiles = (): FileSystemMemoryState.Files => {
+  return FileSystemMemoryState.getAll()
 }
