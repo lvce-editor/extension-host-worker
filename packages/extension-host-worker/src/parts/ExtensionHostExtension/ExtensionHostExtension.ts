@@ -4,6 +4,7 @@ import * as GetExtensionId from '../GetExtensionId/GetExtensionId.ts'
 import * as HandleRpcInfos from '../HandleRpcInfos/HandleRpcInfos.ts'
 import * as ImportScript from '../ImportScript/ImportScript.ts'
 import * as IsImportError from '../IsImportError/IsImportError.ts'
+import * as Platform from '../Platform/Platform.ts'
 import * as Timeout from '../Timeout/Timeout.ts'
 import * as TryToGetActualImportErrorMessage from '../TryToGetActualImportErrorMessage/TryToGetActualImportErrorMessage.ts'
 import { VError } from '../VError/VError.ts'
@@ -24,7 +25,7 @@ export const activate = async (extension, absolutePath) => {
     Assert.string(extension.browser)
     Assert.string(absolutePath)
     const module = await ImportScript.importScript(absolutePath)
-    HandleRpcInfos.handleRpcInfos(extension)
+    HandleRpcInfos.handleRpcInfos(extension, Platform.platform)
     const token = CancelToken.create()
     try {
       await Promise.race([module.activate(extension), rejectAfterTimeout(activationTimeout, token)])
