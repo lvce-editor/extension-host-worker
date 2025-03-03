@@ -1,7 +1,7 @@
 import * as ExtensionHostRpcState from '../ExtensionHostRpcState/ExtensionHostRpcState.ts'
 import * as GetUrlPrefix from '../GetUrlPrefix/GetUrlPrefix.ts'
 
-export const handleRpcInfos = (extension: any, platform: any) => {
+export const handleRpcInfos = (extension: any, platform: any): void => {
   try {
     if (!extension) {
       return
