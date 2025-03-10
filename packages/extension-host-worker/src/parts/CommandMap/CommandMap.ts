@@ -59,6 +59,7 @@ import * as SearchFileWithMemory from '../SearchFileWithMemory/SearchFileWithMem
 import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
+import * as WebViewInterceptor from '../WebViewInterceptor/WebViewInterceptor.ts'
 
 export const commandMap = {
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
@@ -127,6 +128,8 @@ export const commandMap = {
   'TextSearchMemory.textSearch': TextSearchMemory.textSearch,
   'WebView.create3': CreateWebView3.createWebView3,
   'WebView.createWebViewWorkerRpc': CreateWebViewRpc.createWebViewWorkerRpc,
+  'WebView.registerInterceptor': WebViewInterceptor.registerInterceptor,
+  'WebView.unregisterInterceptor': WebViewInterceptor.unregisterInterceptor,
   'WebView.createWebViewWorkerRpc2': CreateWebViewRpc2.createWebViewWorkerRpc2,
   'WebView.getRpcInfo': GetRpcInfo.getRpcInfo,
   'WebViews.getWebViews': GetWebViews.getWebViews,
