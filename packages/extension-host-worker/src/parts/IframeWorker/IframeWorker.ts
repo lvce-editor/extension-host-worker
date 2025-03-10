@@ -17,3 +17,8 @@ export const invoke = async (method, ...params) => {
   const rpc = await ensureWorker()
   return rpc.invoke(method, ...params)
 }
+
+export const invokeAndTransfer = async (method, ...params) => {
+  const rpc = await ensureWorker()
+  return rpc.invokeAndTransfer(method, ...params)
+}
