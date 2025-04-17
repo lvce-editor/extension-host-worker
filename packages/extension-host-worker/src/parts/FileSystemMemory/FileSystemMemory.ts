@@ -73,6 +73,12 @@ export const remove = (uri: string): void => {
   }
 }
 
+export const rename = (oldUri: string, newUri: string): void => {
+  const content = readFile(oldUri)
+  writeFile(newUri, content)
+  remove(oldUri)
+}
+
 export const readDirWithFileTypes = (uri: string): readonly Dirent[] => {
   if (!uri.endsWith(PathSeparatorType.Slash)) {
     uri += PathSeparatorType.Slash
