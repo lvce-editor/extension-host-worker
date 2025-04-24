@@ -8,6 +8,7 @@ export const getWebExtensionManifest = async (path: string, manifestPath: string
     return {
       ...manifest,
       path,
+      uri: path,
     }
   } catch (error) {
     const id = InferExtensionId.interExtensionId(path)
