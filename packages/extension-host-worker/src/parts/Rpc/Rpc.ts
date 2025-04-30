@@ -6,6 +6,9 @@ export const invoke = (method: string, ...params: any[]): Promise<any> => {
   return rpc.invoke(method, ...params)
 }
 
+/**
+ * @deprecated use invoke instead
+ */
 export const send = (method: string, ...params: any[]): void => {
   const rpc = RpcRegistry.get(RpcId.RendererWorker)
   return rpc.send(method, ...params)
