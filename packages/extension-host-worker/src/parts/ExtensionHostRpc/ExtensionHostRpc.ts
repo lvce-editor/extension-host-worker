@@ -6,6 +6,7 @@ import { VError } from '../VError/VError.ts'
 export const createRpc = ({ id, url, name, commandMap, contentSecurityPolicy, execute }) => {
   try {
     if (execute && !commandMap) {
+      // eslint-disable-next-line no-console
       console.info(`[extension-host-worker] The rpc execute function is deprecated. Use the commandMap property instead.`)
     }
     commandMap ||= {}
