@@ -1,5 +1,8 @@
-export const send = (methos: string, ...params: readonly any[]): void => {
-  // TODO
-  // 1. get rpc with id of debug worker
-  // 2. send message
+import * as RpcRegistry from '@lvce-editor/rpc-registry'
+import * as RpcId from '../RpcId/RpcId.ts'
+
+// TODO use invoke
+export const send = async (method: string, ...params: readonly any[]): Promise<void> => {
+  const rpc = RpcRegistry.get(RpcId.DebugWorker)
+  rpc.send(method, ...params)
 }
