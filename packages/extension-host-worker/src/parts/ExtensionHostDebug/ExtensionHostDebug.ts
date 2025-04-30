@@ -25,7 +25,6 @@ export const registerDebugProvider = (debugProvider) => {
 export const start = async (protocol, path) => {
   try {
     const handlePaused = (params) => {
-      console.log('send paused', params)
       Rpc.send('Debug.paused', params)
     }
     const handleResumed = () => {

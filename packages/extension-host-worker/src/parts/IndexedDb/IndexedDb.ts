@@ -44,7 +44,6 @@ export const getValues = async (storeId: any): Promise<any> => {
     const db = await getDbMemoized()
     const tx = db.transaction(storeId, 'readwrite')
     const [objects] = await Promise.all([tx.store.getAll(), tx.done])
-    console.log({ objects })
     return objects
   } catch (error) {
     throw new VError(error, 'Failed to get values from indexed db')
