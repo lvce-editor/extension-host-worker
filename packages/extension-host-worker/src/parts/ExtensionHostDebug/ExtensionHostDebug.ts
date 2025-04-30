@@ -1,5 +1,5 @@
 import * as Assert from '../Assert/Assert.ts'
-import * as Rpc from '../Rpc/Rpc.ts'
+import * as DebugRpc from '../DebugRpc/DebugRpc.ts'
 import { VError } from '../VError/VError.ts'
 
 const state = {
@@ -25,13 +25,13 @@ export const registerDebugProvider = (debugProvider) => {
 export const start = async (protocol, path) => {
   try {
     const handlePaused = (params) => {
-      Rpc.send('Debug.paused', params)
+      DebugRpc.send('Debug.paused', params)
     }
     const handleResumed = () => {
-      Rpc.send('Debug.resumed')
+      DebugRpc.send('Debug.resumed')
     }
     const handleScriptParsed = (parsedScript) => {
-      Rpc.send('Debug.scriptParsed', parsedScript)
+      DebugRpc.send('Debug.scriptParsed', parsedScript)
     }
     const provider = getDebugProvider(protocol)
     await provider.start({ handlePaused, handleResumed, handleScriptParsed }, path)
