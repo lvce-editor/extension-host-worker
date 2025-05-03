@@ -44,6 +44,7 @@ import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as GetWebViewInfo2 from '../GetWebViewInfo2/GetWebViewInfo2.ts'
 import * as GetWebViews from '../GetWebViews/GetWebViews.ts'
 import * as HandleBeforeUnload from '../HandleBeforeUnload/HandleBeforeUnload.ts'
+import * as HandleMessagePort2 from '../HandleMessagePort2/HandleMessagePort2.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IconTheme from '../IconTheme/IconTheme.ts'
 import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
@@ -107,7 +108,8 @@ export const commandMap = {
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
   'HandleBeforeUnload.handleBeforeUnload': HandleBeforeUnload.handleBeforeUnload,
-  'HandleMessagePort.handleMessagePort': HandleMessagePort.handleMessagePort,
+  'HandleMessagePort2.handleMessagePort': HandleMessagePort.handleMessagePort,
+  'HandleMessagePort2.handleMessagePort2': HandleMessagePort2.handleMessagePort2,
   'IconTheme.getJson': GetIconThemeJson.getIconThemeJson,
   'IconTheme.getState': IconThemeState.getState,
   'IconTheme.hydrate': IconTheme.hydrate,
