@@ -98,6 +98,7 @@ const renameDirectory = (oldUri: string, newUri: string): void => {
       FileSystemMemoryState.setDirent(newPath, value)
     }
   }
+  remove(oldUri)
 }
 
 export const rename = (oldUri: string, newUri: string): void => {
