@@ -128,3 +128,85 @@ test('readDirWithFileTypes - mixed content', () => {
 test('getPathSeparator', () => {
   expect(FileSystemMemory.getPathSeparator()).toBe('/')
 })
+
+test.skip('rename - file', () => {
+  FileSystemMemoryState.setDirent('/test/file.txt', {
+    type: DirentType.File,
+    content: 'test content',
+  })
+  FileSystemMemory.rename('/test/file.txt', '/test/renamed.txt')
+  expect(FileSystemMemoryState.getAll()).toEqual({
+    '/': {
+      type: DirentType.Directory,
+      content: '',
+    },
+    '/test/': {
+      type: DirentType.Directory,
+      content: '',
+    },
+    '/test/renamed.txt': {
+      type: DirentType.File,
+      content: 'test content',
+    },
+  })
+})
+
+test.skip('rename - directory', () => {
+  FileSystemMemoryState.setDirent('/test/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test/file.txt', {
+    type: DirentType.File,
+    content: 'test content',
+  })
+  FileSystemMemory.rename('/test/', '/renamed/')
+  expect(FileSystemMemoryState.getAll()).toEqual({
+    '/': {
+      type: DirentType.Directory,
+      content: '',
+    },
+    '/renamed/': {
+      type: DirentType.Directory,
+      content: '',
+    },
+    '/renamed/file.txt': {
+      type: DirentType.File,
+      content: 'test content',
+    },
+  })
+})
+
+test.skip('rename - nested directory', () => {
+  FileSystemMemoryState.setDirent('/test/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test/nested/', {
+    type: DirentType.Directory,
+    content: '',
+  })
+  FileSystemMemoryState.setDirent('/test/nested/file.txt', {
+    type: DirentType.File,
+    content: 'test content',
+  })
+  FileSystemMemory.rename('/test/nested/', '/test/renamed/')
+  expect(FileSystemMemoryState.getAll()).toEqual({
+    '/': {
+      type: DirentType.Directory,
+      content: '',
+    },
+    '/test/': {
+      type: DirentType.Directory,
+      content: '',
+    },
+    '/test/renamed/': {
+      type: DirentType.Directory,
+      content: '',
+    },
+    '/test/renamed/file.txt': {
+      type: DirentType.File,
+      content: 'test content',
+    },
+  })
+})
