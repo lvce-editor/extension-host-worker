@@ -129,7 +129,7 @@ test('getPathSeparator', () => {
   expect(FileSystemMemory.getPathSeparator()).toBe('/')
 })
 
-test.skip('rename - file', () => {
+test('rename - file', () => {
   FileSystemMemoryState.setDirent('/test/file.txt', {
     type: DirentType.File,
     content: 'test content',
@@ -151,7 +151,7 @@ test.skip('rename - file', () => {
   })
 })
 
-test.skip('rename - directory', () => {
+test('rename - directory', () => {
   FileSystemMemoryState.setDirent('/test/', {
     type: DirentType.Directory,
     content: '',
@@ -177,7 +177,7 @@ test.skip('rename - directory', () => {
   })
 })
 
-test.skip('rename - nested directory', () => {
+test('rename - nested directory', () => {
   FileSystemMemoryState.setDirent('/test/', {
     type: DirentType.Directory,
     content: '',

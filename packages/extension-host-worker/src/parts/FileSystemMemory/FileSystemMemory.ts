@@ -73,10 +73,43 @@ export const remove = (uri: string): void => {
   }
 }
 
-export const rename = (oldUri: string, newUri: string): void => {
+const renameFile = (oldUri: string, newUri: string): void => {
   const content = readFile(oldUri)
   writeFile(newUri, content)
   remove(oldUri)
+}
+
+const renameDirectory = (oldUri: string, newUri: string): void => {
+  if (!oldUri.endsWith(PathSeparatorType.Slash)) {
+    oldUri += PathSeparatorType.Slash
+  }
+  if (!newUri.endsWith(PathSeparatorType.Slash)) {
+    newUri += PathSeparatorType.Slash
+  }
+  ensureParentDir(newUri)
+  FileSystemMemoryState.setDirent(newUri, {
+    type: DirentType.Directory,
+    content: '',
+  })
+  const allFiles = FileSystemMemoryState.getAll()
+  for (const [key, value] of Object.entries(allFiles)) {
+    if (key.startsWith(oldUri)) {
+      const newPath = key.replace(oldUri, newUri)
+      FileSystemMemoryState.setDirent(newPath, value)
+    }
+  }
+}
+
+export const rename = (oldUri: string, newUri: string): void => {
+  const item = FileSystemMemoryState.getDirent(oldUri)
+  if (!item) {
+    throw new FileNotFoundError(oldUri)
+  }
+  if (item.type === DirentType.Directory) {
+    renameDirectory(oldUri, newUri)
+    return
+  }
+  renameFile(oldUri, newUri)
 }
 
 export const readDirWithFileTypes = (uri: string): readonly Dirent[] => {
