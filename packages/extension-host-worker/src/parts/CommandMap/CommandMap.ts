@@ -4,6 +4,7 @@ import * as ColorTheme from '../ColorTheme/ColorTheme.ts'
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
 import * as CreateWebViewRpc2 from '../CreateWebViewRpc2/CreateWebViewRpc2.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
+import * as ExecuteExternalCommand from '../ExecuteExternalCommand/ExecuteExternalCommand.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
@@ -69,6 +70,7 @@ export const commandMap = {
   'ColorTheme.getColorThemeNames': GetColorThemeNames.getColorThemeNames,
   'ColorTheme.hydrate': ColorTheme.hydrate,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
+  'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
   'ExtensionHostDebug.evaluate': ExtensionHostDebug.evaluate,
   'ExtensionHostDebug.getProperties': ExtensionHostDebug.getProperties,
   'ExtensionHostDebug.listProcesses': ExtensionHostDebug.listProcesses,
