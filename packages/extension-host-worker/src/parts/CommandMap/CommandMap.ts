@@ -150,6 +150,7 @@ export const commandMap = {
   [ExtensionHostCommandType.FileSystemGetPathSeparator]: ExtensionHostFileSystem.getPathSeparator,
   [ExtensionHostCommandType.FileSystemReadDirWithFileTypes]: ExtensionHostFileSystem.readDirWithFileTypes,
   [ExtensionHostCommandType.FileSystemReadFile]: ExtensionHostFileSystem.readFile,
+  [ExtensionHostCommandType.FileSystemRename]: ExtensionHostFileSystem.rename,
   [ExtensionHostCommandType.FileSystemWriteFile]: ExtensionHostFileSystem.writeFile,
   [ExtensionHostCommandType.FormattingExecuteFormmattingProvider]: ExtensionHostFormatting.executeFormattingProvider,
   [ExtensionHostCommandType.HoverExecute]: ExtensionHostHover.executeHoverProvider,
