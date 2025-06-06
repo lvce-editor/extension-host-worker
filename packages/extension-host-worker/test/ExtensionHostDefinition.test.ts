@@ -77,7 +77,7 @@ test('executeDefinitionProvider - error - definition must be of type object but 
   })
   // @ts-ignore
   await expect(ExtensionHostDefinition.executeDefinitionProvider(1, 0)).rejects.toThrow(
-    new Error('Failed to execute definition provider: VError: invalid definition result: definition must be of type object but is []'),
+    new Error('Failed to execute definition provider: invalid definition result: definition must be of type object but is []'),
   )
 })
 
@@ -98,7 +98,7 @@ test('executeDefinitionProvider - error - definition must be of type object but 
   })
   // @ts-ignore
   await expect(ExtensionHostDefinition.executeDefinitionProvider(1, 0)).rejects.toThrow(
-    new Error('Failed to execute definition provider: VError: invalid definition result: definition must be of type object but is () => { }'),
+    new Error('Failed to execute definition provider: invalid definition result: definition must be of type object but is () => { }'),
   )
 })
 
@@ -119,7 +119,7 @@ test('executeDefinitionProvider - error - definition.uri must be of type string'
   })
   // @ts-ignore
   await expect(ExtensionHostDefinition.executeDefinitionProvider(1, 0)).rejects.toThrow(
-    new Error('Failed to execute definition provider: VError: invalid definition result: definition.uri must be of type string'),
+    new Error('Failed to execute definition provider: invalid definition result: definition.uri must be of type string'),
   )
 })
 
@@ -142,7 +142,7 @@ test('executeDefinitionProvider - error - definition.startOffset must be of type
   })
   // @ts-ignore
   await expect(ExtensionHostDefinition.executeDefinitionProvider(1, 0)).rejects.toThrow(
-    new Error('Failed to execute definition provider: VError: invalid definition result: definition.startOffset must be of type number'),
+    new Error('Failed to execute definition provider: invalid definition result: definition.startOffset must be of type number'),
   )
 })
 
@@ -166,7 +166,7 @@ test('executeDefinitionProvider - error - definition.endOffset must be of type n
   })
   // @ts-ignore
   await expect(ExtensionHostDefinition.executeDefinitionProvider(1, 0)).rejects.toThrow(
-    new Error('Failed to execute definition provider: VError: invalid definition result: definition.endOffset must be of type number'),
+    new Error('Failed to execute definition provider: invalid definition result: definition.endOffset must be of type number'),
   )
 })
 
