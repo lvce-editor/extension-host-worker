@@ -1,3 +1,4 @@
+import { ensureError } from '../EnsureError/EnsureError.ts'
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import { NoProviderFoundError } from '../NoProviderFoundError/NoProviderFoundError.ts'
 import * as Validation from '../Validation/Validation.ts'
@@ -40,22 +41,6 @@ const improveValidationError = (name, validationError) => {
   return pre + ': ' + post
 }
 
-class NonError extends Error {
-  name = 'NonError'
-
-  constructor(message) {
-    super(message)
-  }
-}
-
-// ensureError based on https://github.com/sindresorhus/ensure-error/blob/main/index.ts (License MIT)
-const ensureError = (input) => {
-  if (!(input instanceof Error)) {
-    return new NonError(input)
-  }
-  return input
-}
-
 const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound, name, methodName, resultShape }) => {
   context[`execute${name}Provider`] = async function (textDocumentId, ...params) {
     try {
@@ -75,7 +60,6 @@ const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound
       const error = Validation.validate(result, resultShape)
       if (error) {
         const improvedError = improveValidationError(name, error)
-        // @ts-ignore
         throw new VError(improvedError)
       }
       return result
@@ -85,7 +69,6 @@ const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound
       if (actualError && actualError.message) {
         if (actualError.message === 'provider[methodName] is not a function') {
           const camelCaseName = toCamelCase(name)
-          // @ts-ignore
           throw new VError(`Failed to execute ${spacedOutName} provider: VError: ${camelCaseName}Provider.${methodName} is not a function`)
         }
         throw new VError(actualError, `Failed to execute ${spacedOutName} provider`)
