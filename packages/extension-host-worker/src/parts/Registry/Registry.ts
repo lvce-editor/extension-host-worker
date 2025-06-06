@@ -1,3 +1,4 @@
+import { ensureError } from '../EnsureError/EnsureError.ts'
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import { NoProviderFoundError } from '../NoProviderFoundError/NoProviderFoundError.ts'
 import * as Validation from '../Validation/Validation.ts'
@@ -38,22 +39,6 @@ const improveValidationError = (name, validationError) => {
   const pre = `invalid ${spacedOutName} result`
   const post = improveValidationErrorPostMessage(validationError, camelCaseName)
   return pre + ': ' + post
-}
-
-class NonError extends Error {
-  name = 'NonError'
-
-  constructor(message) {
-    super(message)
-  }
-}
-
-// ensureError based on https://github.com/sindresorhus/ensure-error/blob/main/index.ts (License MIT)
-const ensureError = (input) => {
-  if (!(input instanceof Error)) {
-    return new NonError(input)
-  }
-  return input
 }
 
 const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound, name, methodName, resultShape }) => {
