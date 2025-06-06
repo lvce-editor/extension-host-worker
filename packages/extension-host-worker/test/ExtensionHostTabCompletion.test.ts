@@ -96,7 +96,7 @@ test('execute - when tab completion provider has invalid result of type number',
   })
   // @ts-ignore
   await expect(ExtensionHostTabCompletion.executeTabCompletionProvider(1, 1)).rejects.toThrow(
-    'Failed to execute tab completion provider: VError: invalid tab completion result: tabCompletion must be of type object but is 42',
+    'Failed to execute tab completion provider: invalid tab completion result: tabCompletion must be of type object but is 42',
   )
 })
 
@@ -159,8 +159,6 @@ test('execute - when tab completion provider returns a string', async () => {
   })
   // @ts-ignore
   await expect(ExtensionHostTabCompletion.executeTabCompletionProvider(1, 1)).rejects.toThrow(
-    new Error(
-      'Failed to execute tab completion provider: VError: invalid tab completion result: tabCompletion must be of type object but is "resultsList"',
-    ),
+    new Error('Failed to execute tab completion provider: invalid tab completion result: tabCompletion must be of type object but is "resultsList"'),
   )
 })

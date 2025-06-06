@@ -151,7 +151,7 @@ test('executeCompletionProvider - invalid return value - array with undefined va
   // @ts-ignore
   await expect(ExtensionHostCompletion.executeCompletionProvider(1, 1)).rejects.toThrow(
     new Error(
-      'Failed to execute completion provider: VError: invalid completion result: expected completion item to be of type object but was of type undefined',
+      'Failed to execute completion provider: invalid completion result: expected completion item to be of type object but was of type undefined',
     ),
   )
 })
@@ -174,7 +174,7 @@ test('executeCompletionProvider - invalid return value - number', async () => {
   })
   // @ts-ignore
   await expect(ExtensionHostCompletion.executeCompletionProvider(1, 1)).rejects.toThrow(
-    new Error('Failed to execute completion provider: VError: invalid completion result: completion must be of type array but is 42'),
+    new Error('Failed to execute completion provider: invalid completion result: completion must be of type array but is 42'),
   )
 })
 
@@ -196,7 +196,7 @@ test('executeCompletionProvider - invalid return value - undefined', async () =>
   })
   // @ts-ignore
   await expect(ExtensionHostCompletion.executeCompletionProvider(1, 1)).rejects.toThrow(
-    new Error('Failed to execute completion provider: VError: invalid completion result: completion must be of type array but is undefined'),
+    new Error('Failed to execute completion provider: invalid completion result: completion must be of type array but is undefined'),
   )
 })
 
@@ -218,6 +218,6 @@ test('executeCompletionProvider - invalid return value - null', async () => {
   })
   // @ts-ignore
   await expect(ExtensionHostCompletion.executeCompletionProvider(1, 1)).rejects.toThrow(
-    new Error('Failed to execute completion provider: VError: invalid completion result: completion must be of type array but is null'),
+    new Error('Failed to execute completion provider: invalid completion result: completion must be of type array but is null'),
   )
 })

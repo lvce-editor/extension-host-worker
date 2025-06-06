@@ -136,7 +136,7 @@ test('executeClosingTagProvider - invalid return value - array with undefined va
   })
   // @ts-ignore
   await expect(ExtensionHostClosingTag.executeClosingTagProvider(1, 1)).rejects.toThrow(
-    new Error('Failed to execute closing tag provider: VError: invalid closing tag result: closingTag must be of type object but is array'),
+    new Error('Failed to execute closing tag provider: invalid closing tag result: closingTag must be of type object but is array'),
   )
 })
 
@@ -158,6 +158,6 @@ test('executeClosingTagProvider - invalid return value - number', async () => {
   })
   // @ts-ignore
   await expect(ExtensionHostClosingTag.executeClosingTagProvider(1, 1)).rejects.toThrow(
-    new Error('Failed to execute closing tag provider: VError: invalid closing tag result: closingTag must be of type object but is 42'),
+    new Error('Failed to execute closing tag provider: invalid closing tag result: closingTag must be of type object but is 42'),
   )
 })

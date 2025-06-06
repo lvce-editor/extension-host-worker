@@ -71,8 +71,7 @@ const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound
           const camelCaseName = toCamelCase(name)
           throw new VError(`Failed to execute ${spacedOutName} provider: VError: ${camelCaseName}Provider.${methodName} is not a function`)
         }
-        const message = actualError.name === 'Error' ? actualError.message : `${actualError.name}: ${actualError.message}`
-        actualError.message = `Failed to execute ${spacedOutName} provider: ${message}`
+        throw new VError(actualError, `Failed to execute ${spacedOutName} provider`)
       }
       throw actualError
     }
