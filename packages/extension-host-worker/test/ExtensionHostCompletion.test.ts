@@ -218,6 +218,6 @@ test('executeCompletionProvider - invalid return value - null', async () => {
   })
   // @ts-ignore
   await expect(ExtensionHostCompletion.executeCompletionProvider(1, 1)).rejects.toThrow(
-    new Error('Failed to execute completion provider: VError: invalid completion result: completion must be of type array but is null'),
+    new Error('Failed to execute completion provider: invalid completion result: completion must be of type array but is null'),
   )
 })
