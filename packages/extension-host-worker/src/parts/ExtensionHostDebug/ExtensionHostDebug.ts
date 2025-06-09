@@ -69,6 +69,15 @@ export const pause = async (protocol) => {
   }
 }
 
+export const getScriptSource = async (protocol, scriptId: string) => {
+  try {
+    const provider = getDebugProvider(protocol)
+    return await provider.getScriptSource(scriptId)
+  } catch (error) {
+    throw new VError(error, 'Failed to execute debug provider')
+  }
+}
+
 export const step = async (protocol) => {
   try {
     const provider = getDebugProvider(protocol)
