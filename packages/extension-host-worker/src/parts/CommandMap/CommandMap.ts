@@ -73,6 +73,7 @@ export const commandMap = {
   'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
   'ExtensionHostDebug.evaluate': ExtensionHostDebug.evaluate,
   'ExtensionHostDebug.getProperties': ExtensionHostDebug.getProperties,
+  'ExtensionHostDebug.getScriptSource': ExtensionHostDebug.getScriptSource,
   'ExtensionHostDebug.listProcesses': ExtensionHostDebug.listProcesses,
   'ExtensionHostDebug.pause': ExtensionHostDebug.pause,
   'ExtensionHostDebug.resume': ExtensionHostDebug.resume,
