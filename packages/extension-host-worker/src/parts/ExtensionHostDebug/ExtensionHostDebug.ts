@@ -1,5 +1,5 @@
 import * as Assert from '../Assert/Assert.ts'
-import * as DebugRpc from '../DebugRpc/DebugRpc.ts'
+import * as DebugRpc from '../DebugWorker/DebugWorker.ts'
 import { VError } from '../VError/VError.ts'
 
 const state = {
@@ -22,17 +22,23 @@ export const registerDebugProvider = (debugProvider) => {
   state.debugProviderMap[debugProvider.id] = debugProvider
 }
 
+const handlePaused = async (params) => {
+  // @ts-ignore
+  await DebugRpc.invoke('Debug.paused', params)
+}
+
+const handleResumed = async () => {
+  // @ts-ignore
+  await DebugRpc.invoke('Debug.resumed')
+}
+
+const handleScriptParsed = async (parsedScript) => {
+  // @ts-ignore
+  await DebugRpc.invoke('Debug.scriptParsed', parsedScript)
+}
+
 export const start = async (protocol, path) => {
   try {
-    const handlePaused = (params) => {
-      DebugRpc.send('Debug.paused', params)
-    }
-    const handleResumed = () => {
-      DebugRpc.send('Debug.resumed')
-    }
-    const handleScriptParsed = (parsedScript) => {
-      DebugRpc.send('Debug.scriptParsed', parsedScript)
-    }
     const provider = getDebugProvider(protocol)
     await provider.start({ handlePaused, handleResumed, handleScriptParsed }, path)
   } catch (error) {
