@@ -50,7 +50,9 @@ test('getEnabledProviderIds', async () => {
   }
   expect(await ExtensionHostSourceControl.getEnabledProviderIds('', '/test/folder')).toEqual(['test-source-control-provider-2'])
   expect(provider1.isActive).toHaveBeenCalledTimes(1)
+  // @ts-ignore
   expect(provider1.isActive).toHaveBeenCalledWith('', '/test/folder')
   expect(provider2.isActive).toHaveBeenCalledTimes(1)
+  // @ts-ignore
   expect(provider2.isActive).toHaveBeenCalledWith('', '/test/folder')
 })
