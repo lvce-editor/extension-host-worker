@@ -37,9 +37,9 @@ const handleScriptParsed = async (parsedScript) => {
   await DebugRpc.invoke('Debug.scriptParsed', parsedScript)
 }
 
-const handleChange = async () => {
+const handleChange = async (params: any): Promise<void> => {
   // @ts-ignore
-  await DebugRpc.invoke('Debug.handleChange')
+  await DebugRpc.invoke('Debug.handleChange', params)
 }
 
 export const start = async (protocol, path) => {
