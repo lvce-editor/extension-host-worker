@@ -86,6 +86,7 @@ export const commandMap = {
   'ExtensionHostDebug.getStatus': ExtensionHostDebug.getStatus,
   'ExtensionHostDebug.getCallStack': ExtensionHostDebug.getCallStack,
   'ExtensionHostDebug.getScopeChain': ExtensionHostDebug.getScopeChain,
+  'ExtensionHostDebug.getScripts': ExtensionHostDebug.getScripts,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'ExtensionHostWebView.create': ExtensionHostWebView.createWebView,
