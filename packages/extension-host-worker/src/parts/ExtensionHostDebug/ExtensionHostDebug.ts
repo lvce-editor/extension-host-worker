@@ -84,6 +84,34 @@ export const getScriptSource = async (protocol, scriptId: string) => {
   }
 }
 
+// TODO create direct connection from debug worker to extension, not needing extension host worker apis
+
+export const getStatus = async (protocol: string) => {
+  try {
+    const provider = getDebugProvider(protocol)
+    return await provider.getStatus()
+  } catch (error) {
+    throw new VError(error, 'Failed to execute debug provider')
+  }
+}
+
+export const getCallStack = async (protocol: string) => {
+  try {
+    const provider = getDebugProvider(protocol)
+    return await provider.getCallStack()
+  } catch (error) {
+    throw new VError(error, 'Failed to execute debug provider')
+  }
+}
+export const getScopeChain = async (protocol: string) => {
+  try {
+    const provider = getDebugProvider(protocol)
+    return await provider.getScopeChain()
+  } catch (error) {
+    throw new VError(error, 'Failed to execute debug provider')
+  }
+}
+
 export const step = async (protocol) => {
   try {
     const provider = getDebugProvider(protocol)
