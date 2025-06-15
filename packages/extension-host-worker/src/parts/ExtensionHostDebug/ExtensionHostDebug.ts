@@ -38,6 +38,7 @@ const handleScriptParsed = async (parsedScript) => {
 }
 
 const handleChange = async (params: any): Promise<void> => {
+  Assert.object(params)
   // @ts-ignore
   await DebugRpc.invoke('Debug.handleChange', params)
 }
