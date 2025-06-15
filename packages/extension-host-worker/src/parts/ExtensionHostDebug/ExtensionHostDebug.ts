@@ -37,10 +37,15 @@ const handleScriptParsed = async (parsedScript) => {
   await DebugRpc.invoke('Debug.scriptParsed', parsedScript)
 }
 
+const handleChange = async () => {
+  // @ts-ignore
+  await DebugRpc.invoke('Debug.handleChange')
+}
+
 export const start = async (protocol, path) => {
   try {
     const provider = getDebugProvider(protocol)
-    await provider.start({ handlePaused, handleResumed, handleScriptParsed }, path)
+    await provider.start({ handlePaused, handleResumed, handleScriptParsed, handleChange }, path)
   } catch (error) {
     throw new VError(error, 'Failed to execute debug provider')
   }
