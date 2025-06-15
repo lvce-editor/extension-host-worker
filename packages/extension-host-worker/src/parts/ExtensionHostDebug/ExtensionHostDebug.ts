@@ -128,6 +128,15 @@ export const getScripts = async (protocol: string) => {
   }
 }
 
+export const getPausedStatus = async (protocol: string) => {
+  try {
+    const provider = getDebugProvider(protocol)
+    return await provider.getStatus()
+  } catch (error) {
+    throw new VError(error, 'Failed to execute debug provider')
+  }
+}
+
 export const step = async (protocol) => {
   try {
     const provider = getDebugProvider(protocol)
