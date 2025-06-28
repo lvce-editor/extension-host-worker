@@ -113,6 +113,7 @@ export const commandMap = {
   'FileSystemMemory.readDirWithFileTypes': FileSystemMemory.readDirWithFileTypes,
   'FileSystemMemory.readFile': FileSystemMemory.readFile,
   'FileSystemMemory.rename': FileSystemMemory.rename,
+  'FileSystemMemory.copy': FileSystemMemory.copy,
   'FileSystemMemory.remove': FileSystemMemory.remove,
   'FileSystemMemory.writeFile': FileSystemMemory.writeFile,
   'HandleBeforeUnload.handleBeforeUnload': HandleBeforeUnload.handleBeforeUnload,
