@@ -79,6 +79,11 @@ const renameFile = (oldUri: string, newUri: string): void => {
   remove(oldUri)
 }
 
+export const copy = (oldUri: string, newUri: string): void => {
+  const content = readFile(oldUri)
+  writeFile(newUri, content)
+}
+
 const renameDirectory = (oldUri: string, newUri: string): void => {
   if (!oldUri.endsWith(PathSeparatorType.Slash)) {
     oldUri += PathSeparatorType.Slash
