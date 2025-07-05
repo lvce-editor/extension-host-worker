@@ -91,6 +91,9 @@ export const create = ({ name, resultShape, executeKey = '', returnUndefinedWhen
         delete providers[key]
       }
     },
+    getProvider(languageId) {
+      return providers[languageId]
+    },
   }
   registerMethod({ context, providers, name, methodName, returnUndefinedWhenNoProviderFound, resultShape })
   for (const method of additionalMethodNames) {
