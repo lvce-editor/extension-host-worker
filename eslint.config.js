@@ -39,6 +39,7 @@ export default [
       '@typescript-eslint/no-redundant-type-constituents': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
+      'jest/no-restricted-jest-methods': 'off',
     },
   },
 ]
