@@ -167,6 +167,7 @@ export const commandMap = {
   [ExtensionHostCommandType.OrganizeImportsExecute]: ExtensionHostCodeActions.executeOrganizeImports,
   [ExtensionHostCommandType.ReferenceExecuteFileReferenceProvider]: ExtensionHostReference.executefileReferenceProvider,
   [ExtensionHostCommandType.ReferenceExecuteReferenceProvider]: ExtensionHostReference.executeReferenceProvider,
+  [ExtensionHostCommandType.ReferenceExecuteReferenceProvider2]: ExtensionHostReference.executeReferenceProvider2,
   [ExtensionHostCommandType.SelectionExecuteSelectionProvider]: ExtensionHostSelection.executeSelectionProvider,
   [ExtensionHostCommandType.SourceControlAcceptInput]: ExtensionHostSourceControl.acceptInput,
   [ExtensionHostCommandType.SourceControlAdd]: ExtensionHostSourceControl.add,

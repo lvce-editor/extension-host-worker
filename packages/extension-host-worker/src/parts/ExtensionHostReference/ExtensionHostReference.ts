@@ -1,7 +1,7 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerReferenceProvider, executeReferenceProvider, executefileReferenceProvider, reset } = Registry.create({
+const { registerReferenceProvider, executeReferenceProvider, executefileReferenceProvider, reset, getProvider } = Registry.create({
   name: 'Reference',
   resultShape: {
     type: Types.Array,
@@ -25,3 +25,22 @@ const { registerReferenceProvider, executeReferenceProvider, executefileReferenc
 })
 
 export { registerReferenceProvider, executeReferenceProvider, executefileReferenceProvider, reset }
+
+export const executeReferenceProvider2 = ({
+  uri,
+  offset,
+  languageId,
+  position,
+}: {
+  uri: string
+  offset: number
+  languageId: string
+  position: any
+}) => {
+  const provider = getProvider(languageId)
+  return provider.getReferences({
+    uri,
+    offset,
+    position,
+  })
+}
