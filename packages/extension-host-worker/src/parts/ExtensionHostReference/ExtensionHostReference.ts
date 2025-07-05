@@ -28,7 +28,7 @@ export { registerReferenceProvider, executeReferenceProvider, executefileReferen
 
 export const executeReferenceProvider2 = (uri: string, languageId: string, offset: number, position: any) => {
   const provider = getProvider(languageId)
-  return provider.getReferences({
+  return provider.provideReferences2({
     uri,
     offset,
     position,
