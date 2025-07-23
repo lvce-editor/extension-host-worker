@@ -5,6 +5,7 @@ const states: Record<string, RuntimeStatus> = Object.create(null)
 export const set = (status: RuntimeStatus): void => {
   states[status.id] = status
 }
+
 export const get = (extensionId: string): RuntimeStatus | undefined => {
   return states[extensionId]
 }
