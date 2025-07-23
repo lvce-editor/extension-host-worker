@@ -38,6 +38,7 @@ test('activate - error - module not found', async () => {
         id: 'test',
       },
       '/test/extension.ts',
+      '',
     ),
   ).rejects.toThrow(new Error('Failed to activate extension test: Failed to import /test/extension.ts: Not found (404)'))
 })
@@ -64,6 +65,7 @@ test('activate - error', async () => {
         id: 'test',
       },
       '/test/extension.ts',
+      '',
     ),
   ).rejects.toThrow(new Error('Failed to activate extension test: TypeError: x is not a function'))
 })
@@ -91,6 +93,7 @@ test('activate - timeout exceeded', async () => {
         id: 'test',
       },
       '/test/extension.ts',
+      '',
     ),
   ).rejects.toThrow(new Error('Failed to activate extension test: Activation timeout of 10000ms exceeded'))
 })
