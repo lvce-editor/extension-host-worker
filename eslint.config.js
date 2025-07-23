@@ -40,6 +40,7 @@ export default [
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       'jest/no-restricted-jest-methods': 'off',
+      'no-restricted-syntax': 'off',
     },
   },
 ]
