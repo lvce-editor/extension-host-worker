@@ -3,6 +3,7 @@ import * as ExtensionHostWebViewState from '../ExtensionHostWebViewState/Extensi
 export const loadWebView = async (providerId, savedState) => {
   const rpc = ExtensionHostWebViewState.getWebView(providerId)
 
-  if (rpc && rpc.webView && rpc.webView.rpc && typeof rpc.webView.rpc === 'string') {}
+  if (rpc && rpc.webView && rpc.webView.rpc && typeof rpc.webView.rpc === 'string') {
+  }
   await rpc.provider.create(rpc, rpc.uri, savedState)
 }
