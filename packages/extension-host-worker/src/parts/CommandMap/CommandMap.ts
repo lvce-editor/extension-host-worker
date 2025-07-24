@@ -50,6 +50,7 @@ import * as HandleMessagePort2 from '../HandleMessagePort2/HandleMessagePort2.ts
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IconTheme from '../IconTheme/IconTheme.ts'
 import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
+import * as ImportExtension from '../ImportExtension/ImportExtension.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
 import * as Languages from '../Languages/Languages.ts'
@@ -72,6 +73,7 @@ export const commandMap = {
   'ColorTheme.hydrate': ColorTheme.hydrate,
   'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
   'ExtensionHost.getRuntimeStatus': GetRuntimeStatus.getRuntimeStatus,
+  'ExtensionHost.importExtension': ImportExtension.importExtension,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   'ExtensionHostDebug.evaluate': ExtensionHostDebug.evaluate,
   'ExtensionHostDebug.getCallStack': ExtensionHostDebug.getCallStack,
