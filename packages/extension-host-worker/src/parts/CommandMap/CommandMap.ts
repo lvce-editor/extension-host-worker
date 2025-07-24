@@ -1,3 +1,4 @@
+import * as ExtensionHostExtension from '../ActivateExtension/ActivateExtension.ts'
 import * as AddWebExtension from '../AddWebExtension/AddWebExtension.ts'
 import * as BulkReplacement from '../BulkReplacement/BulkReplacement.ts'
 import * as ColorTheme from '../ColorTheme/ColorTheme.ts'
@@ -15,7 +16,6 @@ import * as ExtensionHostConfiguration from '../ExtensionHostConfiguration/Exten
 import * as ExtensionHostDebug from '../ExtensionHostDebug/ExtensionHostDebug.ts'
 import * as ExtensionHostDefinition from '../ExtensionHostDefinition/ExtensionHostDefinition.ts'
 import * as ExtensionHostDiagnostic from '../ExtensionHostDiagnostic/ExtensionHostDiagnostic.ts'
-import * as ExtensionHostExtension from '../ExtensionHostExtension/ExtensionHostExtension.ts'
 import * as ExtensionHostFileSystem from '../ExtensionHostFileSystem/ExtensionHostFileSystem.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
@@ -155,7 +155,7 @@ export const commandMap = {
   [ExtensionHostCommandType.ConfigurationSetConfiguration]: ExtensionHostConfiguration.setConfigurations,
   [ExtensionHostCommandType.DefinitionExecuteDefinitionProvider]: ExtensionHostDefinition.executeDefinitionProvider,
   [ExtensionHostCommandType.DiagnosticExecuteDiagnosticProvider]: ExtensionHostDiagnostic.executeDiagnosticProvider,
-  [ExtensionHostCommandType.ExtensionActivate]: ExtensionHostExtension.activate,
+  [ExtensionHostCommandType.ExtensionActivate]: ExtensionHostExtension.activateExtension,
   [ExtensionHostCommandType.FileSystemGetPathSeparator]: ExtensionHostFileSystem.getPathSeparator,
   [ExtensionHostCommandType.FileSystemReadDirWithFileTypes]: ExtensionHostFileSystem.readDirWithFileTypes,
   [ExtensionHostCommandType.FileSystemReadFile]: ExtensionHostFileSystem.readFile,

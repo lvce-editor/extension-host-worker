@@ -17,7 +17,7 @@ jest.unstable_mockModule('../src/parts/Timeout/Timeout.ts', () => {
   }
 })
 
-const ExtensionHostExtension = await import('../src/parts/ExtensionHostExtension/ExtensionHostExtension.ts')
+const ExtensionHostExtension = await import('../src/parts/ActivateExtension/ActivateExtension.ts')
 const ImportScript = await import('../src/parts/ImportScript/ImportScript.ts')
 
 test('activate - error - module not found', async () => {
@@ -30,7 +30,7 @@ test('activate - error - module not found', async () => {
     origin: '',
   }
   await expect(
-    ExtensionHostExtension.activate(
+    ExtensionHostExtension.activateExtension(
       {
         isWeb: true,
         path: '/test',
@@ -57,7 +57,7 @@ test('activate - error', async () => {
     origin: '',
   }
   await expect(
-    ExtensionHostExtension.activate(
+    ExtensionHostExtension.activateExtension(
       {
         isWeb: true,
         path: '/test',
@@ -85,7 +85,7 @@ test('activate - timeout exceeded', async () => {
   }
 
   await expect(
-    ExtensionHostExtension.activate(
+    ExtensionHostExtension.activateExtension(
       {
         isWeb: true,
         path: '/test',
