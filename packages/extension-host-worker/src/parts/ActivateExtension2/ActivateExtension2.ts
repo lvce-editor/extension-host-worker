@@ -23,33 +23,29 @@ const rejectAfterTimeout = async (timeout, token) => {
 export const activateExtension2 = async (extensionId: string, absolutePath: string, extension: any) => {
   const token = CancelToken.create()
   try {
-    try {
-      RuntimeStatusState.update(extensionId, {
-        status: RuntimeStatusType.Activating,
-      })
-      const module = ExtensionModules.acquire(extensionId)
-      await Promise.race([module.activate(extension), rejectAfterTimeout(activationTimeout, token)])
-      const endTime = performance.now()
-      const status = RuntimeStatusState.get(extensionId)
-      if (!status) {
-        throw new Error('status expected')
-      }
-      const time = endTime - status.activationStartTime
-      RuntimeStatusState.update(extensionId, {
-        status: RuntimeStatusType.Activated,
-        activationStartTime: time,
-        activationEndTime: endTime,
-      })
-    } catch (error) {
-      throw error
-    } finally {
-      CancelToken.cancel(token)
+    RuntimeStatusState.update(extensionId, {
+      status: RuntimeStatusType.Activating,
+    })
+    const module = ExtensionModules.acquire(extensionId)
+    await Promise.race([module.activate(extension), rejectAfterTimeout(activationTimeout, token)])
+    const endTime = performance.now()
+    const status = RuntimeStatusState.get(extensionId)
+    if (!status) {
+      throw new Error('status expected')
     }
+    const time = endTime - status.activationStartTime
+    RuntimeStatusState.update(extensionId, {
+      status: RuntimeStatusType.Activated,
+      activationStartTime: time,
+      activationEndTime: endTime,
+    })
   } catch (error) {
     RuntimeStatusState.update(extensionId, {
       status: RuntimeStatusType.Error, // TODO maybe store error also in runtime status state
     })
     const id = GetExtensionId.getExtensionId(extension)
     throw new VError(error, `Failed to activate extension ${id}`)
+  } finally {
+    CancelToken.cancel(token)
   }
 }
