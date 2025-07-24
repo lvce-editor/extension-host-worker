@@ -34,7 +34,7 @@ export const activateExtension2 = async (extensionId: string, extension: any) =>
     const time = endTime - startTime
     RuntimeStatusState.update(extensionId, {
       status: RuntimeStatusType.Activated,
-      activationStartTime: time,
+      activationTime: time,
       activationEndTime: endTime,
     })
   } catch (error) {
