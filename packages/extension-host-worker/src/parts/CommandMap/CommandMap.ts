@@ -1,3 +1,4 @@
+import * as ActivateExtension2 from '../ActivateExtension2/ActivateExtension2.ts'
 import * as ExtensionHostExtension from '../ActivateExtension/ActivateExtension.ts'
 import * as AddWebExtension from '../AddWebExtension/AddWebExtension.ts'
 import * as BulkReplacement from '../BulkReplacement/BulkReplacement.ts'
@@ -72,6 +73,7 @@ export const commandMap = {
   'ColorTheme.getColorThemeNames': GetColorThemeNames.getColorThemeNames,
   'ColorTheme.hydrate': ColorTheme.hydrate,
   'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
+  'ExtensionHost.activateExtension2': ActivateExtension2.activateExtension2,
   'ExtensionHost.getRuntimeStatus': GetRuntimeStatus.getRuntimeStatus,
   'ExtensionHost.importExtension': ImportExtension.importExtension,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
