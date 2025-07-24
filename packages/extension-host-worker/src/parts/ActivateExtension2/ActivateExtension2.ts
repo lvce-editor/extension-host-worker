@@ -31,10 +31,6 @@ export const activateExtension2 = async (extensionId: string, extension: any) =>
     const module = ExtensionModules.acquire(extensionId)
     await Promise.race([module.activate(extension), rejectAfterTimeout(activationTimeout, token)])
     const endTime = performance.now()
-    const status = RuntimeStatusState.get(extensionId)
-    if (!status) {
-      throw new Error('status expected')
-    }
     const time = endTime - startTime
     RuntimeStatusState.update(extensionId, {
       status: RuntimeStatusType.Activated,
