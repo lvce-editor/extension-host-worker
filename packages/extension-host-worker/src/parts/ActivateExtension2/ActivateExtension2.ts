@@ -23,8 +23,10 @@ const rejectAfterTimeout = async (timeout, token) => {
 export const activateExtension2 = async (extensionId: string, extension: any) => {
   const token = CancelToken.create()
   try {
+    const startTime = performance.now()
     RuntimeStatusState.update(extensionId, {
       status: RuntimeStatusType.Activating,
+      activationStartTime: startTime,
     })
     const module = ExtensionModules.acquire(extensionId)
     await Promise.race([module.activate(extension), rejectAfterTimeout(activationTimeout, token)])
@@ -33,7 +35,7 @@ export const activateExtension2 = async (extensionId: string, extension: any) =>
     if (!status) {
       throw new Error('status expected')
     }
-    const time = endTime - status.activationStartTime
+    const time = endTime - startTime
     RuntimeStatusState.update(extensionId, {
       status: RuntimeStatusType.Activated,
       activationStartTime: time,
