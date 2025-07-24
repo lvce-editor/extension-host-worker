@@ -6,6 +6,8 @@ const emptyStatus: RuntimeStatus = {
   status: RuntimeStatusType.None,
   id: '',
   activationEvent: '',
+  activationStartTime: 0,
+  activationEndTime: 0,
   activationTime: 0,
 }
 
