@@ -20,7 +20,7 @@ const rejectAfterTimeout = async (timeout, token) => {
 
 // TODO separate importing extension and activating extension for smaller functions
 // and better error handling
-export const activateExtension2 = async (extensionId: string, absolutePath: string, extension: any) => {
+export const activateExtension2 = async (extensionId: string, extension: any) => {
   const token = CancelToken.create()
   try {
     RuntimeStatusState.update(extensionId, {
