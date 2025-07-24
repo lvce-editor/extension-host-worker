@@ -1,0 +1,51 @@
+import * as CancelToken from '../CancelToken/CancelToken.ts'
+import * as ExtensionModules from '../ExtensionModules/ExtensionModules.ts'
+import * as GetExtensionId from '../GetExtensionId/GetExtensionId.ts'
+import * as RuntimeStatusState from '../RuntimeStatusState/RuntimeStatusState.ts'
+import * as RuntimeStatusType from '../RuntimeStatusType/RuntimeStatusType.ts'
+import * as Timeout from '../Timeout/Timeout.ts'
+import { VError } from '../VError/VError.ts'
+
+// TODO make activation timeout configurable or remove it.
+// some extension might do workspace indexing which could take some time
+const activationTimeout = 10_000
+
+const rejectAfterTimeout = async (timeout, token) => {
+  await Timeout.sleep(timeout)
+  if (CancelToken.isCanceled(token)) {
+    return
+  }
+  throw new Error(`Activation timeout of ${timeout}ms exceeded`)
+}
+
+// TODO separate importing extension and activating extension for smaller functions
+// and better error handling
+export const activateExtension2 = async (extensionId: string, absolutePath: string, extension: any) => {
+  const token = CancelToken.create()
+  try {
+    RuntimeStatusState.update(extensionId, {
+      status: RuntimeStatusType.Activating,
+    })
+    const module = ExtensionModules.acquire(extensionId)
+    await Promise.race([module.activate(extension), rejectAfterTimeout(activationTimeout, token)])
+    const endTime = performance.now()
+    const status = RuntimeStatusState.get(extensionId)
+    if (!status) {
+      throw new Error('status expected')
+    }
+    const time = endTime - status.activationStartTime
+    RuntimeStatusState.update(extensionId, {
+      status: RuntimeStatusType.Activated,
+      activationStartTime: time,
+      activationEndTime: endTime,
+    })
+  } catch (error) {
+    RuntimeStatusState.update(extensionId, {
+      status: RuntimeStatusType.Error, // TODO maybe store error also in runtime status state
+    })
+    const id = GetExtensionId.getExtensionId(extension)
+    throw new VError(error, `Failed to activate extension ${id}`)
+  } finally {
+    CancelToken.cancel(token)
+  }
+}
