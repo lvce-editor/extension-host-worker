@@ -45,6 +45,9 @@ export const activateExtension = async (extension: any, absolutePath: string, ac
       activationTime: 0,
       id: extensionId,
       status: RuntimeStatusType.Importing,
+      importEndTime: 0,
+      importStartTime: 0,
+      importTime: 0,
     })
     const module = await ImportScript.importScript(absolutePath)
     HandleRpcInfos.handleRpcInfos(extension, Platform.platform)

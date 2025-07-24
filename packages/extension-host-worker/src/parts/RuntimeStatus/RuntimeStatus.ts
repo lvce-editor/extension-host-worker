@@ -1,8 +1,11 @@
 export interface RuntimeStatus {
-  readonly status: number
-  readonly id: string
+  readonly activationEndTime: number
   readonly activationEvent: string
   readonly activationStartTime: number
-  readonly activationEndTime: number
   readonly activationTime: number
+  readonly id: string
+  readonly importEndTime: number
+  readonly importStartTime: number
+  readonly importTime: number
+  readonly status: number
 }
