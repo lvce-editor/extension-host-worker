@@ -29,13 +29,15 @@ export const activateExtension = async (extension: any, absolutePath: string, ac
     Assert.string(extension.path)
     Assert.string(extension.browser)
     Assert.string(absolutePath)
+    const startTime = performance.now()
     RuntimeStatusState.set({
+      activationEndTime: 0,
       activationEvent: activationEvent,
-      id: extensionId,
+      activationStartTime: startTime,
       activationTime: 0,
+      id: extensionId,
       status: RuntimeStatusType.Importing,
     })
-    const startTime = performance.now()
     const module = await ImportScript.importScript(absolutePath)
     HandleRpcInfos.handleRpcInfos(extension, Platform.platform)
     RuntimeStatusState.update(extensionId, {
@@ -48,7 +50,7 @@ export const activateExtension = async (extension: any, absolutePath: string, ac
       const time = endTime - startTime
       RuntimeStatusState.update(extensionId, {
         status: RuntimeStatusType.Activated,
-        activationTime: time,
+        activationStartTime: time,
       })
     } catch (error) {
       if (IsImportError.isImportError(error)) {
