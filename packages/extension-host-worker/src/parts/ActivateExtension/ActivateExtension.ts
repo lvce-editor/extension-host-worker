@@ -23,7 +23,7 @@ const rejectAfterTimeout = async (timeout, token) => {
 
 // TODO separate importing extension and activating extension for smaller functions
 // and better error handling
-export const activate = async (extension: any, absolutePath: string, activationEvent: string) => {
+export const activateExtension = async (extension: any, absolutePath: string, activationEvent: string) => {
   const extensionId = extension.id
   try {
     Assert.string(extension.path)
