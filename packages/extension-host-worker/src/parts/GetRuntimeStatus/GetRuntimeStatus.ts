@@ -9,6 +9,9 @@ const emptyStatus: RuntimeStatus = {
   activationStartTime: 0,
   activationEndTime: 0,
   activationTime: 0,
+  importEndTime: 0,
+  importStartTime: 0,
+  importTime: 0,
 }
 
 export const getRuntimeStatus = (extensionId: string): RuntimeStatus => {

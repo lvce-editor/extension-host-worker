@@ -10,6 +10,7 @@ import { VError } from '../VError/VError.ts'
 export const importExtension = async (extensionId: string, absolutePath: string, activationEvent: string) => {
   try {
     Assert.string(absolutePath)
+    const startTime = performance.now()
     RuntimeStatusState.set({
       activationEvent: activationEvent,
       id: extensionId,
@@ -17,14 +18,23 @@ export const importExtension = async (extensionId: string, absolutePath: string,
       status: RuntimeStatusType.Importing,
       activationEndTime: 0,
       activationTime: 0,
+      importStartTime: startTime,
+      importEndTime: 0,
+      importTime: 0,
     })
     try {
       const module = await ImportScript.importScript(absolutePath)
+      const endTime = performance.now()
+      const time = endTime - startTime
       ExtensionModules.set(extensionId, module)
+      RuntimeStatusState.update(extensionId, {
+        importEndTime: endTime,
+        importTime: time,
+      })
+    } catch (error) {
       RuntimeStatusState.update(extensionId, {
         status: RuntimeStatusType.Error, // TODO maybe store error also in runtime status state
       })
-    } catch (error) {
       if (IsImportError.isImportError(error)) {
         const actualErrorMessage = await TryToGetActualImportErrorMessage.tryToGetActualImportErrorMessage(absolutePath, error)
         throw new Error(actualErrorMessage)
