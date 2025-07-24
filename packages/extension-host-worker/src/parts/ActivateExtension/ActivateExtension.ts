@@ -23,6 +23,14 @@ const rejectAfterTimeout = async (timeout, token) => {
 
 // TODO separate importing extension and activating extension for smaller functions
 // and better error handling
+
+/**
+ * @deprecated use the separate functions importExtension and activateExtension instead
+ *
+ * @param extension
+ * @param absolutePath
+ * @param activationEvent
+ */
 export const activateExtension = async (extension: any, absolutePath: string, activationEvent: string) => {
   const extensionId = extension.id
   try {
