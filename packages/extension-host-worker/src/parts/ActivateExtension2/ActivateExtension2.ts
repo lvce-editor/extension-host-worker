@@ -18,8 +18,6 @@ const rejectAfterTimeout = async (timeout, token) => {
   throw new Error(`Activation timeout of ${timeout}ms exceeded`)
 }
 
-// TODO separate importing extension and activating extension for smaller functions
-// and better error handling
 export const activateExtension2 = async (extensionId: string, extension: any) => {
   const token = CancelToken.create()
   try {
