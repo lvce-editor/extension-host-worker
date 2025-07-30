@@ -1,9 +1,11 @@
 import * as CancelToken from '../CancelToken/CancelToken.ts'
 import * as ExtensionModules from '../ExtensionModules/ExtensionModules.ts'
 import * as GetExtensionId from '../GetExtensionId/GetExtensionId.ts'
+import * as IsImportError from '../IsImportError/IsImportError.ts'
 import * as RuntimeStatusState from '../RuntimeStatusState/RuntimeStatusState.ts'
 import * as RuntimeStatusType from '../RuntimeStatusType/RuntimeStatusType.ts'
 import * as Timeout from '../Timeout/Timeout.ts'
+import * as TryToGetActualImportErrorMessage from '../TryToGetActualImportErrorMessage/TryToGetActualImportErrorMessage.ts'
 import { VError } from '../VError/VError.ts'
 
 // TODO make activation timeout configurable or remove it.
@@ -18,7 +20,7 @@ const rejectAfterTimeout = async (timeout, token) => {
   throw new Error(`Activation timeout of ${timeout}ms exceeded`)
 }
 
-export const activateExtension2 = async (extensionId: string, extension: any) => {
+export const activateExtension2 = async (extensionId: string, extension: any, absolutePath: string) => {
   const token = CancelToken.create()
   try {
     const startTime = performance.now()
@@ -36,10 +38,15 @@ export const activateExtension2 = async (extensionId: string, extension: any) =>
       activationEndTime: endTime,
     })
   } catch (error) {
+    const id = GetExtensionId.getExtensionId(extension)
+    if (IsImportError.isImportError(error)) {
+      const actualErrorMessage = await TryToGetActualImportErrorMessage.tryToGetActualImportErrorMessage(absolutePath, error)
+      throw new Error(`Failed to activate extension ${id}: ${actualErrorMessage}`)
+    }
     RuntimeStatusState.update(extensionId, {
       status: RuntimeStatusType.Error, // TODO maybe store error also in runtime status state
     })
-    const id = GetExtensionId.getExtensionId(extension)
+
     throw new VError(error, `Failed to activate extension ${id}`)
   } finally {
     CancelToken.cancel(token)
