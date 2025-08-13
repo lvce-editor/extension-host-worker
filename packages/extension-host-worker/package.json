@@ -46,13 +46,13 @@
   },
   "devDependencies": {
     "@lvce-editor/assert": "^1.4.0",
-    "@lvce-editor/rpc": "^4.11.0",
-    "@lvce-editor/rpc-registry": "^2.65.0",
+    "@lvce-editor/rpc": "^4.14.0",
+    "@lvce-editor/rpc-registry": "^2.67.0",
     "@lvce-editor/verror": "^1.7.0",
     "@types/node": "^22.10.5",
     "idb": "^8.0.3",
     "jest": "^30.0.5",
     "ky": "^1.8.2",
-    "ts-jest": "^29.4.0"
+    "ts-jest": "^29.4.1"
   }
 }
