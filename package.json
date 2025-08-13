@@ -14,9 +14,9 @@
     "build:watch": "./packages/build/node_modules/.bin/esbuild --external:node:buffer --external:electron --external:ws --external:node:worker_threads --format=esm --bundle --watch packages/extension-host-worker/src/extensionHostWorkerMain.ts --outfile=.tmp/dist/dist/extensionHostWorkerMain.js",
     "dev": "node packages/build/src/dev.js",
     "format": "prettier --write .",
+    "postinstall": "lerna bootstrap --ci",
     "lint": "eslint .",
     "measure": "cd packages/memory && npm run measure",
-    "postinstall": "lerna bootstrap --ci",
     "test": "lerna run test",
     "type-check": "tsc -b"
   },
