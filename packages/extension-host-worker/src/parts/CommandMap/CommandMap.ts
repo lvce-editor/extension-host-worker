@@ -23,6 +23,7 @@ import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts
 import * as ExtensionHostImplementation from '../ExtensionHostImplementation/ExtensionHostImplementation.ts'
 import * as ExtensionHostMockExec from '../ExtensionHostMockExec/ExtensionHostMockExec.ts'
 import * as ExtensionHostMockRpc from '../ExtensionHostMockRpc/ExtensionHostMockRpc.ts'
+import * as ExtensionHostOutputChannel from '../ExtensionHostOutputChannel/ExtensionHostOutputChannel.ts'
 import * as ExtensionHostReference from '../ExtensionHostReference/ExtensionHostReference.ts'
 import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
 import * as ExtensionHostSelection from '../ExtensionHostSelection/ExtensionHostSelection.ts'
@@ -137,6 +138,7 @@ export const commandMap = {
   'IndexedDb.saveValue': IndexedDb.saveValue,
   'IndexedDb.set': IndexedDbKeyValueStorage.set,
   'Languages.getLanguages': Languages.getLanguages,
+  'Output.getEnabledProviders': ExtensionHostOutputChannel.getEnabledProviders,
   'SaveState.saveState': SaveState.saveState,
   'SearchFileWithFetch.searchFileWithFetch': SearchFileWithFetch.searchFile,
   'SearchFileWithHtml.searchFileWithHtml': SearchFileWithHtml.searchFile,
