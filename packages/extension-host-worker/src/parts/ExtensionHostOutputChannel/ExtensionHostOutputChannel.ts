@@ -1,14 +1,8 @@
 import type { OutputChannelProvider } from '../OutputChannelProvider/OutputChannelProvider.ts'
 import * as FileSystemWorker from '../FileSystemWorker/FileSystemWorker.ts'
+import { getOutputFilePath } from '../GetOutputFilePath/GetOutputFilePath.ts'
 
 const providers: Record<string, OutputChannelProvider> = Object.create(null)
-
-const getOutputFilePath = (id: string): string => {
-  const isWeb = false
-  const outputFolderPath = isWeb ? `output://` : 'file:///tmp'
-  const uri = `${outputFolderPath}/${id}.txt`
-  return uri
-}
 
 export const registerOutputChannel = (provider) => {
   if (!provider) {
