@@ -21,7 +21,7 @@ export const registerOutputChannel = (provider) => {
   }
   return {
     async append(text) {
-      await FileSystemWorker.append(uri, text)
+      await FileSystemWorker.append(uri, text + '\n')
     },
     getUri() {
       return uri
