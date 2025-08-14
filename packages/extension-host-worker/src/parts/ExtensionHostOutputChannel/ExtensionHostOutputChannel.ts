@@ -11,8 +11,10 @@ const getOutputFilePath = (id: string): string => {
 }
 
 export const registerOutputChannel = (provider) => {
-  providers[provider.id] = provider
   const uri = getOutputFilePath(provider.id)
+  providers[provider.id] = {
+    ...provider,
+  }
   return {
     async append(text) {
       await FileSystemWorker.append(uri, text)
@@ -27,7 +29,11 @@ export const getEnabledProviders = (): readonly OutputChannelProvider[] => {
   const values = Object.values(providers)
   const enabledProviders: OutputChannelProvider[] = []
   for (const provider of values) {
-    enabledProviders.push({ id: provider.id, label: provider.label })
+    enabledProviders.push({
+      id: provider.id,
+      label: provider.label,
+      uri: provider.uri,
+    })
   }
   return enabledProviders
 }
