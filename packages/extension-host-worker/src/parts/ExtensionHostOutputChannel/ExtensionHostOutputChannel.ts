@@ -19,8 +19,14 @@ export const registerOutputChannel = (provider) => {
     ...provider,
     uri,
   }
+  let isFirst = true
   return {
     async append(text) {
+      // TODO race condition?
+      if (isFirst) {
+        isFirst = false
+        await FileSystemWorker.writeFile(uri, '')
+      }
       await FileSystemWorker.append(uri, text + '\n')
     },
     getUri() {
