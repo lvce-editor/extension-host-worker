@@ -17,6 +17,7 @@ export const registerOutputChannel = (provider) => {
   const uri = getOutputFilePath(provider.id)
   providers[provider.id] = {
     ...provider,
+    uri,
   }
   return {
     async append(text) {
