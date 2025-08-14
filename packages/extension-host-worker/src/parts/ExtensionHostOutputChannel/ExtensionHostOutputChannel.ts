@@ -1,11 +1,7 @@
 import * as FileSystemWorker from '../FileSystemWorker/FileSystemWorker.ts'
+import { OutputChannelProvider } from '../OutputChannelProvider/OutputChannelProvider.ts'
 
-interface Provider {
-  readonly id: string
-  readonly label: string
-}
-
-const providers: Record<string, Provider> = Object.create(null)
+const providers: Record<string, OutputChannelProvider> = Object.create(null)
 
 export const registerOutputChannel = (provider) => {
   providers[provider.id] = provider
@@ -20,9 +16,9 @@ export const registerOutputChannel = (provider) => {
   }
 }
 
-export const getEnabledProviders = (): readonly Provider[] => {
+export const getEnabledProviders = (): readonly OutputChannelProvider[] => {
   const values = Object.values(providers)
-  const enabledProviders: Provider[] = []
+  const enabledProviders: OutputChannelProvider[] = []
   for (const provider of values) {
     enabledProviders.push({ id: provider.id, label: provider.label })
   }
