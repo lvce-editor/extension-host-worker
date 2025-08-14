@@ -3,9 +3,16 @@ import * as FileSystemWorker from '../FileSystemWorker/FileSystemWorker.ts'
 
 const providers: Record<string, OutputChannelProvider> = Object.create(null)
 
+const getOutputFilePath = (id: string): string => {
+  const isWeb = false
+  const outputFolderPath = isWeb ? `output://` : 'file:///tmp'
+  const uri = `${outputFolderPath}/${id}.txt`
+  return uri
+}
+
 export const registerOutputChannel = (provider) => {
   providers[provider.id] = provider
-  const uri = `output://${provider.id}`
+  const uri = getOutputFilePath(provider.id)
   return {
     async append(text) {
       await FileSystemWorker.append(uri, text)
