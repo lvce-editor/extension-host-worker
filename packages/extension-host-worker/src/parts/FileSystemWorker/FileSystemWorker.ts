@@ -14,3 +14,8 @@ export const append = async (uri: string, content: string): Promise<void> => {
   const rpc = await getOrCreateRpc()
   await rpc.invoke('FileSystem.appendFile', uri, content)
 }
+
+export const writeFile = async (uri: string, content: string): Promise<void> => {
+  const rpc = await getOrCreateRpc()
+  await rpc.invoke('FileSystem.writeFile', uri, content)
+}
