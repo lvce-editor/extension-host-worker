@@ -1,5 +1,5 @@
+import type { OutputChannelProvider } from '../OutputChannelProvider/OutputChannelProvider.ts'
 import * as FileSystemWorker from '../FileSystemWorker/FileSystemWorker.ts'
-import { OutputChannelProvider } from '../OutputChannelProvider/OutputChannelProvider.ts'
 
 const providers: Record<string, OutputChannelProvider> = Object.create(null)
 
