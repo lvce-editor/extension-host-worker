@@ -2,7 +2,8 @@ import { TransferMessagePortRpcParent } from '@lvce-editor/rpc'
 import * as RendererWorker from '../Rpc/Rpc.ts'
 
 const send = async (port: MessagePort) => {
-  await RendererWorker.invokeAndTransfer('SendMessagePortToExtensionHostWorker.sendMessagePortToFileSystemWorker', port)
+  const initialCommand = 'FileSystem.handleMessagePort'
+  await RendererWorker.invokeAndTransfer('SendMessagePortToExtensionHostWorker.sendMessagePortToFileSystemWorker', port, initialCommand)
 }
 
 export const launchFileSystemProcess = async () => {
