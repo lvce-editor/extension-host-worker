@@ -19,6 +19,7 @@ import * as ExtensionHostGetPosition from '../ExtensionHostGetPosition/Extension
 import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
 import * as ExtensionHostImplementation from '../ExtensionHostImplementation/ExtensionHostImplementation.ts'
 import * as ExtensionHostNodeIpc from '../ExtensionHostNodeRpc/ExtensionHostNodeRpc.ts'
+import * as ExtensionHostOutputChannel from '../ExtensionHostOutputChannel/ExtensionHostOutputChannel.ts'
 import * as ExtensionHostPrompt from '../ExtensionHostPrompt/ExtensionHostPrompt.ts'
 import * as ExtensionHostQuickPick from '../ExtensionHostQuickPick/ExtensionHostQuickPick.ts'
 import * as ExtensionHostReference from '../ExtensionHostReference/ExtensionHostReference.ts'
@@ -115,6 +116,9 @@ export const api = {
   // Implementation
   registerImplementationProvider: ExtensionHostImplementation.registerImplementationProvider,
   executeImplementationProvider: ExtensionHostImplementation.executeImplementationProvider,
+
+  // Output
+  registerOutputChannel: ExtensionHostOutputChannel.registerOutputChannel,
 
   // Prompt
   confirm: ExtensionHostPrompt.confirm,
