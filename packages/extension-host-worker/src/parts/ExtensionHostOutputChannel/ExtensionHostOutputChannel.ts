@@ -11,6 +11,15 @@ const getOutputFilePath = (id: string): string => {
 }
 
 export const registerOutputChannel = (provider) => {
+  if (!provider) {
+    throw new Error(`provider is required`)
+  }
+  if (!provider.id) {
+    throw new Error('provider.id is required')
+  }
+  if (!provider.label) {
+    throw new Error('provider.label is required')
+  }
   const uri = getOutputFilePath(provider.id)
   providers[provider.id] = {
     ...provider,
