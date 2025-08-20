@@ -19,7 +19,7 @@ export const readFile = (uri: string): string => {
 }
 
 export const exists = (uri: string): boolean => {
-  const dirent = FileSystemMemoryState.getDirent(uri)
+  const dirent = FileSystemMemoryState.getDirent(uri) || FileSystemMemoryState.getDirent(`${uri}/`)
   if (!dirent) {
     return false
   }
