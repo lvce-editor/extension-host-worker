@@ -18,6 +18,14 @@ export const readFile = (uri: string): string => {
   return dirent.content
 }
 
+export const exists = (uri: string): boolean => {
+  const dirent = FileSystemMemoryState.getDirent(uri)
+  if (!dirent) {
+    return false
+  }
+  return true
+}
+
 const ensureParentDir = (uri: string): void => {
   const startIndex = 0
   let endIndex = uri.indexOf(PathSeparatorType.Slash)

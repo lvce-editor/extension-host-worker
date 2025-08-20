@@ -113,6 +113,7 @@ export const commandMap = {
   'FileSystemFetch.remove': FileSystemFetch.remove,
   'FileSystemFetch.writeFile': FileSystemFetch.writeFile,
   'FileSystemMemory.chmod': FileSystemMemory.chmod,
+  'FileSystemMemory.exists': FileSystemMemory.exists,
   'FileSystemMemory.copy': FileSystemMemory.copy,
   'FileSystemMemory.getBlob': FileSystemMemory.getBlob,
   'FileSystemMemory.getBlobUrl': FileSystemMemory.getBlobUrl,
