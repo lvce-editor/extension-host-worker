@@ -38,6 +38,10 @@ export const readFileExternal = async (path) => {
   return content
 }
 
+export const existsExternal = async (uri) => {
+  return await Rpc.invoke('FileSystem.exists', uri)
+}
+
 export const readDirWithFileTypesExternal = async (path) => {
   // TODO when file is local,
   // don't ask renderer worker
@@ -71,6 +75,15 @@ export const writeFile = async (protocol, uri, content) => {
   try {
     const provider = FileSystemProviderState.get(protocol)
     return await provider.writeFile(uri, content)
+  } catch (error) {
+    throw new VError(error, 'Failed to execute file system provider')
+  }
+}
+
+export const exists = async (protocol, uri) => {
+  try {
+    const provider = FileSystemProviderState.get(protocol)
+    return await provider.exists(uri)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
   }

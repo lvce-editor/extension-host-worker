@@ -94,6 +94,7 @@ export const api = {
   registerFileSystemProvider: ExtensionHostFileSystem.registerFileSystemProvider,
   readFile: ExtensionHostFileSystem.readFileExternal,
   readDirWithFileTypes: ExtensionHostFileSystem.readDirWithFileTypesExternal,
+  exists: ExtensionHostFileSystem.existsExternal,
 
   // Formatting
   registerFormattingProvider: ExtensionHostFormatting.registerFormattingProvider,
