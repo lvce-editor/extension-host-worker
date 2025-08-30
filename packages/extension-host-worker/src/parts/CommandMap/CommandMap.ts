@@ -55,6 +55,7 @@ import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
 import * as ImportExtension from '../ImportExtension/ImportExtension.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
+import * as InvalidateExtensionsCache from '../InvalidateExtensionsCache/InvalidateExtensionsCache.ts'
 import * as Languages from '../Languages/Languages.ts'
 import * as LaunchIframeWorker from '../LaunchIframeWorker/LaunchIframeWorker.ts'
 import * as LoadWebView from '../LoadWebView/LoadWebView.ts'
@@ -68,6 +69,7 @@ import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 import * as WebViewInterceptor from '../WebViewInterceptor/WebViewInterceptor.ts'
 
 export const commandMap = {
+  'Extensions.invalidateExtensionsCache': InvalidateExtensionsCache.invalidateExtensionsCache,
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
   'ColorTheme.getColorThemeCssFromJson': GetColorThemeCss.getColorThemeCssFromJson,
   'ColorTheme.getColorThemeJson': GetColorThemeJson.getColorThemeJson,
