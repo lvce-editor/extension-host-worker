@@ -115,7 +115,7 @@ const renameDirectory = (oldUri: string, newUri: string): void => {
 }
 
 export const rename = (oldUri: string, newUri: string): void => {
-  const item = FileSystemMemoryState.getDirent(oldUri)
+  const item = FileSystemMemoryState.getDirent(oldUri) || FileSystemMemoryState.getDirent(`${oldUri}/`)
   if (!item) {
     throw new FileNotFoundError(oldUri)
   }
