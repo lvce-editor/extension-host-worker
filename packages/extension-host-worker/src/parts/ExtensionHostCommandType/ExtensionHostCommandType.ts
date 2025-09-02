@@ -12,6 +12,7 @@ export const FileSystemReadDirWithFileTypes = 'ExtensionHostFileSystem.readDirWi
 export const FileSystemReadFile = 'ExtensionHostFileSystem.readFile'
 export const FileSystemRename = 'ExtensionHostFileSystem.rename'
 export const FileSystemWriteFile = 'ExtensionHostFileSystem.writeFile'
+export const FileSystemRemove = 'ExtensionHostFileSystem.remove'
 export const FormattingExecuteFormmattingProvider = 'ExtensionHostFormatting.executeFormattingProvider'
 export const HoverExecute = 'ExtensionHostHover.execute'
 export const ImplementationExecuteImplementationProvider = 'ExtensionHostImplementation.executeImplementationProvider'
