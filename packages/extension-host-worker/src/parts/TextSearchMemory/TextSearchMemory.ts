@@ -31,7 +31,7 @@ export const textSearch2 = async (scheme: string, root: string, query: string, o
     }
   }
   return {
-    results: allResults,
+    results: options.limit ? allResults.slice(0, options.limit) : allResults,
     limitHit: allResults.length > options.limit,
   }
 }
