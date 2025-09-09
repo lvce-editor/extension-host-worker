@@ -8,6 +8,14 @@ export const textSearch = async (scheme: string, root: string, query: string, op
   Assert.string(scheme)
   Assert.string(root)
   Assert.string(query)
+  const { results } = await textSearch2(scheme, root, query, options, assetDir)
+  return results
+}
+
+export const textSearch2 = async (scheme: string, root: string, query: string, options: any, assetDir: string): Promise<any> => {
+  Assert.string(scheme)
+  Assert.string(root)
+  Assert.string(query)
   const files = FileSystemMemory.getFiles()
   const relativeRoot = root.slice('memfs://'.length)
   const allResults: any[] = []
@@ -22,5 +30,8 @@ export const textSearch = async (scheme: string, root: string, query: string, op
       allResults.push(...results)
     }
   }
-  return allResults
+  return {
+    results: allResults,
+    limitHit: allResults.length > options.limit,
+  }
 }
