@@ -149,6 +149,7 @@ export const commandMap = {
   'TextSearchFetch.textSearch': TextSearchFetch.textSearch,
   'TextSearchHtml.textSearch': TextSearchHtml.textSearch,
   'TextSearchMemory.textSearch': TextSearchMemory.textSearch,
+  'TextSearchMemory.textSearch2': TextSearchMemory.textSearch2,
   'WebView.create3': CreateWebView3.createWebView3,
   'WebView.createWebViewWorkerRpc': CreateWebViewRpc.createWebViewWorkerRpc,
   'WebView.createWebViewWorkerRpc2': CreateWebViewRpc2.createWebViewWorkerRpc2,
