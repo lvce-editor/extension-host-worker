@@ -69,7 +69,6 @@ import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 import * as WebViewInterceptor from '../WebViewInterceptor/WebViewInterceptor.ts'
 
 export const commandMap = {
-  'Extensions.invalidateExtensionsCache': InvalidateExtensionsCache.invalidateExtensionsCache,
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
   'ColorTheme.getColorThemeCssFromJson': GetColorThemeCss.getColorThemeCssFromJson,
   'ColorTheme.getColorThemeJson': GetColorThemeJson.getColorThemeJson,
@@ -99,6 +98,7 @@ export const commandMap = {
   'ExtensionHostDebug.stepOver': ExtensionHostDebug.stepOver,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
+  'ExtensionHostSourceControl.getIconDefinitions': ExtensionHostSourceControl.getIconDefinitions,
   'ExtensionHostWebView.create': ExtensionHostWebView.createWebView,
   'ExtensionHostWebView.dispose': ExtensionHostWebView.disposeWebView,
   'ExtensionHostWebView.getWebViewInfo': ExtensionHostWebView.getWebViewInfo,
@@ -107,6 +107,7 @@ export const commandMap = {
   'Extensions.addWebExtension': AddWebExtension.addWebExtension,
   'Extensions.getExtension': GetExtension.getExtension,
   'Extensions.getExtensions': GetExtensions.getExtensions,
+  'Extensions.invalidateExtensionsCache': InvalidateExtensionsCache.invalidateExtensionsCache,
   'FileSystemFetch.chmod': FileSystemFetch.chmod,
   'FileSystemFetch.getBlob': FileSystemFetch.getBlob,
   'FileSystemFetch.mkdir': FileSystemFetch.mkdir,
@@ -115,8 +116,8 @@ export const commandMap = {
   'FileSystemFetch.remove': FileSystemFetch.remove,
   'FileSystemFetch.writeFile': FileSystemFetch.writeFile,
   'FileSystemMemory.chmod': FileSystemMemory.chmod,
-  'FileSystemMemory.exists': FileSystemMemory.exists,
   'FileSystemMemory.copy': FileSystemMemory.copy,
+  'FileSystemMemory.exists': FileSystemMemory.exists,
   'FileSystemMemory.getBlob': FileSystemMemory.getBlob,
   'FileSystemMemory.getBlobUrl': FileSystemMemory.getBlobUrl,
   'FileSystemMemory.getFiles': FileSystemMemory.getFiles,

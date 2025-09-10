@@ -1,4 +1,5 @@
 import * as Assert from '../Assert/Assert.ts'
+import { getExtensions } from '../GetExtensions/GetExtensions.ts'
 
 export const state = {
   providers: Object.create(null),
@@ -107,4 +108,18 @@ export const getEnabledProviderIds = async (scheme, root) => {
 
 export const reset = () => {
   state.providers = Object.create(null)
+}
+
+export const getIconDefinitions = async (providerId): Promise<readonly string[]> => {
+  const extensions = await getExtensions()
+
+  for (const extension of extensions) {
+    const id = extension.id.split('.')
+    const shortId = id[1]
+    if (shortId === providerId && extension['source-control-icons'] && Array.isArray(extension['source-control-icons'])) {
+      return extension['source-control-icons']
+    }
+  }
+  // TODO return warning that no icons were found?
+  return []
 }
