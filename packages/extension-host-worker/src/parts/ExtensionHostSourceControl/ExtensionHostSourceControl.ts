@@ -1,4 +1,5 @@
 import * as Assert from '../Assert/Assert.ts'
+import { getRemoteUrlSync } from '../ExtensionHostUrl/ExtensionHostUrl.ts'
 import { getExtensions } from '../GetExtensions/GetExtensions.ts'
 
 export const state = {
@@ -117,7 +118,10 @@ export const getIconDefinitions = async (providerId): Promise<readonly string[]>
     const id = extension.id.split('.')
     const shortId = id[1]
     if (shortId === providerId && extension['source-control-icons'] && Array.isArray(extension['source-control-icons'])) {
-      return extension['source-control-icons']
+      const baseIcons = extension['source-control-icons']
+      const absoluteUris = baseIcons.map((icon) => `${extension.uri}/${icon}`)
+      const remoteUris = absoluteUris.map((icon) => getRemoteUrlSync(icon))
+      return remoteUris
     }
   }
   // TODO return warning that no icons were found?
