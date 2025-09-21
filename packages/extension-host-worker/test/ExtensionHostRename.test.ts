@@ -45,3 +45,32 @@ test('executeRename - error - rename provider throws error', async () => {
     new Error('Failed to execute rename provider: TypeError: x is not a function'),
   )
 })
+
+test('executeRename - error - edit is missing uri', async () => {
+  TextDocument.setFiles([
+    {
+      path: '/test.index.ts',
+      id: 1,
+      languageId: 'javascript',
+      content: '',
+    },
+  ])
+  ExtensionHostRename.registerRenameProvider({
+    languageId: 'javascript',
+    provideRename() {
+      return {
+        canRename: true,
+        edits: [
+          {
+            uri: null,
+            edits: [{}],
+          },
+        ],
+      }
+    },
+  })
+  // @ts-ignore
+  await expect(ExtensionHostRename.executeRenameProvider(1, 0)).rejects.toThrow(
+    new Error('Failed to execute rename provider: invalid rename result: renameResult item uri must be of type string'),
+  )
+})
