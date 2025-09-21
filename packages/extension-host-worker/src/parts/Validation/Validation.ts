@@ -56,6 +56,9 @@ const getPreview = (item): string => {
 }
 
 export const validate = (item, schema): string | undefined => {
+  if (typeof schema === 'function') {
+    return schema(item)
+  }
   const actualType = GetType.getType(item)
   const expectedType = schema.type
   if (actualType !== expectedType) {
