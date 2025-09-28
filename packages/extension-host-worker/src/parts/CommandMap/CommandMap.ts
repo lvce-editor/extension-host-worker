@@ -118,6 +118,7 @@ export const commandMap = {
   'FileSystemMemory.chmod': FileSystemMemory.chmod,
   'FileSystemMemory.copy': FileSystemMemory.copy,
   'FileSystemMemory.exists': FileSystemMemory.exists,
+  'FileSystemMemory.stat': FileSystemMemory.stat,
   'FileSystemMemory.getBlob': FileSystemMemory.getBlob,
   'FileSystemMemory.getBlobUrl': FileSystemMemory.getBlobUrl,
   'FileSystemMemory.getFiles': FileSystemMemory.getFiles,
