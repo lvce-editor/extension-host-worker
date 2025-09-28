@@ -97,6 +97,7 @@ export const api = {
   exists: ExtensionHostFileSystem.existsExternal,
   mkdir: ExtensionHostFileSystem.mkdirExternal,
   writeFile: ExtensionHostFileSystem.writeFileExternal,
+  stat: ExtensionHostFileSystem.statExternal,
 
   // Formatting
   registerFormattingProvider: ExtensionHostFormatting.registerFormattingProvider,

@@ -50,6 +50,10 @@ export const writeFileExternal = async (uri, content) => {
   return await Rpc.invoke('FileSystem.writeFile', uri, content)
 }
 
+export const statExternal = async (uri) => {
+  return await Rpc.invoke('FileSystem.stat', uri)
+}
+
 export const readDirWithFileTypesExternal = async (path) => {
   // TODO when file is local,
   // don't ask renderer worker
