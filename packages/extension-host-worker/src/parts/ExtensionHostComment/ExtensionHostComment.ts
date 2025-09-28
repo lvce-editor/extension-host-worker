@@ -6,7 +6,7 @@ const { registerCommentProvider, executeCommentProvider } = Registry.create({
   resultShape: {
     type: Types.Array,
     items: {
-      type: Types.Object,
+      type: Types.String,
     },
   },
 })
