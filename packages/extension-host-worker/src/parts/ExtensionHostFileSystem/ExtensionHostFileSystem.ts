@@ -47,7 +47,7 @@ export const mkdirExternal = async (uri) => {
 }
 
 export const writeFileExternal = async (uri, content) => {
-  return await Rpc.invoke('FileSystem.writeFIle', uri, content)
+  return await Rpc.invoke('FileSystem.writeFile', uri, content)
 }
 
 export const readDirWithFileTypesExternal = async (path) => {
