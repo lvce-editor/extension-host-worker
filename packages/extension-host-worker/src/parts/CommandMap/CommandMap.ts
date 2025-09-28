@@ -12,6 +12,7 @@ import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHo
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostCommandType from '../ExtensionHostCommandType/ExtensionHostCommandType.ts'
+import { executeCommentProvider } from '../ExtensionHostComment/ExtensionHostComment.ts'
 import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
 import * as ExtensionHostConfiguration from '../ExtensionHostConfiguration/ExtensionHostConfiguration.ts'
 import * as ExtensionHostDebug from '../ExtensionHostDebug/ExtensionHostDebug.ts'
@@ -163,6 +164,7 @@ export const commandMap = {
   [ExtensionHostCommandType.ClosingTagExecuteClosingTagProvider]: ExtensionHostClosingTag.executeClosingTagProvider,
   [ExtensionHostCommandType.CommandExecute]: ExtensionHostCommand.executeCommand,
   [ExtensionHostCommandType.CompletionExecute]: ExtensionHostCompletion.executeCompletionProvider,
+  [ExtensionHostCommandType.CommentProviderExecute]: executeCommentProvider,
   [ExtensionHostCommandType.CompletionResolveExecute]: ExtensionHostCompletion.executeresolveCompletionItemProvider,
   [ExtensionHostCommandType.ConfigurationSetConfiguration]: ExtensionHostConfiguration.setConfigurations,
   [ExtensionHostCommandType.DefinitionExecuteDefinitionProvider]: ExtensionHostDefinition.executeDefinitionProvider,

@@ -2,6 +2,7 @@ export const BraceCompletionExecuteBraceCompletionProvider = 'ExtensionHostBrace
 export const ClosingTagExecuteClosingTagProvider = 'ExtensionHostClosingTag.executeClosingTagProvider'
 export const CommandExecute = 'ExtensionHostCommand.executeCommand'
 export const CompletionExecute = 'ExtensionHostCompletion.execute'
+export const CommentProviderExecute = 'ExtensionHostCommment.execute'
 export const CompletionResolveExecute = 'ExtensionHostCompletion.executeResolve'
 export const ConfigurationSetConfiguration = 'ExtensionHostConfiguration.setConfiguration'
 export const DefinitionExecuteDefinitionProvider = 'ExtensionHostDefinition.executeDefinitionProvider'

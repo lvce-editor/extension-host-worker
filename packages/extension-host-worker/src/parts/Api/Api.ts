@@ -4,6 +4,7 @@ import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/E
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
+import * as ExtensionHostComment from '../ExtensionHostComment/ExtensionHostComment.ts'
 import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
 import * as ExtensionHostConfiguration from '../ExtensionHostConfiguration/ExtensionHostConfiguration.ts'
 import * as ExtensionHostDebug from '../ExtensionHostDebug/ExtensionHostDebug.ts'
@@ -57,6 +58,11 @@ export const api = {
   // Command
   registerCommand: ExtensionHostCommand.registerCommand,
   executeCommand: ExtensionHostCommand.executeCommand,
+
+  // Comment
+
+  registerCommentProvider: ExtensionHostComment.registerCommentProvider,
+  executeCommentProvider: ExtensionHostComment.executeCommentProvider,
 
   // Completion
   registerCompletionProvider: ExtensionHostCompletion.registerCompletionProvider,
