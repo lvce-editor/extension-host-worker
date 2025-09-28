@@ -26,6 +26,34 @@ export const exists = (uri: string): boolean => {
   return true
 }
 
+type Stat = any
+
+export const stat = (uri: string): Stat => {
+  const dirent = FileSystemMemoryState.getDirent(uri)
+  if (!dirent) {
+    return {
+      exists: false,
+      size: 0,
+    }
+  }
+  if (dirent.type === DirentType.File) {
+    return {
+      exists: true,
+      type: DirentType.File,
+    }
+  }
+  if (dirent.type === DirentType.Directory) {
+    return {
+      exists: true,
+      type: DirentType.Directory,
+    }
+  }
+  return {
+    exists: true,
+    type: dirent.type,
+  }
+}
+
 const ensureParentDir = (uri: string): void => {
   const startIndex = 0
   let endIndex = uri.indexOf(PathSeparatorType.Slash)
