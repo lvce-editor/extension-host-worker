@@ -12,6 +12,7 @@ import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHo
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostCommandType from '../ExtensionHostCommandType/ExtensionHostCommandType.ts'
+import { executeCommentProvider } from '../ExtensionHostComment/ExtensionHostComment.ts'
 import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
 import * as ExtensionHostConfiguration from '../ExtensionHostConfiguration/ExtensionHostConfiguration.ts'
 import * as ExtensionHostDebug from '../ExtensionHostDebug/ExtensionHostDebug.ts'
@@ -67,7 +68,6 @@ import * as TextSearchFetch from '../TextSearchFetch/TextSearchFetch.ts'
 import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 import * as WebViewInterceptor from '../WebViewInterceptor/WebViewInterceptor.ts'
-import { executeCommentProvider } from '../ExtensionHostComment/ExtensionHostComment.ts'
 
 export const commandMap = {
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
