@@ -8,6 +8,7 @@ import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHo
 import * as ExtensionHostConfiguration from '../ExtensionHostConfiguration/ExtensionHostConfiguration.ts'
 import * as ExtensionHostDebug from '../ExtensionHostDebug/ExtensionHostDebug.ts'
 import * as ExtensionHostDefinition from '../ExtensionHostDefinition/ExtensionHostDefinition.ts'
+import * as ExtensionHostComment from '../ExtensionHostComment/ExtensionHostComment.ts'
 import * as ExtensionHostDiagnostic from '../ExtensionHostDiagnostic/ExtensionHostDiagnostic.ts'
 import * as ExtensionHostDialog from '../ExtensionHostDialog/ExtensionHostDialog.ts'
 import * as ExtensionHostEnv from '../ExtensionHostEnv/ExtensionHostEnv.ts'
@@ -57,6 +58,11 @@ export const api = {
   // Command
   registerCommand: ExtensionHostCommand.registerCommand,
   executeCommand: ExtensionHostCommand.executeCommand,
+
+  // Comment
+
+  registerCommentProvider: ExtensionHostComment.registerCommentProvider,
+  executeCommentProvider: ExtensionHostComment.executeCommentProvider,
 
   // Completion
   registerCompletionProvider: ExtensionHostCompletion.registerCompletionProvider,
