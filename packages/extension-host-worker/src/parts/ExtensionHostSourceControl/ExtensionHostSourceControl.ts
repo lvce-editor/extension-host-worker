@@ -1,5 +1,6 @@
 import * as Assert from '../Assert/Assert.ts'
 import { getRemoteUrlSync } from '../ExtensionHostUrl/ExtensionHostUrl.ts'
+import * as ExtensionMetaState from '../ExtensionMetaState/ExtensionMetaState.ts'
 import { getExtensions } from '../GetExtensions/GetExtensions.ts'
 
 export const state = {
@@ -113,8 +114,12 @@ export const reset = () => {
 
 export const getIconDefinitions = async (providerId): Promise<readonly string[]> => {
   const extensions = await getExtensions()
+  const allExtensions = [...extensions,
 
-  for (const extension of extensions) {
+  ExtensionMetaState.state.webExtensions
+  ]
+
+  for (const extension of allExtensions) {
     const id = extension.id.split('.')
     const shortId = id[1]
     if (shortId === providerId && extension['source-control-icons'] && Array.isArray(extension['source-control-icons'])) {
