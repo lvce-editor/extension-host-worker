@@ -11,6 +11,9 @@ const isFileProtocol = (protocol: string): boolean => {
 
 export const getRemoteUrlSync = (uri: string): string => {
   const protocol = GetProtocol.getProtocol(uri)
+  if (protocol === 'http://' || protocol === 'https://') {
+    return uri
+  }
   const withoutPrefix = uri.startsWith('file://') ? uri.slice('file://'.length) : uri
   if (Platform.platform === PlatformType.Remote && isFileProtocol(protocol)) {
     if (uri.startsWith('/')) {
