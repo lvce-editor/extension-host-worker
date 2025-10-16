@@ -114,10 +114,7 @@ export const reset = () => {
 
 export const getIconDefinitions = async (providerId): Promise<readonly string[]> => {
   const extensions = await getExtensions()
-  const allExtensions = [...extensions,
-
-  ExtensionMetaState.state.webExtensions
-  ]
+  const allExtensions = [...extensions, ...ExtensionMetaState.state.webExtensions]
 
   for (const extension of allExtensions) {
     const id = extension.id.split('.')
