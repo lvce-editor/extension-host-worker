@@ -44,6 +44,7 @@ export default [
       'jest/no-restricted-jest-methods': 'off',
       'no-restricted-syntax': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
+      'github-actions/ci-versions': 'off',
     },
   },
 ]
