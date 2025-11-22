@@ -27,6 +27,15 @@ export const readFile = async (protocol, path) => {
   }
 }
 
+export const mkdir = async (protocol, path) => {
+  try {
+    const provider = FileSystemProviderState.get(protocol)
+    return await provider.mkdir(path)
+  } catch (error) {
+    throw new VError(error, 'Failed to execute file system provider')
+  }
+}
+
 export const readFileExternal = async (path) => {
   // TODO when file is local,
   // don't ask renderer worker

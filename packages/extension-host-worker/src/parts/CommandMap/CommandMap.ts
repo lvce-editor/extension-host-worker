@@ -176,6 +176,7 @@ export const commandMap = {
   [ExtensionHostCommandType.FileSystemRename]: ExtensionHostFileSystem.rename,
   [ExtensionHostCommandType.FileSystemWriteFile]: ExtensionHostFileSystem.writeFile,
   [ExtensionHostCommandType.FileSystemRemove]: ExtensionHostFileSystem.remove,
+  [ExtensionHostCommandType.FileSystemMkdir]: ExtensionHostFileSystem.mkdir,
   [ExtensionHostCommandType.FormattingExecuteFormmattingProvider]: ExtensionHostFormatting.executeFormattingProvider,
   [ExtensionHostCommandType.HoverExecute]: ExtensionHostHover.executeHoverProvider,
   [ExtensionHostCommandType.ImplementationExecuteImplementationProvider]: ExtensionHostImplementation.executeImplementationProvider,
