@@ -43,6 +43,7 @@ export default [
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       'jest/no-restricted-jest-methods': 'off',
       'no-restricted-syntax': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
     },
   },
 ]
