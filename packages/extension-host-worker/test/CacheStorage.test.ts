@@ -8,7 +8,7 @@ beforeEach(() => {
 
 test('getJson - returns cached data', async () => {
   const mockData = { test: 'data' }
-  const mockResponse = new Response(JSON.stringify(mockData))
+  const mockResponse = Response.json(mockData)
 
   // @ts-ignore
   globalThis.caches = {

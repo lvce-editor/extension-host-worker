@@ -1,7 +1,9 @@
 import * as config from '@lvce-editor/eslint-config'
+import * as actions from '@lvce-editor/eslint-plugin-github-actions'
 
 export default [
   ...config.default,
+  ...actions.default,
   {
     ignores: [
       '**/build/**',
@@ -22,7 +24,6 @@ export default [
     ],
   },
   {
-    files: ['**/*.ts'],
     rules: {
       '@typescript-eslint/require-await': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
@@ -41,6 +42,8 @@ export default [
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       'jest/no-restricted-jest-methods': 'off',
       'no-restricted-syntax': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      'github-actions/ci-versions': 'off',
     },
   },
 ]
