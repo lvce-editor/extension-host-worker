@@ -129,3 +129,14 @@ export const getIconDefinitions = async (providerId): Promise<readonly string[]>
   // TODO return warning that no icons were found?
   return []
 }
+
+export const getFileDecorations = async (providerId: any, uris: readonly string[]): Promise<readonly any[]> => {
+  const provider = state.providers[providerId]
+  // @ts-ignore
+  if (!provider || !provider.getFileDecorations) {
+    return []
+  }
+  // @ts-ignore
+  const decorations = await provider.getFileDecorations(uris)
+  return decorations
+}

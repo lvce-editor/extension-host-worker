@@ -31,6 +31,7 @@ export const SourceControlGetChangedFiles = 'ExtensionHost.sourceControlGetChang
 export const SourceControlGetEnabledProviderIds = 'ExtensionHostSourceControl.getEnabledProviderIds'
 export const SourceControlGetFileBefore = 'ExtensionHostSourceControl.GetFileBefore'
 export const SourceControlGetGroups = 'ExtensionHostSourceControl.getGroups'
+export const SourceControlGetFileDecorations = 'ExtensionHostSourceControl.getFileDecorations'
 export const StatusBarGetStatusBarItems = 'ExtensionHost.getStatusBarItems'
 export const StatusBarRegisterChangeListener = 'ExtensionHostStatusBar.registerChangeListener'
 export const TabCompletionExecuteTabCompletionProvider = 'ExtensionHost.executeTabCompletionProvider'
