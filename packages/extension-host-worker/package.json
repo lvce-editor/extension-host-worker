@@ -5,6 +5,10 @@
   "keywords": [
     "web-worker"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvce-editor/extension-host-worker.git"
+  },
   "license": "MIT",
   "author": "Lvce Editor",
   "type": "module",
