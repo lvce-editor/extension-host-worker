@@ -102,7 +102,7 @@ export const api = {
   readDirWithFileTypes: ExtensionHostFileSystem.readDirWithFileTypesExternal,
   exists: ExtensionHostFileSystem.existsExternal,
   mkdir: ExtensionHostFileSystem.mkdirExternal,
-  remove: ExtensionHostFileSystem.remove,
+  remove: ExtensionHostFileSystem.removeExternal,
   writeFile: ExtensionHostFileSystem.writeFileExternal,
   stat: ExtensionHostFileSystem.statExternal,
 
