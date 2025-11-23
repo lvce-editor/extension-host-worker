@@ -47,6 +47,11 @@ export const readFileExternal = async (path) => {
   return content
 }
 
+export const removeExternal = async (path) => {
+  const content = await Rpc.invoke('FileSystem.remove', path)
+  return content
+}
+
 export const existsExternal = async (uri) => {
   return await Rpc.invoke('FileSystem.exists', uri)
 }
