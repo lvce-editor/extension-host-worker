@@ -51,7 +51,7 @@
   "devDependencies": {
     "@lvce-editor/assert": "^1.4.0",
     "@lvce-editor/rpc": "^4.20.0",
-    "@lvce-editor/rpc-registry": "^4.7.0",
+    "@lvce-editor/rpc-registry": "^4.9.0",
     "@lvce-editor/verror": "^1.7.0",
     "@types/node": "^22.10.5",
     "idb": "^8.0.3",
