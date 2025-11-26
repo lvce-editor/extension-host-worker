@@ -93,7 +93,7 @@ export const api = {
   FormattingError,
   VError,
 
-  // Exec
+  // Exec`
   exec: ExtensionHostExec.exec,
 
   // File System
@@ -179,5 +179,6 @@ export const api = {
   createWorker: ExtensionHostWorker.createWorker,
 
   // Workspace
+  handleWorkspaceRefresh: ExtensionHostWorkspace.handleWorkspaceRefresh,
   getWorkspaceFolder: ExtensionHostWorkspace.getWorkspaceFolder,
 }
