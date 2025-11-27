@@ -19,5 +19,5 @@ export const hasRecentErrors = (): boolean => {
 }
 
 export const getRecentError = (): any => {
-  state.errors.at(-1)
+  return state.errors.at(-1)
 }
