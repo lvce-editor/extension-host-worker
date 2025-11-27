@@ -115,6 +115,7 @@ export const commandMap = {
   'FileSystemFetch.readDirWithFileTypes': FileSystemFetch.readDirWithFileTypes,
   'FileSystemFetch.readFile': FileSystemFetch.readFile,
   'FileSystemFetch.remove': FileSystemFetch.remove,
+  'FileSystemFetch.exists': FileSystemFetch.exists,
   'FileSystemFetch.writeFile': FileSystemFetch.writeFile,
   'FileSystemMemory.chmod': FileSystemMemory.chmod,
   'FileSystemMemory.copy': FileSystemMemory.copy,

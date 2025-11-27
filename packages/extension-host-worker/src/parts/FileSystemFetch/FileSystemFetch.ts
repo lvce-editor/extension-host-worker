@@ -15,6 +15,14 @@ export const readFile = async (uri: string): Promise<string> => {
   return text
 }
 
+export const exists = async (uri: string): Promise<boolean> => {
+  const response = await fetch(uri)
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  }
+  return response.ok
+}
+
 export const writeFile = (): void => {
   throw new Error('not implemented')
 }
