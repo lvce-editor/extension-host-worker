@@ -194,6 +194,7 @@ export const commandMap = {
   [ExtensionHostCommandType.SourceControlGetChangedFiles]: ExtensionHostSourceControl.getChangedFiles,
   [ExtensionHostCommandType.SourceControlGetEnabledProviderIds]: ExtensionHostSourceControl.getEnabledProviderIds,
   [ExtensionHostCommandType.SourceControlGetFileBefore]: ExtensionHostSourceControl.getFileBefore,
+  [ExtensionHostCommandType.SourceControlGetFileBefore2]: ExtensionHostSourceControl.getFileBefore,
   [ExtensionHostCommandType.SourceControlGetGroups]: ExtensionHostSourceControl.getGroups,
   [ExtensionHostCommandType.SourceControlGetFileDecorations]: ExtensionHostSourceControl.getFileDecorations,
   [ExtensionHostCommandType.StatusBarGetStatusBarItems]: ExtensionHostStatusBar.getStatusBarItems,
