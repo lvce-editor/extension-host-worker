@@ -16,20 +16,20 @@ export const createWebView = async (providerId: string, port: MessagePort, uri: 
   // TODO handle case when webview doesn't send ready message
 
   const rpc = await MessagePortRpcParent.create({
-    messagePort: port,
-    isMessagePortOpen: false,
     commandMap: provider.commands || {},
+    isMessagePortOpen: false,
+    messagePort: port,
   })
 
   const outer = {
-    uri,
-    provider,
-    uid,
-    origin,
-    webView,
     async invoke(method, ...params) {
       return rpc.invoke(method, ...params)
     },
+    origin,
+    provider,
+    uid,
+    uri,
+    webView,
   }
   // TODO allow creating multiple webviews per provider
   ExtensionHostWebViewState.setWebView(providerId, outer)
@@ -56,8 +56,8 @@ export const getWebViewInfo = (providerId: string) => {
     throw new Error(`Webview not found: ${providerId}`)
   }
   return {
-    uid: webView.uid,
     origin: webView.origin,
+    uid: webView.uid,
     uri: webView.uri,
   }
 }

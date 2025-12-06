@@ -13,8 +13,8 @@ test('createResponseFromData - creates response with simple object', () => {
 test('createResponseFromData - creates response with nested object', () => {
   const data = {
     user: {
-      name: 'John',
       age: 30,
+      name: 'John',
     },
   }
   const response = createResponseFromData(data)

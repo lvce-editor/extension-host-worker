@@ -12,9 +12,9 @@ export const createWebViewWorkerRpc2 = async (rpcInfo: any, port: MessagePort): 
   // host subworker doesn't need to import the other file
   await ParentRpc.invokeAndTransfer('IpcParent.create', {
     method: RendererWorkerIpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
-    url: rpcInfo.url,
     name: rpcInfo.name,
-    raw: true,
     port,
+    raw: true,
+    url: rpcInfo.url,
   })
 }

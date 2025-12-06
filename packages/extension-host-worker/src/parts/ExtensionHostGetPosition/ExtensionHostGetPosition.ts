@@ -17,7 +17,7 @@ export const getPosition = (textDocument, offset) => {
   }
   const columnIndex = offset - index
   return {
-    rowIndex,
     columnIndex,
+    rowIndex,
   }
 }

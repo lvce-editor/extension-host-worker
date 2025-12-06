@@ -10,7 +10,7 @@ const getOrCreateRpc = async (id: string, commandMap: any, execute?: any) => {
   return RpcState.get(id)
 }
 
-export const createRpcWithId = ({ id, commandMap, execute }: { id: string; commandMap: any; execute?: any }) => {
+export const createRpcWithId = ({ commandMap, execute, id }: { id: string; commandMap: any; execute?: any }) => {
   Assert.string(id)
   RpcState.register(id, commandMap)
   const lazyRpc = {

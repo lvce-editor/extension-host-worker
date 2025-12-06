@@ -9,10 +9,10 @@ beforeEach(() => {
 test('executeRenameProvider - no results', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostRename.registerRenameProvider({
@@ -28,10 +28,10 @@ test('executeRenameProvider - no results', async () => {
 test('executeRename - error - rename provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostRename.registerRenameProvider({
@@ -49,10 +49,10 @@ test('executeRename - error - rename provider throws error', async () => {
 test('executeRename - error - edit is missing uri', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostRename.registerRenameProvider({
@@ -62,8 +62,8 @@ test('executeRename - error - edit is missing uri', async () => {
         canRename: true,
         edits: [
           {
-            uri: null,
             edits: [{}],
+            uri: null,
           },
         ],
       }

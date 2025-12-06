@@ -1,6 +1,6 @@
 import * as Registry from '../Registry/Registry.ts'
 
-const { registerCommentProvider, executeCommentProvider } = Registry.create({
+const { executeCommentProvider, registerCommentProvider } = Registry.create({
   name: 'Comment',
   resultShape() {
     return ''

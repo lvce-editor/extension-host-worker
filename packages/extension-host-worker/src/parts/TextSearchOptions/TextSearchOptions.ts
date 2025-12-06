@@ -1,12 +1,12 @@
 export interface TextSearchOptions {
-  readonly scheme: string
-  readonly root: string
-  readonly query: string
   readonly assetDir: string
-  readonly threads: number
-  readonly include: string
   readonly exclude: string
-
-  readonly useRegularExpression: boolean
+  readonly include: string
   readonly isCaseSensitive: boolean
+  readonly query: string
+  readonly root: string
+  readonly scheme: string
+
+  readonly threads: number
+  readonly useRegularExpression: boolean
 }

@@ -16,9 +16,9 @@ export const create = async ({ type }) => {
   // TODO rpc module should start port
   port.start()
   const rpc = await MessagePortRpcParent.create({
-    messagePort: port,
-    isMessagePortOpen: true,
     commandMap: {},
+    isMessagePortOpen: true,
+    messagePort: port,
   })
   return rpc
 }

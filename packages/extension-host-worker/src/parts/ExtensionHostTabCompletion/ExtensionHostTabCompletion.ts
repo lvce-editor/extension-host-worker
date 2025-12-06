@@ -1,11 +1,11 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerTabCompletionProvider, executeTabCompletionProvider, reset } = Registry.create({
+const { executeTabCompletionProvider, registerTabCompletionProvider, reset } = Registry.create({
   name: 'TabCompletion',
   resultShape: {
-    type: Types.Object,
     allowUndefined: true,
+    type: Types.Object,
   },
 })
 

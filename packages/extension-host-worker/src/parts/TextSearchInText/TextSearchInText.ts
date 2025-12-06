@@ -15,11 +15,11 @@ export const textSearchInText = (file: string, content: string, query: string, f
   if (results.length > 0) {
     return [
       {
-        type: TextSearchResultType.File,
-        text: file,
-        start: 0,
         end: 0,
         lineNumber: 0,
+        start: 0,
+        text: file,
+        type: TextSearchResultType.File,
       },
       ...results,
     ]

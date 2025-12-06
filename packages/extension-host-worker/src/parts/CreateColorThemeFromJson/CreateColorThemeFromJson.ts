@@ -7,10 +7,10 @@ const rgba = (r, g, b, a) => {
   g = Math.min(255, Math.max(0, g)) | 0
   b = Math.min(255, Math.max(0, b)) | 0
   return {
-    r,
-    g,
-    b,
     a,
+    b,
+    g,
+    r,
   }
 }
 

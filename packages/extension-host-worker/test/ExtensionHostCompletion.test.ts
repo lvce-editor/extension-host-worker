@@ -11,10 +11,10 @@ test('registerCompletionProvider - no argument provided', () => {
 
 test('executeCompletionProvider - when completion provider has no result', async () => {
   const textDocument = {
-    id: 1,
-    path: '/tmp/some-file.txt',
-    languageId: 'unknown',
     content: 'sample text',
+    id: 1,
+    languageId: 'unknown',
+    path: '/tmp/some-file.txt',
   }
   TextDocument.setFiles([textDocument])
   const completionProvider = {
@@ -34,15 +34,15 @@ test('executeCompletionProvider - when completion provider has no result', async
 test('execute - when tab completion provider has wrong shape', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({
-    languageId: 'unknown',
     abc() {},
+    languageId: 'unknown',
   })
   // @ts-ignore
   await expect(ExtensionHostCompletion.executeCompletionProvider(1, 1)).rejects.toThrow(
@@ -53,10 +53,10 @@ test('execute - when tab completion provider has wrong shape', async () => {
 test('executeCompletionProvider - when completion provider has normal result', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({
@@ -91,10 +91,10 @@ test('executeCompletionProvider - when completion provider has normal result', a
 test('executeCompletionProvider - completion provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({
@@ -113,10 +113,10 @@ test('executeCompletionProvider - completion provider throws error', async () =>
 test('executeCompletionProvider - completion provider throws null error', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({
@@ -135,10 +135,10 @@ test('executeCompletionProvider - completion provider throws null error', async 
 test('executeCompletionProvider - invalid return value - array with undefined value', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({
@@ -159,10 +159,10 @@ test('executeCompletionProvider - invalid return value - array with undefined va
 test('executeCompletionProvider - invalid return value - number', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({
@@ -181,10 +181,10 @@ test('executeCompletionProvider - invalid return value - number', async () => {
 test('executeCompletionProvider - invalid return value - undefined', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({
@@ -203,10 +203,10 @@ test('executeCompletionProvider - invalid return value - undefined', async () =>
 test('executeCompletionProvider - invalid return value - null', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostCompletion.registerCompletionProvider({

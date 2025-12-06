@@ -9,19 +9,19 @@ beforeEach(() => {
 test('executeTypeDefinitionProvider', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
     languageId: 'javascript',
     provideTypeDefinition() {
       return {
-        uri: '/test/index.ts',
-        startOffset: 15,
         endOffset: 22,
+        startOffset: 15,
+        uri: '/test/index.ts',
       }
     },
   })
@@ -36,19 +36,19 @@ test('executeTypeDefinitionProvider', async () => {
 test('executeTypeDefinitionProvider - definition.startOffset is zero', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
     languageId: 'javascript',
     provideTypeDefinition() {
       return {
-        uri: '/test/index.ts',
-        startOffset: 0,
         endOffset: 0,
+        startOffset: 0,
+        uri: '/test/index.ts',
       }
     },
   })
@@ -63,10 +63,10 @@ test('executeTypeDefinitionProvider - definition.startOffset is zero', async () 
 test('executeTypeDefinitionProvider - error - definition must be of type object but is array', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
@@ -84,10 +84,10 @@ test('executeTypeDefinitionProvider - error - definition must be of type object 
 test('executeTypeDefinitionProvider - error - definition must be of type object but is function', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
@@ -105,10 +105,10 @@ test('executeTypeDefinitionProvider - error - definition must be of type object 
 test('executeTypeDefinitionProvider - error - definition.uri must be of type string', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
@@ -126,10 +126,10 @@ test('executeTypeDefinitionProvider - error - definition.uri must be of type str
 test('executeTypeDefinitionProvider - error - definition.startOffset must be of type number', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
@@ -149,18 +149,18 @@ test('executeTypeDefinitionProvider - error - definition.startOffset must be of 
 test('executeTypeDefinitionProvider - error - definition.endOffset must be of type number', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
     languageId: 'javascript',
     provideTypeDefinition() {
       return {
-        uri: '/test/index.ts',
         startOffset: 1,
+        uri: '/test/index.ts',
       }
     },
   })
@@ -173,10 +173,10 @@ test('executeTypeDefinitionProvider - error - definition.endOffset must be of ty
 test('executeTypeDefinitionProvider - error - definition provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
@@ -194,10 +194,10 @@ test('executeTypeDefinitionProvider - error - definition provider throws error',
 test('executeTypeDefinitionProvider - error - definition provider throws error null', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({
@@ -215,10 +215,10 @@ test('executeTypeDefinitionProvider - error - definition provider throws error n
 test.skip('executeTypeDefinitionProvider - no type definition found', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTypeDefinition.registerTypeDefinitionProvider({

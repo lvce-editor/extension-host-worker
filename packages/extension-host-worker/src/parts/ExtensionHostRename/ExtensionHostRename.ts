@@ -31,20 +31,20 @@ const validateResult = (renameResult: any): string => {
   return ''
 }
 
-const { registerRenameProvider, executeRenameProvider, executeprepareRenameProvider, reset } = Registry.create({
-  name: 'Rename',
-  resultShape: validateResult,
+const { executeprepareRenameProvider, executeRenameProvider, registerRenameProvider, reset } = Registry.create({
   additionalMethodNames: [
     // @ts-ignore
     {
-      name: 'prepareRename',
       methodName: 'prepareRename',
+      name: 'prepareRename',
       resultShape: {
-        type: Types.Object,
         allowUndefined: true,
+        type: Types.Object,
       },
     },
   ],
+  name: 'Rename',
+  resultShape: validateResult,
 })
 
 export { registerRenameProvider, executeRenameProvider, executeprepareRenameProvider, reset }

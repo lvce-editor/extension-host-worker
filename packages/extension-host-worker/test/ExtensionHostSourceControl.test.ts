@@ -7,10 +7,10 @@ beforeEach(() => {
 
 test('getChangedFiles', async () => {
   ExtensionHostSourceControl.registerSourceControlProvider({
-    id: 'test',
     getChangedFiles() {
       return [{ file: '/test/file-1.txt', status: 1 }]
     },
+    id: 'test',
   })
   expect(await ExtensionHostSourceControl.getChangedFiles('test')).toEqual([
     {
@@ -22,10 +22,10 @@ test('getChangedFiles', async () => {
 
 test('getChangedFiles - error - no provider id specified', async () => {
   ExtensionHostSourceControl.registerSourceControlProvider({
-    id: 'test',
     getChangedFiles() {
       return [{ file: '/test/file-1.txt', status: 1 }]
     },
+    id: 'test',
   })
   // @ts-expect-error
   await expect(ExtensionHostSourceControl.getChangedFiles()).rejects.toThrow(new Error('no source control provider found'))

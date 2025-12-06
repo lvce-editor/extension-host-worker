@@ -9,10 +9,10 @@ beforeEach(() => {
 test('executeBraceCompletionProvider - true', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostBraceCompletion.registerBraceCompletionProvider({
@@ -28,10 +28,10 @@ test('executeBraceCompletionProvider - true', async () => {
 test('executeBraceCompletionProvider - false', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostBraceCompletion.registerBraceCompletionProvider({
@@ -47,10 +47,10 @@ test('executeBraceCompletionProvider - false', async () => {
 test('executeBraceCompletionProvider - error - result is undefined', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostBraceCompletion.registerBraceCompletionProvider({
@@ -70,10 +70,10 @@ test('executeBraceCompletionProvider - error - result is undefined', async () =>
 test('executeBraceCompletionProvider - error - definition must be of type object but is function', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostBraceCompletion.registerBraceCompletionProvider({
@@ -93,10 +93,10 @@ test('executeBraceCompletionProvider - error - definition must be of type object
 test('executeBraceCompletionProvider - error - brace completion provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostBraceCompletion.registerBraceCompletionProvider({
@@ -114,10 +114,10 @@ test('executeBraceCompletionProvider - error - brace completion provider throws 
 test('executeBraceCompletionProvider - error - definition provider throws error null', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostBraceCompletion.registerBraceCompletionProvider({

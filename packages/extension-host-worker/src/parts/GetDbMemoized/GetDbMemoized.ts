@@ -4,15 +4,15 @@ import type { IDBPDatabase } from 'idb'
 import * as GetDb from '../GetDb/GetDb.ts'
 
 interface State {
+  cachedDb: IDBPDatabase | undefined
   databases: any
   dbVersion: number
-  cachedDb: IDBPDatabase | undefined
 }
 
 const state: State = {
+  cachedDb: undefined,
   databases: Object.create(null),
   dbVersion: 2,
-  cachedDb: undefined,
 }
 
 export const getDbMemoized = async (): Promise<IDBPDatabase> => {

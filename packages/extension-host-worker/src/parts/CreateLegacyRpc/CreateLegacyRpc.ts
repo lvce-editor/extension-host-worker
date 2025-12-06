@@ -8,7 +8,7 @@ import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
  *
  * @deprecated
  */
-export const createLegacyRpc = async ({ url, name, execute, commandMap = {}, contentSecurityPolicy }) => {
+export const createLegacyRpc = async ({ commandMap = {}, contentSecurityPolicy, execute, name, url }) => {
   Assert.string(url)
   Assert.string(name)
   Assert.object(commandMap)
@@ -16,10 +16,10 @@ export const createLegacyRpc = async ({ url, name, execute, commandMap = {}, con
     await ExtensionHostWorkerContentSecurityPolicy.set(url, contentSecurityPolicy)
   }
   const rpc = await IpcParent.create({
-    method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
-    url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
-    name,
     commandMap,
+    method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
+    name,
+    url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
   })
   if (execute) {
     // deprecated

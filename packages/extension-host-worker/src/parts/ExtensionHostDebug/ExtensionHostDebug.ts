@@ -46,7 +46,7 @@ const handleChange = async (params: any): Promise<void> => {
 export const start = async (protocol, path) => {
   try {
     const provider = getDebugProvider(protocol)
-    const emitter = { handlePaused, handleResumed, handleScriptParsed, handleChange }
+    const emitter = { handleChange, handlePaused, handleResumed, handleScriptParsed }
     await provider.start(emitter, path)
   } catch (error) {
     throw new VError(error, 'Failed to execute debug provider')

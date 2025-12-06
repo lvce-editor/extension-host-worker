@@ -8,8 +8,8 @@ const serializeWebView = async (webView) => {
   if (webView && webView.provider && webView.provider.saveState) {
     const saved = await webView.provider.saveState()
     return {
-      uri: webView.uri,
       state: saved,
+      uri: webView.uri,
     }
   }
   return undefined

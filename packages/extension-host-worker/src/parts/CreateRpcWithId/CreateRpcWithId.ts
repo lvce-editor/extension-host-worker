@@ -10,11 +10,11 @@ export const createRpcWithId = async (id: string, commandMap: any, execute?: any
     throw new Error(`rpc with id ${id} not found`)
   }
   const rpc = await IpcParent.create({
-    method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
-    url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
-    name: info.name,
     commandMap,
     isMessagePortOpen: true,
+    method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
+    name: info.name,
+    url: ExtensionHostSubWorkerUrl.extensionHostSubWorkerUrl,
   })
   if (execute) {
     // @ts-ignore

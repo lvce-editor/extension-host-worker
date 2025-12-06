@@ -30,11 +30,11 @@ export const getLineMatchText = (
   }
   return [
     {
-      type: TextSearchResultType.Match,
-      text: line,
-      start: index,
       end: index + query.length,
       lineNumber,
+      start: index,
+      text: line,
+      type: TextSearchResultType.Match,
     },
   ]
 }

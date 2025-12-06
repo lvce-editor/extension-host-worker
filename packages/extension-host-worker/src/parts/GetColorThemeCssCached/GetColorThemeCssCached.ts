@@ -8,10 +8,10 @@ import * as Preferences from '../Preferences/Preferences.ts'
 
 const getCacheFn = (config) => {
   switch (config) {
-    case 'localStorage':
-      return GetColorThemeCssCachedLocalStorage
     case 'indexedDb':
       return GetColorThemeCssCachedIndexedDb
+    case 'localStorage':
+      return GetColorThemeCssCachedLocalStorage
     default:
       return GetColorThemeCssCachedNoop
   }

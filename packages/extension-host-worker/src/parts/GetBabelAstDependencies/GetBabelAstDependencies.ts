@@ -11,7 +11,7 @@ export const getBabelAstDependencies = (code, ast) => {
       const { start } = node.source
       const { end } = node.source
       // @ts-ignore
-      dependencies.push({ relativePath, code, start, end })
+      dependencies.push({ code, end, relativePath, start })
     } else if (
       node.type === BabelNodeType.VariableDeclaration &&
       node.declarations &&
@@ -31,7 +31,7 @@ export const getBabelAstDependencies = (code, ast) => {
       const { start } = node.declarations[0].init.argument.arguments[0]
       const { end } = node.declarations[0].init.argument.arguments[0]
       // @ts-ignore
-      dependencies.push({ relativePath, code, start, end })
+      dependencies.push({ code, end, relativePath, start })
     }
   }
 
@@ -49,7 +49,7 @@ export const getBabelAstDependencies = (code, ast) => {
       const { start } = node.arguments[0]
       const { end } = node.arguments[0]
       // @ts-ignore
-      dependencies.push({ relativePath, code, start, end })
+      dependencies.push({ code, end, relativePath, start })
     }
   }
   Walk.walk(ast, visitor)

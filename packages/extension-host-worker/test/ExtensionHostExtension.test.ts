@@ -32,10 +32,10 @@ test('activate - error - module not found', async () => {
   await expect(
     ExtensionHostExtension.activateExtension(
       {
-        isWeb: true,
-        path: '/test',
         browser: 'extension.ts',
         id: 'test',
+        isWeb: true,
+        path: '/test',
       },
       '/test/extension.ts',
       '',
@@ -59,10 +59,10 @@ test('activate - error', async () => {
   await expect(
     ExtensionHostExtension.activateExtension(
       {
-        isWeb: true,
-        path: '/test',
         browser: 'extension.ts',
         id: 'test',
+        isWeb: true,
+        path: '/test',
       },
       '/test/extension.ts',
       '',
@@ -87,10 +87,10 @@ test('activate - timeout exceeded', async () => {
   await expect(
     ExtensionHostExtension.activateExtension(
       {
-        isWeb: true,
-        path: '/test',
         browser: 'extension.ts',
         id: 'test',
+        isWeb: true,
+        path: '/test',
       },
       '/test/extension.ts',
       '',

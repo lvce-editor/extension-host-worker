@@ -1,27 +1,27 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerReferenceProvider, executeReferenceProvider, executefileReferenceProvider, reset, getProvider } = Registry.create({
-  name: 'Reference',
-  resultShape: {
-    type: Types.Array,
-    items: {
-      type: Types.Object,
-    },
-  },
+const { executefileReferenceProvider, executeReferenceProvider, getProvider, registerReferenceProvider, reset } = Registry.create({
   additionalMethodNames: [
     // @ts-ignore
     {
-      name: 'fileReference',
       methodName: 'provideFileReferences',
+      name: 'fileReference',
       resultShape: {
-        type: Types.Array,
         items: {
           type: Types.Object,
         },
+        type: Types.Array,
       },
     },
   ],
+  name: 'Reference',
+  resultShape: {
+    items: {
+      type: Types.Object,
+    },
+    type: Types.Array,
+  },
 })
 
 export { registerReferenceProvider, executeReferenceProvider, executefileReferenceProvider, reset }
@@ -29,8 +29,8 @@ export { registerReferenceProvider, executeReferenceProvider, executefileReferen
 export const executeReferenceProvider2 = (uri: string, languageId: string, offset: number, position: any) => {
   const provider = getProvider(languageId)
   return provider.provideReferences2({
-    uri,
     offset,
     position,
+    uri,
   })
 }

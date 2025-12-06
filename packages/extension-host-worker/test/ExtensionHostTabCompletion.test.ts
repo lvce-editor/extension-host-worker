@@ -11,10 +11,10 @@ beforeEach(() => {
 test('registerTabCompletionProvider - no argument provided', () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   expect(() => {
@@ -26,10 +26,10 @@ test('registerTabCompletionProvider - no argument provided', () => {
 test('execute - when tab completion provider has normal result', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
 
@@ -38,8 +38,8 @@ test('execute - when tab completion provider has normal result', async () => {
     // @ts-ignore
     provideTabCompletion(textDocument, offset) {
       return {
-        inserted: '<div></div>',
         deleted: 0,
+        inserted: '<div></div>',
         type: /* Snippet */ 2,
       }
     },
@@ -55,10 +55,10 @@ test('execute - when tab completion provider has normal result', async () => {
 test.skip('execute - when tab completion provider has no result', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
 
@@ -80,10 +80,10 @@ test.skip('execute - when tab completion provider has no result', async () => {
 test('execute - when tab completion provider has invalid result of type number', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
 
@@ -103,16 +103,16 @@ test('execute - when tab completion provider has invalid result of type number',
 test('execute - when tab completion provider has wrong shape', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
 
   ExtensionHostTabCompletion.registerTabCompletionProvider({
-    languageId: 'javascript',
     abc() {},
+    languageId: 'javascript',
   })
   // @ts-ignore
   await expect(ExtensionHostTabCompletion.executeTabCompletionProvider(1, 1)).rejects.toThrow(
@@ -123,10 +123,10 @@ test('execute - when tab completion provider has wrong shape', async () => {
 test('execute - when tab completion provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
 
@@ -145,10 +145,10 @@ test('execute - when tab completion provider throws error', async () => {
 test('execute - when tab completion provider returns a string', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostTabCompletion.registerTabCompletionProvider({

@@ -1,12 +1,12 @@
 const state = {
   /** @type{any[]} */
-  onDidOpenEditorListeners: [],
-  /** @type{any[]} */
-  onWillChangeEditorListeners: [],
-  /** @type{any[]} */
   onDidChangeTextDocumentListeners: [],
   /** @type{any[]} */
+  onDidOpenEditorListeners: [],
+  /** @type{any[]} */
   onDidSaveTextDocumentListeners: [],
+  /** @type{any[]} */
+  onWillChangeEditorListeners: [],
   textDocuments: Object.create(null),
 }
 

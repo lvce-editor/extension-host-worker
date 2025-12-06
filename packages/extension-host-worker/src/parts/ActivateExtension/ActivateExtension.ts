@@ -44,10 +44,10 @@ export const activateExtension = async (extension: any, absolutePath: string, ac
       activationStartTime: startTime,
       activationTime: 0,
       id: extensionId,
-      status: RuntimeStatusType.Importing,
       importEndTime: 0,
       importStartTime: 0,
       importTime: 0,
+      status: RuntimeStatusType.Importing,
     })
     const module = await ImportScript.importScript(absolutePath)
     HandleRpcInfos.handleRpcInfos(extension, Platform.platform)
@@ -60,8 +60,8 @@ export const activateExtension = async (extension: any, absolutePath: string, ac
       const endTime = performance.now()
       const time = endTime - startTime
       RuntimeStatusState.update(extensionId, {
-        status: RuntimeStatusType.Activated,
         activationStartTime: time,
+        status: RuntimeStatusType.Activated,
       })
     } catch (error) {
       if (IsImportError.isImportError(error)) {

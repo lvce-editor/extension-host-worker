@@ -7,11 +7,11 @@ test('getLineMatchRegex - basic regex match', () => {
   const results = GetLineMatchRegex.getLineMatchRegex('hello world', 1, 'h[e]llo', 0)
   expect(results).toEqual([
     {
-      type: TextSearchResultType.Match,
-      text: 'hello world',
-      start: 0,
       end: 5,
       lineNumber: 1,
+      start: 0,
+      text: 'hello world',
+      type: TextSearchResultType.Match,
     },
   ])
 })
@@ -20,11 +20,11 @@ test('getLineMatchRegex - case insensitive match', () => {
   const results = GetLineMatchRegex.getLineMatchRegex('HELLO world', 1, 'hello', 0)
   expect(results).toEqual([
     {
-      type: TextSearchResultType.Match,
-      text: 'HELLO world',
-      start: 0,
       end: 5,
       lineNumber: 1,
+      start: 0,
+      text: 'HELLO world',
+      type: TextSearchResultType.Match,
     },
   ])
 })

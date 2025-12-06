@@ -41,144 +41,144 @@ import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultT
 import { VError } from '../VError/VError.ts'
 
 export const api = {
+  // Prompt
+  confirm: ExtensionHostPrompt.confirm,
+
+  createNodeRpc: ExtensionHostNodeIpc.createNodeRpc,
+  // Rpc
+  createRpc: ExtensionHostRpc.createRpc,
+
+  // Worker
+  createWorker: ExtensionHostWorker.createWorker,
+  EditorCompletionType,
+
+  // Env
+  env: ExtensionHostEnv.env,
+
+  // Exec`
+  exec: ExtensionHostExec.exec,
+  executeBraceCompletionProvider: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
+
+  // Comment
+
+  executeClosingTagProvider: ExtensionHostClosingTag.executeClosingTagProvider,
+  executeCommand: ExtensionHostCommand.executeCommand,
+
+  executeCommentProvider: ExtensionHostComment.executeCommentProvider,
+  executeCompletionProvider: ExtensionHostCompletion.executeCompletionProvider,
+  executeDefinitionProvider: ExtensionHostDefinition.executeDefinitionProvider,
+
+  executeDiagnosticProvider: ExtensionHostDiagnostic.executeDiagnosticProvider,
+
+  executeFormattingProvider: ExtensionHostFormatting.executeFormattingProvider,
+
+  executeHoverProvider: ExtensionHostHover.executeHoverProvider,
+  executeImplementationProvider: ExtensionHostImplementation.executeImplementationProvider,
+
+  executePrepareRenameProvider: ExtensionHostRename.executeprepareRenameProvider,
+  executeReferenceProvider: ExtensionHostReference.executeReferenceProvider,
+
+  executeRenameProvider: ExtensionHostRename.executeRenameProvider,
+
+  executeSelectionProvider: ExtensionHostSelection.executeSelectionProvider,
+
+  executeTabCompletionProvider: ExtensionHostTabCompletion.executeTabCompletionProvider,
+  executeTextSearchProvider: ExtensionHostTextSearch.executeTextSearchProvider,
+
+  executeTypeDefinitionProvider: ExtensionHostTypeDefinition.executeTypeDefinitionProvider,
+
+  exists: ExtensionHostFileSystem.existsExternal,
+  // Errors
+  FormattingError,
+  // Configuration
+  getConfiguration: ExtensionHostConfiguration.getConfiguration,
   // Ajax
   getJson: ExtensionHostAjax.getJson,
+  // Get Offset
+  getOffset: ExtensionHostGetOffset.getOffset,
+  // Get Position
+  getPosition: ExtensionHostGetPosition.getPosition,
+  // Url
+  getRemoteUrl: ExtensionHostUrl.getRemoteUrl,
+  // Text Document
+  getTextFromTextDocument: TextDocument.getText,
 
+  getWorkspaceFolder: ExtensionHostWorkspace.getWorkspaceFolder,
+  // Workspace
+  handleWorkspaceRefresh: ExtensionHostWorkspace.handleWorkspaceRefresh,
+
+  mkdir: ExtensionHostFileSystem.mkdirExternal,
+
+  readDirWithFileTypes: ExtensionHostFileSystem.readDirWithFileTypesExternal,
+
+  readFile: ExtensionHostFileSystem.readFileExternal,
   // Brace Completion
   registerBraceCompletionProvider: ExtensionHostBraceCompletion.registerBraceCompletionProvider,
-  executeBraceCompletionProvider: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
 
   // Closing Tag
   registerClosingTagProvider: ExtensionHostClosingTag.registerClosingTagProvider,
-  executeClosingTagProvider: ExtensionHostClosingTag.executeClosingTagProvider,
-
   // Code Action
   registerCodeActionsProvider: ExtensionHostCodeActions.registerCodeActionProvider,
 
   // Command
   registerCommand: ExtensionHostCommand.registerCommand,
-  executeCommand: ExtensionHostCommand.executeCommand,
-
-  // Comment
-
   registerCommentProvider: ExtensionHostComment.registerCommentProvider,
-  executeCommentProvider: ExtensionHostComment.executeCommentProvider,
 
   // Completion
   registerCompletionProvider: ExtensionHostCompletion.registerCompletionProvider,
-  executeCompletionProvider: ExtensionHostCompletion.executeCompletionProvider,
-  EditorCompletionType,
-
-  // Configuration
-  getConfiguration: ExtensionHostConfiguration.getConfiguration,
 
   // Debug
   registerDebugProvider: ExtensionHostDebug.registerDebugProvider,
 
   // Definition
   registerDefinitionProvider: ExtensionHostDefinition.registerDefinitionProvider,
-  executeDefinitionProvider: ExtensionHostDefinition.executeDefinitionProvider,
 
   // Diagnostic
   registerDiagnosticProvider: ExtensionHostDiagnostic.registerDiagnosticProvider,
-  executeDiagnosticProvider: ExtensionHostDiagnostic.executeDiagnosticProvider,
-
-  // Dialog
-  showInformationMessage: ExtensionHostDialog.showInformationMessage,
-
-  // Env
-  env: ExtensionHostEnv.env,
-
-  // Errors
-  FormattingError,
-  VError,
-
-  // Exec`
-  exec: ExtensionHostExec.exec,
-
   // File System
   registerFileSystemProvider: ExtensionHostFileSystem.registerFileSystemProvider,
-  readFile: ExtensionHostFileSystem.readFileExternal,
-  readDirWithFileTypes: ExtensionHostFileSystem.readDirWithFileTypesExternal,
-  exists: ExtensionHostFileSystem.existsExternal,
-  mkdir: ExtensionHostFileSystem.mkdirExternal,
-  remove: ExtensionHostFileSystem.removeExternal,
-  writeFile: ExtensionHostFileSystem.writeFileExternal,
-  stat: ExtensionHostFileSystem.statExternal,
-
   // Formatting
   registerFormattingProvider: ExtensionHostFormatting.registerFormattingProvider,
-  executeFormattingProvider: ExtensionHostFormatting.executeFormattingProvider,
-
-  // Get Offset
-  getOffset: ExtensionHostGetOffset.getOffset,
-
-  // Get Position
-  getPosition: ExtensionHostGetPosition.getPosition,
 
   // Hover
   registerHoverProvider: ExtensionHostHover.registerHoverProvider,
-  executeHoverProvider: ExtensionHostHover.executeHoverProvider,
-
-  // Rpc
-  createRpc: ExtensionHostRpc.createRpc,
-  createNodeRpc: ExtensionHostNodeIpc.createNodeRpc,
-
   // Implementation
   registerImplementationProvider: ExtensionHostImplementation.registerImplementationProvider,
-  executeImplementationProvider: ExtensionHostImplementation.executeImplementationProvider,
 
   // Output
   registerOutputChannel: ExtensionHostOutputChannel.registerOutputChannel,
-
-  // Prompt
-  confirm: ExtensionHostPrompt.confirm,
-
-  // QuickPick
-  showQuickPick: ExtensionHostQuickPick.showQuickPick,
+  // Reference
+  registerReferenceProvider: ExtensionHostReference.registerReferenceProvider,
 
   // Rename
   registerRenameProvider: ExtensionHostRename.registerRenameProvider,
-  executeRenameProvider: ExtensionHostRename.executeRenameProvider,
-  executePrepareRenameProvider: ExtensionHostRename.executeprepareRenameProvider,
-
-  // Reference
-  registerReferenceProvider: ExtensionHostReference.registerReferenceProvider,
-  executeReferenceProvider: ExtensionHostReference.executeReferenceProvider,
 
   // Selection
   registerSelectionProvider: ExtensionHostSelection.registerSelectionProvider,
-  executeSelectionProvider: ExtensionHostSelection.executeSelectionProvider,
-
   // Source Control
   registerSourceControlProvider: ExtensionHostSourceControl.registerSourceControlProvider,
 
   // Tab Completion
   registerTabCompletionProvider: ExtensionHostTabCompletion.registerTabCompletionProvider,
-  executeTabCompletionProvider: ExtensionHostTabCompletion.executeTabCompletionProvider,
-
-  // Text Document
-  getTextFromTextDocument: TextDocument.getText,
 
   // Text Search
   registerTextSearchProvider: ExtensionHostTextSearch.registerTextSearchProvider,
-  executeTextSearchProvider: ExtensionHostTextSearch.executeTextSearchProvider,
-  TextSearchResultType,
-
   // Type Definition
   registerTypeDefinitionProvider: ExtensionHostTypeDefinition.registerTypeDefinitionProvider,
-  executeTypeDefinitionProvider: ExtensionHostTypeDefinition.executeTypeDefinitionProvider,
-
-  // Url
-  getRemoteUrl: ExtensionHostUrl.getRemoteUrl,
-
   // Webview
   registerWebViewProvider: ExtensionHostWebView.registerWebViewProvider,
 
-  // Worker
-  createWorker: ExtensionHostWorker.createWorker,
+  remove: ExtensionHostFileSystem.removeExternal,
+  // Dialog
+  showInformationMessage: ExtensionHostDialog.showInformationMessage,
 
-  // Workspace
-  handleWorkspaceRefresh: ExtensionHostWorkspace.handleWorkspaceRefresh,
-  getWorkspaceFolder: ExtensionHostWorkspace.getWorkspaceFolder,
+  // QuickPick
+  showQuickPick: ExtensionHostQuickPick.showQuickPick,
+
+  stat: ExtensionHostFileSystem.statExternal,
+
+  TextSearchResultType,
+
+  VError,
+  writeFile: ExtensionHostFileSystem.writeFileExternal,
 }
