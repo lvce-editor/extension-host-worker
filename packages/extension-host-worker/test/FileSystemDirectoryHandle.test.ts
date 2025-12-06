@@ -4,14 +4,14 @@ import * as FileSystemDirectoryHandle from '../src/parts/FileSystemDirectoryHand
 test('getChildHandles - gets all child handles from directory', async () => {
   const mockChildHandles = ['file1', 'file2']
   const mockHandle = {
+    isSameEntry: () => Promise.resolve(true),
+    kind: 'directory',
+    name: 'test-dir',
     values: async function* () {
       for (const handle of mockChildHandles) {
         yield handle
       }
     },
-    kind: 'directory',
-    name: 'test-dir',
-    isSameEntry: () => Promise.resolve(true),
   } as FileSystemHandle
 
   const result = await FileSystemDirectoryHandle.getChildHandles(mockHandle)

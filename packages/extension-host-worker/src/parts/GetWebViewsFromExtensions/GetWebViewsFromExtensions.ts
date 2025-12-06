@@ -14,8 +14,8 @@ export const getWebViewsFromExtensions = (extensions: readonly any[]): readonly 
         webViews.push({
           ...webView,
           path,
-          uri,
           remotePath,
+          uri,
         })
       }
     }

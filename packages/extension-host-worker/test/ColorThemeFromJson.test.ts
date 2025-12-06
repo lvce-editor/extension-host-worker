@@ -9,15 +9,14 @@ afterEach(() => {
 test('createColorThemeFromJson - colors', () => {
   expect(
     ColorThemeFromJson.createColorThemeFromJson('test-theme', {
-      type: 'dark',
       colors: {
+        ActivityBarActiveBackground: '#1f2727',
         ActivityBarBackground: 'rgb(40, 46, 47)',
         ActivityBarForeground: '#878f8c',
-        ActivityBarActiveBackground: '#1f2727',
 
         EditorBackGround: '#1e2324',
-        EditorScrollBarBackground: 'rgba(57, 71, 71, 0.6)',
         EditorCursorBackground: '#a8df5a',
+        EditorScrollBarBackground: 'rgba(57, 71, 71, 0.6)',
 
         ListActiveSelectionBackground: '#515f59',
         ListActiveSelectionForeground: '#ffffff',
@@ -43,6 +42,7 @@ test('createColorThemeFromJson - colors', () => {
         TitleBarColor: '#cccccc',
         TitleBarColorInactive: 'rgba(204, 204, 204, 0.6)',
       },
+      type: 'dark',
     }),
   ).toBe(`:root {
   --ActivityBarBackground: rgb(40, 46, 47);
@@ -80,11 +80,11 @@ test('createColorThemeFromJson - colors', () => {
 test('createColorThemeFromJson - colors with contrast border', () => {
   expect(
     ColorThemeFromJson.createColorThemeFromJson('test-theme', {
-      type: 'dark',
       colors: {
         ActivityBarBackground: 'rgb(40, 46, 47)',
         ContrastBorder: 'rgb(78,78,78)',
       },
+      type: 'dark',
     }),
   ).toBe(`:root {
   --ActivityBarBackground: rgb(40, 46, 47);

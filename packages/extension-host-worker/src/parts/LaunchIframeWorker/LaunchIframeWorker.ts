@@ -9,11 +9,11 @@ export const launchIframeWorker = async () => {
   const name = 'Iframe Worker'
   const id = Id.create()
   const rpc = await IpcParent.create({
+    commandMap: IframeWorkerCommandMap.iframeWorkerCommandMap,
+    id,
     method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
     name,
     url: configuredWorkerUrl,
-    id,
-    commandMap: IframeWorkerCommandMap.iframeWorkerCommandMap,
   })
   return rpc
 }

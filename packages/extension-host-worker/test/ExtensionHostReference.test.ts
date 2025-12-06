@@ -9,10 +9,10 @@ beforeEach(() => {
 test('executeReferenceProvider - no results', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostReference.registerReferenceProvider({
@@ -28,10 +28,10 @@ test('executeReferenceProvider - no results', async () => {
 test('executeReferenceProvider - single result', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostReference.registerReferenceProvider({
@@ -39,10 +39,10 @@ test('executeReferenceProvider - single result', async () => {
     async provideReferences() {
       return [
         {
-          uri: '/test/index.ts',
+          endOffset: 0,
           lineText: '',
           startOffset: 0,
-          endOffset: 0,
+          uri: '/test/index.ts',
         },
       ]
     },
@@ -61,10 +61,10 @@ test('executeReferenceProvider - single result', async () => {
 test('executeReferenceProvider - error - reference provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostReference.registerReferenceProvider({
@@ -82,15 +82,15 @@ test('executeReferenceProvider - error - reference provider throws error', async
 test('executeReferenceProvider - error - referenceProvider has wrong shape', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostReference.registerReferenceProvider({
-    languageId: 'javascript',
     abc() {},
+    languageId: 'javascript',
   })
   // @ts-ignore
   await expect(ExtensionHostReference.executeReferenceProvider(1, 0)).rejects.toThrow(
@@ -101,10 +101,10 @@ test('executeReferenceProvider - error - referenceProvider has wrong shape', asy
 test('executeReferenceProvider - error - no reference provider found', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   // @ts-ignore

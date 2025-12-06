@@ -44,8 +44,8 @@ const getGroupsFromProvider = async (provider, cwd) => {
     const groups = [
       {
         id: 'changes',
-        label: 'Changes',
         items: files,
+        label: 'Changes',
       },
     ]
     return groups

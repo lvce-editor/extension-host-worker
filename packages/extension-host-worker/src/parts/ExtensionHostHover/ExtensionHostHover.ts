@@ -1,12 +1,12 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerHoverProvider, executeHoverProvider, reset } = Registry.create({
+const { executeHoverProvider, registerHoverProvider, reset } = Registry.create({
   name: 'Hover',
   resultShape: {
     allowUndefined: true,
-    type: Types.Object,
     properties: {},
+    type: Types.Object,
   },
 })
 

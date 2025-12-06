@@ -3,7 +3,7 @@ import * as ErrorHandling from '../ErrorHandling/ErrorHandling.ts'
 import * as HandleContentSecurityPolicyViolation from '../HandleContentSecurityPolicyViolation/HandleContentSecurityPolicyViolation.ts'
 import * as SetStackTraceLimit from '../SetStackTraceLimit/SetStackTraceLimit.ts'
 
-export const setup = ({ global, errorConstructor }: { global: typeof globalThis; errorConstructor: any }) => {
+export const setup = ({ errorConstructor, global }: { global: typeof globalThis; errorConstructor: any }) => {
   SetStackTraceLimit.setStackTraceLimit(errorConstructor, 20)
   global.onerror ||= ErrorHandling.handleUnhandledError
   global.onunhandledrejection ||= ErrorHandling.handleUnhandledRejection

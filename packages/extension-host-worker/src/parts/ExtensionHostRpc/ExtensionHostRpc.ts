@@ -3,7 +3,7 @@ import * as CreateLegacyRpc from '../CreateLegacyRpc/CreateLegacyRpc.ts'
 import * as GetOrCreateRpcWithId from '../GetOrCreateRpcWithId/GetOrCreateRpcWithId.ts'
 import { VError } from '../VError/VError.ts'
 
-export const createRpc = ({ id, url, name, commandMap, contentSecurityPolicy, execute }) => {
+export const createRpc = ({ commandMap, contentSecurityPolicy, execute, id, name, url }) => {
   try {
     if (execute && !commandMap) {
       // eslint-disable-next-line no-console
@@ -12,9 +12,9 @@ export const createRpc = ({ id, url, name, commandMap, contentSecurityPolicy, ex
     commandMap ||= {}
     if (id) {
       Assert.string(id)
-      return GetOrCreateRpcWithId.createRpcWithId({ id, execute, commandMap })
+      return GetOrCreateRpcWithId.createRpcWithId({ commandMap, execute, id })
     }
-    return CreateLegacyRpc.createLegacyRpc({ url, name, execute, commandMap, contentSecurityPolicy })
+    return CreateLegacyRpc.createLegacyRpc({ commandMap, contentSecurityPolicy, execute, name, url })
   } catch (error) {
     throw new VError(error, `Failed to create webworker rpc`)
   }

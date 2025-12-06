@@ -1,13 +1,13 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerDiagnosticProvider, executeDiagnosticProvider } = Registry.create({
+const { executeDiagnosticProvider, registerDiagnosticProvider } = Registry.create({
   name: 'Diagnostic',
   resultShape: {
-    type: Types.Array,
     items: {
       type: Types.Object,
     },
+    type: Types.Array,
   },
 })
 

@@ -1,13 +1,13 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerClosingTagProvider, executeClosingTagProvider } = Registry.create({
+const { executeClosingTagProvider, registerClosingTagProvider } = Registry.create({
   name: 'ClosingTag',
-  returnUndefinedWhenNoProviderFound: true,
   resultShape: {
-    type: Types.Object,
     allowUndefined: true,
+    type: Types.Object,
   },
+  returnUndefinedWhenNoProviderFound: true,
 })
 
 export { registerClosingTagProvider, executeClosingTagProvider }

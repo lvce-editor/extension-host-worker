@@ -12,15 +12,15 @@ export const importExtension = async (extensionId: string, absolutePath: string,
     Assert.string(absolutePath)
     const startTime = performance.now()
     RuntimeStatusState.set({
-      activationEvent: activationEvent,
-      id: extensionId,
-      activationStartTime: performance.now(),
-      status: RuntimeStatusType.Importing,
       activationEndTime: 0,
+      activationEvent: activationEvent,
+      activationStartTime: performance.now(),
       activationTime: 0,
-      importStartTime: startTime,
+      id: extensionId,
       importEndTime: 0,
+      importStartTime: startTime,
       importTime: 0,
+      status: RuntimeStatusType.Importing,
     })
     try {
       const module = await ImportScript.importScript(absolutePath)

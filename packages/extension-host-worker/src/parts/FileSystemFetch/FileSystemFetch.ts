@@ -47,13 +47,13 @@ export const readDirWithFileTypes = async (uri: string): Promise<readonly Dirent
           continue
         }
         dirents.push({
-          type: DirentType.Directory,
           name,
+          type: DirentType.Directory,
         })
       } else {
         dirents.push({
-          type: DirentType.File,
           name: rest,
+          type: DirentType.File,
         })
       }
     }

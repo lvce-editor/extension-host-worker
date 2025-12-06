@@ -13,8 +13,8 @@ export const getIconThemeJson = async (iconThemeId) => {
     const url = GetIconThemeUrl.getIconThemeUrl(iconThemeId)
     const json = await GetJson.getJson(url)
     return {
-      json,
       extensionPath: `${AssetDir.assetDir}/extensions/builtin.${iconThemeId}`,
+      json,
     }
   }
   for (const webExtension of ExtensionMetaState.state.webExtensions) {
@@ -24,8 +24,8 @@ export const getIconThemeJson = async (iconThemeId) => {
         const iconThemeUrl = `${webExtension.path}/${iconTheme.path}`
         const json = await GetJson.getJson(iconThemeUrl)
         return {
-          json,
           extensionPath: webExtension.path,
+          json,
         }
       }
     }

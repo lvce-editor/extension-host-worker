@@ -39,18 +39,18 @@ test('textSearch - finds matches in files', async () => {
 
   expect(results).toEqual([
     {
-      type: TextSearchResultType.File,
-      text: 'file-1.txt',
-      start: 0,
       end: 0,
       lineNumber: 0,
+      start: 0,
+      text: 'file-1.txt',
+      type: TextSearchResultType.File,
     },
     {
-      type: TextSearchResultType.Match,
-      text: 'first test file',
-      start: 6,
       end: 10,
       lineNumber: 0,
+      start: 6,
+      text: 'first test file',
+      type: TextSearchResultType.Match,
     },
   ])
 

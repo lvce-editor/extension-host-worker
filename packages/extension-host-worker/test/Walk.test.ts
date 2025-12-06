@@ -10,8 +10,8 @@ test('walk - empty node', () => {
 
 test('walk - array of nodes', () => {
   const nodes = [
-    { type: BabelNodeType.Identifier, name: 'a' },
-    { type: BabelNodeType.Identifier, name: 'b' },
+    { name: 'a', type: BabelNodeType.Identifier },
+    { name: 'b', type: BabelNodeType.Identifier },
   ]
   const visitor = jest.fn()
   Walk.walk(nodes, visitor)
@@ -22,11 +22,11 @@ test('walk - array of nodes', () => {
 
 test('walk - file node', () => {
   const node = {
-    type: BabelNodeType.File,
     program: {
-      type: BabelNodeType.Program,
       body: [],
+      type: BabelNodeType.Program,
     },
+    type: BabelNodeType.File,
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
@@ -36,8 +36,8 @@ test('walk - file node', () => {
 
 test('walk - program node', () => {
   const node = {
+    body: [{ name: 'test', type: BabelNodeType.Identifier }],
     type: BabelNodeType.Program,
-    body: [{ type: BabelNodeType.Identifier, name: 'test' }],
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
@@ -47,11 +47,11 @@ test('walk - program node', () => {
 
 test('walk - export named declaration', () => {
   const node = {
-    type: BabelNodeType.ExportNamedDeclaration,
     declaration: {
-      type: BabelNodeType.VariableDeclaration,
       declarations: [],
+      type: BabelNodeType.VariableDeclaration,
     },
+    type: BabelNodeType.ExportNamedDeclaration,
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
@@ -61,8 +61,8 @@ test('walk - export named declaration', () => {
 
 test('walk - variable declaration', () => {
   const node = {
+    declarations: [{ id: { name: 'x', type: BabelNodeType.Identifier }, type: BabelNodeType.VariableDeclarator }],
     type: BabelNodeType.VariableDeclaration,
-    declarations: [{ type: BabelNodeType.VariableDeclarator, id: { type: BabelNodeType.Identifier, name: 'x' } }],
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
@@ -72,11 +72,11 @@ test('walk - variable declaration', () => {
 
 test('walk - arrow function expression', () => {
   const node = {
-    type: BabelNodeType.ArrowFunctionExpression,
     body: {
-      type: BabelNodeType.BlockStatement,
       body: [],
+      type: BabelNodeType.BlockStatement,
     },
+    type: BabelNodeType.ArrowFunctionExpression,
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
@@ -86,11 +86,11 @@ test('walk - arrow function expression', () => {
 
 test('walk - expression statement', () => {
   const node = {
-    type: BabelNodeType.ExpressionStatement,
     expression: {
+      callee: { name: 'test', type: BabelNodeType.Identifier },
       type: BabelNodeType.CallExpression,
-      callee: { type: BabelNodeType.Identifier, name: 'test' },
     },
+    type: BabelNodeType.ExpressionStatement,
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
@@ -100,11 +100,11 @@ test('walk - expression statement', () => {
 
 test('walk - await expression', () => {
   const node = {
-    type: BabelNodeType.AwaitExpression,
     argument: {
+      callee: { name: 'test', type: BabelNodeType.Identifier },
       type: BabelNodeType.CallExpression,
-      callee: { type: BabelNodeType.Identifier, name: 'test' },
     },
+    type: BabelNodeType.AwaitExpression,
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
@@ -114,11 +114,11 @@ test('walk - await expression', () => {
 
 test('walk - call expression', () => {
   const node = {
-    type: BabelNodeType.CallExpression,
     callee: {
-      type: BabelNodeType.Identifier,
       name: 'test',
+      type: BabelNodeType.Identifier,
     },
+    type: BabelNodeType.CallExpression,
   }
   const visitor = jest.fn()
   Walk.walk(node, visitor)
