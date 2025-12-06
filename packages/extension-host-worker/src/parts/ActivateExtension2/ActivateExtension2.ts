@@ -1,4 +1,5 @@
 import * as CancelToken from '../CancelToken/CancelToken.ts'
+import { getImportError } from '../ErrorWorker/ErrorWorker.ts'
 import * as ExtensionModules from '../ExtensionModules/ExtensionModules.ts'
 import * as GetExtensionId from '../GetExtensionId/GetExtensionId.ts'
 import * as IsImportError from '../IsImportError/IsImportError.ts'
@@ -40,7 +41,7 @@ export const activateExtension2 = async (extensionId: string, extension: any, ab
   } catch (error) {
     const id = GetExtensionId.getExtensionId(extension)
     if (IsImportError.isImportError(error)) {
-      const actualErrorMessage = await TryToGetActualImportErrorMessage.tryToGetActualImportErrorMessage(absolutePath, error)
+      const actualErrorMessage = await getImportError(absolutePath, error)
       throw new Error(`Failed to activate extension ${id}: ${actualErrorMessage}`)
     }
     RuntimeStatusState.update(extensionId, {
