@@ -14,9 +14,8 @@ jest.unstable_mockModule('../src/parts/BabelParser/BabelParser.ts', () => {
   }
 })
 
-const TryToGetActualErrorMessageWhenNetworkRequestSucceeds = await import(
-  '../src/parts/TryToGetActualErrorMessageWhenNetworkRequestSucceeds/TryToGetActualErrorMessageWhenNetworkRequestSucceeds.ts'
-)
+const TryToGetActualErrorMessageWhenNetworkRequestSucceeds =
+  await import('../src/parts/TryToGetActualErrorMessageWhenNetworkRequestSucceeds/TryToGetActualErrorMessageWhenNetworkRequestSucceeds.ts')
 
 const BabelParser = await import('../src/parts/BabelParser/BabelParser.ts')
 
