@@ -31,3 +31,7 @@ export const getStatusBarItems2 = async () => {
 export const registerChangeListener = () => {
   // TODO
 }
+
+export const executeCommand = (name: string): Promise<void> => {
+  // TODO
+}
