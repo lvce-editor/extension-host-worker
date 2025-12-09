@@ -1,3 +1,4 @@
+import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
 
 export const getStatusBarItems = async () => {
@@ -31,5 +32,5 @@ export const registerChangeListener = () => {
 }
 
 export const executeCommand = async (name: string): Promise<void> => {
-  // TODO
+  await ExtensionHostCommand.executeCommand(name)
 }
