@@ -117,10 +117,7 @@ export const commandMap = {
   [ExtensionHostCommandType.SourceControlGetFileDecorations]: ExtensionHostSourceControl.getFileDecorations,
   [ExtensionHostCommandType.SourceControlGetGroups]: ExtensionHostSourceControl.getGroups,
   [ExtensionHostCommandType.StatusBarGetStatusBarItems]: ExtensionHostStatusBar.getStatusBarItems,
-<<<<<<< HEAD
   [ExtensionHostCommandType.StatusBarGetStatusBarItems2]: ExtensionHostStatusBar.getStatusBarItems2,
-=======
->>>>>>> origin/main
   [ExtensionHostCommandType.StatusBarRegisterChangeListener]: ExtensionHostStatusBar.registerChangeListener,
   [ExtensionHostCommandType.TabCompletionExecuteTabCompletionProvider]: ExtensionHostTabCompletion.executeTabCompletionProvider,
   [ExtensionHostCommandType.TextDocumentSetLanguageId]: TextDocument.setLanguageId,
