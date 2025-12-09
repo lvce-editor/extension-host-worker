@@ -18,14 +18,18 @@ export const getStatusBarItems2 = async () => {
   const statusBarItems = []
   for (const provider of providers) {
     // @ts-ignore
-    if (provider && provider.getStatusBarCommands) {
+    if (provider && provider.getStatusBarItems) {
       // @ts-ignore
-      statusBarItems.push(...provider.getStatusBarCommands())
+      statusBarItems.push(...provider.getStatusBarItems())
     }
   }
   return statusBarItems
 }
 
 export const registerChangeListener = () => {
+  // TODO
+}
+
+export const executeCommand = async (name: string): Promise<void> => {
   // TODO
 }

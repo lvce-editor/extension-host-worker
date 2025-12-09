@@ -116,6 +116,7 @@ export const commandMap = {
   [ExtensionHostCommandType.SourceControlGetFileBefore2]: ExtensionHostSourceControl.getFileBefore,
   [ExtensionHostCommandType.SourceControlGetFileDecorations]: ExtensionHostSourceControl.getFileDecorations,
   [ExtensionHostCommandType.SourceControlGetGroups]: ExtensionHostSourceControl.getGroups,
+  [ExtensionHostCommandType.StatusBarExecuteCommand]: ExtensionHostStatusBar.executeCommand,
   [ExtensionHostCommandType.StatusBarGetStatusBarItems]: ExtensionHostStatusBar.getStatusBarItems,
   [ExtensionHostCommandType.StatusBarGetStatusBarItems2]: ExtensionHostStatusBar.getStatusBarItems2,
   [ExtensionHostCommandType.StatusBarRegisterChangeListener]: ExtensionHostStatusBar.registerChangeListener,
