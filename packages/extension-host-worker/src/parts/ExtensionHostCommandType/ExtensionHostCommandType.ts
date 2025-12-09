@@ -35,6 +35,7 @@ export const SourceControlGetFileBefore2 = 'ExtensionHostSourceControl.getFileBe
 export const SourceControlGetGroups = 'ExtensionHostSourceControl.getGroups'
 export const SourceControlGetFileDecorations = 'ExtensionHostSourceControl.getFileDecorations'
 export const StatusBarGetStatusBarItems = 'ExtensionHost.getStatusBarItems'
+export const StatusBarGetStatusBarItems2 = 'ExtensionHost.getStatusBarItems2'
 export const StatusBarRegisterChangeListener = 'ExtensionHostStatusBar.registerChangeListener'
 export const TabCompletionExecuteTabCompletionProvider = 'ExtensionHost.executeTabCompletionProvider'
 export const TextDocumentSetLanguageId = 'ExtensionHostTextDocument.setLanguageId'

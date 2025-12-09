@@ -13,6 +13,19 @@ export const getStatusBarItems = async () => {
   return statusBarItems
 }
 
+export const getStatusBarItems2 = async () => {
+  const providers = Object.values(ExtensionHostSourceControl.state.providers)
+  const statusBarItems = []
+  for (const provider of providers) {
+    // @ts-ignore
+    if (provider && provider.getStatusBarCommands) {
+      // @ts-ignore
+      statusBarItems.push(...provider.getStatusBarCommands())
+    }
+  }
+  return statusBarItems
+}
+
 export const registerChangeListener = () => {
   // TODO
 }
