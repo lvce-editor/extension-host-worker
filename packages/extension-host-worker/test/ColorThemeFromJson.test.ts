@@ -45,12 +45,12 @@ test('createColorThemeFromJson - colors', () => {
       type: 'dark',
     }),
   ).toBe(`:root {
+  --ActivityBarActiveBackground: #1f2727;
   --ActivityBarBackground: rgb(40, 46, 47);
   --ActivityBarForeground: #878f8c;
-  --ActivityBarActiveBackground: #1f2727;
   --EditorBackGround: #1e2324;
-  --EditorScrollBarBackground: rgba(57, 71, 71, 0.6);
   --EditorCursorBackground: #a8df5a;
+  --EditorScrollBarBackground: rgba(57, 71, 71, 0.6);
   --ListActiveSelectionBackground: #515f59;
   --ListActiveSelectionForeground: #ffffff;
   --ListHoverBackground: #405c5033;
