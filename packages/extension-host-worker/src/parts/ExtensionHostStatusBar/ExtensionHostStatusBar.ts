@@ -16,13 +16,15 @@ export const getStatusBarItems = async () => {
 export const getStatusBarItems2 = async () => {
   const providers = Object.values(ExtensionHostSourceControl.state.providers)
   const statusBarItems = []
+  console.log({ providers })
   for (const provider of providers) {
     // @ts-ignore
-    if (provider && provider.getStatusBarCommands) {
+    if (provider && provider.getStatusBarItems) {
       // @ts-ignore
-      statusBarItems.push(...provider.getStatusBarCommands())
+      statusBarItems.push(...provider.getStatusBarItems())
     }
   }
+  console.log({ statusBarItems })
   return statusBarItems
 }
 
