@@ -9,10 +9,10 @@ beforeEach(() => {
 test('executeImplementationProvider - no results', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostImplementation.registerImplementationProvider({
@@ -28,10 +28,10 @@ test('executeImplementationProvider - no results', async () => {
 test('executeImplementationProvider - single result', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostImplementation.registerImplementationProvider({
@@ -39,10 +39,10 @@ test('executeImplementationProvider - single result', async () => {
     async provideImplementations() {
       return [
         {
-          uri: '/test/index.ts',
+          endOffset: 0,
           lineText: '',
           startOffset: 0,
-          endOffset: 0,
+          uri: '/test/index.ts',
         },
       ]
     },
@@ -61,10 +61,10 @@ test('executeImplementationProvider - single result', async () => {
 test('executeImplementationProvider - error - Implementation provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostImplementation.registerImplementationProvider({
@@ -82,15 +82,15 @@ test('executeImplementationProvider - error - Implementation provider throws err
 test('executeImplementationProvider - error - ImplementationProvider has wrong shape', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostImplementation.registerImplementationProvider({
-    languageId: 'javascript',
     abc() {},
+    languageId: 'javascript',
   })
   // @ts-ignore
   await expect(ExtensionHostImplementation.executeImplementationProvider(1, 0)).rejects.toThrow(
@@ -101,10 +101,10 @@ test('executeImplementationProvider - error - ImplementationProvider has wrong s
 test('executeImplementationProvider - error - no Implementation provider found', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: '',
       id: 1,
       languageId: 'javascript',
-      content: '',
+      path: '/test.index.ts',
     },
   ])
   // @ts-ignore

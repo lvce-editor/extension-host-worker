@@ -2,13 +2,13 @@ import * as ExtensionHostTextDocument from '../ExtensionHostTextDocument/Extensi
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerCodeActionProvider, executeCodeActionProvider } = Registry.create({
+const { executeCodeActionProvider, registerCodeActionProvider } = Registry.create({
   name: 'CodeAction',
   resultShape: {
-    type: Types.Array,
     items: {
       type: Types.Object,
     },
+    type: Types.Array,
   },
 })
 

@@ -1,14 +1,14 @@
 import * as InitialIconTheme from '../InitialIconTheme/InitialIconTheme.ts'
 
 const state: any = {
-  seenFiles: [],
-  seenFolders: [],
+  extensionPath: '',
   hasWarned: [],
   /**
    * @type{any}
    */
   iconTheme: InitialIconTheme.initialIconTheme,
-  extensionPath: '',
+  seenFiles: [],
+  seenFolders: [],
 }
 
 export const setTheme = (iconTheme) => {

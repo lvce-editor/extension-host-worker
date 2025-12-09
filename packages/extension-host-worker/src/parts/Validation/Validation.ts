@@ -44,10 +44,10 @@ const getPreviewString = (item): string => {
 const getPreview = (item): string => {
   const type = GetType.getType(item)
   switch (type) {
-    case 'object':
-      return getPreviewObject(item)
     case 'array':
       return getPreviewArray(item)
+    case 'object':
+      return getPreviewObject(item)
     case 'string':
       return getPreviewString(item)
     default:
@@ -69,10 +69,10 @@ export const validate = (item, schema): string | undefined => {
     return `item must be of type ${expectedType} but is ${preview}`
   }
   switch (actualType) {
-    case 'object':
-      return validateResultObject(item, schema)
     case 'array':
       return validateResultArray(item, schema)
+    case 'object':
+      return validateResultObject(item, schema)
   }
   // TODO use json schema to validate result
   return undefined

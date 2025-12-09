@@ -9,17 +9,17 @@ beforeEach(() => {
 test('executeFormattingProvider - error - result value is of type string', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: 'a',
       id: 1,
       languageId: 'javascript',
-      content: 'a',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostFormatting.registerFormattingProvider({
-    languageId: 'javascript',
     format() {
       return 'b'
     },
+    languageId: 'javascript',
   })
   // @ts-ignore
   await expect(ExtensionHostFormatting.executeFormattingProvider(1, 0)).rejects.toThrow(
@@ -30,17 +30,17 @@ test('executeFormattingProvider - error - result value is of type string', async
 test('executeFormattingProvider - error - result value is of type object', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: 'a',
       id: 1,
       languageId: 'javascript',
-      content: 'a',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostFormatting.registerFormattingProvider({
-    languageId: 'javascript',
     format() {
       return {}
     },
+    languageId: 'javascript',
   })
   // @ts-ignore
   await expect(ExtensionHostFormatting.executeFormattingProvider(1, 0)).rejects.toThrow(
@@ -51,23 +51,23 @@ test('executeFormattingProvider - error - result value is of type object', async
 test('executeFormattingProvider', async () => {
   TextDocument.setFiles([
     {
-      path: '/test.index.ts',
+      content: 'a',
       id: 1,
       languageId: 'javascript',
-      content: 'a',
+      path: '/test.index.ts',
     },
   ])
   ExtensionHostFormatting.registerFormattingProvider({
-    languageId: 'javascript',
     format() {
       return [
         {
-          startOffset: 0,
           endOffset: 1,
           inserted: 'b',
+          startOffset: 0,
         },
       ]
     },
+    languageId: 'javascript',
   })
   // @ts-ignore
   expect(await ExtensionHostFormatting.executeFormattingProvider(1, 0)).toEqual([{ endOffset: 1, inserted: 'b', startOffset: 0 }])

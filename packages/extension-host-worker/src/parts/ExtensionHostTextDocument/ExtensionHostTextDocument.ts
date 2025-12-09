@@ -162,10 +162,10 @@ const runListenersSafe = (listeners, ...args) => {
 
 export const syncFull = (uri, textDocumentId, languageId, text) => {
   const textDocument = {
-    uri,
     documentId: textDocumentId,
     languageId,
     text,
+    uri,
   }
   TextDocumentState.setDocument(textDocumentId, textDocument)
   runListenersSafe(TextDocumentState.getDidOpenListeners(), textDocument)
@@ -181,9 +181,9 @@ const getSyntheticChanges = (textDocument, changes) => {
   const inserted = change.inserted.join('\n')
   const syntheticChanges = [
     {
-      startOffset,
       endOffset,
       inserted,
+      startOffset,
     },
   ]
   return syntheticChanges
@@ -235,8 +235,8 @@ export const getPosition = (textDocument, offset) => {
   }
   const columnIndex = offset - index
   return {
-    rowIndex,
     columnIndex,
+    rowIndex,
   }
 }
 

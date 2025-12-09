@@ -60,8 +60,8 @@ const ensureParentDir = (uri: string): void => {
   while (endIndex >= 0) {
     const part = uri.slice(startIndex, endIndex + 1)
     FileSystemMemoryState.setDirent(part, {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     })
     endIndex = uri.indexOf(PathSeparatorType.Slash, endIndex + 1)
   }
@@ -76,8 +76,8 @@ export const writeFile = (uri: string, content: string): void => {
   } else {
     ensureParentDir(uri)
     FileSystemMemoryState.setDirent(uri, {
-      type: DirentType.File,
       content,
+      type: DirentType.File,
     })
   }
 }
@@ -88,8 +88,8 @@ export const mkdir = (uri: string): void => {
   }
   ensureParentDir(uri)
   FileSystemMemoryState.setDirent(uri, {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
 }
 
@@ -129,8 +129,8 @@ const renameDirectory = (oldUri: string, newUri: string): void => {
   }
   ensureParentDir(newUri)
   FileSystemMemoryState.setDirent(newUri, {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   const allFiles = FileSystemMemoryState.getAll()
   for (const [key, value] of Object.entries(allFiles)) {
@@ -166,18 +166,18 @@ export const readDirWithFileTypes = (uri: string): readonly Dirent[] => {
         case DirentType.Directory:
           if (!key.slice(0, -1).includes(PathSeparatorType.Slash, uri.length) && key !== `${uri}/` && key !== uri) {
             dirents.push({
+              name: key.slice(uri.length, -1),
               // @ts-ignore
               type: value.type,
-              name: key.slice(uri.length, -1),
             })
           }
           break
         case DirentType.File:
           if (!key.includes(PathSeparatorType.Slash, uri.length + 1)) {
             dirents.push({
+              name: key.slice(uri.length),
               // @ts-ignore
               type: value.type,
-              name: key.slice(uri.length),
             })
           }
           break

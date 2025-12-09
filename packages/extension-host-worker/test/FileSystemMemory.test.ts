@@ -9,8 +9,8 @@ beforeEach(() => {
 
 test('readFile', () => {
   FileSystemMemoryState.setDirent('/test/file.txt', {
-    type: DirentType.File,
     content: 'test content',
+    type: DirentType.File,
   })
   expect(FileSystemMemory.readFile('/test/file.txt')).toBe('test content')
 })
@@ -19,12 +19,12 @@ test('writeFile', () => {
   FileSystemMemory.writeFile('/test/file.txt', 'test content')
   expect(FileSystemMemoryState.getAll()).toEqual({
     '/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/test/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/test/file.txt': {
       content: 'test content',
@@ -35,12 +35,12 @@ test('writeFile', () => {
 
 test('readDirWithFileTypes - file', () => {
   FileSystemMemoryState.setDirent('/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/test/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/test/file.txt', {
     content: 'test content',
@@ -56,12 +56,12 @@ test('readDirWithFileTypes - file', () => {
 
 test('readDirWithFileTypes - directory', () => {
   FileSystemMemoryState.setDirent('/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/test/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
 
   FileSystemMemoryState.setDirent('/test/file.txt', {
@@ -78,36 +78,36 @@ test('readDirWithFileTypes - directory', () => {
 
 test('readDirWithFileTypes - mixed content', () => {
   FileSystemMemoryState.setDirent('/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/languages/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/sample-folder/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/test.txt', {
-    type: DirentType.File,
     content: 'div',
+    type: DirentType.File,
   })
   FileSystemMemoryState.setDirent('/languages/index.html', {
-    type: DirentType.File,
     content: 'div',
+    type: DirentType.File,
   })
   FileSystemMemoryState.setDirent('/sample-folder/a.txt', {
-    type: DirentType.File,
     content: '',
+    type: DirentType.File,
   })
   FileSystemMemoryState.setDirent('/sample-folder/b.txt', {
-    type: DirentType.File,
     content: '',
+    type: DirentType.File,
   })
   FileSystemMemoryState.setDirent('/sample-folder/c.txt', {
-    type: DirentType.File,
     content: '',
+    type: DirentType.File,
   })
   expect(FileSystemMemory.readDirWithFileTypes('/')).toEqual([
     {
@@ -131,82 +131,82 @@ test('getPathSeparator', () => {
 
 test('rename - file', () => {
   FileSystemMemoryState.setDirent('/test/file.txt', {
-    type: DirentType.File,
     content: 'test content',
+    type: DirentType.File,
   })
   FileSystemMemory.rename('/test/file.txt', '/test/renamed.txt')
   expect(FileSystemMemoryState.getAll()).toEqual({
     '/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/test/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/test/renamed.txt': {
-      type: DirentType.File,
       content: 'test content',
+      type: DirentType.File,
     },
   })
 })
 
 test('rename - directory', () => {
   FileSystemMemoryState.setDirent('/test/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/test/file.txt', {
-    type: DirentType.File,
     content: 'test content',
+    type: DirentType.File,
   })
   FileSystemMemory.rename('/test/', '/renamed/')
   expect(FileSystemMemoryState.getAll()).toEqual({
     '/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/renamed/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/renamed/file.txt': {
-      type: DirentType.File,
       content: 'test content',
+      type: DirentType.File,
     },
   })
 })
 
 test('rename - nested directory', () => {
   FileSystemMemoryState.setDirent('/test/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/test/nested/', {
-    type: DirentType.Directory,
     content: '',
+    type: DirentType.Directory,
   })
   FileSystemMemoryState.setDirent('/test/nested/file.txt', {
-    type: DirentType.File,
     content: 'test content',
+    type: DirentType.File,
   })
   FileSystemMemory.rename('/test/nested/', '/test/renamed/')
   expect(FileSystemMemoryState.getAll()).toEqual({
     '/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/test/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/test/renamed/': {
-      type: DirentType.Directory,
       content: '',
+      type: DirentType.Directory,
     },
     '/test/renamed/file.txt': {
-      type: DirentType.File,
       content: 'test content',
+      type: DirentType.File,
     },
   })
 })
