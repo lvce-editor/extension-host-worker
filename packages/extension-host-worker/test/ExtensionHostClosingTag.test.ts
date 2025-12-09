@@ -11,10 +11,10 @@ test('registerClosingTagProvider - no argument provided', () => {
 
 test('executeClosingTagProvider - when closing tag provider has no result', async () => {
   const textDocument = {
-    id: 1,
-    path: '/tmp/some-file.txt',
-    languageId: 'unknown',
     content: 'sample text',
+    id: 1,
+    languageId: 'unknown',
+    path: '/tmp/some-file.txt',
   }
   TextDocument.setFiles([textDocument])
   const closingTagProvider = {
@@ -34,15 +34,15 @@ test('executeClosingTagProvider - when closing tag provider has no result', asyn
 test('execute - when tab closing tag provider has wrong shape', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostClosingTag.registerClosingTagProvider({
-    languageId: 'unknown',
     abc() {},
+    languageId: 'unknown',
   })
   // @ts-ignore
   await expect(ExtensionHostClosingTag.executeClosingTagProvider(1, 1)).rejects.toThrow(
@@ -53,10 +53,10 @@ test('execute - when tab closing tag provider has wrong shape', async () => {
 test('executeClosingTagProvider - when closing tag provider has normal result', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostClosingTag.registerClosingTagProvider({
@@ -77,10 +77,10 @@ test('executeClosingTagProvider - when closing tag provider has normal result', 
 test('executeClosingTagProvider - closing tag provider throws error', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostClosingTag.registerClosingTagProvider({
@@ -99,10 +99,10 @@ test('executeClosingTagProvider - closing tag provider throws error', async () =
 test('executeClosingTagProvider - closing tag provider throws null error', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostClosingTag.registerClosingTagProvider({
@@ -121,10 +121,10 @@ test('executeClosingTagProvider - closing tag provider throws null error', async
 test('executeClosingTagProvider - invalid return value - array with undefined value', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostClosingTag.registerClosingTagProvider({
@@ -143,10 +143,10 @@ test('executeClosingTagProvider - invalid return value - array with undefined va
 test('executeClosingTagProvider - invalid return value - number', async () => {
   TextDocument.setFiles([
     {
-      path: '/tmp/some-file.txt',
+      content: 'sample text',
       id: 1,
       languageId: 'unknown',
-      content: 'sample text',
+      path: '/tmp/some-file.txt',
     },
   ])
   ExtensionHostClosingTag.registerClosingTagProvider({

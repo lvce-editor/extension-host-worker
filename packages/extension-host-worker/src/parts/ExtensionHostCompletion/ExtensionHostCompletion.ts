@@ -1,25 +1,25 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerCompletionProvider, executeCompletionProvider, executeresolveCompletionItemProvider } = Registry.create({
-  name: 'Completion',
-  resultShape: {
-    type: Types.Array,
-    items: {
-      type: Types.Object,
-    },
-  },
+const { executeCompletionProvider, executeresolveCompletionItemProvider, registerCompletionProvider } = Registry.create({
   additionalMethodNames: [
     // @ts-ignore
     {
-      name: 'resolveCompletionItem',
       methodName: 'resolveCompletionItem',
+      name: 'resolveCompletionItem',
       resultShape: {
-        type: Types.Object,
         allowUndefined: true,
+        type: Types.Object,
       },
     },
   ],
+  name: 'Completion',
+  resultShape: {
+    items: {
+      type: Types.Object,
+    },
+    type: Types.Array,
+  },
 })
 
 export { registerCompletionProvider, executeCompletionProvider, executeresolveCompletionItemProvider }

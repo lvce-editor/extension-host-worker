@@ -1,22 +1,22 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { registerDefinitionProvider, executeDefinitionProvider, reset } = Registry.create({
+const { executeDefinitionProvider, registerDefinitionProvider, reset } = Registry.create({
   name: 'Definition',
   resultShape: {
     allowUndefined: true,
-    type: Types.Object,
     properties: {
-      uri: {
-        type: Types.String,
+      endOffset: {
+        type: Types.Number,
       },
       startOffset: {
         type: Types.Number,
       },
-      endOffset: {
-        type: Types.Number,
+      uri: {
+        type: Types.String,
       },
     },
+    type: Types.Object,
   },
 })
 

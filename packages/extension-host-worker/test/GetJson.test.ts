@@ -6,8 +6,8 @@ test('getJson - should fetch and parse json successfully', async () => {
   const mockData = { test: 'data' }
   // @ts-ignore
   globalThis.fetch = jest.fn().mockResolvedValue({
-    ok: true,
     json: () => Promise.resolve(mockData),
+    ok: true,
   })
 
   const result = await getJson('https://example.com/data.json')

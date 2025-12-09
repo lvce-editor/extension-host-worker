@@ -41,7 +41,7 @@ const improveValidationError = (name, validationError) => {
   return pre + ': ' + post
 }
 
-const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound, name, methodName, resultShape }) => {
+const registerMethod = ({ context, methodName, name, providers, resultShape, returnUndefinedWhenNoProviderFound }) => {
   context[`execute${name}Provider`] = async function (textDocumentId, ...params) {
     try {
       const textDocument = TextDocument.get(textDocumentId)
@@ -78,7 +78,7 @@ const registerMethod = ({ context, providers, returnUndefinedWhenNoProviderFound
   }
 }
 
-export const create = ({ name, resultShape, executeKey = '', returnUndefinedWhenNoProviderFound = false, additionalMethodNames = [] }) => {
+export const create = ({ additionalMethodNames = [], executeKey = '', name, resultShape, returnUndefinedWhenNoProviderFound = false }) => {
   const multipleResults = resultShape.type === 'array'
   const methodName = executeKey || (multipleResults ? `provide${name}s` : `provide${name}`)
   const providers = Object.create(null)
@@ -86,16 +86,16 @@ export const create = ({ name, resultShape, executeKey = '', returnUndefinedWhen
     [`register${name}Provider`](provider) {
       providers[provider.languageId] = provider
     },
+    getProvider(languageId) {
+      return providers[languageId]
+    },
     reset() {
       for (const key in providers) {
         delete providers[key]
       }
     },
-    getProvider(languageId) {
-      return providers[languageId]
-    },
   }
-  registerMethod({ context, providers, name, methodName, returnUndefinedWhenNoProviderFound, resultShape })
+  registerMethod({ context, methodName, name, providers, resultShape, returnUndefinedWhenNoProviderFound })
   for (const method of additionalMethodNames) {
     // @ts-ignore
     registerMethod({ context, providers, ...method })

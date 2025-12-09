@@ -17,17 +17,17 @@ const ContentSecurityPolicyErrorState = await import('../src/parts/ContentSecuri
 
 test('handleContentSecurityPolicyViolation', () => {
   const event = {
-    violatedDirective: 'script-src-elem',
-    sourceFile: 'http://localhost:3000/packages/extension-host-worker-tests/fixtures/sample.error-import-data-url-csp-violation/main.ts',
-    lineNumber: 1,
     columnNumber: 11,
+    lineNumber: 1,
+    sourceFile: 'http://localhost:3000/packages/extension-host-worker-tests/fixtures/sample.error-import-data-url-csp-violation/main.ts',
+    violatedDirective: 'script-src-elem',
   }
   HandleContentSecurityPolicyViolation.handleContentSecurityPolicyViolation(event)
   expect(ContentSecurityPolicyErrorState.addError).toHaveBeenCalledTimes(1)
   expect(ContentSecurityPolicyErrorState.addError).toHaveBeenCalledWith({
-    violatedDirective: 'script-src-elem',
-    sourceFile: 'http://localhost:3000/packages/extension-host-worker-tests/fixtures/sample.error-import-data-url-csp-violation/main.ts',
-    lineNumber: 1,
     columnNumber: 11,
+    lineNumber: 1,
+    sourceFile: 'http://localhost:3000/packages/extension-host-worker-tests/fixtures/sample.error-import-data-url-csp-violation/main.ts',
+    violatedDirective: 'script-src-elem',
   })
 })

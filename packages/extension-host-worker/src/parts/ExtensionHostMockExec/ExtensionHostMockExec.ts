@@ -8,11 +8,11 @@ export const mockExec = () => {
     // @ts-ignore
     Api.api.exec = async (command, args, options) => {
       const result = await Rpc.invoke('Test.executeMockExecFunction', command, args, options)
-      const { stdout, stderr, exitCode } = result
+      const { exitCode, stderr, stdout } = result
       if (exitCode !== 0) {
         throw new ExecError(command, args, stdout, stderr, exitCode)
       }
-      return { stdout, stderr, exitCode }
+      return { exitCode, stderr, stdout }
     }
   } catch (error) {
     throw new VError(error, 'Failed to mock exec function')

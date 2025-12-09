@@ -5,12 +5,12 @@ import * as IpcParentWithWebSocket from '../IpcParentWithWebSocket/IpcParentWith
 
 export const getModule = (method) => {
   switch (method) {
-    case IpcParentType.WebSocket:
-      return IpcParentWithWebSocket
     case IpcParentType.ElectronMessagePort:
       return IpcParentWithNode
     case IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug:
       return IpcParentWithModuleWorkerAndWorkaroundForChromeDevtoolsBug
+    case IpcParentType.WebSocket:
+      return IpcParentWithWebSocket
     default:
       throw new Error('unexpected ipc type')
   }

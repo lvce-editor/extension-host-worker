@@ -22,12 +22,12 @@ test('validate - object property must be of type string but is of type object', 
     uri: {},
   }
   const shape = {
-    type: 'object',
     properties: {
       uri: {
         type: 'string',
       },
     },
+    type: 'object',
   }
   expect(Validation.validate(item, shape)).toBe('item.uri must be of type string')
 })
@@ -35,12 +35,12 @@ test('validate - object property must be of type string but is of type object', 
 test('validate - object property must be of type number but is missing', () => {
   const item = {}
   const shape = {
-    type: 'object',
     properties: {
       endOffset: {
         type: 'number',
       },
     },
+    type: 'object',
   }
   expect(Validation.validate(item, shape)).toBe('item.endOffset must be of type number')
 })

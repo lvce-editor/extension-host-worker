@@ -12,7 +12,7 @@ const getModule = (platform: string) => {
   }
 }
 
-export const create = async ({ type, raw }) => {
+export const create = async ({ raw, type }) => {
   const module = getModule(Platform.platform)
   const rpc = await module.create({ type })
   return rpc

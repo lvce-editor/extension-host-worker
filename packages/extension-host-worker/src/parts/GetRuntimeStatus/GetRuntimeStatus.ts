@@ -3,15 +3,15 @@ import * as RuntimeStatusState from '../RuntimeStatusState/RuntimeStatusState.ts
 import * as RuntimeStatusType from '../RuntimeStatusType/RuntimeStatusType.ts'
 
 const emptyStatus: RuntimeStatus = {
-  status: RuntimeStatusType.None,
-  id: '',
+  activationEndTime: 0,
   activationEvent: '',
   activationStartTime: 0,
-  activationEndTime: 0,
   activationTime: 0,
+  id: '',
   importEndTime: 0,
   importStartTime: 0,
   importTime: 0,
+  status: RuntimeStatusType.None,
 }
 
 export const getRuntimeStatus = (extensionId: string): RuntimeStatus => {

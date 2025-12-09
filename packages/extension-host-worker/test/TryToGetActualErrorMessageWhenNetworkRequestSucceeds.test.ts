@@ -49,8 +49,8 @@ test('tryToGetActualErrorMessage - syntax error - identifier has already been de
   // @ts-ignore
   BabelParser.parse.mockImplementation(() => {
     throw new BabelSyntaxError("Identifier 'x' has already been declared. (3:4)", {
-      line: 3,
       column: 4,
+      line: 3,
     })
   })
   const error = await getError(
@@ -75,8 +75,8 @@ test('tryToGetActualErrorMessage - syntax error - missing semicolon', async () =
   // @ts-ignore
   BabelParser.parse.mockImplementation(() => {
     throw new BabelSyntaxError('SyntaxError: Missing semicolon. (1:2)', {
-      line: 1,
       column: 2,
+      line: 1,
     })
   })
   const error = await getError(

@@ -7,11 +7,11 @@ test('getLineMatch - plain text search', () => {
   const results = GetLineMatch.getLineMatch('hello world', 1, 'hello', 'hello', 0, 0, 0)
   expect(results).toEqual([
     {
-      type: TextSearchResultType.Match,
-      text: 'hello world',
-      start: 0,
       end: 5,
       lineNumber: 1,
+      start: 0,
+      text: 'hello world',
+      type: TextSearchResultType.Match,
     },
   ])
 })
@@ -20,11 +20,11 @@ test.skip('getLineMatch - regex search', () => {
   const results = GetLineMatch.getLineMatch('hello world', 1, 'h[e]llo', 'h[e]llo', UseRegularExpression, 0, 0)
   expect(results).toEqual([
     {
-      type: TextSearchResultType.Match,
-      text: 'hello world',
-      start: 0,
       end: 5,
       lineNumber: 1,
+      start: 0,
+      text: 'hello world',
+      type: TextSearchResultType.Match,
     },
   ])
 })

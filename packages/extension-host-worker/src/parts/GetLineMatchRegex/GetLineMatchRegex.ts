@@ -8,11 +8,11 @@ export const getLineMatchRegex = (line: string, lineNumber: number, query: strin
   if (match && typeof match.index === 'number') {
     return [
       {
-        type: TextSearchResultType.Match,
-        text: line,
-        start: match.index,
         end: match.index + match[0].length,
         lineNumber,
+        start: match.index,
+        text: line,
+        type: TextSearchResultType.Match,
       },
     ]
   }

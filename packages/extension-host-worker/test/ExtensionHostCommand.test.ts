@@ -34,10 +34,10 @@ test('executeCommand - not found', async () => {
 
 test('executeCommand - error', async () => {
   ExtensionHostCommand.registerCommand({
-    id: 'xyz',
     execute(query) {
       throw new TypeError('x is not a function')
     },
+    id: 'xyz',
   })
   await expect(ExtensionHostCommand.executeCommand('xyz', 'abc')).rejects.toThrow(
     new Error('Failed to execute command: TypeError: x is not a function'),
@@ -46,13 +46,13 @@ test('executeCommand - error', async () => {
 
 test('executeCommand - error - command is registered multiple times', async () => {
   ExtensionHostCommand.registerCommand({
-    id: 'xyz',
     execute(query) {},
+    id: 'xyz',
   })
   expect(() => {
     ExtensionHostCommand.registerCommand({
-      id: 'xyz',
       execute(query) {},
+      id: 'xyz',
     })
   }).toThrow(new Error('Failed to register command xyz: command cannot be registered multiple times'))
 })
