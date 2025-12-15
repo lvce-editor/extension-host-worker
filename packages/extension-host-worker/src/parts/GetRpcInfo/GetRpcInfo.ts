@@ -1,9 +1,5 @@
-import * as ExtensionHostRpcState from '../ExtensionHostRpcState/ExtensionHostRpcState.ts'
+import * as ExtensionManagementWorker from '../ExtensionManagementWorker/ExtensionManagementWorker.ts'
 
-export const getRpcInfo = (rpcId: string): any => {
-  const info = ExtensionHostRpcState.get(rpcId)
-  if (!info) {
-    throw new Error(`Rpc not found ${rpcId}`)
-  }
-  return info
+export const getRpcInfo = async (rpcId: string): Promise<any> => {
+  return await ExtensionManagementWorker.invoke('Extensions.getRpcInfo', rpcId)
 }
