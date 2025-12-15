@@ -53,6 +53,7 @@ import * as HandleMessagePort2 from '../HandleMessagePort2/HandleMessagePort2.ts
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
 import * as IconTheme from '../IconTheme/IconTheme.ts'
 import * as IconThemeState from '../IconThemeState/IconThemeState.ts'
+import { importExtension2 } from '../ImportExtension2/ImportExtension2.ts'
 import * as ImportExtension from '../ImportExtension/ImportExtension.ts'
 import * as IndexedDb from '../IndexedDb/IndexedDb.ts'
 import * as IndexedDbKeyValueStorage from '../IndexedDbKeyValueStorage/IndexedDbKeyValueStorage.ts'
@@ -79,6 +80,7 @@ export const commandMap = {
   'ExtensionHost.activateExtension2': ActivateExtension2.activateExtension2,
   'ExtensionHost.getRuntimeStatus': GetRuntimeStatus.getRuntimeStatus,
   'ExtensionHost.importExtension': ImportExtension.importExtension,
+  'ExtensionHost.importExtension2': importExtension2,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
   [ExtensionHostCommandType.BraceCompletionExecuteBraceCompletionProvider]: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
   [ExtensionHostCommandType.ClosingTagExecuteClosingTagProvider]: ExtensionHostClosingTag.executeClosingTagProvider,
