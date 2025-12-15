@@ -1,19 +1,12 @@
-import * as GetConfiguredIframeWorkerUrl from '../GetConfiguredIframeWorkerUrl/GetConfiguredIframeWorkerUrl.ts'
-import * as Id from '../Id/Id.ts'
-import * as IframeWorkerCommandMap from '../IframeWorkerCommandMap/IframeWorkerCommandMap.ts'
-import * as IpcParent from '../IpcParent/IpcParent.ts'
-import * as IpcParentType from '../IpcParentType/IpcParentType.ts'
+import { TransferMessagePortRpcParent } from '@lvce-editor/rpc'
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 
 export const launchIframeWorker = async () => {
-  const configuredWorkerUrl = await GetConfiguredIframeWorkerUrl.getConfiguredIframeWorkerUrl()
-  const name = 'Iframe Worker'
-  const id = Id.create()
-  const rpc = await IpcParent.create({
-    commandMap: IframeWorkerCommandMap.iframeWorkerCommandMap,
-    id,
-    method: IpcParentType.ModuleWorkerAndWorkaroundForChromeDevtoolsBug,
-    name,
-    url: configuredWorkerUrl,
+  const rpc = await TransferMessagePortRpcParent.create({
+    commandMap: {},
+    async send(port) {
+      await RendererWorker.sendMessagePortToIframeWorker(port, 0)
+    },
   })
   return rpc
 }
