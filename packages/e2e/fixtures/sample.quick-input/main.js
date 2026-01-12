@@ -1,4 +1,4 @@
-export const activate = async () => {
+const execute = async () => {
   // @ts-ignore
   const result = await vscode.showQuickInput({
     ignoreFocusOut: false,
@@ -24,4 +24,11 @@ export const activate = async () => {
   } else {
     console.log('Quick input was canceled')
   }
+}
+
+export const activate = async () => {
+  vscode.registerCommand({
+    id: 'quickPickSample',
+    execute,
+  })
 }

@@ -4,16 +4,16 @@ export const name = 'sample.quick-input'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Main, FileSystem, Locator, expect }) => {
+export const test: Test = async ({ Extension, Locator, expect, QuickPick }) => {
   // arrange - load the extension that uses showQuickInput
-  await Extension.addWebExtension(new URL(`../fixtures/${name}`, import.meta.url).toString())
+  await Extension.addWebExtension(import.meta.resolve(`../fixtures/${name}`))
+  await QuickPick.open()
+  await QuickPick.setValue('>quickPickSample')
+  await QuickPick.selectItem('Quick Pick Sample')
+  // await Command.execute('ext.quickPickSample')
+  // await QuickPick.executeCommand('quickPickSample')
 
   // create a test file with the quickinput language to trigger activation
-  const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/test.quickinput`, `test content`)
-
-  // act - open the file to trigger extension activation and showQuickInput
-  await Main.openUri(`${tmpDir}/test.quickinput`)
 
   // assert - verify quick input is displayed
   const quickPick = Locator('.QuickPick')
