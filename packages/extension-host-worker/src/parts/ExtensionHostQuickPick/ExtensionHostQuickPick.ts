@@ -1,3 +1,5 @@
+import type { QuickInputOptions } from '../QuickInputOptions/QuickInputOptions.ts'
+import type { QuickInputResult } from '../QuickInputResult/QuickInputResult.ts'
 import * as FileSearchWorker from '../FileSearchWorker/FileSearchWorker.ts'
 import * as Id from '../Id/Id.ts'
 import * as RendererWorkerCommandType from '../RendererWorkerCommandType/RendererWorkerCommandType.ts'
@@ -10,17 +12,6 @@ export const showQuickPick = async ({ getPicks, toPick }) => {
 }
 
 const quickInputs = Object.create(null)
-
-interface QuickInputOptions {
-  readonly ignoreFocusOut?: boolean
-  readonly initialValue?: string
-  readonly render?: any
-}
-
-interface QuickInputResult {
-  readonly canceled: boolean
-  readonly inputValue: string
-}
 
 export const showQuickInput = async ({ ignoreFocusOut, initialValue, render }: QuickInputOptions): Promise<QuickInputResult> => {
   const id = Id.create()

@@ -173,6 +173,7 @@ export const api = {
   showInformationMessage: ExtensionHostDialog.showInformationMessage,
 
   // QuickPick
+  showQuickInput: ExtensionHostQuickPick.showQuickInput,
   showQuickPick: ExtensionHostQuickPick.showQuickPick,
 
   stat: ExtensionHostFileSystem.statExternal,
