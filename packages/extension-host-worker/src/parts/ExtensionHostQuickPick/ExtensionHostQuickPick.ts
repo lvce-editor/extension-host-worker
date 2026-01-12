@@ -1,6 +1,6 @@
+import { FileSearchWorker } from '@lvce-editor/rpc-registry'
 import type { QuickInputOptions } from '../QuickInputOptions/QuickInputOptions.ts'
 import type { QuickInputResult } from '../QuickInputResult/QuickInputResult.ts'
-import * as FileSearchWorker from '../FileSearchWorker/FileSearchWorker.ts'
 import * as Id from '../Id/Id.ts'
 import * as RendererWorkerCommandType from '../RendererWorkerCommandType/RendererWorkerCommandType.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
