@@ -1,4 +1,4 @@
-import * as ExtensionManagementWorker from '../ExtensionManagementWorker/ExtensionManagementWorker.ts'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 /**
  * @deprecated use createWebViewWorkerRpc2 which passes the worker url as a parameter

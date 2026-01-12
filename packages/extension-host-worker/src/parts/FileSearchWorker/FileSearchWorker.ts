@@ -7,6 +7,7 @@ export const invoke = (method: string, ...params: any[]): Promise<any> => {
 }
 
 export const invokeAndTransfer = (method: string, ...params: any[]): Promise<any> => {
+  // RpcRegistry.RendererWorker.sendMessagePortToFileSystemWorker
   const rpc = RpcRegistry.get(RpcId.RendererWorker)
   return rpc.invokeAndTransfer(method, ...params)
 }
