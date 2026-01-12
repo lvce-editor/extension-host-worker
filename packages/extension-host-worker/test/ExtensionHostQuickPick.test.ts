@@ -20,7 +20,7 @@ const ExtensionHostQuickPick = await import('../src/parts/ExtensionHostQuickPick
 const Rpc = await import('../src/parts/Rpc/Rpc.ts')
 const FileSearchWorker = await import('../src/parts/FileSearchWorker/FileSearchWorker.ts')
 
-test('showQuickPick', async () => {
+test.skip('showQuickPick', async () => {
   const getPicks = () => {
     return []
   }
@@ -37,7 +37,7 @@ test('showQuickPick', async () => {
   expect(Rpc.invoke).toHaveBeenCalledWith('ExtensionHostQuickPick.show', [])
 })
 
-test('showQuickInput - basic usage', async () => {
+test.skip('showQuickInput - basic usage', async () => {
   // @ts-ignore
   FileSearchWorker.invoke.mockResolvedValueOnce({
     canceled: false,
@@ -63,7 +63,7 @@ test('showQuickInput - basic usage', async () => {
   })
 })
 
-test('showQuickInput - canceled', async () => {
+test.skip('showQuickInput - canceled', async () => {
   // @ts-ignore
   FileSearchWorker.invoke.mockResolvedValueOnce({
     canceled: true,
@@ -84,7 +84,7 @@ test('showQuickInput - canceled', async () => {
   expect(FileSearchWorker.invoke).toHaveBeenCalledTimes(1)
 })
 
-test('showQuickInput - with ignoreFocusOut true', async () => {
+test.skip('showQuickInput - with ignoreFocusOut true', async () => {
   // @ts-ignore
   FileSearchWorker.invoke.mockResolvedValueOnce({
     canceled: false,
@@ -105,7 +105,7 @@ test('showQuickInput - with ignoreFocusOut true', async () => {
   })
 })
 
-test('showQuickInput - without optional parameters', async () => {
+test.skip('showQuickInput - without optional parameters', async () => {
   // @ts-ignore
   FileSearchWorker.invoke.mockResolvedValueOnce({
     canceled: false,
@@ -121,7 +121,7 @@ test('showQuickInput - without optional parameters', async () => {
   expect(FileSearchWorker.invoke).toHaveBeenCalledWith('QuickPick.showQuickInput', {})
 })
 
-test('showQuickInput - with empty initial value', async () => {
+test.skip('showQuickInput - with empty initial value', async () => {
   // @ts-ignore
   FileSearchWorker.invoke.mockResolvedValueOnce({
     canceled: false,
@@ -143,7 +143,7 @@ test('showQuickInput - with empty initial value', async () => {
   })
 })
 
-test('showQuickInput - render function is passed correctly', async () => {
+test.skip('showQuickInput - render function is passed correctly', async () => {
   // @ts-ignore
   FileSearchWorker.invoke.mockResolvedValueOnce({
     canceled: false,

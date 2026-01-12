@@ -1,4 +1,4 @@
-import * as ExtensionManagementWorker from '../ExtensionManagementWorker/ExtensionManagementWorker.ts'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import * as GetWebExtensions from '../GetWebExtensions/GetWebExtensions.ts'
 import * as Platform from '../Platform/Platform.ts'
 import * as PlatformType from '../PlatformType/PlatformType.ts'
