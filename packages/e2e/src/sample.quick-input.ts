@@ -10,10 +10,10 @@ export const test: Test = async ({ Extension, Locator, expect, QuickPick }) => {
   await QuickPick.open()
   await QuickPick.setValue('>quickPickSample')
   await QuickPick.selectItem('Quick Pick Sample')
-  // await Command.execute('ext.quickPickSample')
-  // await QuickPick.executeCommand('quickPickSample')
 
-  // create a test file with the quickinput language to trigger activation
+  // TODO the way quickpick currently works, we cannot check the intermediate state,
+  // since the promise only resolves once the inner command also has finished
+  // at which point the quickpick is already closed
 
   // assert - verify quick input is displayed
   const quickPick = Locator('.QuickPick')
