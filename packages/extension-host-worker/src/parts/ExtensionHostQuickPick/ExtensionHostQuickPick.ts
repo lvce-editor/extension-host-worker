@@ -18,9 +18,9 @@ export const showQuickInput = async ({ ignoreFocusOut, initialValue, render }: Q
   quickInputs[id] = render
   // TODO create direct connection to file search worker
   const { canceled, inputValue } = await FileSearchWorker.invoke('QuickPick.showQuickInput', {
+    id,
     ignoreFocusOut,
     initialValue,
-    render,
   })
   delete quickInputs[id]
   return {
