@@ -1,4 +1,10 @@
 {
   "browser": "main.js",
-  "activation": ["onLanguage:quickinput"]
+  "activation": ["onCommand:quickPickSample"],
+  "commands": [
+    {
+      "id": "quickPickSample",
+      "label": "Quick Pick Sample"
+    }
+  ]
 }
