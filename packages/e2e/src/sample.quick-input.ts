@@ -10,12 +10,7 @@ export const test: Test = async ({ Extension, Locator, expect, QuickPick, Comman
   await QuickPick.open()
   await QuickPick.setValue('>quickPickSample')
 
-  // @ts-ignore
-  await QuickPick.selectItem2({
-    label: 'Quick Pick Sample',
-    waitUntil: 'visible',
-    // visibleCallback: 'testCallback.resolve',
-  })
+  await QuickPick.selectItem('Quick Pick Sample')
 
   console.log('done')
 
