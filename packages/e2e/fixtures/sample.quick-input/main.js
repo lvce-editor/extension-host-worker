@@ -1,6 +1,6 @@
 const execute = async () => {
   // @ts-ignore
-  const result = await vscode.showQuickInput({
+  await vscode.showQuickInput({
     ignoreFocusOut: false,
     initialValue: 'test',
     render: async (searchValue) => {
@@ -18,12 +18,6 @@ const execute = async () => {
       ]
     },
   })
-
-  if (!result.canceled) {
-    console.log('Quick input result:', result.inputValue)
-  } else {
-    console.log('Quick input was canceled')
-  }
 }
 
 export const activate = async () => {
