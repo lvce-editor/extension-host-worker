@@ -13,7 +13,7 @@ export const test: Test = async ({ Extension, Locator, expect, QuickPick, Comman
   // @ts-ignore
   await QuickPick.selectItem2({
     label: 'Quick Pick Sample',
-    wait: true,
+    waitUntil: 'visible',
     // visibleCallback: 'testCallback.resolve',
   })
 
