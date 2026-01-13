@@ -3,6 +3,7 @@ const execute = async () => {
   await vscode.showQuickInput({
     ignoreFocusOut: false,
     initialValue: 'test',
+    waitUntil: 'visible',
     render: async (searchValue) => {
       if (!searchValue) {
         return [
