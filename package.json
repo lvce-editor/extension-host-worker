@@ -30,7 +30,7 @@
     "@lvce-editor/eslint-config": "^4.6.0",
     "eslint": "^9.39.2",
     "lerna": "^8.2.4",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.0",
     "typescript": "^5.9.3"
   }
 }
