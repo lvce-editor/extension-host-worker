@@ -44,6 +44,7 @@ export default [
       'no-restricted-syntax': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
       'github-actions/ci-versions': 'off',
+      '@cspell/spellchecker': 'off',
     },
   },
 ]
