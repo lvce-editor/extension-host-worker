@@ -35,27 +35,37 @@ export const remove = (): void => {
   throw new Error('not implemented')
 }
 
+const normalizeUri = (uri: string): string => {
+  if (uri.startsWith('fetch://')) {
+    return uri.slice('fetch://'.length)
+  }
+  return uri
+}
+
 export const readDirWithFileTypes = async (uri: string): Promise<readonly Dirent[]> => {
+  const normalizedUri = normalizeUri(uri)
+  const directoryPrefix = normalizedUri.endsWith(PathSeparatorType.Slash) ? normalizedUri : `${normalizedUri}${PathSeparatorType.Slash}`
   const fileList = await GetJson.getJson(FileMapUrl.fileMapUrl)
   const dirents: Dirent[] = []
   for (const fileUri of fileList) {
-    if (fileUri.startsWith(uri)) {
-      const rest = fileUri.slice(uri.length + 1)
-      if (rest.includes(PathSeparatorType.Slash)) {
-        const name = rest.slice(0, rest.indexOf(PathSeparatorType.Slash))
-        if (dirents.some((dirent) => dirent.name === name)) {
-          continue
-        }
-        dirents.push({
-          name,
-          type: DirentType.Directory,
-        })
-      } else {
-        dirents.push({
-          name: rest,
-          type: DirentType.File,
-        })
+    if (!fileUri.startsWith(directoryPrefix)) {
+      continue
+    }
+    const rest = fileUri.slice(directoryPrefix.length)
+    if (rest.includes(PathSeparatorType.Slash)) {
+      const name = rest.slice(0, rest.indexOf(PathSeparatorType.Slash))
+      if (dirents.some((dirent) => dirent.name === name)) {
+        continue
       }
+      dirents.push({
+        name,
+        type: DirentType.Directory,
+      })
+    } else {
+      dirents.push({
+        name: rest,
+        type: DirentType.File,
+      })
     }
   }
   return dirents
