@@ -1,10 +1,9 @@
 export const getPosition = (textDocument, offset) => {
   let index = 0
   let rowIndex = 0
-  let newLineIndex = 0
   const { text } = textDocument
   while (index < offset) {
-    newLineIndex = text.indexOf('\n', index)
+    const newLineIndex = text.indexOf('\n', index)
     if (newLineIndex === -1) {
       break
     }

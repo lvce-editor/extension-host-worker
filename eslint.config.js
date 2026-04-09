@@ -45,6 +45,7 @@ export default [
       '@typescript-eslint/no-misused-promises': 'off',
       'github-actions/ci-versions': 'off',
       '@cspell/spellchecker': 'off',
+      'preserve-caught-error': 'off',
     },
   },
 ]
