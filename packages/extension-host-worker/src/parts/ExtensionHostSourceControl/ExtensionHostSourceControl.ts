@@ -11,15 +11,20 @@ export const registerSourceControlProvider = (provider) => {
   state.providers[provider.id] = provider
 }
 
+const getProvider = (providerId) => {
+  const provider = state.providers[providerId]
+  if (!provider) {
+    throw new Error('no source control provider found')
+  }
+  return provider
+}
+
 const getFilesFromProvider = (provider) => {
   return provider.getChangedFiles()
 }
 
 export const getChangedFiles = async (providerId) => {
-  const provider = state.providers[providerId]
-  if (!provider) {
-    throw new Error('no source control provider found')
-  }
+  const provider = getProvider(providerId)
   const changedFiles = await getFilesFromProvider(provider)
   const flattenedChangedFiles = changedFiles
   return flattenedChangedFiles
@@ -28,10 +33,7 @@ export const getChangedFiles = async (providerId) => {
 export const getFileBefore = async (providerId, uri) => {
   Assert.string(providerId)
   Assert.string(uri)
-  const provider = state.providers[providerId]
-  if (!provider) {
-    throw new Error('no source control provider found')
-  }
+  const provider = getProvider(providerId)
   return provider.getFileBefore(uri)
 }
 
@@ -54,20 +56,38 @@ const getGroupsFromProvider = async (provider, cwd) => {
 }
 
 export const getGroups = async (providerId, cwd) => {
-  const provider = state.providers[providerId]
-  if (!provider) {
-    throw new Error('no source control provider found')
-  }
+  const provider = getProvider(providerId)
   const groups = await getGroupsFromProvider(provider, cwd)
   return groups
 }
 
 export const acceptInput = async (providerId, value) => {
-  const provider = state.providers[providerId]
-  if (!provider) {
-    throw new Error('no source control provider found')
-  }
+  const provider = getProvider(providerId)
   await provider.acceptInput(value)
+}
+
+export const generateCommitMessage = async (providerId) => {
+  const provider = getProvider(providerId)
+  if (typeof provider.generateCommitMessage !== 'function') {
+    throw new TypeError('source control provider is missing required function generateCommitMessage')
+  }
+  return provider.generateCommitMessage()
+}
+
+export const getFeatures = async (providerId) => {
+  const provider = getProvider(providerId)
+  if (typeof provider.getFeatures === 'function') {
+    return provider.getFeatures()
+  }
+  if (provider.features && typeof provider.features === 'object') {
+    return provider.features
+  }
+  if ('showGenerateCommitMessageButton' in provider) {
+    return {
+      showGenerateCommitMessageButton: provider.showGenerateCommitMessageButton,
+    }
+  }
+  return {}
 }
 
 export const add = async (path) => {
