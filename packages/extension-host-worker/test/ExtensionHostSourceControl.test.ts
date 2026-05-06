@@ -56,3 +56,62 @@ test('getEnabledProviderIds', async () => {
   // @ts-ignore
   expect(provider2.isActive).toHaveBeenCalledWith('', '/test/folder')
 })
+
+test('generateCommitMessage', async () => {
+  const generateCommitMessage = jest.fn(() => {
+    return 'feat: generated message'
+  })
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    generateCommitMessage,
+    id: 'test',
+  })
+
+  expect(await ExtensionHostSourceControl.generateCommitMessage('test')).toBe('feat: generated message')
+  expect(generateCommitMessage).toHaveBeenCalledTimes(1)
+})
+
+test('generateCommitMessage - error - provider missing function', async () => {
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    id: 'test',
+  })
+
+  await expect(ExtensionHostSourceControl.generateCommitMessage('test')).rejects.toThrow(
+    new TypeError('source control provider is missing required function generateCommitMessage'),
+  )
+})
+
+test('getFeatures - from getFeatures function', async () => {
+  const getFeatures = jest.fn(() => {
+    return {
+      showGenerateCommitMessageButton: false,
+    }
+  })
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    getFeatures,
+    id: 'test',
+  })
+
+  expect(await ExtensionHostSourceControl.getFeatures('test')).toEqual({
+    showGenerateCommitMessageButton: false,
+  })
+  expect(getFeatures).toHaveBeenCalledTimes(1)
+})
+
+test('getFeatures - from provider property', async () => {
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    id: 'test',
+    showGenerateCommitMessageButton: false,
+  })
+
+  expect(await ExtensionHostSourceControl.getFeatures('test')).toEqual({
+    showGenerateCommitMessageButton: false,
+  })
+})
+
+test('getFeatures - defaults to empty object', async () => {
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    id: 'test',
+  })
+
+  expect(await ExtensionHostSourceControl.getFeatures('test')).toEqual({})
+})
