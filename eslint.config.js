@@ -46,6 +46,7 @@ export default [
       'github-actions/ci-versions': 'off',
       '@cspell/spellchecker': 'off',
       'preserve-caught-error': 'off',
+      'sonarjs/no-dead-store': 'off',
     },
   },
 ]
