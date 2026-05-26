@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-disabled-tests */
+
 import { beforeEach, expect, jest, test } from '@jest/globals'
 
 beforeEach(() => {

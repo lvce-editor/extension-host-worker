@@ -128,6 +128,7 @@ export const getScripts = async (protocol: string) => {
   }
 }
 
+// eslint-disable-next-line sonarjs/no-identical-functions
 export const getPausedStatus = async (protocol: string) => {
   try {
     const provider = getDebugProvider(protocol)

@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-disabled-tests */
+
 import { expect, jest, test } from '@jest/globals'
 import * as ExtensionHostRpcState from '../src/parts/ExtensionHostRpcState/ExtensionHostRpcState.ts'
 import * as HandleRpcInfos from '../src/parts/HandleRpcInfos/HandleRpcInfos.ts'

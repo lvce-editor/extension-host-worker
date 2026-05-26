@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-disabled-tests */
+
 import { beforeEach, expect, test } from '@jest/globals'
 import * as ExtensionHostTabCompletion from '../src/parts/ExtensionHostTabCompletion/ExtensionHostTabCompletion.ts'
 import * as TextDocument from '../src/parts/ExtensionHostTextDocument/ExtensionHostTextDocument.ts'

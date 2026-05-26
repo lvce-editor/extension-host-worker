@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-disabled-tests */
+
 import { beforeEach, expect, test } from '@jest/globals'
 import * as ContentSecurityPolicyErrorState from '../src/parts/ContentSecurityPolicyErrorState/ContentSecurityPolicyErrorState.ts'
 

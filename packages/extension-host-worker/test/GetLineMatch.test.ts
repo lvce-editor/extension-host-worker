@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-disabled-tests */
+
 import { expect, test } from '@jest/globals'
 import * as GetLineMatch from '../src/parts/GetLineMatch/GetLineMatch.ts'
 import { MatchCase, UseRegularExpression } from '../src/parts/SearchFlags/SearchFlags.ts'

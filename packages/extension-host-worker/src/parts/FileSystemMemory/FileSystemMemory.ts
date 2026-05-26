@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/prefer-single-boolean-return, sonarjs/redundant-type-aliases, sonarjs/cognitive-complexity */
+
 import type { Dirent } from '../Dirent/Dirent.ts'
 import * as DirentType from '../DirentType/DirentType.ts'
 import { FileNotFoundError } from '../FileNotFoundError/FileNotFoundError.ts'
@@ -20,15 +22,10 @@ export const readFile = (uri: string): string => {
 
 export const exists = (uri: string): boolean => {
   const dirent = FileSystemMemoryState.getDirent(uri) || FileSystemMemoryState.getDirent(`${uri}/`)
-  if (!dirent) {
-    return false
-  }
-  return true
+  return !!dirent
 }
 
-type Stat = any
-
-export const stat = (uri: string): Stat => {
+export const stat = (uri: string): any => {
   const dirent = FileSystemMemoryState.getDirent(uri)
   if (!dirent) {
     return {
@@ -154,6 +151,17 @@ export const rename = (oldUri: string, newUri: string): void => {
   renameFile(oldUri, newUri)
 }
 
+const isDirectChildDirectory = (key: string, uri: string): boolean => {
+  return !key.slice(0, -1).includes(PathSeparatorType.Slash, uri.length) && key !== `${uri}/` && key !== uri
+}
+
+const pushDirent = (dirents: Dirent[], name: string, type: number): void => {
+  dirents.push({
+    name,
+    type,
+  })
+}
+
 export const readDirWithFileTypes = (uri: string): readonly Dirent[] => {
   if (!uri.endsWith(PathSeparatorType.Slash)) {
     uri += PathSeparatorType.Slash
@@ -164,21 +172,15 @@ export const readDirWithFileTypes = (uri: string): readonly Dirent[] => {
       // @ts-ignore
       switch (value.type) {
         case DirentType.Directory:
-          if (!key.slice(0, -1).includes(PathSeparatorType.Slash, uri.length) && key !== `${uri}/` && key !== uri) {
-            dirents.push({
-              name: key.slice(uri.length, -1),
-              // @ts-ignore
-              type: value.type,
-            })
+          if (isDirectChildDirectory(key, uri)) {
+            // @ts-ignore
+            pushDirent(dirents, key.slice(uri.length, -1), value.type)
           }
           break
         case DirentType.File:
           if (!key.includes(PathSeparatorType.Slash, uri.length + 1)) {
-            dirents.push({
-              name: key.slice(uri.length),
-              // @ts-ignore
-              type: value.type,
-            })
+            // @ts-ignore
+            pushDirent(dirents, key.slice(uri.length), value.type)
           }
           break
         default:
