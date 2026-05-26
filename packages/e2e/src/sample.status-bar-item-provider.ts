@@ -11,7 +11,6 @@ export const test: Test = async ({ Extension, FileSystem, Locator, expect }) => 
   // @ts-ignore
   const tmpDir = await FileSystem.getTmpDir()
 
-  console.log('setup done..')
   // assert
   const item = Locator('.StatusBarItem[name="xyz"]')
   await expect(item).toBeVisible()
