@@ -2,14 +2,15 @@ const statusBarProvider = {
   id: 'xyz',
   getStatusBarItem() {
     return {
-      label: 'abc',
+      text: 'abc',
       icon: '',
+      name: 'xyz',
+      onClick: '',
     }
   },
 }
 
 export const activate = () => {
-  console.log('act')
   // @ts-ignore
   vscode.registerStatusBarItemProvider(statusBarProvider)
 }
