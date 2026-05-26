@@ -28,6 +28,7 @@ import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename
 import * as ExtensionHostRpc from '../ExtensionHostRpc/ExtensionHostRpc.ts'
 import * as ExtensionHostSelection from '../ExtensionHostSelection/ExtensionHostSelection.ts'
 import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
+import * as ExtensionHostStatusBar from '../ExtensionHostStatusBar/ExtensionHostStatusBar.ts'
 import * as ExtensionHostTabCompletion from '../ExtensionHostTabCompletion/ExtensionHostTabCompletion.ts'
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHostTextSearch.ts'
@@ -82,11 +83,12 @@ export const api = {
 
   executeSelectionProvider: ExtensionHostSelection.executeSelectionProvider,
 
+  executeStatusBarItemProvider: ExtensionHostStatusBar.executeStatusBarItemProvider,
   executeTabCompletionProvider: ExtensionHostTabCompletion.executeTabCompletionProvider,
+
   executeTextSearchProvider: ExtensionHostTextSearch.executeTextSearchProvider,
 
   executeTypeDefinitionProvider: ExtensionHostTypeDefinition.executeTypeDefinitionProvider,
-
   exists: ExtensionHostFileSystem.existsExternal,
   // Errors
   FormattingError,
@@ -100,28 +102,29 @@ export const api = {
   getPosition: ExtensionHostGetPosition.getPosition,
   // Url
   getRemoteUrl: ExtensionHostUrl.getRemoteUrl,
+
   // Text Document
   getTextFromTextDocument: TextDocument.getText,
-
   getWorkspaceFolder: ExtensionHostWorkspace.getWorkspaceFolder,
+
   // Workspace
   handleWorkspaceRefresh: ExtensionHostWorkspace.handleWorkspaceRefresh,
 
   mkdir: ExtensionHostFileSystem.mkdirExternal,
 
   readDirWithFileTypes: ExtensionHostFileSystem.readDirWithFileTypesExternal,
-
   readFile: ExtensionHostFileSystem.readFileExternal,
+
   // Brace Completion
   registerBraceCompletionProvider: ExtensionHostBraceCompletion.registerBraceCompletionProvider,
-
   // Closing Tag
   registerClosingTagProvider: ExtensionHostClosingTag.registerClosingTagProvider,
+
   // Code Action
   registerCodeActionsProvider: ExtensionHostCodeActions.registerCodeActionProvider,
-
   // Command
   registerCommand: ExtensionHostCommand.registerCommand,
+
   registerCommentProvider: ExtensionHostComment.registerCommentProvider,
 
   // Completion
@@ -132,31 +135,34 @@ export const api = {
 
   // Definition
   registerDefinitionProvider: ExtensionHostDefinition.registerDefinitionProvider,
-
   // Diagnostic
   registerDiagnosticProvider: ExtensionHostDiagnostic.registerDiagnosticProvider,
   // File System
   registerFileSystemProvider: ExtensionHostFileSystem.registerFileSystemProvider,
+
   // Formatting
   registerFormattingProvider: ExtensionHostFormatting.registerFormattingProvider,
-
   // Hover
   registerHoverProvider: ExtensionHostHover.registerHoverProvider,
+
   // Implementation
   registerImplementationProvider: ExtensionHostImplementation.registerImplementationProvider,
-
   // Output
   registerOutputChannel: ExtensionHostOutputChannel.registerOutputChannel,
+
   // Reference
   registerReferenceProvider: ExtensionHostReference.registerReferenceProvider,
 
   // Rename
   registerRenameProvider: ExtensionHostRename.registerRenameProvider,
-
   // Selection
   registerSelectionProvider: ExtensionHostSelection.registerSelectionProvider,
+
   // Source Control
   registerSourceControlProvider: ExtensionHostSourceControl.registerSourceControlProvider,
+
+  // Status bar
+  registerStatusBarItemProvider: ExtensionHostStatusBar.registerStatuBarItemProvider,
 
   // Tab Completion
   registerTabCompletionProvider: ExtensionHostTabCompletion.registerTabCompletionProvider,
