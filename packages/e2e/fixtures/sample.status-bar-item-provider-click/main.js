@@ -12,17 +12,15 @@ const statusBarProvider = {
   },
 }
 
-const incrementCommand = {
-  id: 'xyz.increment',
-  execute() {
-    count++
-    // TODO notify vsc  ode of status bar item change?
-  },
-}
-
 export const activate = () => {
   // @ts-ignore
-  vscode.registerStatusBarItemProvider(statusBarProvider)
+  const statusBarHandle = vscode.registerStatusBarItemProvider(statusBarProvider)
   // @ts-ignore
-  vscode.registerCommand(incrementCommand)
+  vscode.registerCommand({
+    id: 'xyz.increment',
+    async execute() {
+      count++
+      await statusBarHandle.refresh()
+    },
+  })
 }
