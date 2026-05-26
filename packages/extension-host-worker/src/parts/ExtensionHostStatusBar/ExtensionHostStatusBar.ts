@@ -47,12 +47,12 @@ export const executeCommand = async (name: string): Promise<void> => {
 }
 
 export interface StatusBarItemProvider {
-  getStatusBarItem: () => any
-  id: string
+  readonly getStatusBarItem: () => any
+  readonly id: string
 }
 
-interface StatusBarItemProviderHandle {
-  refresh: () => Promise<void>
+export interface StatusBarItemProviderHandle {
+  readonly refresh: () => Promise<void>
 }
 
 const providers: Record<string, StatusBarItemProvider> = Object.create(null)
