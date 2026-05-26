@@ -34,3 +34,14 @@ export const registerChangeListener = () => {
 export const executeCommand = async (name: string): Promise<void> => {
   await ExtensionHostCommand.executeCommand(name)
 }
+
+const providers = Object.create(null)
+
+export const executeStatusBarItemProvider = (id) => {
+  const provider = providers[id]
+  return provider.getStatusBarItem()
+}
+
+export const registerStatuBarItemProvider = (provider) => {
+  providers[provider.id] = provider
+}
