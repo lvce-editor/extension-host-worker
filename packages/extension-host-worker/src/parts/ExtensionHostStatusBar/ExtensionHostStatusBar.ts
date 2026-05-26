@@ -1,5 +1,6 @@
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
+import * as Rpc from '../Rpc/Rpc.ts'
 
 export const getStatusBarItems = async () => {
   const providers = Object.values(ExtensionHostSourceControl.state.providers)
@@ -49,13 +50,32 @@ export interface StatusBarItemProvider {
   id: string
 }
 
+interface StatusBarItemProviderHandle {
+  refresh: () => Promise<void>
+}
+
 const providers: Record<string, StatusBarItemProvider> = Object.create(null)
+
+const notifyChange = async (id: string): Promise<void> => {
+  await Rpc.invoke('StatusBar.handleChange', id)
+}
 
 export const executeStatusBarItemProvider = (id) => {
   const provider = providers[id]
   return provider.getStatusBarItem()
 }
 
-export const registerStatuBarItemProvider = (provider: StatusBarItemProvider) => {
+export const registerStatuBarItemProvider = (provider: StatusBarItemProvider): StatusBarItemProviderHandle => {
   providers[provider.id] = provider
+  return {
+    refresh() {
+      return notifyChange(provider.id)
+    },
+  }
+}
+
+export const reset = (): void => {
+  for (const key of Object.keys(providers)) {
+    delete providers[key]
+  }
 }
