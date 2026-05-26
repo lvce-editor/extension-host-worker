@@ -6,7 +6,7 @@ const statusBarProvider = {
     return {
       text: `${count}`,
       icon: '',
-      name: 'xyz',
+      name: 'xyz.increment',
       onClick: '',
     }
   },
