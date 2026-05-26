@@ -44,7 +44,7 @@ export const executeCommand = async (name: string): Promise<void> => {
   await ExtensionHostCommand.executeCommand(name)
 }
 
-interface StatusBarItemProvider {
+export interface StatusBarItemProvider {
   getStatusBarItem: () => any
   id: string
 }
