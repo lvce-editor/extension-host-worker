@@ -8,6 +8,7 @@ const getHandleDb = async (): Promise<IDBPDatabase> => {
   const db = await openDB('handle', state.dbVersion, {
     async upgrade(db, oldVersion) {
       if (!db.objectStoreNames.contains('file-handles-store')) {
+        // eslint-disable-next-line sonarjs/no-dead-store
         // @ts-ignore
         const objectStore = await db.createObjectStore('file-handles-store', {})
       }

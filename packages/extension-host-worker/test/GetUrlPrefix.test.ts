@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-disabled-tests */
+
 import { expect, test } from '@jest/globals'
 import * as GetUrlPrefix from '../src/parts/GetUrlPrefix/GetUrlPrefix.ts'
 import * as PlatformType from '../src/parts/PlatformType/PlatformType.ts'

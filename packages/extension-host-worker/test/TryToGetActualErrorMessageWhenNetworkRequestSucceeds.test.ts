@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/unused-import */
+
 // @ts-nocheck
 import { jest, test, expect, beforeEach } from '@jest/globals'
 import * as ErrorCodes from '../src/parts/ErrorCodes/ErrorCodes.ts'

@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-disabled-tests */
+
 import { expect, jest, test } from '@jest/globals'
 import * as RpcId from '../src/parts/RpcId/RpcId.ts'
 
