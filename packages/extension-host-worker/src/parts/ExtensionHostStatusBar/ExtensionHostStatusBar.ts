@@ -28,8 +28,8 @@ export const getStatusBarItems2 = async (): Promise<any[]> => {
   }
   const values = Object.values(providers)
   for (const provider of values) {
-    if (provider && provider.getStatusBarItem) {
-      const item = provider.getStatusBarItem()
+    if (provider) {
+      const item = getValidatedStatusBarItem(provider)
       if (item) {
         statusBarItems.push(item)
       }
@@ -68,9 +68,57 @@ const notifyChange = async (id: string): Promise<void> => {
   await Rpc.invoke('StatusBar.handleChange', id)
 }
 
+const getType = (value: any): string => {
+  if (value === null) {
+    return 'null'
+  }
+  if (Array.isArray(value)) {
+    return 'array'
+  }
+  return typeof value
+}
+
+const validateStatusBarItem = (item: any): void => {
+  if (!item || typeof item !== 'object') {
+    throw new Error(`status bar item must be an object, got ${getType(item)}`)
+  }
+  if ('text' in item && typeof item.text !== 'string') {
+    throw new Error(`status bar item.text must be a string, got ${getType(item.text)}`)
+  }
+  if ('name' in item && typeof item.name !== 'string') {
+    throw new Error(`status bar item.name must be a string, got ${getType(item.name)}`)
+  }
+}
+
+const getErrorStatusBarItem = (title: string) => {
+  return {
+    icon: '',
+    name: 'error',
+    onClick: '',
+    text: 'error',
+    title,
+  }
+}
+
+const getValidatedStatusBarItem = (provider: StatusBarItemProvider): any => {
+  try {
+    const item = provider.getStatusBarItem()
+    if (!item) {
+      return item
+    }
+    validateStatusBarItem(item)
+    return item
+  } catch (error) {
+    const providerDisplay = getStatusBarItemProviderDisplay(provider)
+    const wrappedError = new VError(error, `Failed to execute status bar item provider${providerDisplay}`)
+    console.error(wrappedError)
+    return getErrorStatusBarItem(wrappedError.message)
+  }
+}
+
 export const executeStatusBarItemProvider = (id) => {
   const provider = providers[id]
-  return provider.getStatusBarItem()
+  return getValidatedStatusBarItem(provider)
 }
 
 export const registerStatuBarItemProvider = (provider: StatusBarItemProvider): StatusBarItemProviderHandle => {
