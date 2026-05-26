@@ -4,7 +4,7 @@ export const name = 'sample.status-bar-provider'
 
 export const skip = 1
 
-export const test: Test = async ({ Extension, FileSystem }) => {
+export const test: Test = async ({ Extension, FileSystem, Locator, expect }) => {
   // arrange
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
@@ -12,5 +12,7 @@ export const test: Test = async ({ Extension, FileSystem }) => {
   const tmpDir = await FileSystem.getTmpDir()
 
   // assert
+  const item = Locator('.StatusBarItem[name="xyz"]')
+  await expect(item).toBeVisible()
   // TODO wait for status bar item to be visible
 }
