@@ -1,6 +1,7 @@
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
+import { VError } from '../VError/VError.ts'
 
 export const getStatusBarItems = async () => {
   const providers = Object.values(ExtensionHostSourceControl.state.providers)
@@ -56,6 +57,13 @@ interface StatusBarItemProviderHandle {
 
 const providers: Record<string, StatusBarItemProvider> = Object.create(null)
 
+const getStatusBarItemProviderDisplay = (provider: StatusBarItemProvider): string => {
+  if (provider && provider.id && typeof provider.id === 'string') {
+    return ` ${provider.id}`
+  }
+  return ''
+}
+
 const notifyChange = async (id: string): Promise<void> => {
   await Rpc.invoke('StatusBar.handleChange', id)
 }
@@ -66,11 +74,22 @@ export const executeStatusBarItemProvider = (id) => {
 }
 
 export const registerStatuBarItemProvider = (provider: StatusBarItemProvider): StatusBarItemProviderHandle => {
-  providers[provider.id] = provider
-  return {
-    refresh() {
-      return notifyChange(provider.id)
-    },
+  try {
+    if (!provider.id) {
+      throw new Error('status bar item provider is missing id')
+    }
+    if (provider.id in providers) {
+      throw new Error('status bar item provider cannot be registered multiple times')
+    }
+    providers[provider.id] = provider
+    return {
+      refresh() {
+        return notifyChange(provider.id)
+      },
+    }
+  } catch (error) {
+    const providerDisplay = getStatusBarItemProviderDisplay(provider)
+    throw new VError(error, `Failed to register status bar item provider${providerDisplay}`)
   }
 }
 
