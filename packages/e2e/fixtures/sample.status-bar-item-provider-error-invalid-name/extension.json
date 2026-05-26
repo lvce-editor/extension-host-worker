@@ -1,0 +1,15 @@
+{
+  "browser": "main.js",
+  "activation": ["*", "onStatusbarItem:xyz", "onStatusBarItem", "onStatusBarItem:*"],
+  "statusBarItems": [
+    {
+      "id": "xyz"
+    }
+  ],
+  "commands": [
+    {
+      "id": "xyz.increment",
+      "title": "xyz"
+    }
+  ]
+}
