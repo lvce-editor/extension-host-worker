@@ -8,12 +8,15 @@ export const test: Test = async ({ Extension, Locator, expect, QuickPick }) => {
   // arrange
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
-
-  // assert
   const item = Locator('.StatusBarItem[name="xyz"]')
   await expect(item).toBeVisible()
 
-  await QuickPick.executeCommand(`xyz.increment`)
+  await QuickPick.open()
+  await QuickPick.handleInput('>xyz')
 
+  // act
+  await QuickPick.selectIndex(0)
+
+  // assert
   await expect(item).toHaveText('1')
 }
