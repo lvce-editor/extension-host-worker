@@ -24,6 +24,8 @@ const remoteUrl = getRemoteUrl(extensionHostWorkerPath)
 
 const config = {
   'develop.extensionHostWorkerPath': remoteUrl,
+  'develop.extensionHostWorkerUrl': remoteUrl,
+  extensionHostWorkerUrl: remoteUrl,
 }
 const stringifiedConfig = JSON.stringify(config, null, 2)
 const newContent = indexHtmlContent.replace(
