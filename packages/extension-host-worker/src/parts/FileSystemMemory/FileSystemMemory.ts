@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/prefer-single-boolean-return, sonarjs/redundant-type-aliases, sonarjs/cognitive-complexity */
-
 import type { Dirent } from '../Dirent/Dirent.ts'
 import * as DirentType from '../DirentType/DirentType.ts'
 import { FileNotFoundError } from '../FileNotFoundError/FileNotFoundError.ts'

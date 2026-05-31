@@ -1,14 +1,45 @@
-import { FileSearchWorker } from '@lvce-editor/rpc-registry'
+import { QuickPickWorker } from '@lvce-editor/rpc-registry'
 import type { QuickInputOptions } from '../QuickInputOptions/QuickInputOptions.ts'
 import type { QuickInputResult } from '../QuickInputResult/QuickInputResult.ts'
 import * as Id from '../Id/Id.ts'
-import * as RendererWorkerCommandType from '../RendererWorkerCommandType/RendererWorkerCommandType.ts'
-import * as Rpc from '../Rpc/Rpc.ts'
 
-export const showQuickPick = async ({ getPicks, toPick }) => {
-  const rawPicks = await getPicks()
-  const picks = rawPicks.map(toPick)
-  return Rpc.invoke(RendererWorkerCommandType.ExtensionHostQuickPickShow, picks)
+export interface QuickPickItem {
+  readonly description: string
+  readonly label: string
+  readonly value: unknown
+}
+
+export interface ShowQuickPickOptions {
+  readonly items: readonly QuickPickItem[]
+  readonly placeholder?: string
+}
+
+const validateQuickPickItem = (item: QuickPickItem): void => {
+  if (!item || typeof item !== 'object') {
+    throw new TypeError('quick pick item must be an object')
+  }
+  if (typeof item.label !== 'string') {
+    throw new TypeError('quick pick item.label must be a string')
+  }
+  if (typeof item.description !== 'string') {
+    throw new TypeError('quick pick item.description must be a string')
+  }
+  if (!('value' in item)) {
+    throw new TypeError('quick pick item.value is required')
+  }
+}
+
+export const showQuickPick = async ({ items, placeholder }: ShowQuickPickOptions): Promise<unknown> => {
+  if (!Array.isArray(items)) {
+    throw new TypeError('showQuickPick items must be an array')
+  }
+  for (const item of items) {
+    validateQuickPickItem(item)
+  }
+  return QuickPickWorker.invoke('QuickPick.showQuickPick', {
+    items,
+    placeholder,
+  })
 }
 
 const quickInputs = Object.create(null)
@@ -17,7 +48,7 @@ export const showQuickInput = async ({ ignoreFocusOut, initialValue, render }: Q
   const id = Id.create()
   quickInputs[id] = render
   // TODO create direct connection to file search worker
-  const { canceled, inputValue } = await FileSearchWorker.invoke('QuickPick.showQuickInput', {
+  const { canceled, inputValue } = await QuickPickWorker.invoke('QuickPick.showQuickInput', {
     id,
     ignoreFocusOut,
     initialValue,

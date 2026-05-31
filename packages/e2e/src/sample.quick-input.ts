@@ -4,7 +4,8 @@ export const name = 'sample.quick-input'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Locator, expect, QuickPick }) => {
+export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }) => {
+  await Main.closeAllEditors()
   // arrange - load the extension that uses showQuickInput
   await Extension.addWebExtension(import.meta.resolve(`../fixtures/${name}`))
   await QuickPick.open()
