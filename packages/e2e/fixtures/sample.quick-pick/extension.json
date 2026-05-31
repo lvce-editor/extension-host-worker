@@ -1,0 +1,15 @@
+{
+  "browser": "main.js",
+  "activation": ["*", "onCommand:quickPickBranches", "onStatusbarItem:quickpick.result", "onStatusBarItem", "onStatusBarItem:*"],
+  "statusBarItems": [
+    {
+      "id": "quickpick.result"
+    }
+  ],
+  "commands": [
+    {
+      "id": "quickPickBranches",
+      "label": "Quick Pick Branches"
+    }
+  ]
+}
