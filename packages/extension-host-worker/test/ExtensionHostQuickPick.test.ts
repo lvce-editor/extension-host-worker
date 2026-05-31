@@ -21,13 +21,13 @@ test('showQuickPick', async () => {
 
   const items = [
     {
-      label: 'branch 1',
       description: 'Local branch',
+      label: 'branch 1',
       value: 'branch-1',
     },
     {
-      label: 'branch 2',
       description: 'Remote branch',
+      label: 'branch 2',
       value: 'branch-2',
     },
   ]
@@ -51,8 +51,8 @@ test('showQuickPick - canceled', async () => {
   const result = await ExtensionHostQuickPick.showQuickPick({
     items: [
       {
-        label: 'branch 1',
         description: 'Local branch',
+        label: 'branch 1',
         value: 'branch-1',
       },
     ],
