@@ -12,7 +12,15 @@ const statusBarProvider = {
   },
 }
 
-export const main = async (): Promise<void> => {
+let registered = false
+
+const main = async (): Promise<void> => {
   await activate()
+  if (registered) {
+    return
+  }
+  registered = true
   registerStatusBarItemProvider(statusBarProvider)
 }
+
+main()
