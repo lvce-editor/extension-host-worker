@@ -14,7 +14,9 @@ const createActivationContext = (): ActivationContext => {
   }
 }
 
-export function activate<TContext extends ActivationContext = ActivationContext>(activation: ActivationFunction<TContext>): ActivationFunction<TContext>
+export function activate<TContext extends ActivationContext = ActivationContext>(
+  activation: ActivationFunction<TContext>,
+): ActivationFunction<TContext>
 export function activate(): Promise<ActivationContext>
 export function activate<TContext extends ActivationContext = ActivationContext>(
   activation?: ActivationFunction<TContext>,
