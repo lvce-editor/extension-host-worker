@@ -1,5 +1,7 @@
 import { executeCommand as executeRegisteredCommand, getCommandRegistrySnapshot, registerCommand, resetCommandRegistry } from '../src/parts/Command/Command.ts'
 import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
+import { showQuickPick } from '../src/parts/QuickPick/QuickPick.ts'
+import * as Rpc from '../src/parts/Rpc/Rpc.ts'
 import {
   getStatusBarItemProviderRegistrySnapshot,
   registerStatusBarItemProvider,
@@ -92,3 +94,29 @@ registerStatusBarItemProvider({
 })
 resetStatusBarItemProviderRegistry()
 strictEqual(getStatusBarItemProviderRegistrySnapshot().providers.length, 0)
+
+let invokedMethod = ''
+let invokedOptions: unknown
+
+Rpc.set({
+  async invoke(method: string, options: unknown): Promise<unknown> {
+    invokedMethod = method
+    invokedOptions = options
+    return 'option-1'
+  },
+} as any)
+
+const quickPickOptions = {
+  placeholder: 'Select option',
+  items: [
+    {
+      description: 'First option',
+      label: 'Option 1',
+      value: 'option-1',
+    },
+  ],
+}
+
+strictEqual(await showQuickPick(quickPickOptions), 'option-1')
+strictEqual(invokedMethod, 'ExtensionHostQuickPick.showQuickPick')
+strictEqual(invokedOptions, quickPickOptions)
