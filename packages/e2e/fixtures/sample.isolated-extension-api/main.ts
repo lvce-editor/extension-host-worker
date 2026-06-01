@@ -12,14 +12,8 @@ const statusBarProvider = {
   },
 }
 
-let registered = false
-
 const main = async (): Promise<void> => {
   await activate()
-  if (registered) {
-    return
-  }
-  registered = true
   registerStatusBarItemProvider(statusBarProvider)
 }
 
