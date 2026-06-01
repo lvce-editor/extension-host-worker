@@ -1,0 +1,5 @@
+export { activate } from './parts/Activation/Activation.ts'
+export { registerCommand } from './parts/Command/Command.ts'
+export type { ActivationContext, ActivationFunction, ActivationResult } from './parts/Activation/Activation.ts'
+export type { Command, CommandCallback, CommandRegistrySnapshot } from './parts/Command/Command.ts'
+export type { Disposable } from './parts/Disposable/Disposable.ts'
