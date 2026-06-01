@@ -5,5 +5,9 @@ export const activateExtension3 = async (extensionId: string, extension: any): P
   if (!module) {
     throw new Error(`extension module ${extensionId} not found`)
   }
+  if (module.main) {
+    await module.main(extension)
+    return
+  }
   await module.activate(extension)
 }
