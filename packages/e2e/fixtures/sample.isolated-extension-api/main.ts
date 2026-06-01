@@ -1,4 +1,4 @@
-import { activate, registerStatusBarItemProvider } from '@lvce-editor/api'
+import { activate as activateExtensionApi, registerStatusBarItemProvider } from '@lvce-editor/api'
 
 const statusBarProvider = {
   id: 'isolated-extension-api',
@@ -12,9 +12,7 @@ const statusBarProvider = {
   },
 }
 
-const main = async (): Promise<void> => {
-  await activate()
+export const activate = async (): Promise<void> => {
+  await activateExtensionApi()
   registerStatusBarItemProvider(statusBarProvider)
 }
-
-main()

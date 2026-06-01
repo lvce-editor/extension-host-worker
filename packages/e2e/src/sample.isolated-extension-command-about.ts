@@ -6,7 +6,9 @@ export const test: Test = async ({ Extension, Locator, QuickPick, expect }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
 
-  await QuickPick.executeCommand('Open About From Isolated Extension')
+  await QuickPick.open()
+  await QuickPick.setValue('>Open About From Isolated Extension')
+  await QuickPick.selectItem('Open About From Isolated Extension')
 
   const dialogContent = Locator('.DialogContent')
   await expect(dialogContent).toBeVisible()

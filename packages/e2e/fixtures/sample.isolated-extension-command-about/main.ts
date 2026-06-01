@@ -1,7 +1,7 @@
-import { activate, executeCommand, registerCommand } from '@lvce-editor/api'
+import { activate as activateExtensionApi, executeCommand, registerCommand } from '@lvce-editor/api'
 
-const main = async (): Promise<void> => {
-  await activate()
+export const activate = async (): Promise<void> => {
+  await activateExtensionApi()
   registerCommand({
     id: 'isolatedAbout.openAbout',
     async execute(): Promise<void> {
@@ -9,5 +9,3 @@ const main = async (): Promise<void> => {
     },
   })
 }
-
-main()
