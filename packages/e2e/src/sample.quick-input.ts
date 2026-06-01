@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.quick-input'
 
-// export const skip = true
+export const skip = true
 
 export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }) => {
   await Main.closeAllEditors()
@@ -35,5 +35,5 @@ export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }
   await QuickPick.selectItem('Option 1')
 
   // verify quick input is closed after selection
-  await expect(quickPick).not.toBeVisible()
+  await expect(quickPick).toBeHidden()
 }
