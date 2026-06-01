@@ -1,5 +1,5 @@
+import { handleExtensionManagementMessagePort } from '../ExtensionApiWorkerHandleMessagePort/ExtensionApiWorkerHandleMessagePort.ts'
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
-import { handleExtensionManagementMessagePort } from '../HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 
 export const commandMap = {
   'ExtensionApi.getStatusBarItems': getStatusBarItems,
