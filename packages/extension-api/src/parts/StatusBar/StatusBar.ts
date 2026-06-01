@@ -1,0 +1,8 @@
+export { getStatusBarItemProviderRegistrySnapshot } from '../GetStatusBarItemProviderRegistrySnapshot/GetStatusBarItemProviderRegistrySnapshot.ts'
+export { registerStatusBarItemProvider } from '../RegisterStatusBarItemProvider/RegisterStatusBarItemProvider.ts'
+export { resetStatusBarItemProviderRegistry } from '../ResetStatusBarItemProviderRegistry/ResetStatusBarItemProviderRegistry.ts'
+export type { RegisteredStatusBarItemProvider } from '../RegisteredStatusBarItemProvider/RegisteredStatusBarItemProvider.ts'
+export type { StatusBarItem } from '../StatusBarItem/StatusBarItem.ts'
+export type { StatusBarItemProvider } from '../StatusBarItemProvider/StatusBarItemProvider.ts'
+export type { StatusBarItemProviderHandle } from '../StatusBarItemProviderHandle/StatusBarItemProviderHandle.ts'
+export type { StatusBarItemProviderRegistrySnapshot } from '../StatusBarItemProviderRegistrySnapshot/StatusBarItemProviderRegistrySnapshot.ts'

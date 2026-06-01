@@ -17,7 +17,7 @@ interface RegisteredCommand {
   readonly id: string
 }
 
-const commands = new Map<string, RegisteredCommand>()
+const commands: Record<string, RegisteredCommand> = Object.create(null)
 
 const assertCommand = <TArgs extends readonly unknown[], TResult>(command: Command<TArgs, TResult>): void => {
   if (!command) {
@@ -29,32 +29,34 @@ const assertCommand = <TArgs extends readonly unknown[], TResult>(command: Comma
   if (typeof command.execute !== 'function') {
     throw new ExtensionApiError(`command ${command.id} is missing execute function`)
   }
-  if (commands.has(command.id)) {
+  if (command.id in commands) {
     throw new ExtensionApiError(`command ${command.id} is already registered`)
   }
 }
 
 export const registerCommand = <TArgs extends readonly unknown[], TResult>(command: Command<TArgs, TResult>): Disposable => {
   assertCommand(command)
-  commands.set(command.id, {
+  commands[command.id] = {
     execute(...args: readonly unknown[]): TResult | Promise<TResult> {
       return command.execute(...(args as unknown as TArgs))
     },
     id: command.id,
-  })
+  }
   return {
     dispose(): void {
-      commands.delete(command.id)
+      delete commands[command.id]
     },
   }
 }
 
 export const getCommandRegistrySnapshot = (): CommandRegistrySnapshot => {
   return {
-    commands: [...commands.values()],
+    commands: Object.values(commands),
   }
 }
 
 export const resetCommandRegistry = (): void => {
-  commands.clear()
+  for (const id of Object.keys(commands)) {
+    delete commands[id]
+  }
 }

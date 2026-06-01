@@ -56,7 +56,8 @@ export const activateExtension = async (extension: any, absolutePath: string, ac
     })
     const token = CancelToken.create()
     try {
-      await Promise.race([module.activate(extension), rejectAfterTimeout(activationTimeout, token)])
+      const activate = module.main || module.activate
+      await Promise.race([activate(extension), rejectAfterTimeout(activationTimeout, token)])
       const endTime = performance.now()
       const time = endTime - startTime
       RuntimeStatusState.update(extensionId, {

@@ -19,6 +19,10 @@
     "./command": {
       "types": "./src/parts/Command/Command.ts",
       "default": "./src/parts/Command/Command.ts"
+    },
+    "./handle-extension-management-message-port": {
+      "types": "./src/parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts",
+      "default": "./src/parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts"
     }
   },
   "sideEffects": false,

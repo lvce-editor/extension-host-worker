@@ -4,9 +4,12 @@
     "lib": ["esnext", "WebWorker"],
     "checkJs": true,
     "module": "nodenext",
+    "paths": {
+      "@lvce-editor/api": ["../extension-api/src/index.ts"]
+    },
     "types": [],
     "moduleResolution": "nodenext",
-    "rootDir": ".",
+    "rootDir": "..",
     "allowJs": true,
     "skipLibCheck": true,
     "noEmit": true,
@@ -19,7 +22,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noUncheckedSideEffectImports": true,
-    "composite": true
+    "composite": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["src", "test"]
+  "include": ["src", "test", "fixtures/**/*.ts", "../extension-api/src"]
 }
