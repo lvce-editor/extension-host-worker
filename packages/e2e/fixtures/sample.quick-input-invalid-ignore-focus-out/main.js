@@ -1,19 +1,16 @@
 export const activate = async () => {
   try {
     // @ts-ignore
-    const result = await vscode.showQuickInput({
-      ignoreFocusOut: 'not a boolean', // Invalid: should be a boolean
-      initialValue: 'test',
-      render: async (searchValue) => {
-        return [
-          { label: 'Option 1', value: 'option1' },
-          { label: 'Option 2', value: 'option2' },
-        ]
-      },
+    const result = await vscode.showQuickPick({
+      placeholder: 'Select option',
+      items: [
+        { label: 'Option 1', description: 'First option' },
+        { label: 'Option 2', description: 'Second option', value: 'option2' },
+      ],
     })
 
-    console.log('Quick input result:', result.inputValue)
+    console.log('Quick pick result:', result)
   } catch (error) {
-    console.error('Quick input error:', error.message)
+    console.error('Quick pick error:', error.message)
   }
 }

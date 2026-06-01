@@ -2,8 +2,6 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.quick-input'
 
-export const skip = true
-
 export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }) => {
   await Main.closeAllEditors()
   const uri = import.meta.resolve(`../fixtures/${name}`)
@@ -18,5 +16,5 @@ export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }
   // assert
   const quickPickInput = Locator('.QuickPick input')
   await expect(quickPickInput).toBeVisible()
-  await expect(quickPickInput).toHaveValue('test')
+  await expect(quickPickInput).toHaveAttribute('placeholder', 'Select option')
 }

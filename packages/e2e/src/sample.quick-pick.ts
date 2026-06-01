@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.quick-pick'
 
-export const skip = 1
+// export const skip = 1
 
 export const test: Test = async ({ Extension, Locator, QuickPick, expect }) => {
   await Extension.addWebExtension(import.meta.resolve(`../fixtures/${name}`))

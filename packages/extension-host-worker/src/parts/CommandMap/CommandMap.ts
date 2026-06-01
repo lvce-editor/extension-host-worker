@@ -151,7 +151,6 @@ export const commandMap = {
   'ExtensionHostDebug.stepInto': ExtensionHostDebug.stepInto,
   'ExtensionHostDebug.stepOut': ExtensionHostDebug.stepOut,
   'ExtensionHostDebug.stepOver': ExtensionHostDebug.stepOver,
-  'ExtensionHostQuickPick.renderQuickInput': ExtensionHostQuickPick.renderQuickInput,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'ExtensionHostSourceControl.getIconDefinitions': ExtensionHostSourceControl.getIconDefinitions,

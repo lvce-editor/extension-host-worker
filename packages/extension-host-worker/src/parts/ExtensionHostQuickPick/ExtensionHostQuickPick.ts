@@ -1,7 +1,4 @@
 import { QuickPickWorker } from '@lvce-editor/rpc-registry'
-import type { QuickInputOptions } from '../QuickInputOptions/QuickInputOptions.ts'
-import type { QuickInputResult } from '../QuickInputResult/QuickInputResult.ts'
-import * as Id from '../Id/Id.ts'
 
 export interface QuickPickItem {
   readonly description: string
@@ -40,35 +37,4 @@ export const showQuickPick = async ({ items, placeholder }: ShowQuickPickOptions
     items,
     placeholder,
   })
-}
-
-const quickInputs = Object.create(null)
-
-export const renderQuickInput = async (id: number, searchValue: string): Promise<readonly unknown[]> => {
-  const render = quickInputs[id]
-  if (!render) {
-    return []
-  }
-  return render(searchValue)
-}
-
-export const showQuickInput = async ({ ignoreFocusOut, initialValue, render }: QuickInputOptions): Promise<QuickInputResult> => {
-  const id = Id.create()
-  quickInputs[id] = render
-  const initialItems = await render('')
-  // TODO create direct connection to file search worker
-  const { canceled, inputValue } = await QuickPickWorker.invoke('QuickPick.showQuickInput', {
-    id,
-    ignoreFocusOut,
-    initialItems,
-    initialValue,
-  })
-  try {
-    return {
-      canceled,
-      inputValue,
-    }
-  } finally {
-    delete quickInputs[id]
-  }
 }

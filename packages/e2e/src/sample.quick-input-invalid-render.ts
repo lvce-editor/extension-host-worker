@@ -5,7 +5,7 @@ export const name = 'sample.quick-input-invalid-render'
 export const skip = true
 
 export const test: Test = async ({ Extension, Main, FileSystem, Locator, expect }) => {
-  // arrange - load the extension that passes a non-function to render
+  // arrange - load the extension that passes invalid quick pick items
   await Extension.addWebExtension(new URL(`../fixtures/${name}`, import.meta.url).toString())
 
   // create a test file to trigger activation
@@ -16,12 +16,9 @@ export const test: Test = async ({ Extension, Main, FileSystem, Locator, expect 
   await Main.openUri(`${tmpDir}/test.quickinput-invalid-render`)
 
   // assert - verify error is handled
-  // The API should throw an error when render is not a function
+  // The API should throw an error when items is not an array
   const errorDialog = Locator('.Dialog')
-  // @ts-ignore
-  const quickPick = Locator('.QuickPick')
-
-  // Either an error dialog should appear or the quick input should not show
+  // Either an error dialog should appear or the quick pick should not show
   await expect(errorDialog).toBeVisible()
   await expect(errorDialog).toContainText('error')
 
