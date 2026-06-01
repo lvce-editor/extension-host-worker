@@ -1,5 +1,6 @@
 {
   "browser": "main.ts",
+  "isolated": true,
   "activation": ["*", "onStatusbarItem:isolated-extension-api", "onStatusBarItem", "onStatusBarItem:*"],
   "statusBarItems": [
     {
