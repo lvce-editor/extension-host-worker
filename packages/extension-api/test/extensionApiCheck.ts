@@ -1,5 +1,10 @@
 import { activate } from '../src/parts/Activation/Activation.ts'
 import { getCommandRegistrySnapshot, registerCommand, resetCommandRegistry } from '../src/parts/Command/Command.ts'
+import {
+  getStatusBarItemProviderRegistrySnapshot,
+  registerStatusBarItemProvider,
+  resetStatusBarItemProviderRegistry,
+} from '../src/parts/StatusBar/StatusBar.ts'
 
 const strictEqual = (actual: unknown, expected: unknown): void => {
   if (actual !== expected) {
@@ -20,6 +25,7 @@ const throws = (fn: () => void, expected: RegExp): void => {
 }
 
 resetCommandRegistry()
+resetStatusBarItemProviderRegistry()
 
 const activation = activate(() => {
   return undefined
@@ -45,3 +51,48 @@ throws(() => {
 
 disposable.dispose()
 strictEqual(getCommandRegistrySnapshot().commands.length, 0)
+
+const statusBarHandle = registerStatusBarItemProvider({
+  getStatusBarItem() {
+    return {
+      name: 'sample.status',
+      text: 'Ready',
+    }
+  },
+  id: 'sample.status',
+})
+
+const statusBarSnapshot = getStatusBarItemProviderRegistrySnapshot()
+strictEqual(statusBarSnapshot.providers.length, 1)
+strictEqual(statusBarSnapshot.providers[0]?.id, 'sample.status')
+strictEqual(statusBarSnapshot.providers[0]?.getStatusBarItem()?.text, 'Ready')
+
+throws(() => {
+  registerStatusBarItemProvider({
+    getStatusBarItem() {
+      return undefined
+    },
+    id: 'sample.status',
+  })
+}, /status bar item provider sample\.status is already registered/)
+
+throws(() => {
+  registerStatusBarItemProvider({
+    // @ts-expect-error testing invalid provider shape
+    getStatusBarItem: undefined,
+    id: 'sample.invalid',
+  })
+}, /status bar item provider sample\.invalid is missing getStatusBarItem function/)
+
+await statusBarHandle.refresh()
+statusBarHandle.dispose()
+strictEqual(getStatusBarItemProviderRegistrySnapshot().providers.length, 0)
+
+registerStatusBarItemProvider({
+  getStatusBarItem() {
+    return undefined
+  },
+  id: 'sample.reset',
+})
+resetStatusBarItemProviderRegistry()
+strictEqual(getStatusBarItemProviderRegistrySnapshot().providers.length, 0)
