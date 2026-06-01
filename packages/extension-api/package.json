@@ -23,6 +23,7 @@
   },
   "sideEffects": false,
   "scripts": {
+    "test": "node --experimental-strip-types test/extensionApiCheck.ts",
     "type-check": "tsc"
   }
 }
