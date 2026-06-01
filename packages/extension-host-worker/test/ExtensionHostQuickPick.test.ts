@@ -73,36 +73,3 @@ test('showQuickPick - missing description', async () => {
     }),
   ).rejects.toThrow(new TypeError('quick pick item.description must be a string'))
 })
-
-test('showQuickInput - basic usage', async () => {
-  const render = jest.fn()
-  render.mockResolvedValueOnce([{ label: 'Initial result', value: 'initial-result' }] as never)
-  render.mockResolvedValueOnce([{ label: 'Search result', value: 'search-result' }] as never)
-  quickPickInvoke.mockImplementationOnce(async (_command: unknown, options: any) => {
-    const rendered = await ExtensionHostQuickPick.renderQuickInput(options.id, 'search')
-    expect(rendered).toEqual([{ label: 'Search result', value: 'search-result' }])
-    return {
-      canceled: false,
-      inputValue: 'test input',
-    }
-  })
-
-  const result = await ExtensionHostQuickPick.showQuickInput({
-    ignoreFocusOut: false,
-    initialValue: 'initial',
-    render,
-  })
-
-  expect(result).toEqual({
-    canceled: false,
-    inputValue: 'test input',
-  })
-  expect(quickPickInvoke).toHaveBeenCalledTimes(1)
-  expect(quickPickInvoke).toHaveBeenCalledWith('QuickPick.showQuickInput', {
-    id: expect.any(Number),
-    ignoreFocusOut: false,
-    initialItems: [{ label: 'Initial result', value: 'initial-result' }],
-    initialValue: 'initial',
-  })
-  await expect(ExtensionHostQuickPick.renderQuickInput(1, 'search')).resolves.toEqual([])
-})

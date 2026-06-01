@@ -1,14 +1,13 @@
 export const activate = async () => {
   try {
     // @ts-ignore
-    const result = await vscode.showQuickInput({
-      ignoreFocusOut: false,
-      initialValue: 'test',
-      render: 'not a function', // Invalid: should be a function
+    const result = await vscode.showQuickPick({
+      placeholder: 'Select option',
+      items: 'not an array',
     })
 
-    console.log('Quick input result:', result.inputValue)
+    console.log('Quick pick result:', result)
   } catch (error) {
-    console.error('Quick input error:', error.message)
+    console.error('Quick pick error:', error.message)
   }
 }

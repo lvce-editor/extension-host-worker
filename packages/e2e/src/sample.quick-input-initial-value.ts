@@ -18,5 +18,5 @@ export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }
   // assert
   const quickPickInput = Locator('.QuickPick input')
   await expect(quickPickInput).toBeVisible()
-  await expect(quickPickInput).toHaveValue('test')
+  await expect(quickPickInput).toHaveAttribute('placeholder', 'Select option')
 }

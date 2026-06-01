@@ -21,4 +21,5 @@ export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }
   await expect(quickPick.locator('text=Option 1')).toHaveText('Option 1')
   await expect(quickPick.locator('text=Option 2')).toHaveText('Option 2')
   await expect(quickPick.locator('text=Option 3')).toHaveText('Option 3')
+  await expect(quickPick).toContainText('First option')
 }
