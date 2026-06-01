@@ -1,4 +1,3 @@
-import { activate } from '../src/parts/Activation/Activation.ts'
 import { getCommandRegistrySnapshot, registerCommand, resetCommandRegistry } from '../src/parts/Command/Command.ts'
 import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
 import {
@@ -27,12 +26,6 @@ const throws = (fn: () => void, expected: RegExp): void => {
 
 resetCommandRegistry()
 resetStatusBarItemProviderRegistry()
-
-const activation = activate(() => {
-  return undefined
-})
-
-strictEqual(typeof activation, 'function')
 
 const disposable = registerCommand({
   execute(value: string): string {

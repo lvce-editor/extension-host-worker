@@ -1,8 +1,8 @@
+import { MessagePortRpcClient } from '@lvce-editor/rpc'
 import * as ExtensionApiWorkerCommandMap from '../ExtensionApiWorkerCommandMap/ExtensionApiWorkerCommandMap.ts'
-import { createJsonRpcServer } from '../JsonRpcServer/JsonRpcServer.ts'
 
 export const handleExtensionManagementMessagePort = async (port: MessagePort): Promise<void> => {
-  createJsonRpcServer({
+  await MessagePortRpcClient.create({
     commandMap: ExtensionApiWorkerCommandMap.commandMap,
     messagePort: port,
   })
