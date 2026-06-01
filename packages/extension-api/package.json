@@ -26,6 +26,9 @@
     }
   },
   "sideEffects": false,
+  "dependencies": {
+    "@lvce-editor/rpc": "^6.4.0"
+  },
   "scripts": {
     "test": "node --experimental-strip-types test/extensionApiCheck.ts",
     "type-check": "tsc"

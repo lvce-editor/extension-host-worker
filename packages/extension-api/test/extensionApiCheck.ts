@@ -1,5 +1,5 @@
-import { activate } from '../src/parts/Activation/Activation.ts'
 import { getCommandRegistrySnapshot, registerCommand, resetCommandRegistry } from '../src/parts/Command/Command.ts'
+import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
 import {
   getStatusBarItemProviderRegistrySnapshot,
   registerStatusBarItemProvider,
@@ -26,12 +26,6 @@ const throws = (fn: () => void, expected: RegExp): void => {
 
 resetCommandRegistry()
 resetStatusBarItemProviderRegistry()
-
-const activation = activate(() => {
-  return undefined
-})
-
-strictEqual(typeof activation, 'function')
 
 const disposable = registerCommand({
   execute(value: string): string {
@@ -66,6 +60,7 @@ const statusBarSnapshot = getStatusBarItemProviderRegistrySnapshot()
 strictEqual(statusBarSnapshot.providers.length, 1)
 strictEqual(statusBarSnapshot.providers[0]?.id, 'sample.status')
 strictEqual(statusBarSnapshot.providers[0]?.getStatusBarItem()?.text, 'Ready')
+strictEqual(getStatusBarItems()[0]?.text, 'Ready')
 
 throws(() => {
   registerStatusBarItemProvider({

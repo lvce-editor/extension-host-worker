@@ -56,7 +56,7 @@ const removeExistingPatchHelper = (content) => {
 
 const patchTypeScriptCompileProcess = async () => {
   const content = await readFile(typescriptCompileProcessPath, 'utf8')
-  const extensionApiUrl = getRemoteUrl(join(root, 'packages', 'extension-api', 'src', 'index.ts'))
+  const extensionApiUrl = getRemoteUrl(join(root, '.tmp', 'dist', 'dist', 'extension-api', 'index.js'))
   const helper = getPatchHelper(extensionApiUrl)
   const contentWithoutHelper = removeExistingPatchHelper(content)
   let patched = contentWithoutHelper.replace(

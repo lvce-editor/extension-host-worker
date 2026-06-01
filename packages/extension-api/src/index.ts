@@ -6,7 +6,6 @@ export {
   resetStatusBarItemProviderRegistry,
 } from './parts/StatusBar/StatusBar.ts'
 export { handleExtensionManagementMessagePort } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
-export type { ActivationContext, ActivationFunction, ActivationResult } from './parts/Activation/Activation.ts'
 export type { Command, CommandCallback, CommandRegistrySnapshot } from './parts/Command/Command.ts'
 export type { Disposable } from './parts/Disposable/Disposable.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
