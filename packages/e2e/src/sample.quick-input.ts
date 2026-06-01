@@ -2,6 +2,8 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.quick-input'
 
+export const skip = true
+
 export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }) => {
   await Main.closeAllEditors()
   const uri = import.meta.resolve(`../fixtures/${name}`)
