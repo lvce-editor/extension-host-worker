@@ -76,6 +76,7 @@ test('showQuickPick - missing description', async () => {
 
 test('showQuickInput - basic usage', async () => {
   const render = jest.fn()
+  render.mockResolvedValueOnce([{ label: 'Initial result', value: 'initial-result' }] as never)
   render.mockResolvedValueOnce([{ label: 'Search result', value: 'search-result' }] as never)
   quickPickInvoke.mockImplementationOnce(async (_command: unknown, options: any) => {
     const rendered = await ExtensionHostQuickPick.renderQuickInput(options.id, 'search')
@@ -100,6 +101,7 @@ test('showQuickInput - basic usage', async () => {
   expect(quickPickInvoke).toHaveBeenCalledWith('QuickPick.showQuickInput', {
     id: expect.any(Number),
     ignoreFocusOut: false,
+    initialItems: [{ label: 'Initial result', value: 'initial-result' }],
     initialValue: 'initial',
   })
   await expect(ExtensionHostQuickPick.renderQuickInput(1, 'search')).resolves.toEqual([])

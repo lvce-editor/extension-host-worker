@@ -55,15 +55,20 @@ export const renderQuickInput = async (id: number, searchValue: string): Promise
 export const showQuickInput = async ({ ignoreFocusOut, initialValue, render }: QuickInputOptions): Promise<QuickInputResult> => {
   const id = Id.create()
   quickInputs[id] = render
+  const initialItems = await render('')
   // TODO create direct connection to file search worker
   const { canceled, inputValue } = await QuickPickWorker.invoke('QuickPick.showQuickInput', {
     id,
     ignoreFocusOut,
     initialValue,
+    initialItems,
   })
-  delete quickInputs[id]
-  return {
-    canceled,
-    inputValue,
+  try {
+    return {
+      canceled,
+      inputValue,
+    }
+  } finally {
+    delete quickInputs[id]
   }
 }
