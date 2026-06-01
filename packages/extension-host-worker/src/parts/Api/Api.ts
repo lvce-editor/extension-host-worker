@@ -1,4 +1,5 @@
 import * as EditorCompletionType from '../EditorCompletionType/EditorCompletionType.ts'
+import * as ExecuteCommand from '../ExecuteCommand/ExecuteCommand.ts'
 import * as ExtensionHostAjax from '../ExtensionHostAjax/ExtensionHostAjax.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
@@ -63,7 +64,7 @@ export const api = {
   // Comment
 
   executeClosingTagProvider: ExtensionHostClosingTag.executeClosingTagProvider,
-  executeCommand: ExtensionHostCommand.executeCommand,
+  executeCommand: ExecuteCommand.executeCommand,
 
   executeCommentProvider: ExtensionHostComment.executeCommentProvider,
   executeCompletionProvider: ExtensionHostCompletion.executeCompletionProvider,

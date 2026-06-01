@@ -1,4 +1,4 @@
-import { getCommandRegistrySnapshot, registerCommand, resetCommandRegistry } from '../src/parts/Command/Command.ts'
+import { executeCommand as executeRegisteredCommand, getCommandRegistrySnapshot, registerCommand, resetCommandRegistry } from '../src/parts/Command/Command.ts'
 import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
 import {
   getStatusBarItemProviderRegistrySnapshot,
@@ -35,6 +35,7 @@ const disposable = registerCommand({
 })
 
 strictEqual(getCommandRegistrySnapshot().commands.length, 1)
+strictEqual(await executeRegisteredCommand('sample.run', 'ready'), 'READY')
 
 throws(() => {
   registerCommand({

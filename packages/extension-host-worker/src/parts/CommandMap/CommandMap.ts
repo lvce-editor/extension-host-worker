@@ -7,6 +7,7 @@ import * as ColorTheme from '../ColorTheme/ColorTheme.ts'
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
 import * as CreateWebViewRpc2 from '../CreateWebViewRpc2/CreateWebViewRpc2.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
+import * as ExecuteCommand from '../ExecuteCommand/ExecuteCommand.ts'
 import * as ExecuteExternalCommand from '../ExecuteExternalCommand/ExecuteExternalCommand.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
@@ -78,6 +79,7 @@ export const commandMap = {
   'ColorTheme.getColorThemeJson': GetColorThemeJson.getColorThemeJson,
   'ColorTheme.getColorThemeNames': GetColorThemeNames.getColorThemeNames,
   'ColorTheme.hydrate': ColorTheme.hydrate,
+  'Commands.executeCommand': ExecuteCommand.executeCommand,
   'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
   'ExtensionHost.activateExtension2': ActivateExtension2.activateExtension2,
   'ExtensionHost.activateExtension3': activateExtension3,

@@ -20,6 +20,10 @@
       "types": "./src/parts/Command/Command.ts",
       "default": "./src/parts/Command/Command.ts"
     },
+    "./execute-command": {
+      "types": "./src/parts/ExecuteCommand/ExecuteCommand.ts",
+      "default": "./src/parts/ExecuteCommand/ExecuteCommand.ts"
+    },
     "./handle-extension-management-message-port": {
       "types": "./src/parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts",
       "default": "./src/parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts"

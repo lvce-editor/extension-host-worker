@@ -1,4 +1,5 @@
 export { activate } from './parts/Activation/Activation.ts'
+export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { registerCommand } from './parts/Command/Command.ts'
 export {
   getStatusBarItemProviderRegistrySnapshot,
