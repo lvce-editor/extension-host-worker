@@ -6,6 +6,10 @@ const getStatusBarItem = (provider: RegisteredStatusBarItemProvider): StatusBarI
   return provider.getStatusBarItem()
 }
 
+const isStatusBarItem = (item: StatusBarItem | undefined): item is StatusBarItem => {
+  return item !== undefined
+}
+
 export const getStatusBarItems = (): readonly StatusBarItem[] => {
-  return getStatusBarItemProviders().map(getStatusBarItem).filter((item): item is StatusBarItem => Boolean(item))
+  return getStatusBarItemProviders().map(getStatusBarItem).filter(isStatusBarItem)
 }

@@ -14,7 +14,6 @@ export const getRemoteUrl = (path) => {
 const nodeModulesPath = join(root, 'packages', 'server', 'node_modules')
 
 const extensionHostWorkerPath = join(root, '.tmp', 'dist', 'dist', 'extensionHostWorkerMain.js')
-const extensionApiWorkerPath = join(root, '.tmp', 'dist', 'dist', 'extension-api', 'extensionApiWorkerMain.js')
 const typescriptCompileProcessPath = join(nodeModulesPath, '@lvce-editor', 'typescript-compile-process', 'dist', 'index.js')
 const typescriptCompileCachePath = join(nodeModulesPath, '@lvce-editor', 'packages', 'build', '.tmp', 'typescript-compile-cache')
 
@@ -22,12 +21,9 @@ const staticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'stati
 const indexHtmlPath = join(staticPath, 'index.html')
 
 const remoteUrl = getRemoteUrl(extensionHostWorkerPath)
-const extensionApiWorkerUrl = getRemoteUrl(extensionApiWorkerPath)
 
 const config = {
-  'develop.extensionApiWorkerPath': extensionApiWorkerUrl,
   'develop.extensionHostWorkerPath': remoteUrl,
-  extensionApiWorkerUrl,
   extensionHostWorkerUrl: remoteUrl,
 }
 const stringifiedConfig = JSON.stringify(config, null, 2)

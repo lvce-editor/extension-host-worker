@@ -87,7 +87,7 @@ const extensionApiFiles = await walk(join(root, '.tmp', 'dist', 'dist', 'extensi
 for (const file of extensionApiFiles) {
   if (file.endsWith('.js')) {
     const content = await readFile(file, 'utf8')
-    await writeFile(file, content.replace(/\.ts(['"])/g, ".js$1"))
+    await writeFile(file, content.replace(/\.ts(['"])/g, '.js$1'))
   }
 }
 
