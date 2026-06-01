@@ -1,6 +1,6 @@
+import type { StatusBarItemProvider } from './StatusBarItemProvider.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { hasStatusBarItemProvider } from './StatusBarItemProviderState.ts'
-import type { StatusBarItemProvider } from './StatusBarItemProvider.ts'
 
 export const assertStatusBarItemProvider = (provider: StatusBarItemProvider): void => {
   if (!provider) {

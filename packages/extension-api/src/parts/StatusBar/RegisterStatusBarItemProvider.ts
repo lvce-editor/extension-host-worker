@@ -1,8 +1,8 @@
+import type { StatusBarItem } from './StatusBarItem.ts'
+import type { StatusBarItemProvider } from './StatusBarItemProvider.ts'
+import type { StatusBarItemProviderHandle } from './StatusBarItemProviderHandle.ts'
 import { assertStatusBarItemProvider } from './AssertStatusBarItemProvider.ts'
 import { deleteStatusBarItemProvider, setStatusBarItemProvider } from './StatusBarItemProviderState.ts'
-import type { StatusBarItem } from './StatusBarItem.ts'
-import type { StatusBarItemProviderHandle } from './StatusBarItemProviderHandle.ts'
-import type { StatusBarItemProvider } from './StatusBarItemProvider.ts'
 
 export const registerStatusBarItemProvider = (provider: StatusBarItemProvider): StatusBarItemProviderHandle => {
   assertStatusBarItemProvider(provider)
