@@ -6,6 +6,7 @@ import { bundleJs } from './bundleJs.js'
 import { root } from './root.js'
 
 const dist = join(root, '.tmp', 'dist')
+const external = ['node:buffer', 'node:worker_threads', 'electron', 'ws']
 
 const readJson = async (path) => {
   const content = await readFile(path, 'utf8')
@@ -80,6 +81,15 @@ await build({
   format: 'esm',
   outbase: join(root, 'packages', 'extension-api', 'src'),
   outdir: join(root, '.tmp', 'dist', 'dist', 'extension-api'),
+  platform: 'browser',
+})
+
+await build({
+  bundle: true,
+  entryPoints: [join(root, 'packages', 'extension-api', 'src', 'index.ts')],
+  external,
+  format: 'esm',
+  outfile: join(root, '.tmp', 'dist', 'dist', 'extension-api', 'index.js'),
   platform: 'browser',
 })
 
