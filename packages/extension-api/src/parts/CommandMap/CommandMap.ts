@@ -1,4 +1,5 @@
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
+import { handleExtensionManagementMessagePort } from '../HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 
 export const commandMap = {
   'ExtensionApi.getStatusBarItems': getStatusBarItems,
@@ -6,9 +7,6 @@ export const commandMap = {
     if (type !== 'message-port') {
       throw new Error(`unsupported initialize type ${type}`)
     }
-    const { handleExtensionManagementMessagePort } = await import(
-      '../ExtensionApiWorkerHandleMessagePort/ExtensionApiWorkerHandleMessagePort.ts'
-    )
     await handleExtensionManagementMessagePort(port)
   },
 }
