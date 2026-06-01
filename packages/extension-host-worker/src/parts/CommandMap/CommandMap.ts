@@ -26,6 +26,7 @@ import * as ExtensionHostImplementation from '../ExtensionHostImplementation/Ext
 import * as ExtensionHostMockExec from '../ExtensionHostMockExec/ExtensionHostMockExec.ts'
 import * as ExtensionHostMockRpc from '../ExtensionHostMockRpc/ExtensionHostMockRpc.ts'
 import * as ExtensionHostOutputChannel from '../ExtensionHostOutputChannel/ExtensionHostOutputChannel.ts'
+import * as ExtensionHostQuickPick from '../ExtensionHostQuickPick/ExtensionHostQuickPick.ts'
 import * as ExtensionHostReference from '../ExtensionHostReference/ExtensionHostReference.ts'
 import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
 import * as ExtensionHostSelection from '../ExtensionHostSelection/ExtensionHostSelection.ts'
@@ -150,6 +151,7 @@ export const commandMap = {
   'ExtensionHostDebug.stepInto': ExtensionHostDebug.stepInto,
   'ExtensionHostDebug.stepOut': ExtensionHostDebug.stepOut,
   'ExtensionHostDebug.stepOver': ExtensionHostDebug.stepOver,
+  'ExtensionHostQuickPick.renderQuickInput': ExtensionHostQuickPick.renderQuickInput,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'ExtensionHostSourceControl.getIconDefinitions': ExtensionHostSourceControl.getIconDefinitions,
