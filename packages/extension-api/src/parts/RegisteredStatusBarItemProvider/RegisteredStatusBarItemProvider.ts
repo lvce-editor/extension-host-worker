@@ -1,4 +1,4 @@
-import type { StatusBarItem } from './StatusBarItem.ts'
+import type { StatusBarItem } from '../StatusBarItem/StatusBarItem.ts'
 
 export interface RegisteredStatusBarItemProvider {
   readonly getStatusBarItem: () => StatusBarItem | undefined

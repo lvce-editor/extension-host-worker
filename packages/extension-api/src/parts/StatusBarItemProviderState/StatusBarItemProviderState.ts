@@ -1,4 +1,4 @@
-import type { RegisteredStatusBarItemProvider } from './RegisteredStatusBarItemProvider.ts'
+import type { RegisteredStatusBarItemProvider } from '../RegisteredStatusBarItemProvider/RegisteredStatusBarItemProvider.ts'
 
 const providers: Record<string, RegisteredStatusBarItemProvider> = Object.create(null)
 
