@@ -1,3 +1,4 @@
+import { executeCommand as executeExtensionApiCommand } from '../../../../extension-api/src/parts/Command/Command.ts'
 import { VError } from '../VError/VError.ts'
 
 const state = {
@@ -39,7 +40,7 @@ export const executeCommand = async (id, ...args) => {
   try {
     const command = state.commands[id]
     if (!command) {
-      throw new Error(`command ${id} not found`)
+      return await executeExtensionApiCommand(id, ...args)
     }
     const results = await command.execute(...args)
     return results

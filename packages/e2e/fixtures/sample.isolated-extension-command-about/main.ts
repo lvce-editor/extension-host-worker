@@ -5,7 +5,9 @@ export const activate = async (): Promise<void> => {
   registerCommand({
     id: 'isolatedAbout.openAbout',
     async execute(): Promise<void> {
+      console.log('isolatedAbout.openAbout execute start')
       await executeCommand('About.showAbout')
+      console.log('isolatedAbout.openAbout execute end')
     },
   })
 }

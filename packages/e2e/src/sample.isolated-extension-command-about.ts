@@ -8,7 +8,7 @@ export const test: Test = async ({ Extension, Locator, QuickPick, expect }) => {
 
   await QuickPick.open()
   await QuickPick.setValue('>Open About From Isolated Extension')
-  await QuickPick.selectItem('Open About From Isolated Extension')
+  await QuickPick.selectIndex(0)
 
   const dialogContent = Locator('.DialogContent')
   await expect(dialogContent).toBeVisible()
