@@ -60,8 +60,8 @@ export const showQuickInput = async ({ ignoreFocusOut, initialValue, render }: Q
   const { canceled, inputValue } = await QuickPickWorker.invoke('QuickPick.showQuickInput', {
     id,
     ignoreFocusOut,
-    initialValue,
     initialItems,
+    initialValue,
   })
   try {
     return {
