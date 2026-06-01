@@ -1,12 +1,10 @@
 import { LazyTransferMessagePortRpcParent } from '@lvce-editor/rpc'
 import { QuickPickWorker, RendererWorker } from '@lvce-editor/rpc-registry'
-import * as ExtensionHostQuickPick from '../ExtensionHostQuickPick/ExtensionHostQuickPick.ts'
+import * as CommandMap from '../CommandMap/CommandMap.ts'
 
 export const launchQuickPickWorker = async (): Promise<void> => {
   const rpc = await LazyTransferMessagePortRpcParent.create({
-    commandMap: {
-      'ExtensionHostQuickPick.renderQuickInput': ExtensionHostQuickPick.renderQuickInput,
-    },
+    commandMap: CommandMap.commandMap,
     async send(port) {
       await RendererWorker.sendMessagePortToQuickPickWorker(port, 0)
     },

@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.quick-input'
 
-export const skip = true
+// export const skip = true
 
 export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }) => {
   await Main.closeAllEditors()
@@ -11,11 +11,8 @@ export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }
   await Extension.addWebExtension(uri)
   await QuickPick.open()
   await QuickPick.setValue('>quickPickSample')
-  await QuickPick.selectItem('Quick Pick Sample')
-
-  // TODO the way quickpick currently works, we cannot check the intermediate state,
-  // since the promise only resolves once the inner command also has finished
-  // at which point the quickpick is already closed
+  // @ts-ignore older published test-worker types don't include waitUntil yet
+  await QuickPick.selectItem('Quick Pick Sample', { waitUntil: 'quickPick' })
 
   // assert - verify quick input is displayed
   const quickPick = Locator('.QuickPick')
@@ -27,19 +24,15 @@ export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }
   await expect(input).toHaveValue('test')
 
   // verify that initial options are rendered
-  await expect(quickPick).toContainText('Option 1')
-  await expect(quickPick).toContainText('Option 2')
-  await expect(quickPick).toContainText('Option 3')
+  await expect(quickPick.locator('text=Option 1')).toHaveText('Option 1')
+  await expect(quickPick.locator('text=Option 2')).toHaveText('Option 2')
+  await expect(quickPick.locator('text=Option 3')).toHaveText('Option 3')
 
   // test dynamic rendering by typing
-  // @ts-ignore
-  await input.fill('search')
-  await expect(quickPick).toContainText('Search: search')
+  await QuickPick.setValue('search')
+  await expect(quickPick.locator('text=Search: search')).toHaveText('Search: search')
 
-  // select the first option by clicking
-  const firstOption = quickPick.locator('text=Option 1')
-  // @ts-ignore
-  await firstOption.click()
+  await QuickPick.selectItem('Option 1')
 
   // verify quick input is closed after selection
   await expect(quickPick).not.toBeVisible()
