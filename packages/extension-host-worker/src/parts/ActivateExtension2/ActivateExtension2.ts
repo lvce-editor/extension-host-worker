@@ -6,6 +6,7 @@ import * as RuntimeStatusState from '../RuntimeStatusState/RuntimeStatusState.ts
 import * as RuntimeStatusType from '../RuntimeStatusType/RuntimeStatusType.ts'
 import * as Timeout from '../Timeout/Timeout.ts'
 import * as TryToGetActualImportErrorMessage from '../TryToGetActualImportErrorMessage/TryToGetActualImportErrorMessage.ts'
+import * as ValidateIsolatedExtensionCommands from '../ValidateIsolatedExtensionCommands/ValidateIsolatedExtensionCommands.ts'
 import { VError } from '../VError/VError.ts'
 
 // TODO make activation timeout configurable or remove it.
@@ -30,7 +31,9 @@ export const activateExtension2 = async (extensionId: string, extension: any, ab
     })
     const module = ExtensionModules.acquire(extensionId)
     const activate = module.main || module.activate
+    const beforeCommandIds = ValidateIsolatedExtensionCommands.getRegisteredCommandIds()
     await Promise.race([activate(extension), rejectAfterTimeout(activationTimeout, token)])
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionCommands(extension, beforeCommandIds)
     const endTime = performance.now()
     const time = endTime - startTime
     RuntimeStatusState.update(extensionId, {

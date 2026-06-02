@@ -1,4 +1,9 @@
-import { executeCommand as executeRegisteredCommand, getCommandRegistrySnapshot, registerCommand, resetCommandRegistry } from '../src/parts/Command/Command.ts'
+import {
+  executeCommand as executeRegisteredCommand,
+  getCommandRegistrySnapshot,
+  registerCommand,
+  resetCommandRegistry,
+} from '../src/parts/Command/Command.ts'
 import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
 import { showQuickPick } from '../src/parts/QuickPick/QuickPick.ts'
 import * as Rpc from '../src/parts/Rpc/Rpc.ts'
@@ -107,7 +112,6 @@ Rpc.set({
 } as any)
 
 const quickPickOptions = {
-  placeholder: 'Select option',
   items: [
     {
       description: 'First option',
@@ -115,6 +119,7 @@ const quickPickOptions = {
       value: 'option-1',
     },
   ],
+  placeholder: 'Select option',
 }
 
 strictEqual(await showQuickPick(quickPickOptions), 'option-1')
