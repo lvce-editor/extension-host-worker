@@ -74,7 +74,8 @@ const completionHandle = registerCompletionProvider({
 })
 
 strictEqual(getCompletionProviderRegistrySnapshot().providers.length, 1)
-strictEqual((await executeCompletionProvider({ languageId: 'sample', text: 'abc', uri: '/sample.txt' }, 2))[0]?.label, 'sample:2')
+const completions = await executeCompletionProvider({ languageId: 'sample', text: 'abc', uri: '/sample.txt' }, 2)
+strictEqual(completions[0]?.label, 'sample:2')
 
 throws(() => {
   registerCompletionProvider({

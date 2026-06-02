@@ -3,9 +3,9 @@ import type { CompletionProvider } from '../CompletionProvider/CompletionProvide
 import type { CompletionProviderRegistrySnapshot } from '../CompletionProviderRegistrySnapshot/CompletionProviderRegistrySnapshot.ts'
 import type { TextDocument } from '../CompletionTextDocument/CompletionTextDocument.ts'
 import type { Disposable } from '../Disposable/Disposable.ts'
+import type { RegisteredCompletionProvider } from '../RegisteredCompletionProvider/RegisteredCompletionProvider.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
-import type { RegisteredCompletionProvider } from '../RegisteredCompletionProvider/RegisteredCompletionProvider.ts'
 
 const getType = (value: unknown): string => {
   if (value === null) {
@@ -38,7 +38,8 @@ const registry = createProviderRegistry<CompletionProvider, RegisteredCompletion
         return provider.provideCompletions(textDocument, offset, ...args)
       },
       resolveCompletionItem: provider.resolveCompletionItem
-        ? (textDocument, offset, name, completionItem, ...args) => provider.resolveCompletionItem?.(textDocument, offset, name, completionItem, ...args)
+        ? (textDocument, offset, name, completionItem, ...args) =>
+            provider.resolveCompletionItem?.(textDocument, offset, name, completionItem, ...args)
         : undefined,
     }
   },
@@ -64,7 +65,12 @@ export const executeCompletionProvider = async (
   offset: number,
   ...args: readonly unknown[]
 ): Promise<readonly CompletionItem[]> => {
-  return registry.executeProviderByLanguageId(textDocument.languageId, 'provideCompletions', [textDocument, offset, ...args], validateCompletionResult)
+  return registry.executeProviderByLanguageId(
+    textDocument.languageId,
+    'provideCompletions',
+    [textDocument, offset, ...args],
+    validateCompletionResult,
+  )
 }
 
 export const executeResolveCompletionItemProvider = async (

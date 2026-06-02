@@ -11,11 +11,11 @@ interface ProviderWithLanguageId extends ProviderWithId {
 }
 
 interface ProviderRegistryOptions<TProvider, TRegisteredProvider extends ProviderWithId> {
-  readonly providerName: string
-  readonly requireLanguageId?: boolean
-  readonly requiredMethods: readonly string[]
-  readonly optionalMethods?: readonly string[]
   readonly mapProvider: (provider: TProvider) => TRegisteredProvider
+  readonly optionalMethods?: readonly string[]
+  readonly providerName: string
+  readonly requiredMethods: readonly string[]
+  readonly requireLanguageId?: boolean
 }
 
 export interface ProviderRegistry<TProvider, TRegisteredProvider extends ProviderWithId> {
@@ -74,7 +74,7 @@ export const createProviderRegistry = <TProvider, TRegisteredProvider extends Pr
       throw new ExtensionApiError(`${providerName} is not defined`)
     }
     const providerRecord = provider as Record<string, unknown>
-    const id = providerRecord.id
+    const { id } = providerRecord
     if (typeof id !== 'string' || id.length === 0) {
       throw new ExtensionApiError(`${providerName} is missing id`)
     }

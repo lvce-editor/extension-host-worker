@@ -3,8 +3,8 @@ import type { FormattingEdit } from '../FormattingEdit/FormattingEdit.ts'
 import type { FormattingProvider } from '../FormattingProvider/FormattingProvider.ts'
 import type { FormattingProviderRegistrySnapshot } from '../FormattingProviderRegistrySnapshot/FormattingProviderRegistrySnapshot.ts'
 import type { TextDocument } from '../FormattingTextDocument/FormattingTextDocument.ts'
-import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 import type { RegisteredFormattingProvider } from '../RegisteredFormattingProvider/RegisteredFormattingProvider.ts'
+import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
 const registry = createProviderRegistry<FormattingProvider, RegisteredFormattingProvider>({
   mapProvider(provider) {
