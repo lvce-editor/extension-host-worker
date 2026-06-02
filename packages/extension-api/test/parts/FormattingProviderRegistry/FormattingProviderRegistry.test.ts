@@ -1,5 +1,5 @@
-import { afterEach, test } from 'node:test'
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
+import { afterEach, test } from 'node:test'
 import {
   executeFormattingProvider,
   getFormattingProviderRegistrySnapshot,
@@ -20,8 +20,6 @@ afterEach(() => {
 
 test('executeFormattingProvider returns edits from matching provider', async () => {
   registerFormattingProvider({
-    id: 'sample.formatting',
-    languageId: 'sample',
     format(document) {
       return [
         {
@@ -31,6 +29,8 @@ test('executeFormattingProvider returns edits from matching provider', async () 
         },
       ]
     },
+    id: 'sample.formatting',
+    languageId: 'sample',
   })
 
   const edits = await executeFormattingProvider(textDocument)
@@ -40,11 +40,11 @@ test('executeFormattingProvider returns edits from matching provider', async () 
 
 test('registerFormattingProvider disposes provider', () => {
   const disposable = registerFormattingProvider({
-    id: 'sample.formatting',
-    languageId: 'sample',
     format() {
       return []
     },
+    id: 'sample.formatting',
+    languageId: 'sample',
   })
 
   strictEqual(getFormattingProviderRegistrySnapshot().providers.length, 1)
@@ -54,20 +54,20 @@ test('registerFormattingProvider disposes provider', () => {
 
 test('registerFormattingProvider rejects duplicate id', () => {
   registerFormattingProvider({
-    id: 'sample.formatting',
-    languageId: 'sample',
     format() {
       return []
     },
+    id: 'sample.formatting',
+    languageId: 'sample',
   })
 
   throws(() => {
     registerFormattingProvider({
-      id: 'sample.formatting',
-      languageId: 'sample',
       format() {
         return []
       },
+      id: 'sample.formatting',
+      languageId: 'sample',
     })
   }, /formatting provider sample\.formatting is already registered/)
 })
@@ -75,12 +75,12 @@ test('registerFormattingProvider rejects duplicate id', () => {
 test('registerFormattingProvider rejects missing language id', () => {
   throws(() => {
     registerFormattingProvider({
-      id: 'sample.formatting',
-      // @ts-expect-error testing invalid provider shape
-      languageId: undefined,
       format() {
         return []
       },
+      id: 'sample.formatting',
+      // @ts-expect-error testing invalid provider shape
+      languageId: undefined,
     })
   }, /formatting provider sample\.formatting is missing languageId/)
 })
@@ -88,10 +88,10 @@ test('registerFormattingProvider rejects missing language id', () => {
 test('registerFormattingProvider rejects missing format function', () => {
   throws(() => {
     registerFormattingProvider({
-      id: 'sample.formatting',
-      languageId: 'sample',
       // @ts-expect-error testing invalid provider shape
       format: undefined,
+      id: 'sample.formatting',
+      languageId: 'sample',
     })
   }, /formatting provider sample\.formatting is missing format function/)
 })
@@ -102,11 +102,11 @@ test('executeFormattingProvider rejects missing provider', async () => {
 
 test('executeFormattingProvider propagates provider errors', async () => {
   registerFormattingProvider({
-    id: 'sample.formatting',
-    languageId: 'sample',
     format() {
       throw new Error('sample formatting failed')
     },
+    id: 'sample.formatting',
+    languageId: 'sample',
   })
 
   await rejects(() => executeFormattingProvider(textDocument), /sample formatting failed/)
@@ -114,11 +114,11 @@ test('executeFormattingProvider propagates provider errors', async () => {
 
 test('getFormattingProviderRegistrySnapshot returns registered providers', () => {
   registerFormattingProvider({
-    id: 'sample.formatting',
-    languageId: 'sample',
     format() {
       return []
     },
+    id: 'sample.formatting',
+    languageId: 'sample',
   })
 
   deepStrictEqual(

@@ -1,5 +1,5 @@
-import { afterEach, test } from 'node:test'
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
+import { afterEach, test } from 'node:test'
 import {
   executeCompletionProvider,
   executeResolveCompletionItemProvider,

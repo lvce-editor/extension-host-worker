@@ -1,5 +1,5 @@
-import { afterEach, test } from 'node:test'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
+import { afterEach, test } from 'node:test'
 import { showQuickPick } from '../../../src/parts/QuickPick/QuickPick.ts'
 import * as Rpc from '../../../src/parts/Rpc/Rpc.ts'
 

@@ -1,5 +1,5 @@
-import { test } from 'node:test'
 import { strictEqual } from 'node:assert/strict'
+import { test } from 'node:test'
 import { commandMap } from '../../../src/parts/ExtensionApiCommandMap/ExtensionApiCommandMap.ts'
 
 test('commandMap exposes hover provider commands', () => {

@@ -1,11 +1,11 @@
 import type { Disposable } from '../Disposable/Disposable.ts'
-import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import type { HoverProvider } from '../HoverProvider/HoverProvider.ts'
 import type { HoverProviderRegistrySnapshot } from '../HoverProviderRegistrySnapshot/HoverProviderRegistrySnapshot.ts'
 import type { HoverResult } from '../HoverResult/HoverResult.ts'
 import type { TextDocument } from '../HoverTextDocument/HoverTextDocument.ts'
-import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 import type { RegisteredHoverProvider } from '../RegisteredHoverProvider/RegisteredHoverProvider.ts'
+import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
+import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
 const getType = (value: unknown): string => {
   if (value === null) {
