@@ -32,7 +32,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "test": "node --experimental-strip-types --test \"test/**/*.test.ts\"",
+    "test": "node --test \"test/**/*.test.ts\"",
     "type-check": "tsc"
   },
   "devDependencies": {
