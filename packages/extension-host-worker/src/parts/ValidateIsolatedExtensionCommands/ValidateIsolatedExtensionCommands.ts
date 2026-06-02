@@ -1,5 +1,6 @@
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
+import * as ExtensionHostDiagnostic from '../ExtensionHostDiagnostic/ExtensionHostDiagnostic.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
 
@@ -19,9 +20,14 @@ interface ManifestHoverProvider {
   readonly id?: unknown
 }
 
+interface ManifestDiagnosticProvider {
+  readonly id?: unknown
+}
+
 interface ExtensionManifest {
   readonly commands?: readonly ManifestCommand[]
   readonly completionProviders?: readonly ManifestCompletionProvider[]
+  readonly diagnosticProviders?: readonly ManifestDiagnosticProvider[]
   readonly formattingProviders?: readonly ManifestFormattingProvider[]
   readonly hoverProviders?: readonly ManifestHoverProvider[]
   readonly isolated?: boolean
@@ -55,6 +61,13 @@ const getManifestHoverProviderIds = (extension: ExtensionManifest): readonly str
   return extension.hoverProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
 }
 
+const getManifestDiagnosticProviderIds = (extension: ExtensionManifest): readonly string[] => {
+  if (!Array.isArray(extension.diagnosticProviders)) {
+    return []
+  }
+  return extension.diagnosticProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
+}
+
 const assertUniqueIds = (ids: readonly string[], label: string): void => {
   const seen = new Set<string>()
   for (const id of ids) {
@@ -85,6 +98,11 @@ const getNewRegisteredHoverProviderIds = (beforeHoverProviderIds: readonly strin
   return ExtensionHostHover.getRegisteredHoverProviderIds().filter((providerId) => !before.has(providerId))
 }
 
+const getNewRegisteredDiagnosticProviderIds = (beforeDiagnosticProviderIds: readonly string[]): readonly string[] => {
+  const before = new Set(beforeDiagnosticProviderIds)
+  return ExtensionHostDiagnostic.getRegisteredDiagnosticProviderIds().filter((providerId) => !before.has(providerId))
+}
+
 export const getRegisteredCommandIds = (): readonly string[] => {
   return ExtensionHostCommand.getRegisteredCommandIds()
 }
@@ -99,6 +117,10 @@ export const getRegisteredFormattingProviderIds = (): readonly string[] => {
 
 export const getRegisteredHoverProviderIds = (): readonly string[] => {
   return ExtensionHostHover.getRegisteredHoverProviderIds()
+}
+
+export const getRegisteredDiagnosticProviderIds = (): readonly string[] => {
+  return ExtensionHostDiagnostic.getRegisteredDiagnosticProviderIds()
 }
 
 const validateIsolatedExtensionContribution = (label: string, manifestIds: readonly string[], registeredIds: readonly string[]): void => {
@@ -151,4 +173,13 @@ export const validateIsolatedExtensionHoverProviders = (extension: ExtensionMani
   const manifestHoverProviderIds = getManifestHoverProviderIds(extension)
   const registeredHoverProviderIds = getNewRegisteredHoverProviderIds(beforeHoverProviderIds)
   validateIsolatedExtensionContribution('hover provider', manifestHoverProviderIds, registeredHoverProviderIds)
+}
+
+export const validateIsolatedExtensionDiagnosticProviders = (extension: ExtensionManifest, beforeDiagnosticProviderIds: readonly string[]): void => {
+  if (!extension.isolated) {
+    return
+  }
+  const manifestDiagnosticProviderIds = getManifestDiagnosticProviderIds(extension)
+  const registeredDiagnosticProviderIds = getNewRegisteredDiagnosticProviderIds(beforeDiagnosticProviderIds)
+  validateIsolatedExtensionContribution('diagnostic provider', manifestDiagnosticProviderIds, registeredDiagnosticProviderIds)
 }
