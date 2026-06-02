@@ -1,6 +1,6 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { showQuickPick } from '../../../src/parts/QuickPick/QuickPick.ts'
 
 interface MockRpcDisposable {

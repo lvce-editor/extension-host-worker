@@ -1,8 +1,8 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import type { OutputChannel } from '../OutputChannelHandle/OutputChannelHandle.ts'
 import type { OutputChannelRegistrySnapshot } from '../OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
 import type { RegisteredOutputChannel } from '../RegisteredOutputChannel/RegisteredOutputChannel.ts'
+import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const outputChannels: Record<string, RegisteredOutputChannel> = Object.create(null)
 let isActivated = false

@@ -1,6 +1,6 @@
 import type { Disposable } from '../Disposable/Disposable.ts'
-import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import type { RegisteredView, View, ViewRegistrySnapshot } from '../View/View.ts'
+import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const views: Record<string, View> = Object.create(null)
 

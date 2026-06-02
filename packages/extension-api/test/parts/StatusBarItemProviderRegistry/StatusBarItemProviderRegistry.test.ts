@@ -1,6 +1,6 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, beforeEach, test } from 'node:test'
-import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import {
   getStatusBarItemProviderRegistrySnapshot,
   getStatusBarItems,

@@ -1,7 +1,7 @@
 import { context } from 'esbuild'
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
-import { root } from './root.js'
+import { root } from './root.ts'
 
 const external = ['node:buffer', 'node:worker_threads', 'electron', 'ws']
 const dist = join(root, '.tmp', 'dist', 'dist')
