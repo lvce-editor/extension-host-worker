@@ -43,6 +43,18 @@ const throws = (fn: () => void, expected: RegExp): void => {
   throw new Error(`Expected function to throw ${expected}`)
 }
 
+const rejects = async (fn: () => Promise<unknown>, expected: RegExp): Promise<void> => {
+  try {
+    await fn()
+  } catch (error) {
+    if (error instanceof Error && expected.test(error.message)) {
+      return
+    }
+    throw error
+  }
+  throw new Error(`Expected function to reject ${expected}`)
+}
+
 resetCommandRegistry()
 resetCompletionProviderRegistry()
 resetHoverProviderRegistry()
@@ -121,7 +133,89 @@ throws(() => {
   })
 }, /hover provider sample\.hover is already registered/)
 
+throws(() => {
+  registerHoverProvider({
+    id: 'sample.hover.missing-language',
+    // @ts-expect-error testing invalid provider shape
+    languageId: undefined,
+    provideHover() {
+      return undefined
+    },
+  })
+}, /hover provider sample\.hover\.missing-language is missing languageId/)
+
+throws(() => {
+  registerHoverProvider({
+    id: 'sample.hover.missing-method',
+    languageId: 'sample',
+    // @ts-expect-error testing invalid provider shape
+    provideHover: undefined,
+  })
+}, /hover provider sample\.hover\.missing-method is missing provideHover function/)
+
+await rejects(
+  () =>
+    executeHoverProvider(
+      {
+        languageId: 'missing',
+        text: 'abc',
+        uri: '/missing.txt',
+      },
+      0,
+    ),
+  /No hover provider found for missing/,
+)
+
 hoverHandle.dispose()
+strictEqual(getHoverProviderRegistrySnapshot().providers.length, 0)
+
+registerHoverProvider({
+  id: 'sample.hover.invalid',
+  languageId: 'sample',
+  // @ts-expect-error testing invalid provider result
+  provideHover() {
+    return 123
+  },
+})
+
+await rejects(
+  () =>
+    executeHoverProvider(
+      {
+        languageId: 'sample',
+        text: 'abc',
+        uri: '/sample.txt',
+      },
+      0,
+    ),
+  /invalid hover result: hover must be of type object or undefined but is number/,
+)
+
+resetHoverProviderRegistry()
+strictEqual(getHoverProviderRegistrySnapshot().providers.length, 0)
+
+registerHoverProvider({
+  id: 'sample.hover.error',
+  languageId: 'sample',
+  provideHover() {
+    throw new Error('sample hover failed')
+  },
+})
+
+await rejects(
+  () =>
+    executeHoverProvider(
+      {
+        languageId: 'sample',
+        text: 'abc',
+        uri: '/sample.txt',
+      },
+      0,
+    ),
+  /sample hover failed/,
+)
+
+resetHoverProviderRegistry()
 strictEqual(getHoverProviderRegistrySnapshot().providers.length, 0)
 
 const statusBarHandle = registerStatusBarItemProvider({
