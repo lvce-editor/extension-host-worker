@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-hover-provider-not-registered",
+  "name": "Sample Isolated Extension Hover Provider Not Registered",
+  "browser": "main.ts",
+  "isolated": true,
+  "hoverProviders": [
+    {
+      "id": "isolatedHoverMissingRegistration",
+      "languageId": "javascript"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-hover-provider-duplicate",
+  "name": "Sample Isolated Extension Hover Provider Duplicate",
+  "browser": "main.ts",
+  "isolated": true,
+  "hoverProviders": [
+    {
+      "id": "isolatedHoverDuplicate",
+      "languageId": "javascript"
+    }
+  ]
+}

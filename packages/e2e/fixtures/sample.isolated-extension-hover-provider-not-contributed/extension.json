@@ -1,0 +1,7 @@
+{
+  "id": "sample.isolated-extension-hover-provider-not-contributed",
+  "name": "Sample Isolated Extension Hover Provider Not Contributed",
+  "browser": "main.ts",
+  "isolated": true,
+  "hoverProviders": []
+}
