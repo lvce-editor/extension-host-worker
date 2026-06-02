@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-hover-provider-error",
+  "name": "Sample Isolated Extension Hover Provider Error",
+  "browser": "main.ts",
+  "isolated": true,
+  "hoverProviders": [
+    {
+      "id": "isolatedHoverError",
+      "languageId": "javascript"
+    }
+  ]
+}
