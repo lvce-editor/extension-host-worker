@@ -9,7 +9,6 @@ export default [
       '**/build/**',
       '**/coverage/**',
       '**/server/**',
-      '**/e2e/**',
       '**/.tmp/**',
       '**/memory/**',
       '**/extension-host-sub-worker/**',

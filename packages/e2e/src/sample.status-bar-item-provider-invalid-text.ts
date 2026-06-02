@@ -4,7 +4,7 @@ export const name = 'sample.status-bar-item-provider-error-invalid-text'
 
 export const skip = 1
 
-export const test: Test = async ({ Extension, FileSystem, Locator, Workspace, expect }) => {
+export const test: Test = async ({ expect, Extension, FileSystem, Locator, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
   await Workspace.setPath(tmpDir)
   const uri = import.meta.resolve(`../fixtures/${name}`)

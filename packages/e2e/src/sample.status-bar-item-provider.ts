@@ -4,7 +4,7 @@ export const name = 'sample.status-bar-item-provider'
 
 export const skip = 1
 
-export const test: Test = async ({ Extension, Locator, expect }) => {
+export const test: Test = async ({ expect, Extension, Locator }) => {
   // arrange
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)

@@ -4,7 +4,7 @@ export const name = 'sample.quick-input-cancel'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Main, FileSystem, Locator, expect }) => {
+export const test: Test = async ({ expect, Extension, FileSystem, Locator, Main }) => {
   await Extension.addWebExtension(new URL(`../fixtures/${name}`, import.meta.url).toString())
 
   // create a test file to trigger activation

@@ -4,7 +4,7 @@ export const name = 'sample.isolated-extension-view'
 
 export const skip = 1
 
-export const test: Test = async ({ Extension, Locator, expect }) => {
+export const test: Test = async ({ expect, Extension, Locator }) => {
   const uri = new URL(`../fixtures/${name}`, import.meta.url).toString()
   await Extension.addWebExtension(uri)
 

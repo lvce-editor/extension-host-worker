@@ -4,7 +4,7 @@ export const name = 'sample.webview-provider-message'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Main, FileSystem, WebView }) => {
+export const test: Test = async ({ Extension, FileSystem, Main, WebView }) => {
   // arrange
   await Extension.addWebExtension(new URL(`../fixtures/${name}`, import.meta.url).toString())
   const tmpDir = await FileSystem.getTmpDir()

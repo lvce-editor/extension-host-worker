@@ -4,7 +4,7 @@ export const name = 'sample.isolated-extension-view-csp-violation'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Locator, expect }) => {
+export const test: Test = async ({ expect, Extension, Locator }) => {
   const uri = new URL(`../fixtures/${name}`, import.meta.url).toString()
   await Extension.addWebExtension(uri)
 

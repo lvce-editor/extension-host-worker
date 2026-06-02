@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.isolated-extension-command-about'
 
-export const test: Test = async ({ Command, Extension, Locator, expect }) => {
+export const test: Test = async ({ Command, expect, Extension, Locator }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
 
