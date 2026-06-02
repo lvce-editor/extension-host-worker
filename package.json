@@ -9,10 +9,11 @@
     "test": "test"
   },
   "scripts": {
-    "build": "node packages/build/src/build.js",
-    "build:static": "node packages/build/src/build-static.js",
-    "build:watch": "node packages/build/src/build-watch.js",
-    "dev": "node packages/build/src/dev.js",
+    "benchmark:isolated-extension-api": "node packages/build/src/benchmark-isolated-extension-api-size.ts",
+    "build": "node packages/build/src/build.ts",
+    "build:static": "node packages/build/src/build-static.ts",
+    "build:watch": "node packages/build/src/build-watch.ts",
+    "dev": "node packages/build/src/dev.ts",
     "format": "prettier --write .",
     "postinstall": "lerna bootstrap --ci && npm --prefix packages/server run postinstall",
     "lint": "eslint . && prettier --check .",

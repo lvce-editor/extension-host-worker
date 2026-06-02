@@ -35,6 +35,7 @@ import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDoc
 import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHostTextSearch.ts'
 import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/ExtensionHostTypeDefinition.ts'
 import * as ExtensionHostUrl from '../ExtensionHostUrl/ExtensionHostUrl.ts'
+import * as ExtensionHostView from '../ExtensionHostView/ExtensionHostView.ts'
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorker from '../ExtensionHostWorker/ExtensionHostWorker.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
@@ -90,6 +91,7 @@ export const api = {
   executeTextSearchProvider: ExtensionHostTextSearch.executeTextSearchProvider,
 
   executeTypeDefinitionProvider: ExtensionHostTypeDefinition.executeTypeDefinitionProvider,
+  executeViewProvider: ExtensionHostView.executeViewProvider,
   exists: ExtensionHostFileSystem.existsExternal,
   // Errors
   FormattingError,
@@ -172,6 +174,8 @@ export const api = {
   registerTextSearchProvider: ExtensionHostTextSearch.registerTextSearchProvider,
   // Type Definition
   registerTypeDefinitionProvider: ExtensionHostTypeDefinition.registerTypeDefinitionProvider,
+  // View
+  registerView: ExtensionHostView.registerView,
   // Webview
   registerWebViewProvider: ExtensionHostWebView.registerWebViewProvider,
 

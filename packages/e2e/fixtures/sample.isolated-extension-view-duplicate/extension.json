@@ -1,0 +1,15 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.duplicate"],
+  "views": [
+    {
+      "id": "sample.views.duplicate",
+      "title": "Duplicate"
+    },
+    {
+      "id": "sample.views.duplicate",
+      "title": "Duplicate Again"
+    }
+  ]
+}

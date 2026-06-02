@@ -2,12 +2,14 @@ import { beforeEach, expect, test } from '@jest/globals'
 import * as ExtensionHostCommand from '../src/parts/ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostCompletion from '../src/parts/ExtensionHostCompletion/ExtensionHostCompletion.ts'
 import * as ExtensionHostFormatting from '../src/parts/ExtensionHostFormatting/ExtensionHostFormatting.ts'
+import * as ExtensionHostView from '../src/parts/ExtensionHostView/ExtensionHostView.ts'
 import * as ValidateIsolatedExtensionCommands from '../src/parts/ValidateIsolatedExtensionCommands/ValidateIsolatedExtensionCommands.ts'
 
 beforeEach(() => {
   ExtensionHostCommand.reset()
   ExtensionHostCompletion.reset()
   ExtensionHostFormatting.reset()
+  ExtensionHostView.reset()
 })
 
 test('validateIsolatedExtensionCommands - duplicate command contribution', () => {
@@ -155,4 +157,49 @@ test('validateIsolatedExtensionCompletionProviders - contributed completion prov
       [],
     )
   }).toThrow(new Error('completion provider sample.missingCompletionRegistration is contributed in extension.json but not registered'))
+})
+
+test('validateIsolatedExtensionViews - duplicate view contribution', () => {
+  ExtensionHostView.registerView({
+    create() {},
+    id: 'sample.duplicateView',
+  })
+  expect(() => {
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionViews(
+      {
+        isolated: true,
+        views: [{ id: 'sample.duplicateView' }, { id: 'sample.duplicateView' }],
+      },
+      [],
+    )
+  }).toThrow(new Error('view sample.duplicateView is contributed multiple times'))
+})
+
+test('validateIsolatedExtensionViews - registered view missing from extension json', () => {
+  const beforeViewIds = ValidateIsolatedExtensionCommands.getRegisteredViewIds()
+  ExtensionHostView.registerView({
+    create() {},
+    id: 'sample.missingViewContribution',
+  })
+  expect(() => {
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionViews(
+      {
+        isolated: true,
+        views: [],
+      },
+      beforeViewIds,
+    )
+  }).toThrow(new Error('view sample.missingViewContribution is registered but not contributed in extension.json'))
+})
+
+test('validateIsolatedExtensionViews - contributed view not registered', () => {
+  expect(() => {
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionViews(
+      {
+        isolated: true,
+        views: [{ id: 'sample.missingViewRegistration' }],
+      },
+      [],
+    )
+  }).toThrow(new Error('view sample.missingViewRegistration is contributed in extension.json but not registered'))
 })

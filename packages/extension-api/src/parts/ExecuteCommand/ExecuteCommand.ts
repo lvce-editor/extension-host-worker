@@ -1,5 +1,5 @@
-import * as Rpc from '../Rpc/Rpc.ts'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export const executeCommand = async (id: string, ...args: readonly unknown[]): Promise<unknown> => {
-  return Rpc.invoke('Extensions.executeCommand', id, ...args)
+  return ExtensionManagementWorker.invoke('Extensions.executeCommand', id, ...args)
 }

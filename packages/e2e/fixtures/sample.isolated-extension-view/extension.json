@@ -1,0 +1,18 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.testing"],
+  "views": [
+    {
+      "id": "sample.views.testing",
+      "title": "Testing",
+      "icon": "symbol-beaker",
+      "iframe": {
+        "path": "view.html",
+        "sandbox": ["allow-scripts"],
+        "csp": "default-src 'self'; script-src 'self'; style-src 'unsafe-inline'",
+        "credentialless": true
+      }
+    }
+  ]
+}

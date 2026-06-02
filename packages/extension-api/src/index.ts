@@ -22,11 +22,14 @@ export {
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
+export { executeViewProvider, getViewRegistrySnapshot, registerView, resetViewRegistry } from './parts/ViewRegistry/ViewRegistry.ts'
+export { createOutputChannel, getOutputChannelRegistrySnapshot, resetOutputChannelRegistry } from './parts/OutputChannel/OutputChannel.ts'
 export {
   getStatusBarItemProviderRegistrySnapshot,
   registerStatusBarItemProvider,
   resetStatusBarItemProviderRegistry,
 } from './parts/StatusBar/StatusBar.ts'
+export type { RegisteredView, View, ViewRegistrySnapshot } from './parts/View/View.ts'
 export { handleExtensionManagementMessagePort } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { Command } from './parts/Command/Command.ts'
 export type { CommandCallback } from './parts/CommandCallback/CommandCallback.ts'
@@ -52,6 +55,9 @@ export type {
 } from './parts/Formatting/Formatting.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
+export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHandle.ts'
+export type { OutputChannelRegistrySnapshot } from './parts/OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
+export type { RegisteredOutputChannel } from './parts/RegisteredOutputChannel/RegisteredOutputChannel.ts'
 export type { QuickPickItem } from './parts/QuickPickItem/QuickPickItem.ts'
 export type { ShowQuickPickOptions } from './parts/ShowQuickPickOptions/ShowQuickPickOptions.ts'
 export type {

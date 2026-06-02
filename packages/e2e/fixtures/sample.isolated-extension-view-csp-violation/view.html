@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CSP Violation</title>
+  </head>
+  <body>
+    <div id="result">script blocked</div>
+    <script>
+      document.querySelector('#result').textContent = 'script ran'
+    </script>
+  </body>
+</html>

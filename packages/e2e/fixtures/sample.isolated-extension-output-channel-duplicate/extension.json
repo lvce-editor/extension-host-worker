@@ -1,0 +1,16 @@
+{
+  "browser": "main.ts",
+  "id": "sample.isolated-extension-output-channel-duplicate",
+  "isolated": true,
+  "activation": ["*"],
+  "outputChannels": [
+    {
+      "id": "sample-output-duplicate",
+      "label": "Duplicate One"
+    },
+    {
+      "id": "sample-output-duplicate",
+      "label": "Duplicate Two"
+    }
+  ]
+}

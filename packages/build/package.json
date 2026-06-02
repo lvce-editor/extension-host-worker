@@ -1,7 +1,7 @@
 {
   "name": "build",
   "version": "0.0.0-dev",
-  "main": "index.js",
+  "main": "src/build.ts",
   "type": "module",
   "keywords": [],
   "author": "",
@@ -13,8 +13,10 @@
     "@rollup/plugin-babel": "^7.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@types/node": "^22.10.5",
+    "@types/yazl": "^3.3.1",
     "esbuild": "^0.28.0",
     "execa": "^9.6.1",
-    "rollup": "^4.61.0"
+    "rollup": "^4.61.0",
+    "yazl": "^3.3.1"
   }
 }

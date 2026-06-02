@@ -2,21 +2,34 @@ import { execa } from 'execa'
 import { build } from 'esbuild'
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { bundleJs } from './bundleJs.js'
-import { root } from './root.js'
+import { bundleJs } from './bundleJs.ts'
+import { root } from './root.ts'
 
 const dist = join(root, '.tmp', 'dist')
 const external = ['node:buffer', 'node:worker_threads', 'electron', 'ws']
 const extensionApiDist = join(dist, 'extension-api')
 
-const readJson = async (path) => {
+interface PackageJson {
+  [key: string]: unknown
+  version?: string
+  main?: string
+  scripts?: unknown
+  devDependencies?: unknown
+  prettier?: unknown
+  jest?: unknown
+  xo?: unknown
+  directories?: unknown
+  nodemonConfig?: unknown
+}
+
+const readJson = async (path: string): Promise<PackageJson> => {
   const content = await readFile(path, 'utf8')
   return JSON.parse(content)
 }
 
-const walk = async (dir) => {
+const walk = async (dir: string): Promise<string[]> => {
   const entries = await readdir(dir, { withFileTypes: true })
-  const files = []
+  const files: string[] = []
   for (const entry of entries) {
     const path = join(dir, entry.name)
     if (entry.isDirectory()) {
@@ -28,11 +41,11 @@ const walk = async (dir) => {
   return files
 }
 
-const writeJson = async (path, json) => {
+const writeJson = async (path: string, json: unknown): Promise<void> => {
   await writeFile(path, JSON.stringify(json, null, 2) + '\n')
 }
 
-const removePackageJsonFields = (packageJson) => {
+const removePackageJsonFields = (packageJson: PackageJson): void => {
   delete packageJson.scripts
   delete packageJson.devDependencies
   delete packageJson.prettier
@@ -42,7 +55,7 @@ const removePackageJsonFields = (packageJson) => {
   delete packageJson.nodemonConfig
 }
 
-const getGitTagFromGit = async () => {
+const getGitTagFromGit = async (): Promise<string> => {
   const { stdout, stderr, exitCode } = await execa('git', ['describe', '--exact-match', '--tags'], {
     reject: false,
   })
@@ -58,7 +71,7 @@ const getGitTagFromGit = async () => {
   return stdout
 }
 
-const getVersion = async () => {
+const getVersion = async (): Promise<string> => {
   const { env } = process
   const { RG_VERSION, GIT_TAG } = env
   if (RG_VERSION) {
