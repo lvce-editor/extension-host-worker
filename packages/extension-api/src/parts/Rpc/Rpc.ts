@@ -6,6 +6,10 @@ export const set = (value: Rpc): void => {
   rpc = value
 }
 
+export const isActive = (): boolean => {
+  return Boolean(rpc)
+}
+
 export const invoke = async (method: string, ...params: readonly any[]): Promise<any> => {
   if (!rpc) {
     return undefined

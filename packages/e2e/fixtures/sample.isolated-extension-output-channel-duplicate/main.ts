@@ -1,7 +1,4 @@
-import { activate } from '@lvce-editor/api'
-import * as api from '@lvce-editor/api'
-
-const { createOutputChannel } = api as any
+import { activate, createOutputChannel } from '@lvce-editor/api'
 
 createOutputChannel('sample.output.duplicate')
 
