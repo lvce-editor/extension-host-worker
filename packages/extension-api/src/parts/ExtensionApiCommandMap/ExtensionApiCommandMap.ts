@@ -4,6 +4,7 @@ import { executeDiagnosticProvider, getDiagnosticProviderRegistrySnapshot } from
 import { executeFormattingProvider, getFormattingProviderRegistrySnapshot } from '../Formatting/Formatting.ts'
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
 import { executeHoverProvider, getHoverProviderRegistrySnapshot } from '../Hover/Hover.ts'
+import { executeViewProvider, getViewRegistrySnapshot } from '../ViewRegistry/ViewRegistry.ts'
 
 export const commandMap = {
   'ExtensionApi.executeCommand': executeCommand,
@@ -12,10 +13,12 @@ export const commandMap = {
   'ExtensionApi.executeFormattingProvider': executeFormattingProvider,
   'ExtensionApi.executeHoverProvider': executeHoverProvider,
   'ExtensionApi.executeResolveCompletionItemProvider': executeResolveCompletionItemProvider,
+  'ExtensionApi.executeViewProvider': executeViewProvider,
   'ExtensionApi.getCommandRegistrySnapshot': getCommandRegistrySnapshot,
   'ExtensionApi.getCompletionProviderRegistrySnapshot': getCompletionProviderRegistrySnapshot,
   'ExtensionApi.getDiagnosticProviderRegistrySnapshot': getDiagnosticProviderRegistrySnapshot,
   'ExtensionApi.getFormattingProviderRegistrySnapshot': getFormattingProviderRegistrySnapshot,
   'ExtensionApi.getHoverProviderRegistrySnapshot': getHoverProviderRegistrySnapshot,
   'ExtensionApi.getStatusBarItems': getStatusBarItems,
+  'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
 }

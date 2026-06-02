@@ -3,6 +3,7 @@ import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHo
 import * as ExtensionHostDiagnostic from '../ExtensionHostDiagnostic/ExtensionHostDiagnostic.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
+import * as ExtensionHostView from '../ExtensionHostView/ExtensionHostView.ts'
 
 interface ManifestCommand {
   readonly id?: unknown
@@ -24,6 +25,10 @@ interface ManifestDiagnosticProvider {
   readonly id?: unknown
 }
 
+interface ManifestView {
+  readonly id?: unknown
+}
+
 interface ExtensionManifest {
   readonly commands?: readonly ManifestCommand[]
   readonly completionProviders?: readonly ManifestCompletionProvider[]
@@ -31,6 +36,7 @@ interface ExtensionManifest {
   readonly formattingProviders?: readonly ManifestFormattingProvider[]
   readonly hoverProviders?: readonly ManifestHoverProvider[]
   readonly isolated?: boolean
+  readonly views?: readonly ManifestView[]
 }
 
 const getManifestCommandIds = (extension: ExtensionManifest): readonly string[] => {
@@ -68,6 +74,13 @@ const getManifestDiagnosticProviderIds = (extension: ExtensionManifest): readonl
   return extension.diagnosticProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
 }
 
+const getManifestViewIds = (extension: ExtensionManifest): readonly string[] => {
+  if (!Array.isArray(extension.views)) {
+    return []
+  }
+  return extension.views.map((view) => view.id).filter((id): id is string => typeof id === 'string')
+}
+
 const assertUniqueIds = (ids: readonly string[], label: string): void => {
   const seen = new Set<string>()
   for (const id of ids) {
@@ -103,6 +116,11 @@ const getNewRegisteredDiagnosticProviderIds = (beforeDiagnosticProviderIds: read
   return ExtensionHostDiagnostic.getRegisteredDiagnosticProviderIds().filter((providerId) => !before.has(providerId))
 }
 
+const getNewRegisteredViewIds = (beforeViewIds: readonly string[]): readonly string[] => {
+  const before = new Set(beforeViewIds)
+  return ExtensionHostView.getRegisteredViewIds().filter((viewId) => !before.has(viewId))
+}
+
 export const getRegisteredCommandIds = (): readonly string[] => {
   return ExtensionHostCommand.getRegisteredCommandIds()
 }
@@ -121,6 +139,10 @@ export const getRegisteredHoverProviderIds = (): readonly string[] => {
 
 export const getRegisteredDiagnosticProviderIds = (): readonly string[] => {
   return ExtensionHostDiagnostic.getRegisteredDiagnosticProviderIds()
+}
+
+export const getRegisteredViewIds = (): readonly string[] => {
+  return ExtensionHostView.getRegisteredViewIds()
 }
 
 const validateIsolatedExtensionContribution = (label: string, manifestIds: readonly string[], registeredIds: readonly string[]): void => {
@@ -182,4 +204,13 @@ export const validateIsolatedExtensionDiagnosticProviders = (extension: Extensio
   const manifestDiagnosticProviderIds = getManifestDiagnosticProviderIds(extension)
   const registeredDiagnosticProviderIds = getNewRegisteredDiagnosticProviderIds(beforeDiagnosticProviderIds)
   validateIsolatedExtensionContribution('diagnostic provider', manifestDiagnosticProviderIds, registeredDiagnosticProviderIds)
+}
+
+export const validateIsolatedExtensionViews = (extension: ExtensionManifest, beforeViewIds: readonly string[]): void => {
+  if (!extension.isolated) {
+    return
+  }
+  const manifestViewIds = getManifestViewIds(extension)
+  const registeredViewIds = getNewRegisteredViewIds(beforeViewIds)
+  validateIsolatedExtensionContribution('view', manifestViewIds, registeredViewIds)
 }

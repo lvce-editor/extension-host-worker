@@ -1,0 +1,14 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.loadError"],
+  "views": [
+    {
+      "id": "sample.views.loadError",
+      "title": "Load Error",
+      "iframe": {
+        "path": "missing.html"
+      }
+    }
+  ]
+}

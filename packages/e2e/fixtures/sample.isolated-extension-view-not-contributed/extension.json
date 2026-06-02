@@ -1,0 +1,6 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.notContributed"],
+  "views": []
+}

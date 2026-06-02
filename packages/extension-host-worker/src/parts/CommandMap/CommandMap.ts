@@ -37,6 +37,7 @@ import * as ExtensionHostTabCompletion from '../ExtensionHostTabCompletion/Exten
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import * as ExtensionHostTextSearch from '../ExtensionHostTextSearch/ExtensionHostTextSearch.ts'
 import * as ExtensionHostTypeDefinition from '../ExtensionHostTypeDefinition/ExtensionHostTypeDefinition.ts'
+import * as ExtensionHostView from '../ExtensionHostView/ExtensionHostView.ts'
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
 import * as FileSystemFetch from '../FileSystemFetch/FileSystemFetch.ts'
@@ -136,6 +137,7 @@ export const commandMap = {
   [ExtensionHostCommandType.TextDocumentSyncIncremental]: TextDocument.syncIncremental,
   [ExtensionHostCommandType.TextSearchExecuteTextSearchProvider]: ExtensionHostTextSearch.executeTextSearchProvider,
   [ExtensionHostCommandType.TypeDefinitionExecuteTypeDefinitionProvider]: ExtensionHostTypeDefinition.executeTypeDefinitionProvider,
+  [ExtensionHostCommandType.ViewExecute]: ExtensionHostView.executeViewProvider,
   [ExtensionHostCommandType.WorkspaceSetPath]: ExtensionHostWorkspace.setWorkspacePath,
   'ExtensionHostDebug.evaluate': ExtensionHostDebug.evaluate,
   'ExtensionHostDebug.getCallStack': ExtensionHostDebug.getCallStack,
