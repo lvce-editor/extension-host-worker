@@ -16,5 +16,9 @@ const expectAddWebExtensionToThrow = async (Extension: any, uri: string, expecte
 
 export const test: Test = async ({ Extension }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
-  await expectAddWebExtensionToThrow(Extension, uri, 'formatting provider isolatedFormattingMissingRegistration is contributed in extension.json but not registered')
+  await expectAddWebExtensionToThrow(
+    Extension,
+    uri,
+    'formatting provider isolatedFormattingMissingRegistration is contributed in extension.json but not registered',
+  )
 }
