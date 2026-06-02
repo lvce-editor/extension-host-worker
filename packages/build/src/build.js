@@ -7,6 +7,7 @@ import { root } from './root.js'
 
 const dist = join(root, '.tmp', 'dist')
 const external = ['node:buffer', 'node:worker_threads', 'electron', 'ws']
+const extensionApiDist = join(dist, 'extension-api')
 
 const readJson = async (path) => {
   const content = await readFile(path, 'utf8')
@@ -29,6 +30,16 @@ const walk = async (dir) => {
 
 const writeJson = async (path, json) => {
   await writeFile(path, JSON.stringify(json, null, 2) + '\n')
+}
+
+const removePackageJsonFields = (packageJson) => {
+  delete packageJson.scripts
+  delete packageJson.devDependencies
+  delete packageJson.prettier
+  delete packageJson.jest
+  delete packageJson.xo
+  delete packageJson.directories
+  delete packageJson.nodemonConfig
 }
 
 const getGitTagFromGit = async () => {
@@ -101,15 +112,13 @@ for (const file of extensionApiFiles) {
   }
 }
 
+await execa('npm', ['--prefix', 'packages/extension-api', 'run', 'build'], {
+  stdio: 'inherit',
+})
+
 const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
 
-delete packageJson.scripts
-delete packageJson.devDependencies
-delete packageJson.prettier
-delete packageJson.jest
-delete packageJson.xo
-delete packageJson.directories
-delete packageJson.nodemonConfig
+removePackageJsonFields(packageJson)
 packageJson.version = version
 packageJson.main = 'dist/extensionHostWorkerMain.js'
 
@@ -117,3 +126,12 @@ await writeJson(join(dist, 'package.json'), packageJson)
 
 await cp(join(root, 'README.md'), join(dist, 'README.md'))
 await cp(join(root, 'LICENSE'), join(dist, 'LICENSE'))
+
+const extensionApiPackageJson = await readJson(join(root, 'packages', 'extension-api', 'package.json'))
+
+removePackageJsonFields(extensionApiPackageJson)
+extensionApiPackageJson.version = version
+
+await writeJson(join(extensionApiDist, 'package.json'), extensionApiPackageJson)
+await cp(join(root, 'packages', 'extension-api', 'README.md'), join(extensionApiDist, 'README.md'))
+await cp(join(root, 'LICENSE'), join(extensionApiDist, 'LICENSE'))

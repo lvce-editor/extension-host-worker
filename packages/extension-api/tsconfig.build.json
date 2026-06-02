@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "noEmit": false,
+    "outDir": "../../.tmp/dist/extension-api/dist",
+    "rootDir": "src",
+    "rewriteRelativeImportExtensions": true,
+    "tsBuildInfoFile": "../../.tmp/dist/extension-api/tsconfig.tsbuildinfo"
+  },
+  "include": ["src"]
+}

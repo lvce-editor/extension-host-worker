@@ -105,6 +105,9 @@ jobs:
       - run: npm publish --access public
         working-directory: ./.tmp/dist
 
+      - run: npm publish --access public
+        working-directory: ./.tmp/dist/extension-api
+
       - name: Publish GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
