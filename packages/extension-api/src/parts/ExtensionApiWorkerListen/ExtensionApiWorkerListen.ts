@@ -1,11 +1,9 @@
-import { type Rpc, WebWorkerRpcClient2 } from '@lvce-editor/rpc'
+import { type Rpc, WebWorkerRpcClient } from '@lvce-editor/rpc'
 import * as ExtensionApiWorkerCommandMap from '../ExtensionApiWorkerCommandMap/ExtensionApiWorkerCommandMap.ts'
 
 export const listen = async (): Promise<Rpc> => {
-  console.log('before listen')
-  const rpc = WebWorkerRpcClient2.create({
+  const rpc = WebWorkerRpcClient.create({
     commandMap: ExtensionApiWorkerCommandMap.commandMap,
   })
-  console.log('after listen')
   return rpc
 }

@@ -1,4 +1,4 @@
-import { MessagePortRpcClient } from '@lvce-editor/rpc'
+import { PlainMessagePortRpc } from '@lvce-editor/rpc'
 import * as ExtensionApiCommandMap from '../ExtensionApiCommandMap/ExtensionApiCommandMap.ts'
 
 const commandMap = {
@@ -12,8 +12,9 @@ const commandMap = {
 }
 
 export const handleExtensionManagementMessagePort = async (port: MessagePort): Promise<void> => {
-  await MessagePortRpcClient.create({
+  await PlainMessagePortRpc.create({
     commandMap,
+    isMessagePortOpen: true,
     messagePort: port,
   })
 }

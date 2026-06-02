@@ -6,8 +6,10 @@ export const test: Test = async ({ Command, Extension, Locator, expect }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
 
+  console.log('after add')
   await Command.execute('ExtensionHost.executeCommand', 'isolatedAbout.openAbout')
 
+  console.log('did exec')
   const dialogContent = Locator('.DialogContent')
   await expect(dialogContent).toBeVisible()
   const infoIcon = dialogContent.locator('.DialogInfoIcon')
