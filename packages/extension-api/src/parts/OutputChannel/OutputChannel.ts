@@ -1,5 +1,5 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
-import * as Rpc from '../Rpc/Rpc.ts'
 
 export interface OutputChannelRegistrySnapshot {
   readonly outputChannels: readonly RegisteredOutputChannel[]
@@ -17,6 +17,7 @@ export interface OutputChannel {
 }
 
 const outputChannels: Record<string, RegisteredOutputChannel> = Object.create(null)
+let isActivated = false
 
 const assertOutputChannelId = (id: string): void => {
   if (typeof id !== 'string' || id.length === 0) {
@@ -25,7 +26,7 @@ const assertOutputChannelId = (id: string): void => {
 }
 
 const assertCanWrite = (id: string): void => {
-  if (!Rpc.isActive()) {
+  if (!isActivated) {
     throw new ExtensionApiError(`output channel ${id} cannot be written before activate`)
   }
 }
@@ -39,23 +40,27 @@ class ExtensionOutputChannel implements OutputChannel {
 
   async append(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    await Rpc.invoke('ExtensionApi.appendOutputChannel', this.#id, text)
+    await ExtensionManagementWorker.invoke('ExtensionApi.appendOutputChannel', this.#id, text)
   }
 
   async appendLine(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    await Rpc.invoke('ExtensionApi.appendOutputChannel', this.#id, `${text}\n`)
+    await ExtensionManagementWorker.invoke('ExtensionApi.appendOutputChannel', this.#id, `${text}\n`)
   }
 
   async clear(): Promise<void> {
     assertCanWrite(this.#id)
-    await Rpc.invoke('ExtensionApi.clearOutputChannel', this.#id)
+    await ExtensionManagementWorker.invoke('ExtensionApi.clearOutputChannel', this.#id)
   }
 
   async replace(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    await Rpc.invoke('ExtensionApi.replaceOutputChannel', this.#id, text)
+    await ExtensionManagementWorker.invoke('ExtensionApi.replaceOutputChannel', this.#id, text)
   }
+}
+
+export const activateOutputChannels = (): void => {
+  isActivated = true
 }
 
 export const createOutputChannel = (id: string): OutputChannel => {
@@ -79,4 +84,5 @@ export const resetOutputChannelRegistry = (): void => {
   for (const id of Object.keys(outputChannels)) {
     delete outputChannels[id]
   }
+  isActivated = false
 }

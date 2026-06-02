@@ -1,5 +1,6 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { listen } from '../ExtensionApiWorkerListen/ExtensionApiWorkerListen.ts'
-import * as Rpc from '../Rpc/Rpc.ts'
+import { activateOutputChannels } from '../OutputChannel/OutputChannel.ts'
 
 let rpcPromise: Promise<Awaited<ReturnType<typeof listen>>> | undefined
 
@@ -8,5 +9,6 @@ export const activate = async (): Promise<void> => {
     rpcPromise = listen()
   }
   const rpc = await rpcPromise
-  Rpc.set(rpc)
+  ExtensionManagementWorker.set(rpc)
+  activateOutputChannels()
 }
