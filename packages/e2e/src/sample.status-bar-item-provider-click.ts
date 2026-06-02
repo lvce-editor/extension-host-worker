@@ -4,7 +4,7 @@ export const name = 'sample.status-bar-item-provider-click'
 
 export const skip = 1
 
-export const test: Test = async ({ FileSystem, Extension, Locator, expect, QuickPick, Workspace }) => {
+export const test: Test = async ({ expect, Extension, FileSystem, Locator, QuickPick, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
   await Workspace.setPath(tmpDir)

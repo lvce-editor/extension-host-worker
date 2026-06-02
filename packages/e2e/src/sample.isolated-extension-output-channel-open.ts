@@ -12,6 +12,8 @@ export const test: Test = async ({ Command, expect, Extension, Locator, Output, 
   await Command.execute('Panel.selectIndex', 1)
   await Output.selectChannel('sample-output-open')
 
-  await expect(Locator('[name="output"]')).toHaveValue('sample-output-open')
-  await expect(Locator('.OutputContent')).toHaveText('extension started\nready')
+  const outputSelect = Locator('[name="output"]')
+  const outputContent = Locator('.OutputContent')
+  await expect(outputSelect).toHaveValue('sample-output-open')
+  await expect(outputContent).toHaveText('extension started\nready')
 }

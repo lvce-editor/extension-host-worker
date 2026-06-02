@@ -4,7 +4,7 @@ export const name = 'sample.isolated-extension-view'
 
 export const skip = 1
 
-export const test: Test = async ({ Extension, Locator, expect }) => {
+export const test: Test = async ({ ActivityBar, expect, Extension, Locator }) => {
   const uri = new URL(`../fixtures/${name}`, import.meta.url).toString()
   await Extension.addWebExtension(uri)
 
@@ -12,8 +12,9 @@ export const test: Test = async ({ Extension, Locator, expect }) => {
   await expect(item).toBeVisible()
   await expect(item).toHaveAttribute('aria-selected', 'false')
 
-  await item.click()
+  await ActivityBar.toggleActivityBarItem('sample.views.testing')
 
+  const iframe = Locator('iframe.ExtensionViewIframe[title="Testing"]')
   await expect(item).toHaveAttribute('aria-selected', 'true')
-  await expect(Locator('iframe.ExtensionViewIframe[title="Testing"]')).toBeVisible()
+  await expect(iframe).toBeVisible()
 }

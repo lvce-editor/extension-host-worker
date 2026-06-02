@@ -4,7 +4,7 @@ export const name = 'sample.isolated-extension-quick-input'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Locator, QuickPick, expect }) => {
+export const test: Test = async ({ expect, Extension, Locator, QuickPick }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
 

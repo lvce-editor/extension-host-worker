@@ -4,13 +4,14 @@ export const name = 'sample.isolated-extension-view-missing-iframe'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Locator, expect }) => {
+export const test: Test = async ({ ActivityBar, expect, Extension, Locator }) => {
   const uri = new URL(`../fixtures/${name}`, import.meta.url).toString()
   await Extension.addWebExtension(uri)
 
   const item = Locator('.ActivityBarItem[title="Missing Iframe"]')
   await expect(item).toBeVisible()
-  await item.click()
+  await ActivityBar.toggleActivityBarItem('sample.views.missingIframe')
 
-  await expect(Locator('text=view sample.views.missingIframe is missing iframe contribution')).toBeVisible()
+  const errorMessage = Locator('text=view sample.views.missingIframe is missing iframe contribution')
+  await expect(errorMessage).toBeVisible()
 }

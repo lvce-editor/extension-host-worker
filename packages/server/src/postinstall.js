@@ -48,21 +48,46 @@ const rewriteLvceEditorApiImports = code => {
 `
 }
 
-const removeExistingPatchHelper = (content) => {
-  return content
-    .replace(/\n?const lvceEditorApiUrl = '[^']*';\nconst rewriteLvceEditorApiImports = code => \{\n[\s\S]*?\n\};\n?/, '\n')
-    .replace(/\n?const rewriteLvceEditorApiImports = code => \{\n[\s\S]*?\n\};\n?/, '\n')
+const removeInjectedPatchHelperOnce = (content) => {
+  const start = content.indexOf("\nconst lvceEditorApiUrl = '")
+  if (start === -1) {
+    return content
+  }
+  const functionStart = content.indexOf('\nconst rewriteLvceEditorApiImports = code => {', start)
+  if (functionStart === -1) {
+    return content
+  }
+  const end = content.indexOf('\n};', functionStart)
+  if (end === -1) {
+    return content
+  }
+  return `${content.slice(0, start)}${content.slice(end + '\n};'.length)}`
+}
+
+const removeInjectedPatchHelpers = (content) => {
+  let current = content
+  while (true) {
+    const next = removeInjectedPatchHelperOnce(current)
+    if (next === current) {
+      return current
+    }
+    current = next
+  }
+}
+
+const hasPatchHelper = (content) => {
+  return content.includes('const rewriteLvceEditorApiImports =')
 }
 
 const patchTypeScriptCompileProcess = async () => {
   const content = await readFile(typescriptCompileProcessPath, 'utf8')
   const extensionApiUrl = getRemoteUrl(join(root, '.tmp', 'dist', 'dist', 'extension-api', 'index.js'))
   const helper = getPatchHelper(extensionApiUrl)
-  const contentWithoutHelper = removeExistingPatchHelper(content)
-  let patched = contentWithoutHelper.replace(
-    'const transpileTypeScript2 = async code => {',
-    `${helper}\nconst transpileTypeScript2 = async code => {`,
-  )
+  const contentWithoutInjectedHelpers = removeInjectedPatchHelpers(content)
+  let patched = contentWithoutInjectedHelpers
+  if (!hasPatchHelper(patched)) {
+    patched = patched.replace('const transpileTypeScript2 = async code => {', `${helper}\nconst transpileTypeScript2 = async code => {`)
+  }
   patched = patched.replace(
     /const transformed = stripTypeScriptTypes\(code\);\n\s*return .*?;/,
     'const transformed = stripTypeScriptTypes(code);\n    return rewriteLvceEditorApiImports(transformed);',

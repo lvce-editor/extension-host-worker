@@ -4,7 +4,7 @@ export const name = 'sample.quick-input'
 
 export const skip = true
 
-export const test: Test = async ({ Main, Extension, Locator, expect, QuickPick }) => {
+export const test: Test = async ({ expect, Extension, Locator, Main, QuickPick }) => {
   await Main.closeAllEditors()
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)

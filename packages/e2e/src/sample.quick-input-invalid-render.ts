@@ -4,7 +4,7 @@ export const name = 'sample.quick-input-invalid-render'
 
 export const skip = true
 
-export const test: Test = async ({ Extension, Main, FileSystem, Locator, expect }) => {
+export const test: Test = async ({ expect, Extension, FileSystem, Locator, Main }) => {
   // arrange - load the extension that passes invalid quick pick items
   await Extension.addWebExtension(new URL(`../fixtures/${name}`, import.meta.url).toString())
 

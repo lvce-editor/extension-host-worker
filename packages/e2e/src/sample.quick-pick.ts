@@ -4,7 +4,7 @@ export const name = 'sample.quick-pick'
 
 export const skip = 1
 
-export const test: Test = async ({ Extension, Locator, QuickPick, expect }) => {
+export const test: Test = async ({ expect, Extension, Locator, QuickPick }) => {
   await Extension.addWebExtension(import.meta.resolve(`../fixtures/${name}`))
 
   const result = Locator('.StatusBarItem[name="quickpick.result"]')
