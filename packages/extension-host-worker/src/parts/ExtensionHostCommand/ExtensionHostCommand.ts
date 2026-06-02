@@ -1,13 +1,8 @@
 import { executeCommand as executeExtensionApiCommand } from '../../../../extension-api/src/parts/Command/Command.ts'
-import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { VError } from '../VError/VError.ts'
 
 const state = {
   commands: Object.create(null),
-}
-
-const isCommandNotFoundError = (error: unknown): boolean => {
-  return error instanceof Error && error.name === 'CommandNotFoundError'
 }
 
 const getCommandDisplay = (command) => {
@@ -45,14 +40,7 @@ export const executeCommand = async (id, ...args) => {
   try {
     const command = state.commands[id]
     if (!command) {
-      try {
-        return await ExtensionManagementWorker.invoke('Commands.executeCommand', id, ...args)
-      } catch (error) {
-        if (!isCommandNotFoundError(error)) {
-          throw error
-        }
-        return await executeExtensionApiCommand(id, ...args)
-      }
+      return await executeExtensionApiCommand(id, ...args)
     }
     const results = await command.execute(...args)
     return results
