@@ -6,7 +6,7 @@ const isCommandNotFoundError = (error: unknown): boolean => {
 
 export const executeCommand = async (id: string, ...args: readonly unknown[]): Promise<unknown> => {
   try {
-    return await ExtensionManagementWorker.invoke('Commands.executeCommand', id, ...args)
+    return await ExtensionManagementWorker.invoke('Extensions.executeCommand', id, ...args)
   } catch (error) {
     if (!isCommandNotFoundError(error)) {
       throw error
