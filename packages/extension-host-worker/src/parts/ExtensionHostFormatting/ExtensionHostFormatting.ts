@@ -5,8 +5,8 @@ import { VError } from '../VError/VError.ts'
 
 const {
   executeFormattingProvider: executeRegisteredFormattingProvider,
-  getProviders,
   getProvider,
+  getProviders,
   registerFormattingProvider,
   reset,
 } = Registry.create({
