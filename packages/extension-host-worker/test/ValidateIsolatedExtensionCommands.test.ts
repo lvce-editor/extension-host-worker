@@ -14,8 +14,8 @@ test('validateIsolatedExtensionCommands - duplicate command contribution', () =>
   expect(() => {
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionCommands(
       {
-        isolated: true,
         commands: [{ id: 'sample.duplicate' }, { id: 'sample.duplicate' }],
+        isolated: true,
       },
       [],
     )
@@ -31,8 +31,8 @@ test('validateIsolatedExtensionCommands - registered command missing from extens
   expect(() => {
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionCommands(
       {
-        isolated: true,
         commands: [],
+        isolated: true,
       },
       beforeCommandIds,
     )
@@ -43,8 +43,8 @@ test('validateIsolatedExtensionCommands - contributed command not registered', (
   expect(() => {
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionCommands(
       {
-        isolated: true,
         commands: [{ id: 'sample.missingRegistration' }],
+        isolated: true,
       },
       [],
     )
