@@ -9,3 +9,5 @@ export const activate = async (): Promise<void> => {
     },
   })
 }
+
+await activate()

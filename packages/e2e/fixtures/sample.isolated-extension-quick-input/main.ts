@@ -18,3 +18,5 @@ export const activate = async (): Promise<void> => {
     execute,
   })
 }
+
+await activate()

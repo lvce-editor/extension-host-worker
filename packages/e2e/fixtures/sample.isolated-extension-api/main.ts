@@ -16,3 +16,5 @@ export const activate = async (): Promise<void> => {
   await activateExtensionApi()
   registerStatusBarItemProvider(statusBarProvider)
 }
+
+await activate()
