@@ -1,6 +1,6 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'sample.isolated-extension-output-channel-not-created'
+export const name = 'sample.isolated-extension-output-channel-invalid-id'
 
 export const skip = true
 
@@ -18,5 +18,5 @@ const expectAddWebExtensionToThrow = async (Extension: any, uri: string, expecte
 
 export const test: Test = async ({ Extension }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
-  await expectAddWebExtensionToThrow(Extension, uri, 'output channel sample-output-missing-creation is contributed in extension.json but not created')
+  await expectAddWebExtensionToThrow(Extension, uri, 'output channel id sampleOutputInvalid must be dash-case')
 }

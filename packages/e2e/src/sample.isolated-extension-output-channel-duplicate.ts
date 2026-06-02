@@ -18,5 +18,5 @@ const expectAddWebExtensionToThrow = async (Extension: any, uri: string, expecte
 
 export const test: Test = async ({ Extension }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
-  await expectAddWebExtensionToThrow(Extension, uri, 'output channel sample.output.duplicate is contributed multiple times')
+  await expectAddWebExtensionToThrow(Extension, uri, 'output channel sample-output-duplicate is contributed multiple times')
 }

@@ -5,7 +5,7 @@
   "activation": ["*"],
   "outputChannels": [
     {
-      "id": "sample.output.beforeActivate",
+      "id": "sample-output-before-activate",
       "label": "Before Activate"
     }
   ]

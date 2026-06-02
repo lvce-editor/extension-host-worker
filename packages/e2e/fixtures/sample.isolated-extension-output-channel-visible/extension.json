@@ -5,7 +5,7 @@
   "activation": ["onOutput"],
   "outputChannels": [
     {
-      "id": "sample.output.visible",
+      "id": "sample-output-visible",
       "label": "Sample Output Visible"
     }
   ]

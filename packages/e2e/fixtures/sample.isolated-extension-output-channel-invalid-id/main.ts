@@ -1,6 +1,6 @@
 import { activate, createOutputChannel } from '@lvce-editor/api'
 
-createOutputChannel('sample-output-visible')
+createOutputChannel('sampleOutputInvalid')
 
 const main = async (): Promise<void> => {
   await activate()

@@ -11,7 +11,7 @@
   ],
   "outputChannels": [
     {
-      "id": "sample.output.live",
+      "id": "sample-output-live",
       "label": "Sample Output Live"
     }
   ]

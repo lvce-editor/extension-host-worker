@@ -10,7 +10,7 @@ export const test: Test = async ({ Command, expect, Extension, Locator, Output, 
 
   await Panel.open('Output')
   await Command.execute('Panel.selectIndex', 1)
-  await Output.selectChannel('sample.output.live')
+  await Output.selectChannel('sample-output-live')
 
   const content = Locator('.OutputContent')
   await expect(content).toHaveText('before command')

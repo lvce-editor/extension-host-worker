@@ -51,19 +51,19 @@ afterEach(() => {
 })
 
 test('createOutputChannel registers an output channel', () => {
-  createOutputChannel('sample.output')
+  createOutputChannel('sample-output')
 
   deepStrictEqual(getOutputChannelRegistrySnapshot(), {
     outputChannels: [
       {
-        id: 'sample.output',
+        id: 'sample-output',
       },
     ],
   })
 })
 
 test('createOutputChannel returns an output channel with write methods', () => {
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
 
   strictEqual(typeof output.append, 'function')
   strictEqual(typeof output.appendLine, 'function')
@@ -80,38 +80,66 @@ test('createOutputChannel rejects non-string id', () => {
 })
 
 test('createOutputChannel rejects duplicate id', () => {
-  createOutputChannel('sample.output')
+  createOutputChannel('sample-output')
 
-  rejects(async () => createOutputChannel('sample.output'), /output channel sample\.output is already created/)
+  rejects(async () => createOutputChannel('sample-output'), /output channel sample-output is already created/)
+})
+
+test('createOutputChannel rejects dotted id', () => {
+  rejects(async () => createOutputChannel('sample.output'), /output channel id sample\.output must be dash-case/)
+})
+
+test('createOutputChannel rejects camel case id', () => {
+  rejects(async () => createOutputChannel('sampleOutput'), /output channel id sampleOutput must be dash-case/)
+})
+
+test('createOutputChannel rejects uppercase id', () => {
+  rejects(async () => createOutputChannel('Sample-Output'), /output channel id Sample-Output must be dash-case/)
+})
+
+test('createOutputChannel rejects underscore id', () => {
+  rejects(async () => createOutputChannel('sample_output'), /output channel id sample_output must be dash-case/)
+})
+
+test('createOutputChannel rejects leading dash', () => {
+  rejects(async () => createOutputChannel('-sample-output'), /output channel id -sample-output must be dash-case/)
+})
+
+test('createOutputChannel rejects trailing dash', () => {
+  rejects(async () => createOutputChannel('sample-output-'), /output channel id sample-output- must be dash-case/)
+})
+
+test('createOutputChannel rejects repeated dashes', () => {
+  rejects(async () => createOutputChannel('sample--output'), /output channel id sample--output must be dash-case/)
 })
 
 test('append rejects before activation', async () => {
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
 
-  await rejects(() => output.append('hello'), /output channel sample\.output cannot be written before activate/)
+  await rejects(() => output.append('hello'), /output channel sample-output cannot be written before activate/)
 })
 
 test('appendLine rejects before activation', async () => {
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
 
-  await rejects(() => output.appendLine('hello'), /output channel sample\.output cannot be written before activate/)
+  await rejects(() => output.appendLine('hello'), /output channel sample-output cannot be written before activate/)
 })
 
 test('replace rejects before activation', async () => {
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
 
-  await rejects(() => output.replace('hello'), /output channel sample\.output cannot be written before activate/)
+  await rejects(() => output.replace('hello'), /output channel sample-output cannot be written before activate/)
 })
 
 test('clear rejects before activation', async () => {
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
 
-  await rejects(() => output.clear(), /output channel sample\.output cannot be written before activate/)
+  await rejects(() => output.clear(), /output channel sample-output cannot be written before activate/)
 })
 
 test('append writes text to extension management worker', async () => {
   const invocations = registerOutputChannelMock()
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.append('hello')
@@ -119,14 +147,14 @@ test('append writes text to extension management worker', async () => {
   deepStrictEqual(invocations, [
     {
       method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample.output', 'hello'],
+      params: ['sample-output', 'hello'],
     },
   ])
 })
 
 test('append allows empty text', async () => {
   const invocations = registerOutputChannelMock()
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.append('')
@@ -134,14 +162,14 @@ test('append allows empty text', async () => {
   deepStrictEqual(invocations, [
     {
       method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample.output', ''],
+      params: ['sample-output', ''],
     },
   ])
 })
 
 test('appendLine appends a newline', async () => {
   const invocations = registerOutputChannelMock()
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.appendLine('hello')
@@ -149,14 +177,14 @@ test('appendLine appends a newline', async () => {
   deepStrictEqual(invocations, [
     {
       method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample.output', 'hello\n'],
+      params: ['sample-output', 'hello\n'],
     },
   ])
 })
 
 test('replace sends replacement text', async () => {
   const invocations = registerOutputChannelMock()
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.replace('new content')
@@ -164,14 +192,14 @@ test('replace sends replacement text', async () => {
   deepStrictEqual(invocations, [
     {
       method: 'ExtensionApi.replaceOutputChannel',
-      params: ['sample.output', 'new content'],
+      params: ['sample-output', 'new content'],
     },
   ])
 })
 
 test('clear clears the output channel', async () => {
   const invocations = registerOutputChannelMock()
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.clear()
@@ -179,15 +207,15 @@ test('clear clears the output channel', async () => {
   deepStrictEqual(invocations, [
     {
       method: 'ExtensionApi.clearOutputChannel',
-      params: ['sample.output'],
+      params: ['sample-output'],
     },
   ])
 })
 
 test('multiple channels invoke with their own ids', async () => {
   const invocations = registerOutputChannelMock()
-  const first = createOutputChannel('sample.first')
-  const second = createOutputChannel('sample.second')
+  const first = createOutputChannel('sample-first')
+  const second = createOutputChannel('sample-second')
   activateOutputChannels()
 
   await first.append('one')
@@ -196,17 +224,17 @@ test('multiple channels invoke with their own ids', async () => {
   deepStrictEqual(invocations, [
     {
       method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample.first', 'one'],
+      params: ['sample-first', 'one'],
     },
     {
       method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample.second', 'two'],
+      params: ['sample-second', 'two'],
     },
   ])
 })
 
 test('resetOutputChannelRegistry clears registered output channels', () => {
-  createOutputChannel('sample.output')
+  createOutputChannel('sample-output')
 
   resetOutputChannelRegistry()
 
@@ -216,10 +244,10 @@ test('resetOutputChannelRegistry clears registered output channels', () => {
 })
 
 test('resetOutputChannelRegistry marks existing channels inactive', async () => {
-  const output = createOutputChannel('sample.output')
+  const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   resetOutputChannelRegistry()
 
-  await rejects(() => output.append('hello'), /output channel sample\.output cannot be written before activate/)
+  await rejects(() => output.append('hello'), /output channel sample-output cannot be written before activate/)
 })

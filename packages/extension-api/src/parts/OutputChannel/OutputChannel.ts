@@ -18,10 +18,14 @@ export interface OutputChannel {
 
 const outputChannels: Record<string, RegisteredOutputChannel> = Object.create(null)
 let isActivated = false
+const RE_DASH_CASE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
 
 const assertOutputChannelId = (id: string): void => {
   if (typeof id !== 'string' || id.length === 0) {
     throw new ExtensionApiError('output channel id is required')
+  }
+  if (!RE_DASH_CASE.test(id)) {
+    throw new ExtensionApiError(`output channel id ${id} must be dash-case`)
   }
 }
 

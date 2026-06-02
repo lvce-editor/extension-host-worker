@@ -5,7 +5,7 @@
   "activation": ["*"],
   "outputChannels": [
     {
-      "id": "sample.output.missingCreation",
+      "id": "sample-output-missing-creation",
       "label": "Missing Creation"
     }
   ]

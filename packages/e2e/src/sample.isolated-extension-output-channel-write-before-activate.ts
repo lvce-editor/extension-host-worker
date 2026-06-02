@@ -18,5 +18,5 @@ const expectAddWebExtensionToThrow = async (Extension: any, uri: string, expecte
 
 export const test: Test = async ({ Extension }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
-  await expectAddWebExtensionToThrow(Extension, uri, 'output channel sample.output.beforeActivate cannot be written before activate')
+  await expectAddWebExtensionToThrow(Extension, uri, 'output channel sample-output-before-activate cannot be written before activate')
 }

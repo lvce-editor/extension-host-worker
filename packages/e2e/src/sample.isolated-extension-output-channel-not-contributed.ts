@@ -21,6 +21,6 @@ export const test: Test = async ({ Extension }) => {
   await expectAddWebExtensionToThrow(
     Extension,
     uri,
-    'output channel sample.output.missingContribution is created but not contributed in extension.json',
+    'output channel sample-output-missing-contribution is created but not contributed in extension.json',
   )
 }

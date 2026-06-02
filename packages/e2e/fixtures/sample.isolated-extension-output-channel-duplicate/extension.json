@@ -5,11 +5,11 @@
   "activation": ["*"],
   "outputChannels": [
     {
-      "id": "sample.output.duplicate",
+      "id": "sample-output-duplicate",
       "label": "Duplicate One"
     },
     {
-      "id": "sample.output.duplicate",
+      "id": "sample-output-duplicate",
       "label": "Duplicate Two"
     }
   ]

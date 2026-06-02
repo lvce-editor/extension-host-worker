@@ -5,7 +5,7 @@
   "activation": ["*"],
   "outputChannels": [
     {
-      "id": "sample.output.open",
+      "id": "sample-output-open",
       "label": "Sample Output Open"
     }
   ]
