@@ -3,7 +3,13 @@ import {
   getCommandRegistrySnapshot,
   registerCommand,
   resetCommandRegistry,
-} from '../src/parts/Command/Command.ts'
+} from '../src/parts/CommandRegistry/CommandRegistry.ts'
+import {
+  executeCompletionProvider,
+  getCompletionProviderRegistrySnapshot,
+  registerCompletionProvider,
+  resetCompletionProviderRegistry,
+} from '../src/parts/Completion/Completion.ts'
 import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
 import { showQuickPick } from '../src/parts/QuickPick/QuickPick.ts'
 import * as Rpc from '../src/parts/Rpc/Rpc.ts'
@@ -32,6 +38,7 @@ const throws = (fn: () => void, expected: RegExp): void => {
 }
 
 resetCommandRegistry()
+resetCompletionProviderRegistry()
 resetStatusBarItemProviderRegistry()
 
 const disposable = registerCommand({
@@ -53,6 +60,35 @@ throws(() => {
 
 disposable.dispose()
 strictEqual(getCommandRegistrySnapshot().commands.length, 0)
+
+const completionHandle = registerCompletionProvider({
+  id: 'sample.completion',
+  languageId: 'sample',
+  provideCompletions(textDocument, offset) {
+    return [
+      {
+        label: `${textDocument.languageId}:${offset}`,
+      },
+    ]
+  },
+})
+
+strictEqual(getCompletionProviderRegistrySnapshot().providers.length, 1)
+const completions = await executeCompletionProvider({ languageId: 'sample', text: 'abc', uri: '/sample.txt' }, 2)
+strictEqual(completions[0]?.label, 'sample:2')
+
+throws(() => {
+  registerCompletionProvider({
+    id: 'sample.completion',
+    languageId: 'sample',
+    provideCompletions() {
+      return []
+    },
+  })
+}, /completion provider sample\.completion is already registered/)
+
+completionHandle.dispose()
+strictEqual(getCompletionProviderRegistrySnapshot().providers.length, 0)
 
 const statusBarHandle = registerStatusBarItemProvider({
   getStatusBarItem() {

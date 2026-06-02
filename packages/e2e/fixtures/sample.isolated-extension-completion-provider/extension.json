@@ -1,0 +1,18 @@
+{
+  "id": "sample.isolated-extension-completion-provider",
+  "name": "Sample Isolated Extension Completion Provider",
+  "browser": "main.ts",
+  "isolated": true,
+  "completionProviders": [
+    {
+      "id": "isolatedCompletion",
+      "languageId": "xyz"
+    }
+  ],
+  "languages": [
+    {
+      "id": "xyz",
+      "extensions": [".xyz"]
+    }
+  ]
+}

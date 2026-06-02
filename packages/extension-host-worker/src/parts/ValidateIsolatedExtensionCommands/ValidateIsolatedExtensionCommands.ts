@@ -1,11 +1,23 @@
-import { getCommandRegistrySnapshot } from '../../../../extension-api/src/parts/Command/Command.ts'
+import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
+import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
+import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 
 interface ManifestCommand {
   readonly id?: unknown
 }
 
+interface ManifestFormattingProvider {
+  readonly id?: unknown
+}
+
+interface ManifestCompletionProvider {
+  readonly id?: unknown
+}
+
 interface ExtensionManifest {
   readonly commands?: readonly ManifestCommand[]
+  readonly completionProviders?: readonly ManifestCompletionProvider[]
+  readonly formattingProviders?: readonly ManifestFormattingProvider[]
   readonly isolated?: boolean
 }
 
@@ -16,25 +28,71 @@ const getManifestCommandIds = (extension: ExtensionManifest): readonly string[] 
   return extension.commands.map((command) => command.id).filter((id): id is string => typeof id === 'string')
 }
 
-const assertUniqueCommandIds = (commandIds: readonly string[]): void => {
+const getManifestFormattingProviderIds = (extension: ExtensionManifest): readonly string[] => {
+  if (!Array.isArray(extension.formattingProviders)) {
+    return []
+  }
+  return extension.formattingProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
+}
+
+const getManifestCompletionProviderIds = (extension: ExtensionManifest): readonly string[] => {
+  if (!Array.isArray(extension.completionProviders)) {
+    return []
+  }
+  return extension.completionProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
+}
+
+const assertUniqueIds = (ids: readonly string[], label: string): void => {
   const seen = new Set<string>()
-  for (const commandId of commandIds) {
-    if (seen.has(commandId)) {
-      throw new Error(`command ${commandId} is contributed multiple times`)
+  for (const id of ids) {
+    if (seen.has(id)) {
+      throw new Error(`${label} ${id} is contributed multiple times`)
     }
-    seen.add(commandId)
+    seen.add(id)
   }
 }
 
 const getNewRegisteredCommandIds = (beforeCommandIds: readonly string[]): readonly string[] => {
   const before = new Set(beforeCommandIds)
-  return getCommandRegistrySnapshot()
-    .commands.map((command) => command.id)
-    .filter((commandId) => !before.has(commandId))
+  return ExtensionHostCommand.getRegisteredCommandIds().filter((commandId) => !before.has(commandId))
+}
+
+const getNewRegisteredFormattingProviderIds = (beforeFormattingProviderIds: readonly string[]): readonly string[] => {
+  const before = new Set(beforeFormattingProviderIds)
+  return ExtensionHostFormatting.getRegisteredFormattingProviderIds().filter((providerId) => !before.has(providerId))
+}
+
+const getNewRegisteredCompletionProviderIds = (beforeCompletionProviderIds: readonly string[]): readonly string[] => {
+  const before = new Set(beforeCompletionProviderIds)
+  return ExtensionHostCompletion.getRegisteredCompletionProviderIds().filter((providerId) => !before.has(providerId))
 }
 
 export const getRegisteredCommandIds = (): readonly string[] => {
-  return getCommandRegistrySnapshot().commands.map((command) => command.id)
+  return ExtensionHostCommand.getRegisteredCommandIds()
+}
+
+export const getRegisteredCompletionProviderIds = (): readonly string[] => {
+  return ExtensionHostCompletion.getRegisteredCompletionProviderIds()
+}
+
+export const getRegisteredFormattingProviderIds = (): readonly string[] => {
+  return ExtensionHostFormatting.getRegisteredFormattingProviderIds()
+}
+
+const validateIsolatedExtensionContribution = (label: string, manifestIds: readonly string[], registeredIds: readonly string[]): void => {
+  assertUniqueIds(manifestIds, label)
+  const manifestIdSet = new Set(manifestIds)
+  const registeredIdSet = new Set(registeredIds)
+  for (const registeredId of registeredIds) {
+    if (!manifestIdSet.has(registeredId)) {
+      throw new Error(`${label} ${registeredId} is registered but not contributed in extension.json`)
+    }
+  }
+  for (const manifestId of manifestIds) {
+    if (!registeredIdSet.has(manifestId)) {
+      throw new Error(`${label} ${manifestId} is contributed in extension.json but not registered`)
+    }
+  }
 }
 
 export const validateIsolatedExtensionCommands = (extension: ExtensionManifest, beforeCommandIds: readonly string[]): void => {
@@ -42,18 +100,24 @@ export const validateIsolatedExtensionCommands = (extension: ExtensionManifest, 
     return
   }
   const manifestCommandIds = getManifestCommandIds(extension)
-  assertUniqueCommandIds(manifestCommandIds)
-  const manifestCommandIdSet = new Set(manifestCommandIds)
   const registeredCommandIds = getNewRegisteredCommandIds(beforeCommandIds)
-  const registeredCommandIdSet = new Set(registeredCommandIds)
-  for (const registeredCommandId of registeredCommandIds) {
-    if (!manifestCommandIdSet.has(registeredCommandId)) {
-      throw new Error(`command ${registeredCommandId} is registered but not contributed in extension.json`)
-    }
+  validateIsolatedExtensionContribution('command', manifestCommandIds, registeredCommandIds)
+}
+
+export const validateIsolatedExtensionCompletionProviders = (extension: ExtensionManifest, beforeCompletionProviderIds: readonly string[]): void => {
+  if (!extension.isolated) {
+    return
   }
-  for (const manifestCommandId of manifestCommandIds) {
-    if (!registeredCommandIdSet.has(manifestCommandId)) {
-      throw new Error(`command ${manifestCommandId} is contributed in extension.json but not registered`)
-    }
+  const manifestCompletionProviderIds = getManifestCompletionProviderIds(extension)
+  const registeredCompletionProviderIds = getNewRegisteredCompletionProviderIds(beforeCompletionProviderIds)
+  validateIsolatedExtensionContribution('completion provider', manifestCompletionProviderIds, registeredCompletionProviderIds)
+}
+
+export const validateIsolatedExtensionFormattingProviders = (extension: ExtensionManifest, beforeFormattingProviderIds: readonly string[]): void => {
+  if (!extension.isolated) {
+    return
   }
+  const manifestFormattingProviderIds = getManifestFormattingProviderIds(extension)
+  const registeredFormattingProviderIds = getNewRegisteredFormattingProviderIds(beforeFormattingProviderIds)
+  validateIsolatedExtensionContribution('formatting provider', manifestFormattingProviderIds, registeredFormattingProviderIds)
 }

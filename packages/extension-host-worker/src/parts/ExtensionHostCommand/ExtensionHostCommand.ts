@@ -1,5 +1,3 @@
-import { executeCommand as executeExtensionApiCommand } from '../../../../extension-api/src/parts/Command/Command.ts'
-import { ExtensionApiError } from '../../../../extension-api/src/parts/ExtensionApiError/ExtensionApiError.ts'
 import { VError } from '../VError/VError.ts'
 
 const state = {
@@ -11,13 +9,6 @@ const getCommandDisplay = (command) => {
     return ` ${command.id}`
   }
   return ''
-}
-
-const getCommandError = (error) => {
-  if (error instanceof ExtensionApiError) {
-    return new Error(error.message)
-  }
-  return error
 }
 
 export const registerCommand = (command) => {
@@ -48,7 +39,7 @@ export const executeCommand = async (id, ...args) => {
   try {
     const command = state.commands[id]
     if (!command) {
-      return await executeExtensionApiCommand(id, ...args)
+      throw new Error(`command ${id} not found`)
     }
     const results = await command.execute(...args)
     return results
@@ -57,8 +48,12 @@ export const executeCommand = async (id, ...args) => {
     if (error && error.isExpected) {
       throw error
     }
-    throw new VError(getCommandError(error), 'Failed to execute command')
+    throw new VError(error, 'Failed to execute command')
   }
+}
+
+export const getRegisteredCommandIds = (): readonly string[] => {
+  return Object.values(state.commands).map((command: any) => command.id)
 }
 
 export const reset = () => {

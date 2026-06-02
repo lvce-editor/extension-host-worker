@@ -1,7 +1,7 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { executeCompletionProvider, executeresolveCompletionItemProvider, registerCompletionProvider } = Registry.create({
+const { executeCompletionProvider, executeresolveCompletionItemProvider, getProviders, registerCompletionProvider, reset } = Registry.create({
   additionalMethodNames: [
     // @ts-ignore
     {
@@ -22,4 +22,8 @@ const { executeCompletionProvider, executeresolveCompletionItemProvider, registe
   },
 })
 
-export { registerCompletionProvider, executeCompletionProvider, executeresolveCompletionItemProvider }
+const getRegisteredCompletionProviderIds = (): readonly string[] => {
+  return getProviders().map((provider: any) => provider.id)
+}
+
+export { registerCompletionProvider, executeCompletionProvider, executeresolveCompletionItemProvider, getRegisteredCompletionProviderIds, reset }

@@ -89,6 +89,9 @@ export const create = ({ additionalMethodNames = [], executeKey = '', name, resu
     getProvider(languageId) {
       return providers[languageId]
     },
+    getProviders() {
+      return Object.values(providers)
+    },
     reset() {
       for (const key in providers) {
         delete providers[key]

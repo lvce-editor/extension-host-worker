@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-completion-provider-not-registered",
+  "name": "Sample Isolated Extension Completion Provider Not Registered",
+  "browser": "main.ts",
+  "isolated": true,
+  "completionProviders": [
+    {
+      "id": "isolatedCompletionMissingRegistration",
+      "languageId": "javascript"
+    }
+  ]
+}
