@@ -11,7 +11,7 @@ const execute = async (): Promise<void> => {
   })
 }
 
-export const activate = async (): Promise<void> => {
+const activate = async (): Promise<void> => {
   await activateExtensionApi()
   registerCommand({
     id: 'isolatedQuickPickSample',

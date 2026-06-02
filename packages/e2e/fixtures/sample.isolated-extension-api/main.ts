@@ -12,7 +12,7 @@ const statusBarProvider = {
   },
 }
 
-export const activate = async (): Promise<void> => {
+const activate = async (): Promise<void> => {
   await activateExtensionApi()
   registerStatusBarItemProvider(statusBarProvider)
 }
