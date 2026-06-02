@@ -32,8 +32,10 @@ export const activateExtension2 = async (extensionId: string, extension: any, ab
     const module = ExtensionModules.acquire(extensionId)
     const activate = module.main || module.activate
     const beforeCommandIds = ValidateIsolatedExtensionCommands.getRegisteredCommandIds()
+    const beforeFormattingProviderIds = ValidateIsolatedExtensionCommands.getRegisteredFormattingProviderIds()
     await Promise.race([activate(extension), rejectAfterTimeout(activationTimeout, token)])
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionCommands(extension, beforeCommandIds)
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionFormattingProviders(extension, beforeFormattingProviderIds)
     const endTime = performance.now()
     const time = endTime - startTime
     RuntimeStatusState.update(extensionId, {

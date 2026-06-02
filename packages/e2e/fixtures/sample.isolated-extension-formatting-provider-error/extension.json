@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["*"],
+  "formattingProviders": [
+    {
+      "id": "isolatedFormattingError",
+      "languageId": "javascript"
+    }
+  ]
+}
