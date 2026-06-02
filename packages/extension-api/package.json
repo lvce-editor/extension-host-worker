@@ -31,7 +31,10 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "test": "node --experimental-strip-types test/extensionApiCheck.ts",
+    "test": "node --experimental-strip-types --test \"test/**/*.test.ts\"",
     "type-check": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1"
   }
 }
