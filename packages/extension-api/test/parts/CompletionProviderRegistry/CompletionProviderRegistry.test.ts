@@ -172,7 +172,10 @@ test('executeCompletionProvider rejects invalid item result', async () => {
     },
   })
 
-  await rejects(() => executeCompletionProvider(textDocument, 0), /invalid completion result: expected completion item to be of type object but was of type null/)
+  await rejects(
+    () => executeCompletionProvider(textDocument, 0),
+    /invalid completion result: expected completion item to be of type object but was of type null/,
+  )
 })
 
 test('getCompletionProviderRegistrySnapshot returns registered providers', () => {

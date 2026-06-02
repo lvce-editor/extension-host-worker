@@ -4,5 +4,9 @@ import type { TextDocument } from '../HoverTextDocument/HoverTextDocument.ts'
 export interface HoverProvider {
   readonly id: string
   readonly languageId: string
-  readonly provideHover: (textDocument: TextDocument, offset: number, ...args: readonly unknown[]) => HoverResult | undefined | Promise<HoverResult | undefined>
+  readonly provideHover: (
+    textDocument: TextDocument,
+    offset: number,
+    ...args: readonly unknown[]
+  ) => HoverResult | undefined | Promise<HoverResult | undefined>
 }

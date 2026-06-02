@@ -56,7 +56,11 @@ export const registerHoverProvider = (provider: HoverProvider): Disposable => {
   }
 }
 
-export const executeHoverProvider = async (textDocument: TextDocument, offset: number, ...args: readonly unknown[]): Promise<HoverResult | undefined> => {
+export const executeHoverProvider = async (
+  textDocument: TextDocument,
+  offset: number,
+  ...args: readonly unknown[]
+): Promise<HoverResult | undefined> => {
   return registry.executeProviderByLanguageId(textDocument.languageId, 'provideHover', [textDocument, offset, ...args], validateHoverResult)
 }
 
