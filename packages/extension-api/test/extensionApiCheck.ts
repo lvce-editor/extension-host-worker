@@ -11,6 +11,12 @@ import {
   resetCompletionProviderRegistry,
 } from '../src/parts/Completion/Completion.ts'
 import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
+import {
+  executeHoverProvider,
+  getHoverProviderRegistrySnapshot,
+  registerHoverProvider,
+  resetHoverProviderRegistry,
+} from '../src/parts/Hover/Hover.ts'
 import { showQuickPick } from '../src/parts/QuickPick/QuickPick.ts'
 import * as Rpc from '../src/parts/Rpc/Rpc.ts'
 import {
@@ -39,6 +45,7 @@ const throws = (fn: () => void, expected: RegExp): void => {
 
 resetCommandRegistry()
 resetCompletionProviderRegistry()
+resetHoverProviderRegistry()
 resetStatusBarItemProviderRegistry()
 
 const disposable = registerCommand({
@@ -89,6 +96,33 @@ throws(() => {
 
 completionHandle.dispose()
 strictEqual(getCompletionProviderRegistrySnapshot().providers.length, 0)
+
+const hoverHandle = registerHoverProvider({
+  id: 'sample.hover',
+  languageId: 'sample',
+  provideHover(textDocument, offset) {
+    return {
+      documentation: `${textDocument.languageId}:${offset}`,
+    }
+  },
+})
+
+strictEqual(getHoverProviderRegistrySnapshot().providers.length, 1)
+const hover = await executeHoverProvider({ languageId: 'sample', text: 'abc', uri: '/sample.txt' }, 2)
+strictEqual(hover?.documentation, 'sample:2')
+
+throws(() => {
+  registerHoverProvider({
+    id: 'sample.hover',
+    languageId: 'sample',
+    provideHover() {
+      return undefined
+    },
+  })
+}, /hover provider sample\.hover is already registered/)
+
+hoverHandle.dispose()
+strictEqual(getHoverProviderRegistrySnapshot().providers.length, 0)
 
 const statusBarHandle = registerStatusBarItemProvider({
   getStatusBarItem() {
