@@ -1,5 +1,5 @@
-import type { Disposable } from '../Disposable/Disposable.ts'
 import type { CompletionProvider } from '../CompletionProvider/CompletionProvider.ts'
+import type { Disposable } from '../Disposable/Disposable.ts'
 import { assertCompletionProvider } from '../AssertCompletionProvider/AssertCompletionProvider.ts'
 import { deleteCompletionProvider, setCompletionProvider } from '../CompletionProviderState/CompletionProviderState.ts'
 

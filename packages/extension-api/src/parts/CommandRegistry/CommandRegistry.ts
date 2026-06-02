@@ -1,8 +1,8 @@
 import type { Command } from '../Command/Command.ts'
 import type { CommandRegistrySnapshot } from '../CommandRegistrySnapshot/CommandRegistrySnapshot.ts'
 import type { Disposable } from '../Disposable/Disposable.ts'
-import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import type { RegisteredCommand } from '../RegisteredCommand/RegisteredCommand.ts'
+import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const commands: Record<string, RegisteredCommand> = Object.create(null)
 

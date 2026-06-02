@@ -4,8 +4,8 @@ import { executeFormattingProvider, getFormattingProviderRegistrySnapshot } from
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
 
 export const commandMap = {
-  'ExtensionApi.executeCompletionProvider': executeCompletionProvider,
   'ExtensionApi.executeCommand': executeCommand,
+  'ExtensionApi.executeCompletionProvider': executeCompletionProvider,
   'ExtensionApi.executeFormattingProvider': executeFormattingProvider,
   'ExtensionApi.executeResolveCompletionItemProvider': executeResolveCompletionItemProvider,
   'ExtensionApi.getCommandRegistrySnapshot': getCommandRegistrySnapshot,

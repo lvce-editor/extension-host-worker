@@ -1,6 +1,6 @@
 import type { CompletionProvider } from '../CompletionProvider/CompletionProvider.ts'
-import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { hasCompletionProvider } from '../CompletionProviderState/CompletionProviderState.ts'
+import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 export const assertCompletionProvider = (provider: CompletionProvider): void => {
   if (!provider) {

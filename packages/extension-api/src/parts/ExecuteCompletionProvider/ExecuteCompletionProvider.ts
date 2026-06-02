@@ -1,7 +1,7 @@
 import type { CompletionItem } from '../CompletionItem/CompletionItem.ts'
 import type { TextDocument } from '../CompletionTextDocument/CompletionTextDocument.ts'
-import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { getCompletionProviderByLanguageId } from '../CompletionProviderState/CompletionProviderState.ts'
+import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const getType = (value: unknown): string => {
   if (value === null) {

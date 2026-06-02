@@ -15,8 +15,8 @@ interface ManifestCompletionProvider {
 }
 
 interface ExtensionManifest {
-  readonly completionProviders?: readonly ManifestCompletionProvider[]
   readonly commands?: readonly ManifestCommand[]
+  readonly completionProviders?: readonly ManifestCompletionProvider[]
   readonly formattingProviders?: readonly ManifestFormattingProvider[]
   readonly isolated?: boolean
 }

@@ -1,15 +1,15 @@
 import {
-  executeCompletionProvider,
-  getCompletionProviderRegistrySnapshot,
-  registerCompletionProvider,
-  resetCompletionProviderRegistry,
-} from '../src/parts/Completion/Completion.ts'
-import {
   executeCommand as executeRegisteredCommand,
   getCommandRegistrySnapshot,
   registerCommand,
   resetCommandRegistry,
 } from '../src/parts/CommandRegistry/CommandRegistry.ts'
+import {
+  executeCompletionProvider,
+  getCompletionProviderRegistrySnapshot,
+  registerCompletionProvider,
+  resetCompletionProviderRegistry,
+} from '../src/parts/Completion/Completion.ts'
 import { getStatusBarItems } from '../src/parts/GetStatusBarItems/GetStatusBarItems.ts'
 import { showQuickPick } from '../src/parts/QuickPick/QuickPick.ts'
 import * as Rpc from '../src/parts/Rpc/Rpc.ts'
