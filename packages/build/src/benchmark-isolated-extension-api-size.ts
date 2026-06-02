@@ -13,7 +13,7 @@ const sourceDir = join(benchmarkDir, 'src')
 const bundleDir = join(benchmarkDir, 'bundles')
 const zipDir = join(benchmarkDir, 'zips')
 const apiEntry = join(root, 'packages', 'extension-api', 'src', 'index.ts')
-const external = ['electron', 'node:buffer', 'node:worker_threads']
+const external = ['electron', 'node:buffer', 'node:worker_threads', 'ws']
 
 interface BenchmarkCase {
   readonly id: string
