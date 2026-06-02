@@ -1,0 +1,12 @@
+{
+  "browser": "main.ts",
+  "id": "sample.isolated-extension-output-channel-visible",
+  "isolated": true,
+  "activation": ["onOutput"],
+  "outputChannels": [
+    {
+      "id": "sample.output.visible",
+      "label": "Sample Output Visible"
+    }
+  ]
+}

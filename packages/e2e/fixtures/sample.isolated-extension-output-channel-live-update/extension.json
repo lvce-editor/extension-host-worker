@@ -1,0 +1,18 @@
+{
+  "browser": "main.ts",
+  "id": "sample.isolated-extension-output-channel-live-update",
+  "isolated": true,
+  "activation": ["*", "onCommand:sample.output.append"],
+  "commands": [
+    {
+      "id": "sample.output.append",
+      "label": "Append Output Line"
+    }
+  ],
+  "outputChannels": [
+    {
+      "id": "sample.output.live",
+      "label": "Sample Output Live"
+    }
+  ]
+}
