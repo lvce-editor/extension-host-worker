@@ -1,6 +1,3 @@
-import { ExtensionApiError } from '../../../../extension-api/src/parts/ExtensionApiError/ExtensionApiError.ts'
-import { executeFormattingProvider as executeIsolatedFormattingProvider } from '../../../../extension-api/src/parts/Formatting/Formatting.ts'
-import { ensureError } from '../EnsureError/EnsureError.ts'
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
@@ -42,18 +39,10 @@ const executeFormattingProvider = async (textDocumentId: number, ...params: any[
     throw new VError(`Failed to execute formatting provider: textDocument with id ${textDocumentId} not found`)
   }
   const provider = getProvider(textDocument.languageId)
-  if (provider) {
-    return executeRegisteredFormattingProviderWithParams(textDocumentId, ...params)
+  if (!provider) {
+    throw new VError(`No formatting provider found for ${textDocument.languageId}`, 'Failed to execute formatting provider')
   }
-  try {
-    return await executeIsolatedFormattingProvider(textDocument, ...params)
-  } catch (error) {
-    const actualError = ensureError(error)
-    if (actualError instanceof ExtensionApiError) {
-      throw new VError(actualError.message, 'Failed to execute formatting provider')
-    }
-    throw new VError(actualError, 'Failed to execute formatting provider')
-  }
+  return executeRegisteredFormattingProviderWithParams(textDocumentId, ...params)
 }
 
 export { registerFormattingProvider, executeFormattingProvider, reset }
