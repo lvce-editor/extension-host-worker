@@ -33,11 +33,13 @@ export const activateExtension2 = async (extensionId: string, extension: any, ab
     const activate = module.main || module.activate
     const beforeCommandIds = ValidateIsolatedExtensionCommands.getRegisteredCommandIds()
     const beforeCompletionProviderIds = ValidateIsolatedExtensionCommands.getRegisteredCompletionProviderIds()
+    const beforeDiagnosticProviderIds = ValidateIsolatedExtensionCommands.getRegisteredDiagnosticProviderIds()
     const beforeFormattingProviderIds = ValidateIsolatedExtensionCommands.getRegisteredFormattingProviderIds()
     const beforeHoverProviderIds = ValidateIsolatedExtensionCommands.getRegisteredHoverProviderIds()
     await Promise.race([activate(extension), rejectAfterTimeout(activationTimeout, token)])
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionCommands(extension, beforeCommandIds)
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionCompletionProviders(extension, beforeCompletionProviderIds)
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionDiagnosticProviders(extension, beforeDiagnosticProviderIds)
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionFormattingProviders(extension, beforeFormattingProviderIds)
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionHoverProviders(extension, beforeHoverProviderIds)
     const endTime = performance.now()

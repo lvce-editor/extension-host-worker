@@ -1,7 +1,7 @@
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { executeDiagnosticProvider, registerDiagnosticProvider } = Registry.create({
+const { executeDiagnosticProvider, getProviders, registerDiagnosticProvider, reset } = Registry.create({
   name: 'Diagnostic',
   resultShape: {
     items: {
@@ -11,4 +11,8 @@ const { executeDiagnosticProvider, registerDiagnosticProvider } = Registry.creat
   },
 })
 
-export { executeDiagnosticProvider, registerDiagnosticProvider }
+const getRegisteredDiagnosticProviderIds = (): readonly string[] => {
+  return getProviders().map((provider: any) => provider.id)
+}
+
+export { executeDiagnosticProvider, getRegisteredDiagnosticProviderIds, registerDiagnosticProvider, reset }

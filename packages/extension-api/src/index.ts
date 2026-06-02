@@ -10,6 +10,12 @@ export {
   resetCompletionProviderRegistry,
 } from './parts/Completion/Completion.ts'
 export {
+  executeDiagnosticProvider,
+  getDiagnosticProviderRegistrySnapshot,
+  registerDiagnosticProvider,
+  resetDiagnosticProviderRegistry,
+} from './parts/Diagnostic/Diagnostic.ts'
+export {
   executeFormattingProvider,
   getFormattingProviderRegistrySnapshot,
   registerFormattingProvider,
@@ -31,6 +37,12 @@ export type {
   CompletionProviderRegistrySnapshot,
   RegisteredCompletionProvider,
 } from './parts/Completion/Completion.ts'
+export type {
+  Diagnostic,
+  DiagnosticProvider,
+  DiagnosticProviderRegistrySnapshot,
+  RegisteredDiagnosticProvider,
+} from './parts/Diagnostic/Diagnostic.ts'
 export type { Disposable } from './parts/Disposable/Disposable.ts'
 export type {
   FormattingEdit,

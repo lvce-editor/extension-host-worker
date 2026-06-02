@@ -7,8 +7,9 @@ test('commandMap exposes hover provider commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.getHoverProviderRegistrySnapshot'], 'function')
 })
 
-test('commandMap keeps completion and formatting provider commands', () => {
+test('commandMap keeps completion, diagnostic and formatting provider commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.executeCompletionProvider'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.executeDiagnosticProvider'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.executeFormattingProvider'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.executeResolveCompletionItemProvider'], 'function')
 })
