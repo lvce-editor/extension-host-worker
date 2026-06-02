@@ -18,5 +18,9 @@ const expectAddWebExtensionToThrow = async (Extension: any, uri: string, expecte
 
 export const test: Test = async ({ Extension }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
-  await expectAddWebExtensionToThrow(Extension, uri, 'hover provider isolatedHoverMissingContribution is registered but not contributed in extension.json')
+  await expectAddWebExtensionToThrow(
+    Extension,
+    uri,
+    'hover provider isolatedHoverMissingContribution is registered but not contributed in extension.json',
+  )
 }
