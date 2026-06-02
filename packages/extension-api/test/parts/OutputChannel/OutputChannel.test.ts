@@ -1,4 +1,4 @@
-import { deepStrictEqual, rejects, strictEqual } from 'node:assert/strict'
+import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import {
@@ -72,45 +72,45 @@ test('createOutputChannel returns an output channel with write methods', () => {
 })
 
 test('createOutputChannel rejects empty id', () => {
-  rejects(async () => createOutputChannel(''), /output channel id is required/)
+  throws(() => createOutputChannel(''), /output channel id is required/)
 })
 
 test('createOutputChannel rejects non-string id', () => {
-  rejects(async () => createOutputChannel(undefined as unknown as string), /output channel id is required/)
+  throws(() => createOutputChannel(undefined as unknown as string), /output channel id is required/)
 })
 
 test('createOutputChannel rejects duplicate id', () => {
   createOutputChannel('sample-output')
 
-  rejects(async () => createOutputChannel('sample-output'), /output channel sample-output is already created/)
+  throws(() => createOutputChannel('sample-output'), /output channel sample-output is already created/)
 })
 
 test('createOutputChannel rejects dotted id', () => {
-  rejects(async () => createOutputChannel('sample.output'), /output channel id sample\.output must be dash-case/)
+  throws(() => createOutputChannel('sample.output'), /output channel id sample\.output must be dash-case/)
 })
 
 test('createOutputChannel rejects camel case id', () => {
-  rejects(async () => createOutputChannel('sampleOutput'), /output channel id sampleOutput must be dash-case/)
+  throws(() => createOutputChannel('sampleOutput'), /output channel id sampleOutput must be dash-case/)
 })
 
 test('createOutputChannel rejects uppercase id', () => {
-  rejects(async () => createOutputChannel('Sample-Output'), /output channel id Sample-Output must be dash-case/)
+  throws(() => createOutputChannel('Sample-Output'), /output channel id Sample-Output must be dash-case/)
 })
 
 test('createOutputChannel rejects underscore id', () => {
-  rejects(async () => createOutputChannel('sample_output'), /output channel id sample_output must be dash-case/)
+  throws(() => createOutputChannel('sample_output'), /output channel id sample_output must be dash-case/)
 })
 
 test('createOutputChannel rejects leading dash', () => {
-  rejects(async () => createOutputChannel('-sample-output'), /output channel id -sample-output must be dash-case/)
+  throws(() => createOutputChannel('-sample-output'), /output channel id -sample-output must be dash-case/)
 })
 
 test('createOutputChannel rejects trailing dash', () => {
-  rejects(async () => createOutputChannel('sample-output-'), /output channel id sample-output- must be dash-case/)
+  throws(() => createOutputChannel('sample-output-'), /output channel id sample-output- must be dash-case/)
 })
 
 test('createOutputChannel rejects repeated dashes', () => {
-  rejects(async () => createOutputChannel('sample--output'), /output channel id sample--output must be dash-case/)
+  throws(() => createOutputChannel('sample--output'), /output channel id sample--output must be dash-case/)
 })
 
 test('append rejects before activation', async () => {
