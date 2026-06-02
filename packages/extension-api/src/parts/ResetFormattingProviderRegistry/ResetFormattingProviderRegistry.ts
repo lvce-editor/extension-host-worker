@@ -1,5 +1,1 @@
-import { clearFormattingProviders } from '../FormattingProviderState/FormattingProviderState.ts'
-
-export const resetFormattingProviderRegistry = (): void => {
-  clearFormattingProviders()
-}
+export { resetFormattingProviderRegistry } from '../FormattingProviderRegistry/FormattingProviderRegistry.ts'

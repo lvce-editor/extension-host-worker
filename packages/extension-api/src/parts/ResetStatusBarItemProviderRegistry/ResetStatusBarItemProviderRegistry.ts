@@ -1,5 +1,1 @@
-import { clearStatusBarItemProviders } from '../StatusBarItemProviderState/StatusBarItemProviderState.ts'
-
-export const resetStatusBarItemProviderRegistry = (): void => {
-  clearStatusBarItemProviders()
-}
+export { resetStatusBarItemProviderRegistry } from '../StatusBarItemProviderRegistry/StatusBarItemProviderRegistry.ts'

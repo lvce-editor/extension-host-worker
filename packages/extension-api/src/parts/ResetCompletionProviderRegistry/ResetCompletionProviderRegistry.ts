@@ -1,5 +1,1 @@
-import { clearCompletionProviders } from '../CompletionProviderState/CompletionProviderState.ts'
-
-export const resetCompletionProviderRegistry = (): void => {
-  clearCompletionProviders()
-}
+export { resetCompletionProviderRegistry } from '../CompletionProviderRegistry/CompletionProviderRegistry.ts'
