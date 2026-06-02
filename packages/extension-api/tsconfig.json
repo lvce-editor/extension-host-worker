@@ -4,7 +4,7 @@
     "target": "esnext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "types": [],
+    "types": ["node"],
     "skipLibCheck": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true,

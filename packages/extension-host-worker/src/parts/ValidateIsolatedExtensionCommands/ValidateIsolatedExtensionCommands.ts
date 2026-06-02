@@ -1,6 +1,7 @@
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
+import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
 
 interface ManifestCommand {
   readonly id?: unknown
@@ -14,10 +15,15 @@ interface ManifestCompletionProvider {
   readonly id?: unknown
 }
 
+interface ManifestHoverProvider {
+  readonly id?: unknown
+}
+
 interface ExtensionManifest {
   readonly commands?: readonly ManifestCommand[]
   readonly completionProviders?: readonly ManifestCompletionProvider[]
   readonly formattingProviders?: readonly ManifestFormattingProvider[]
+  readonly hoverProviders?: readonly ManifestHoverProvider[]
   readonly isolated?: boolean
 }
 
@@ -40,6 +46,13 @@ const getManifestCompletionProviderIds = (extension: ExtensionManifest): readonl
     return []
   }
   return extension.completionProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
+}
+
+const getManifestHoverProviderIds = (extension: ExtensionManifest): readonly string[] => {
+  if (!Array.isArray(extension.hoverProviders)) {
+    return []
+  }
+  return extension.hoverProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
 }
 
 const assertUniqueIds = (ids: readonly string[], label: string): void => {
@@ -67,6 +80,11 @@ const getNewRegisteredCompletionProviderIds = (beforeCompletionProviderIds: read
   return ExtensionHostCompletion.getRegisteredCompletionProviderIds().filter((providerId) => !before.has(providerId))
 }
 
+const getNewRegisteredHoverProviderIds = (beforeHoverProviderIds: readonly string[]): readonly string[] => {
+  const before = new Set(beforeHoverProviderIds)
+  return ExtensionHostHover.getRegisteredHoverProviderIds().filter((providerId) => !before.has(providerId))
+}
+
 export const getRegisteredCommandIds = (): readonly string[] => {
   return ExtensionHostCommand.getRegisteredCommandIds()
 }
@@ -77,6 +95,10 @@ export const getRegisteredCompletionProviderIds = (): readonly string[] => {
 
 export const getRegisteredFormattingProviderIds = (): readonly string[] => {
   return ExtensionHostFormatting.getRegisteredFormattingProviderIds()
+}
+
+export const getRegisteredHoverProviderIds = (): readonly string[] => {
+  return ExtensionHostHover.getRegisteredHoverProviderIds()
 }
 
 const validateIsolatedExtensionContribution = (label: string, manifestIds: readonly string[], registeredIds: readonly string[]): void => {
@@ -120,4 +142,13 @@ export const validateIsolatedExtensionFormattingProviders = (extension: Extensio
   const manifestFormattingProviderIds = getManifestFormattingProviderIds(extension)
   const registeredFormattingProviderIds = getNewRegisteredFormattingProviderIds(beforeFormattingProviderIds)
   validateIsolatedExtensionContribution('formatting provider', manifestFormattingProviderIds, registeredFormattingProviderIds)
+}
+
+export const validateIsolatedExtensionHoverProviders = (extension: ExtensionManifest, beforeHoverProviderIds: readonly string[]): void => {
+  if (!extension.isolated) {
+    return
+  }
+  const manifestHoverProviderIds = getManifestHoverProviderIds(extension)
+  const registeredHoverProviderIds = getNewRegisteredHoverProviderIds(beforeHoverProviderIds)
+  validateIsolatedExtensionContribution('hover provider', manifestHoverProviderIds, registeredHoverProviderIds)
 }
