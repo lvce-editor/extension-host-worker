@@ -115,6 +115,12 @@ for (const file of extensionApiFiles) {
 await execa('npm', ['--prefix', 'packages/extension-api', 'run', 'build'], {
   stdio: 'inherit',
 })
+<<<<<<< Updated upstream
+=======
+await rm(join(extensionApiDist, 'dist'), { recursive: true, force: true })
+await cp(join(extensionApiDist, '.tsc', 'src'), join(extensionApiDist, 'dist'), { recursive: true })
+await rewriteTsExtensions(join(extensionApiDist, 'dist'), ['.d.ts'])
+>>>>>>> Stashed changes
 
 const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
 

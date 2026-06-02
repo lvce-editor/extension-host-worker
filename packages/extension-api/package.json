@@ -30,7 +30,11 @@
     "@lvce-editor/rpc": "^6.4.0"
   },
   "scripts": {
+<<<<<<< Updated upstream
     "build": "tsc -p tsconfig.build.json",
+=======
+    "build": "tsc -p tsconfig.json --declaration true --emitDeclarationOnly false --noEmit false --outDir ../../.tmp/dist/extension-api/.tsc --rootDir . --rewriteRelativeImportExtensions true --tsBuildInfoFile ../../.tmp/dist/extension-api/tsconfig.tsbuildinfo",
+>>>>>>> Stashed changes
     "test": "node --experimental-strip-types test/extensionApiCheck.ts",
     "type-check": "tsc"
   }
