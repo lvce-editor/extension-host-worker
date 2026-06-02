@@ -1,4 +1,5 @@
 import { executeCommand as executeExtensionApiCommand } from '../../../../extension-api/src/parts/Command/Command.ts'
+import { ExtensionApiError } from '../../../../extension-api/src/parts/ExtensionApiError/ExtensionApiError.ts'
 import { VError } from '../VError/VError.ts'
 
 const state = {
@@ -10,6 +11,13 @@ const getCommandDisplay = (command) => {
     return ` ${command.id}`
   }
   return ''
+}
+
+const getCommandError = (error) => {
+  if (error instanceof ExtensionApiError) {
+    return new Error(error.message)
+  }
+  return error
 }
 
 export const registerCommand = (command) => {
@@ -49,7 +57,7 @@ export const executeCommand = async (id, ...args) => {
     if (error && error.isExpected) {
       throw error
     }
-    throw new VError(error, 'Failed to execute command')
+    throw new VError(getCommandError(error), 'Failed to execute command')
   }
 }
 
