@@ -1,8 +1,11 @@
-import { build } from 'esbuild'
-import type { Plugin, PluginBuild } from 'esbuild'
+import pluginTypeScript from '@babel/preset-typescript'
+import { babel } from '@rollup/plugin-babel'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { basename, join } from 'node:path'
-import { deflateRawSync } from 'node:zlib'
+import { rollup } from 'rollup'
+import type { OutputOptions, Plugin, RollupOptions } from 'rollup'
+import { ZipFile } from 'yazl'
 import { root } from './root.ts'
 
 const benchmarkDir = join(root, '.tmp', 'benchmark')
@@ -96,89 +99,66 @@ const sizeFormatter = new Intl.NumberFormat('en-US')
 
 const apiAliasPlugin: Plugin = {
   name: 'extension-api-source-alias',
-  setup(build: PluginBuild) {
-    build.onResolve({ filter: /^@lvce-editor\/api$/ }, () => {
-      return {
-        path: apiEntry,
-      }
-    })
+  resolveId(id) {
+    if (id === '@lvce-editor/api') {
+      return apiEntry
+    }
+    return null
   },
 }
 
-const crcTable = new Uint32Array(256)
-for (let i = 0; i < crcTable.length; i++) {
-  let value = i
-  for (let j = 0; j < 8; j++) {
-    value = value & 1 ? 0xedb88320 ^ (value >>> 1) : value >>> 1
+const bundleBenchmark = async (inFile: string, outFile: string): Promise<void> => {
+  const outputOptions: OutputOptions = {
+    compact: true,
+    file: outFile,
+    format: 'es',
+    freeze: false,
+    generatedCode: {
+      constBindings: true,
+      objectShorthand: true,
+    },
   }
-  crcTable[i] = value >>> 0
-}
-
-const getCrc32 = (buffer: Buffer): number => {
-  let crc = 0xffffffff
-  for (const byte of buffer) {
-    crc = crcTable[(crc ^ byte) & 0xff] ^ (crc >>> 8)
+  const options: RollupOptions = {
+    external,
+    input: inFile,
+    output: outputOptions,
+    plugins: [
+      apiAliasPlugin,
+      babel({
+        babelHelpers: 'bundled',
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        presets: [pluginTypeScript],
+      }),
+      nodeResolve(),
+    ],
+    preserveEntrySignatures: 'strict',
+    treeshake: {
+      propertyReadSideEffects: false,
+    },
   }
-  return (crc ^ 0xffffffff) >>> 0
+  const bundle = await rollup(options)
+  await bundle.write(outputOptions)
+  await bundle.close()
 }
 
-const writeUInt16 = (buffer: Buffer, value: number, offset: number): void => {
-  buffer.writeUInt16LE(value, offset)
-}
-
-const writeUInt32 = (buffer: Buffer, value: number, offset: number): void => {
-  buffer.writeUInt32LE(value >>> 0, offset)
-}
-
-const getZipFile = (fileName: string, content: Buffer): Buffer => {
-  const name = Buffer.from(fileName)
-  const compressed = deflateRawSync(content, { level: 9 })
-  const crc32 = getCrc32(content)
-  const localHeader = Buffer.alloc(30 + name.length)
-  writeUInt32(localHeader, 0x04034b50, 0)
-  writeUInt16(localHeader, 20, 4)
-  writeUInt16(localHeader, 0, 6)
-  writeUInt16(localHeader, 8, 8)
-  writeUInt16(localHeader, 0, 10)
-  writeUInt16(localHeader, 0, 12)
-  writeUInt32(localHeader, crc32, 14)
-  writeUInt32(localHeader, compressed.length, 18)
-  writeUInt32(localHeader, content.length, 22)
-  writeUInt16(localHeader, name.length, 26)
-  writeUInt16(localHeader, 0, 28)
-  name.copy(localHeader, 30)
-
-  const centralDirectory = Buffer.alloc(46 + name.length)
-  writeUInt32(centralDirectory, 0x02014b50, 0)
-  writeUInt16(centralDirectory, 20, 4)
-  writeUInt16(centralDirectory, 20, 6)
-  writeUInt16(centralDirectory, 0, 8)
-  writeUInt16(centralDirectory, 8, 10)
-  writeUInt16(centralDirectory, 0, 12)
-  writeUInt16(centralDirectory, 0, 14)
-  writeUInt32(centralDirectory, crc32, 16)
-  writeUInt32(centralDirectory, compressed.length, 20)
-  writeUInt32(centralDirectory, content.length, 24)
-  writeUInt16(centralDirectory, name.length, 28)
-  writeUInt16(centralDirectory, 0, 30)
-  writeUInt16(centralDirectory, 0, 32)
-  writeUInt16(centralDirectory, 0, 34)
-  writeUInt16(centralDirectory, 0, 36)
-  writeUInt32(centralDirectory, 0, 38)
-  writeUInt32(centralDirectory, 0, 42)
-  name.copy(centralDirectory, 46)
-
-  const end = Buffer.alloc(22)
-  writeUInt32(end, 0x06054b50, 0)
-  writeUInt16(end, 0, 4)
-  writeUInt16(end, 0, 6)
-  writeUInt16(end, 1, 8)
-  writeUInt16(end, 1, 10)
-  writeUInt32(end, centralDirectory.length, 12)
-  writeUInt32(end, localHeader.length + compressed.length, 16)
-  writeUInt16(end, 0, 20)
-
-  return Buffer.concat([localHeader, compressed, centralDirectory, end])
+const getZipFile = async (fileName: string, content: Buffer): Promise<Buffer> => {
+  const zipFile = new ZipFile()
+  const chunks: Buffer[] = []
+  const zipFilePromise = new Promise<Buffer>((resolve, reject) => {
+    zipFile.outputStream.on('data', (chunk: Buffer) => {
+      chunks.push(chunk)
+    })
+    zipFile.outputStream.on('end', () => {
+      resolve(Buffer.concat(chunks))
+    })
+    zipFile.outputStream.on('error', reject)
+  })
+  zipFile.addBuffer(content, fileName, {
+    compress: true,
+    compressionLevel: 9,
+  })
+  zipFile.end()
+  return zipFilePromise
 }
 
 const formatBytes = (bytes: number): string => {
@@ -250,21 +230,10 @@ for (const benchmarkCase of cases) {
   const inFile = join(sourceDir, `${benchmarkCase.id}.ts`)
   const outFile = join(bundleDir, `${benchmarkCase.id}.js`)
   await writeFile(inFile, benchmarkCase.source)
-  await build({
-    bundle: true,
-    entryPoints: [inFile],
-    external,
-    format: 'esm',
-    minify: true,
-    outfile: outFile,
-    platform: 'browser',
-    plugins: [apiAliasPlugin],
-    target: 'es2022',
-    treeShaking: true,
-  })
+  await bundleBenchmark(inFile, outFile)
   const rawBytes = (await stat(outFile)).size
   const bundleContent = await readFile(outFile)
-  const zipFile = getZipFile(basename(outFile), bundleContent)
+  const zipFile = await getZipFile(basename(outFile), bundleContent)
   const zipOutFile = join(zipDir, `${benchmarkCase.id}.zip`)
   await writeFile(zipOutFile, zipFile)
   const zipBytes = zipFile.length
