@@ -1,11 +1,12 @@
 import { listen } from '../ExtensionApiWorkerListen/ExtensionApiWorkerListen.ts'
+import * as Rpc from '../Rpc/Rpc.ts'
 
-let activated = false
+let rpcPromise: Promise<Awaited<ReturnType<typeof listen>>> | undefined
 
 export const activate = async (): Promise<void> => {
-  if (activated) {
-    throw new Error('Extension API Worker already activated')
+  if (!rpcPromise) {
+    rpcPromise = listen()
   }
-  activated = true
-  await listen()
+  const rpc = await rpcPromise
+  Rpc.set(rpc)
 }

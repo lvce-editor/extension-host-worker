@@ -55,6 +55,14 @@ export const getCommandRegistrySnapshot = (): CommandRegistrySnapshot => {
   }
 }
 
+export const executeCommand = async (id: string, ...args: readonly unknown[]): Promise<unknown> => {
+  const command = commands[id]
+  if (!command) {
+    throw new ExtensionApiError(`command ${id} not found`)
+  }
+  return command.execute(...args)
+}
+
 export const resetCommandRegistry = (): void => {
   for (const id of Object.keys(commands)) {
     delete commands[id]

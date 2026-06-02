@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedQuickPickSample"],
+  "commands": [
+    {
+      "id": "isolatedQuickPickSample",
+      "label": "Isolated Quick Pick Sample"
+    }
+  ]
+}

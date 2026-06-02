@@ -7,6 +7,7 @@ import * as ColorTheme from '../ColorTheme/ColorTheme.ts'
 import * as CreateWebView3 from '../CreateWebView3/CreateWebView3.ts'
 import * as CreateWebViewRpc2 from '../CreateWebViewRpc2/CreateWebViewRpc2.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
+import * as ExecuteCommand from '../ExecuteCommand/ExecuteCommand.ts'
 import * as ExecuteExternalCommand from '../ExecuteExternalCommand/ExecuteExternalCommand.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
@@ -26,6 +27,7 @@ import * as ExtensionHostImplementation from '../ExtensionHostImplementation/Ext
 import * as ExtensionHostMockExec from '../ExtensionHostMockExec/ExtensionHostMockExec.ts'
 import * as ExtensionHostMockRpc from '../ExtensionHostMockRpc/ExtensionHostMockRpc.ts'
 import * as ExtensionHostOutputChannel from '../ExtensionHostOutputChannel/ExtensionHostOutputChannel.ts'
+import * as ExtensionHostQuickPick from '../ExtensionHostQuickPick/ExtensionHostQuickPick.ts'
 import * as ExtensionHostReference from '../ExtensionHostReference/ExtensionHostReference.ts'
 import * as ExtensionHostRename from '../ExtensionHostRename/ExtensionHostRename.ts'
 import * as ExtensionHostSelection from '../ExtensionHostSelection/ExtensionHostSelection.ts'
@@ -78,6 +80,7 @@ export const commandMap = {
   'ColorTheme.getColorThemeJson': GetColorThemeJson.getColorThemeJson,
   'ColorTheme.getColorThemeNames': GetColorThemeNames.getColorThemeNames,
   'ColorTheme.hydrate': ColorTheme.hydrate,
+  'Commands.executeCommand': ExecuteCommand.executeCommand,
   'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
   'ExtensionHost.activateExtension2': ActivateExtension2.activateExtension2,
   'ExtensionHost.activateExtension3': activateExtension3,
@@ -151,6 +154,7 @@ export const commandMap = {
   'ExtensionHostDebug.stepInto': ExtensionHostDebug.stepInto,
   'ExtensionHostDebug.stepOut': ExtensionHostDebug.stepOut,
   'ExtensionHostDebug.stepOver': ExtensionHostDebug.stepOver,
+  'ExtensionHostQuickPick.showQuickPick': ExtensionHostQuickPick.showQuickPick,
   'ExtensionHostRename.executeprepareRenameProvider': ExtensionHostRename.executeprepareRenameProvider,
   'ExtensionHostRename.executeRenameProvider': ExtensionHostRename.executeRenameProvider,
   'ExtensionHostSourceControl.getIconDefinitions': ExtensionHostSourceControl.getIconDefinitions,

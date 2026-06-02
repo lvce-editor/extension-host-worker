@@ -1,0 +1,6 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["*"],
+  "commands": []
+}

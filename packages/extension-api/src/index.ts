@@ -1,4 +1,6 @@
 export { activate } from './parts/Activation/Activation.ts'
+export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
+export { showQuickPick } from './parts/QuickPick/QuickPick.ts'
 export { registerCommand } from './parts/Command/Command.ts'
 export {
   getStatusBarItemProviderRegistrySnapshot,
@@ -9,6 +11,7 @@ export { handleExtensionManagementMessagePort } from './parts/HandleExtensionMan
 export type { Command, CommandCallback, CommandRegistrySnapshot } from './parts/Command/Command.ts'
 export type { Disposable } from './parts/Disposable/Disposable.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
+export type { QuickPickItem, ShowQuickPickOptions } from './parts/QuickPick/QuickPick.ts'
 export type {
   StatusBarItem,
   StatusBarItemProvider,

@@ -1,3 +1,4 @@
+import { getStatusBarItems as getExtensionApiStatusBarItems } from '../../../../extension-api/src/parts/GetStatusBarItems/GetStatusBarItems.ts'
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
@@ -35,6 +36,7 @@ export const getStatusBarItems2 = async (): Promise<any[]> => {
       }
     }
   }
+  statusBarItems.push(...getExtensionApiStatusBarItems())
   return statusBarItems
 }
 

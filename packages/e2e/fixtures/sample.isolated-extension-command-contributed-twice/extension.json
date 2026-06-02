@@ -1,0 +1,15 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["*"],
+  "commands": [
+    {
+      "id": "isolatedDuplicate.run",
+      "label": "Run Duplicate Command"
+    },
+    {
+      "id": "isolatedDuplicate.run",
+      "label": "Run Duplicate Command Again"
+    }
+  ]
+}

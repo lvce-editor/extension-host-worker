@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedAbout.openAbout"],
+  "commands": [
+    {
+      "id": "isolatedAbout.openAbout",
+      "label": "Open About From Isolated Extension"
+    }
+  ]
+}
