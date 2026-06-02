@@ -3,6 +3,7 @@ export { getFormattingProviderRegistrySnapshot } from '../GetFormattingProviderR
 export { registerFormattingProvider } from '../RegisterFormattingProvider/RegisterFormattingProvider.ts'
 export { resetFormattingProviderRegistry } from '../ResetFormattingProviderRegistry/ResetFormattingProviderRegistry.ts'
 export type { FormattingEdit } from '../FormattingEdit/FormattingEdit.ts'
-export type { FormattingProvider, TextDocument } from '../FormattingProvider/FormattingProvider.ts'
+export type { FormattingProvider } from '../FormattingProvider/FormattingProvider.ts'
 export type { FormattingProviderRegistrySnapshot } from '../FormattingProviderRegistrySnapshot/FormattingProviderRegistrySnapshot.ts'
+export type { TextDocument } from '../FormattingTextDocument/FormattingTextDocument.ts'
 export type { RegisteredFormattingProvider } from '../RegisteredFormattingProvider/RegisteredFormattingProvider.ts'

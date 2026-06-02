@@ -32,7 +32,10 @@ const {
   },
 })
 
-const executeRegisteredFormattingProviderWithParams = executeRegisteredFormattingProvider as (textDocumentId: number, ...params: any[]) => Promise<any>
+const executeRegisteredFormattingProviderWithParams = executeRegisteredFormattingProvider as (
+  textDocumentId: number,
+  ...params: any[]
+) => Promise<any>
 
 const executeFormattingProvider = async (textDocumentId: number, ...params: any[]) => {
   const textDocument = TextDocument.get(textDocumentId)

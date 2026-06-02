@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-completion-provider-direct",
+  "name": "Sample Isolated Extension Completion Provider Direct",
+  "browser": "main.ts",
+  "isolated": true,
+  "completionProviders": [
+    {
+      "id": "isolatedCompletionDirect",
+      "languageId": "javascript"
+    }
+  ]
+}

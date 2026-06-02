@@ -1,4 +1,5 @@
 import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
+import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 
 interface ManifestCommand {
@@ -9,7 +10,12 @@ interface ManifestFormattingProvider {
   readonly id?: unknown
 }
 
+interface ManifestCompletionProvider {
+  readonly id?: unknown
+}
+
 interface ExtensionManifest {
+  readonly completionProviders?: readonly ManifestCompletionProvider[]
   readonly commands?: readonly ManifestCommand[]
   readonly formattingProviders?: readonly ManifestFormattingProvider[]
   readonly isolated?: boolean
@@ -27,6 +33,13 @@ const getManifestFormattingProviderIds = (extension: ExtensionManifest): readonl
     return []
   }
   return extension.formattingProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
+}
+
+const getManifestCompletionProviderIds = (extension: ExtensionManifest): readonly string[] => {
+  if (!Array.isArray(extension.completionProviders)) {
+    return []
+  }
+  return extension.completionProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
 }
 
 const assertUniqueIds = (ids: readonly string[], label: string): void => {
@@ -49,19 +62,24 @@ const getNewRegisteredFormattingProviderIds = (beforeFormattingProviderIds: read
   return ExtensionHostFormatting.getRegisteredFormattingProviderIds().filter((providerId) => !before.has(providerId))
 }
 
+const getNewRegisteredCompletionProviderIds = (beforeCompletionProviderIds: readonly string[]): readonly string[] => {
+  const before = new Set(beforeCompletionProviderIds)
+  return ExtensionHostCompletion.getRegisteredCompletionProviderIds().filter((providerId) => !before.has(providerId))
+}
+
 export const getRegisteredCommandIds = (): readonly string[] => {
   return ExtensionHostCommand.getRegisteredCommandIds()
+}
+
+export const getRegisteredCompletionProviderIds = (): readonly string[] => {
+  return ExtensionHostCompletion.getRegisteredCompletionProviderIds()
 }
 
 export const getRegisteredFormattingProviderIds = (): readonly string[] => {
   return ExtensionHostFormatting.getRegisteredFormattingProviderIds()
 }
 
-const validateIsolatedExtensionContribution = (
-  label: string,
-  manifestIds: readonly string[],
-  registeredIds: readonly string[],
-): void => {
+const validateIsolatedExtensionContribution = (label: string, manifestIds: readonly string[], registeredIds: readonly string[]): void => {
   assertUniqueIds(manifestIds, label)
   const manifestIdSet = new Set(manifestIds)
   const registeredIdSet = new Set(registeredIds)
@@ -84,6 +102,15 @@ export const validateIsolatedExtensionCommands = (extension: ExtensionManifest, 
   const manifestCommandIds = getManifestCommandIds(extension)
   const registeredCommandIds = getNewRegisteredCommandIds(beforeCommandIds)
   validateIsolatedExtensionContribution('command', manifestCommandIds, registeredCommandIds)
+}
+
+export const validateIsolatedExtensionCompletionProviders = (extension: ExtensionManifest, beforeCompletionProviderIds: readonly string[]): void => {
+  if (!extension.isolated) {
+    return
+  }
+  const manifestCompletionProviderIds = getManifestCompletionProviderIds(extension)
+  const registeredCompletionProviderIds = getNewRegisteredCompletionProviderIds(beforeCompletionProviderIds)
+  validateIsolatedExtensionContribution('completion provider', manifestCompletionProviderIds, registeredCompletionProviderIds)
 }
 
 export const validateIsolatedExtensionFormattingProviders = (extension: ExtensionManifest, beforeFormattingProviderIds: readonly string[]): void => {

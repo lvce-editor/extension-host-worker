@@ -1,5 +1,5 @@
 import type { FormattingEdit } from '../FormattingEdit/FormattingEdit.ts'
-import type { TextDocument } from '../FormattingProvider/FormattingProvider.ts'
+import type { TextDocument } from '../FormattingTextDocument/FormattingTextDocument.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { getFormattingProviderByLanguageId } from '../FormattingProviderState/FormattingProviderState.ts'
 

@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-completion-provider-error",
+  "name": "Sample Isolated Extension Completion Provider Error",
+  "browser": "main.ts",
+  "isolated": true,
+  "completionProviders": [
+    {
+      "id": "isolatedCompletionError",
+      "languageId": "javascript"
+    }
+  ]
+}

@@ -1,11 +1,5 @@
 import type { FormattingEdit } from '../FormattingEdit/FormattingEdit.ts'
-
-export interface TextDocument {
-  readonly documentId: number
-  readonly languageId: string
-  readonly text: string
-  readonly uri: string
-}
+import type { TextDocument } from '../FormattingTextDocument/FormattingTextDocument.ts'
 
 export interface FormattingProvider {
   readonly format: (textDocument: TextDocument, ...args: readonly unknown[]) => readonly FormattingEdit[] | Promise<readonly FormattingEdit[]>
