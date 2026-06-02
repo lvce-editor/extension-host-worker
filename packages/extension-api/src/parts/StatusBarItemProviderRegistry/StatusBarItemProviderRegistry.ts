@@ -1,8 +1,8 @@
+import type { RegisteredStatusBarItemProvider } from '../RegisteredStatusBarItemProvider/RegisteredStatusBarItemProvider.ts'
 import type { StatusBarItem } from '../StatusBarItem/StatusBarItem.ts'
 import type { StatusBarItemProvider } from '../StatusBarItemProvider/StatusBarItemProvider.ts'
 import type { StatusBarItemProviderHandle } from '../StatusBarItemProviderHandle/StatusBarItemProviderHandle.ts'
 import type { StatusBarItemProviderRegistrySnapshot } from '../StatusBarItemProviderRegistrySnapshot/StatusBarItemProviderRegistrySnapshot.ts'
-import type { RegisteredStatusBarItemProvider } from '../RegisteredStatusBarItemProvider/RegisteredStatusBarItemProvider.ts'
 import * as NotifyStatusBarChange from '../NotifyStatusBarChange/NotifyStatusBarChange.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
