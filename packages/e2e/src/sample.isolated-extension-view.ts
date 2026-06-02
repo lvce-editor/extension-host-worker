@@ -12,8 +12,9 @@ export const test: Test = async ({ expect, Extension, Locator }) => {
   await expect(item).toBeVisible()
   await expect(item).toHaveAttribute('aria-selected', 'false')
 
-  await item.click()
+  await item.dispatchEvent('click')
 
+  const iframe = Locator('iframe.ExtensionViewIframe[title="Testing"]')
   await expect(item).toHaveAttribute('aria-selected', 'true')
-  await expect(Locator('iframe.ExtensionViewIframe[title="Testing"]')).toBeVisible()
+  await expect(iframe).toBeVisible()
 }

@@ -10,8 +10,10 @@ export const test: Test = async ({ expect, Extension, Locator }) => {
 
   const item = Locator('.ActivityBarItem[title="CSP Violation"]')
   await expect(item).toBeVisible()
-  await item.click()
+  await item.dispatchEvent('click')
 
-  await expect(Locator('iframe.ExtensionViewIframe[title="CSP Violation"]')).toBeVisible()
-  await expect(Locator('text=script blocked')).toBeVisible()
+  const iframe = Locator('iframe.ExtensionViewIframe[title="CSP Violation"]')
+  const scriptBlocked = Locator('text=script blocked')
+  await expect(iframe).toBeVisible()
+  await expect(scriptBlocked).toBeVisible()
 }

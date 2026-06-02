@@ -8,8 +8,6 @@
     "type-check": "tsc"
   },
   "type": "module",
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "devDependencies": {
     "@lvce-editor/test-with-playwright": "^17.2.0"

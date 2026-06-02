@@ -10,9 +10,10 @@ export const test: Test = async ({ expect, Extension, Locator }) => {
 
   const item = Locator('.ActivityBarItem[title="Load Error"]')
   await expect(item).toBeVisible()
-  await item.click()
+  await item.dispatchEvent('click')
 
   const iframe = Locator('iframe.ExtensionViewIframe[title="Load Error"]')
+  const errorMessage = Locator('text=Failed to load extension view iframe')
   await expect(iframe).toBeVisible()
-  await expect(Locator('text=Failed to load extension view iframe')).toBeVisible()
+  await expect(errorMessage).toBeVisible()
 }

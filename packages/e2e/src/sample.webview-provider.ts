@@ -15,7 +15,6 @@ export const test: Test = async ({ Extension, FileSystem, Main, WebView }) => {
 
   // assert
   const webView = await WebView.fromId('xyz')
-  console.log({ webview: webView })
   const heading = webView.locator('h1')
   // TODO allow using normal expect function for webview also
   await webView.expect(heading).toBeVisible()

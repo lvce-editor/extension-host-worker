@@ -10,7 +10,8 @@ export const test: Test = async ({ expect, Extension, Locator }) => {
 
   const item = Locator('.ActivityBarItem[title="Missing Iframe"]')
   await expect(item).toBeVisible()
-  await item.click()
+  await item.dispatchEvent('click')
 
-  await expect(Locator('text=view sample.views.missingIframe is missing iframe contribution')).toBeVisible()
+  const errorMessage = Locator('text=view sample.views.missingIframe is missing iframe contribution')
+  await expect(errorMessage).toBeVisible()
 }
