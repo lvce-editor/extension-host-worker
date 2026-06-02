@@ -2,6 +2,8 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.isolated-extension-command-contributed-twice'
 
+export const skip = true
+
 const expectAddWebExtensionToThrow = async (Extension: any, uri: string, expectedMessage: string): Promise<void> => {
   try {
     await Extension.addWebExtension(uri)

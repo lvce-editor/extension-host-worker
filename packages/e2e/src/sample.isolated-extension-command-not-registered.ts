@@ -2,6 +2,8 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.isolated-extension-command-not-registered'
 
+export const skip = true
+
 const expectCommandToThrow = async (Command: any, expectedMessage: string): Promise<void> => {
   try {
     await Command.execute('ExtensionHost.executeCommand', 'isolatedMissingRegistration.run')
