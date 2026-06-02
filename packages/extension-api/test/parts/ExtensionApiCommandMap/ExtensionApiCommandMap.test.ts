@@ -12,6 +12,10 @@ test('commandMap exposes view commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.getViewRegistrySnapshot'], 'function')
 })
 
+test('commandMap exposes output channel commands', () => {
+  strictEqual(typeof commandMap['ExtensionApi.getOutputChannelRegistrySnapshot'], 'function')
+})
+
 test('commandMap keeps completion, diagnostic and formatting provider commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.executeCompletionProvider'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.executeDiagnosticProvider'], 'function')

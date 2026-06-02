@@ -1,5 +1,6 @@
 import { deepStrictEqual, strictEqual, throws } from 'node:assert/strict'
-import { afterEach, test } from 'node:test'
+import { afterEach, beforeEach, test } from 'node:test'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import {
   getStatusBarItemProviderRegistrySnapshot,
   getStatusBarItems,
@@ -7,8 +8,26 @@ import {
   resetStatusBarItemProviderRegistry,
 } from '../../../src/parts/StatusBarItemProviderRegistry/StatusBarItemProviderRegistry.ts'
 
+interface MockRpcDisposable {
+  [Symbol.dispose](): void
+}
+
+let mockRpc: MockRpcDisposable | undefined
+let statusBarChanges: string[] = []
+
+beforeEach(() => {
+  statusBarChanges = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    'StatusBar.handleChange'(id: string): void {
+      statusBarChanges.push(id)
+    },
+  })
+})
+
 afterEach(() => {
   resetStatusBarItemProviderRegistry()
+  mockRpc?.[Symbol.dispose]()
+  mockRpc = undefined
 })
 
 test('registerStatusBarItemProvider registers and returns items', () => {
@@ -49,6 +68,8 @@ test('registerStatusBarItemProvider refresh resolves', async () => {
   })
 
   await handle.refresh()
+
+  deepStrictEqual(statusBarChanges, ['sample.status', 'sample.status'])
 })
 
 test('registerStatusBarItemProvider rejects duplicate id', () => {

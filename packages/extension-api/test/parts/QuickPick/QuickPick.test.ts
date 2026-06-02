@@ -1,22 +1,27 @@
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { showQuickPick } from '../../../src/parts/QuickPick/QuickPick.ts'
-import * as Rpc from '../../../src/parts/Rpc/Rpc.ts'
+
+interface MockRpcDisposable {
+  [Symbol.dispose](): void
+}
+
+let mockRpc: MockRpcDisposable | undefined
 
 afterEach(() => {
-  Rpc.set(undefined as any)
+  mockRpc?.[Symbol.dispose]()
+  mockRpc = undefined
 })
 
 test('showQuickPick invokes extension host quick pick command', async () => {
-  let invokedMethod = ''
   let invokedOptions: unknown
-  Rpc.set({
-    async invoke(method: string, options: unknown): Promise<unknown> {
-      invokedMethod = method
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'ExtensionHostQuickPick.showQuickPick'(options: unknown): Promise<unknown> {
       invokedOptions = options
       return 'option-1'
     },
-  } as any)
+  })
   const options = {
     items: [
       {
@@ -31,14 +36,5 @@ test('showQuickPick invokes extension host quick pick command', async () => {
   const result = await showQuickPick(options)
 
   strictEqual(result, 'option-1')
-  strictEqual(invokedMethod, 'ExtensionHostQuickPick.showQuickPick')
   deepStrictEqual(invokedOptions, options)
-})
-
-test('showQuickPick returns undefined when rpc is not configured', async () => {
-  const result = await showQuickPick({
-    items: [],
-  })
-
-  strictEqual(result, undefined)
 })
