@@ -27,11 +27,12 @@
   ],
   "sideEffects": false,
   "dependencies": {
-    "@lvce-editor/rpc": "^6.4.0"
+    "@lvce-editor/rpc": "^6.4.0",
+    "@lvce-editor/rpc-registry": "^9.24.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "test": "node --experimental-strip-types --test \"test/**/*.test.ts\"",
+    "test": "node --test \"test/**/*.test.ts\"",
     "type-check": "tsc"
   },
   "devDependencies": {

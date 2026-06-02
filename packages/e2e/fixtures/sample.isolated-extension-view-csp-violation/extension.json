@@ -1,0 +1,16 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.cspViolation"],
+  "views": [
+    {
+      "id": "sample.views.cspViolation",
+      "title": "CSP Violation",
+      "iframe": {
+        "path": "view.html",
+        "sandbox": ["allow-scripts"],
+        "csp": "default-src 'self'; script-src 'none'; style-src 'unsafe-inline'"
+      }
+    }
+  ]
+}

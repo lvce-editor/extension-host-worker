@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.missingIframe"],
+  "views": [
+    {
+      "id": "sample.views.missingIframe",
+      "title": "Missing Iframe"
+    }
+  ]
+}

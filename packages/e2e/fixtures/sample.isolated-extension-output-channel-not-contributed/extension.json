@@ -1,0 +1,7 @@
+{
+  "browser": "main.ts",
+  "id": "sample.isolated-extension-output-channel-not-contributed",
+  "isolated": true,
+  "activation": ["*"],
+  "outputChannels": []
+}

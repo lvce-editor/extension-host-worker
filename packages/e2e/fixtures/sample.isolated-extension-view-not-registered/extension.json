@@ -1,0 +1,14 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.notRegistered"],
+  "views": [
+    {
+      "id": "sample.views.notRegistered",
+      "title": "Not Registered",
+      "iframe": {
+        "path": "view.html"
+      }
+    }
+  ]
+}

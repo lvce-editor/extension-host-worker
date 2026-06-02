@@ -1,5 +1,5 @@
-import * as Rpc from '../Rpc/Rpc.ts'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export const notifyStatusBarChange = async (id: string): Promise<void> => {
-  await Rpc.invoke('StatusBar.handleChange', id)
+  await ExtensionManagementWorker.invoke('StatusBar.handleChange', id)
 }

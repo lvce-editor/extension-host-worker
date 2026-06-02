@@ -1,0 +1,12 @@
+{
+  "browser": "main.ts",
+  "id": "sample.isolated-extension-output-channel-invalid-id",
+  "isolated": true,
+  "activation": ["*"],
+  "outputChannels": [
+    {
+      "id": "sample-output-invalid",
+      "label": "Invalid Output"
+    }
+  ]
+}
