@@ -1,15 +1,15 @@
 import { beforeEach, expect, test } from '@jest/globals'
-import { registerCommand, resetCommandRegistry } from '../../extension-api/src/parts/Command/Command.ts'
-import { registerFormattingProvider, resetFormattingProviderRegistry } from '../../extension-api/src/parts/Formatting/Formatting.ts'
+import * as ExtensionHostCommand from '../src/parts/ExtensionHostCommand/ExtensionHostCommand.ts'
+import * as ExtensionHostFormatting from '../src/parts/ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ValidateIsolatedExtensionCommands from '../src/parts/ValidateIsolatedExtensionCommands/ValidateIsolatedExtensionCommands.ts'
 
 beforeEach(() => {
-  resetCommandRegistry()
-  resetFormattingProviderRegistry()
+  ExtensionHostCommand.reset()
+  ExtensionHostFormatting.reset()
 })
 
 test('validateIsolatedExtensionCommands - duplicate command contribution', () => {
-  registerCommand({
+  ExtensionHostCommand.registerCommand({
     execute(): void {},
     id: 'sample.duplicate',
   })
@@ -26,7 +26,7 @@ test('validateIsolatedExtensionCommands - duplicate command contribution', () =>
 
 test('validateIsolatedExtensionCommands - registered command missing from extension json', () => {
   const beforeCommandIds = ValidateIsolatedExtensionCommands.getRegisteredCommandIds()
-  registerCommand({
+  ExtensionHostCommand.registerCommand({
     execute(): void {},
     id: 'sample.missingContribution',
   })
@@ -54,7 +54,7 @@ test('validateIsolatedExtensionCommands - contributed command not registered', (
 })
 
 test('validateIsolatedExtensionFormattingProviders - duplicate formatting provider contribution', () => {
-  registerFormattingProvider({
+  ExtensionHostFormatting.registerFormattingProvider({
     format() {
       return []
     },
@@ -74,7 +74,7 @@ test('validateIsolatedExtensionFormattingProviders - duplicate formatting provid
 
 test('validateIsolatedExtensionFormattingProviders - registered formatting provider missing from extension json', () => {
   const beforeFormattingProviderIds = ValidateIsolatedExtensionCommands.getRegisteredFormattingProviderIds()
-  registerFormattingProvider({
+  ExtensionHostFormatting.registerFormattingProvider({
     format() {
       return []
     },

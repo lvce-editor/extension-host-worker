@@ -5,6 +5,7 @@ import { VError } from '../VError/VError.ts'
 
 const {
   executeFormattingProvider: executeRegisteredFormattingProvider,
+  getProviders,
   getProvider,
   registerFormattingProvider,
   reset,
@@ -45,4 +46,8 @@ const executeFormattingProvider = async (textDocumentId: number, ...params: any[
   return executeRegisteredFormattingProviderWithParams(textDocumentId, ...params)
 }
 
-export { registerFormattingProvider, executeFormattingProvider, reset }
+const getRegisteredFormattingProviderIds = (): readonly string[] => {
+  return getProviders().map((provider: any) => provider.id)
+}
+
+export { registerFormattingProvider, executeFormattingProvider, getRegisteredFormattingProviderIds, reset }

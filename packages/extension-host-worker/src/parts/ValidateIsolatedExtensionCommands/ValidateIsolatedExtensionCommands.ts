@@ -1,5 +1,5 @@
-import { getCommandRegistrySnapshot } from '../../../../extension-api/src/parts/Command/Command.ts'
-import { getFormattingProviderRegistrySnapshot } from '../../../../extension-api/src/parts/Formatting/Formatting.ts'
+import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
+import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 
 interface ManifestCommand {
   readonly id?: unknown
@@ -41,24 +41,20 @@ const assertUniqueIds = (ids: readonly string[], label: string): void => {
 
 const getNewRegisteredCommandIds = (beforeCommandIds: readonly string[]): readonly string[] => {
   const before = new Set(beforeCommandIds)
-  return getCommandRegistrySnapshot()
-    .commands.map((command) => command.id)
-    .filter((commandId) => !before.has(commandId))
+  return ExtensionHostCommand.getRegisteredCommandIds().filter((commandId) => !before.has(commandId))
 }
 
 const getNewRegisteredFormattingProviderIds = (beforeFormattingProviderIds: readonly string[]): readonly string[] => {
   const before = new Set(beforeFormattingProviderIds)
-  return getFormattingProviderRegistrySnapshot()
-    .providers.map((provider) => provider.id)
-    .filter((providerId) => !before.has(providerId))
+  return ExtensionHostFormatting.getRegisteredFormattingProviderIds().filter((providerId) => !before.has(providerId))
 }
 
 export const getRegisteredCommandIds = (): readonly string[] => {
-  return getCommandRegistrySnapshot().commands.map((command) => command.id)
+  return ExtensionHostCommand.getRegisteredCommandIds()
 }
 
 export const getRegisteredFormattingProviderIds = (): readonly string[] => {
-  return getFormattingProviderRegistrySnapshot().providers.map((provider) => provider.id)
+  return ExtensionHostFormatting.getRegisteredFormattingProviderIds()
 }
 
 const validateIsolatedExtensionContribution = (

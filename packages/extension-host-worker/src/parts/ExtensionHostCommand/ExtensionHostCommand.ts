@@ -52,6 +52,10 @@ export const executeCommand = async (id, ...args) => {
   }
 }
 
+export const getRegisteredCommandIds = (): readonly string[] => {
+  return Object.values(state.commands).map((command: any) => command.id)
+}
+
 export const reset = () => {
   state.commands = Object.create(null)
 }
