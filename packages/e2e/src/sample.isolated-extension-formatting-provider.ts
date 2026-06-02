@@ -2,17 +2,15 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.isolated-extension-formatting-provider'
 
-const assertFormattingEdits = (actual: unknown): void => {
-  const expected = [{ endOffset: 13, inserted: 'const value = 1', startOffset: 0 }]
-  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-    throw new Error(`Expected formatting edits ${JSON.stringify(expected)}, but got ${JSON.stringify(actual)}`)
-  }
-}
-
-export const test: Test = async ({ Command, Extension }) => {
+export const test: Test = async ({ Command, Editor, Extension, FileSystem, Main, Workspace }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
-  await Command.execute('ExtensionHostTextDocument.syncFull', '/test.js', 1, 'javascript', 'const value=1')
-  const edits = await Command.execute('ExtensionHostFormatting.executeFormattingProvider', 1)
-  assertFormattingEdits(edits)
+  const tmpDir = await FileSystem.getTmpDir()
+  await FileSystem.writeFile(`${tmpDir}/test.js`, 'const value=1')
+  await Workspace.setPath(tmpDir)
+  await Main.openUri(`${tmpDir}/test.js`)
+
+  await Command.execute('Editor.format')
+
+  await Editor.shouldHaveText('const value = 1')
 }
