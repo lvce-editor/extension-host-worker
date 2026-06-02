@@ -55,7 +55,9 @@ export type {
 } from './parts/Formatting/Formatting.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
-export type { OutputChannel, OutputChannelRegistrySnapshot, RegisteredOutputChannel } from './parts/OutputChannel/OutputChannelTypes.ts'
+export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHandle.ts'
+export type { OutputChannelRegistrySnapshot } from './parts/OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
+export type { RegisteredOutputChannel } from './parts/RegisteredOutputChannel/RegisteredOutputChannel.ts'
 export type { QuickPickItem } from './parts/QuickPickItem/QuickPickItem.ts'
 export type { ShowQuickPickOptions } from './parts/ShowQuickPickOptions/ShowQuickPickOptions.ts'
 export type {

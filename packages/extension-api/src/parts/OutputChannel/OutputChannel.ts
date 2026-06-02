@@ -1,6 +1,8 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import type { OutputChannel, OutputChannelRegistrySnapshot, RegisteredOutputChannel } from './OutputChannelTypes.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
+import type { OutputChannel } from '../OutputChannelHandle/OutputChannelHandle.ts'
+import type { OutputChannelRegistrySnapshot } from '../OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
+import type { RegisteredOutputChannel } from '../RegisteredOutputChannel/RegisteredOutputChannel.ts'
 
 const outputChannels: Record<string, RegisteredOutputChannel> = Object.create(null)
 let isActivated = false
@@ -77,4 +79,6 @@ export const resetOutputChannelRegistry = (): void => {
   isActivated = false
 }
 
-export type { OutputChannel, OutputChannelRegistrySnapshot, RegisteredOutputChannel } from './OutputChannelTypes.ts'
+export type { OutputChannel } from '../OutputChannelHandle/OutputChannelHandle.ts'
+export type { OutputChannelRegistrySnapshot } from '../OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
+export type { RegisteredOutputChannel } from '../RegisteredOutputChannel/RegisteredOutputChannel.ts'
