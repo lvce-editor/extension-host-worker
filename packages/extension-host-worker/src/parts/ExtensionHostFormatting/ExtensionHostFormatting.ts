@@ -1,8 +1,8 @@
-import { executeFormattingProvider as executeIsolatedFormattingProvider } from '../../../../extension-api/src/parts/Formatting/Formatting.ts'
 import { ExtensionApiError } from '../../../../extension-api/src/parts/ExtensionApiError/ExtensionApiError.ts'
+import { executeFormattingProvider as executeIsolatedFormattingProvider } from '../../../../extension-api/src/parts/Formatting/Formatting.ts'
 import { ensureError } from '../EnsureError/EnsureError.ts'
-import * as Registry from '../Registry/Registry.ts'
 import * as TextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
+import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 import { VError } from '../VError/VError.ts'
 
