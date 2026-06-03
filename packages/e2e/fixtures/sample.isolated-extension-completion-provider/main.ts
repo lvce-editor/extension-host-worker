@@ -1,7 +1,7 @@
-import { activate as activateExtensionApi, registerCompletionProvider } from '@lvce-editor/api'
+import { activate, registerCompletionProvider } from '@lvce-editor/api'
 
-export const activate = (): void => {
-  activateExtensionApi()
+const main = async (): Promise<void> => {
+  await activate()
   registerCompletionProvider({
     id: 'isolatedCompletion',
     languageId: 'xyz',
@@ -15,3 +15,5 @@ export const activate = (): void => {
     },
   })
 }
+
+await main()
