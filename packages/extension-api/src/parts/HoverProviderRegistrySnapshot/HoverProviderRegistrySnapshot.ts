@@ -1,5 +1,6 @@
-import type { RegisteredHoverProvider } from '../RegisteredHoverProvider/RegisteredHoverProvider.ts'
-
 export interface HoverProviderRegistrySnapshot {
-  readonly providers: readonly RegisteredHoverProvider[]
+  readonly providers: readonly {
+    readonly id: string
+    readonly languageId: string
+  }[]
 }

@@ -1,5 +1,6 @@
-import type { RegisteredFormattingProvider } from '../RegisteredFormattingProvider/RegisteredFormattingProvider.ts'
-
 export interface FormattingProviderRegistrySnapshot {
-  readonly providers: readonly RegisteredFormattingProvider[]
+  readonly providers: readonly {
+    readonly id: string
+    readonly languageId: string
+  }[]
 }

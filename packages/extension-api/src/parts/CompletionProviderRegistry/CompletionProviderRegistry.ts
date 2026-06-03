@@ -91,7 +91,10 @@ export const getCompletionProviders = registry.getProviders
 
 export const getCompletionProviderRegistrySnapshot = (): CompletionProviderRegistrySnapshot => {
   return {
-    providers: registry.getProviders(),
+    providers: registry.getProviders().map((provider) => ({
+      id: provider.id,
+      languageId: provider.languageId,
+    })),
   }
 }
 
