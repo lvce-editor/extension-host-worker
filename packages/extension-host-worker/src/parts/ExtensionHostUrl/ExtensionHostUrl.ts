@@ -9,23 +9,26 @@ const isFileProtocol = (protocol: string): boolean => {
   return !protocol || protocol === 'file'
 }
 
+const getRemotePath = (uri: string): string => {
+  const withoutPrefix = uri.startsWith('file://') ? uri.slice('file://'.length) : uri
+  const normalized = withoutPrefix.replaceAll('\\', '/')
+  if (normalized.startsWith('/')) {
+    return normalized
+  }
+  return `/${normalized}`
+}
+
 export const getRemoteUrlSync = (uri: string): string => {
   const protocol = GetProtocol.getProtocol(uri)
   if (protocol === 'http' || protocol === 'https') {
     return uri
   }
-  const withoutPrefix = uri.startsWith('file://') ? uri.slice('file://'.length) : uri
+  const remotePath = getRemotePath(uri)
   if (Platform.platform === PlatformType.Remote && isFileProtocol(protocol)) {
-    if (uri.startsWith('/')) {
-      return `/remote${withoutPrefix}`
-    }
-    return `/remote/${withoutPrefix}`
+    return `/remote${remotePath}`
   }
   if (Platform.platform === PlatformType.Electron && isFileProtocol(protocol)) {
-    if (uri.startsWith('/')) {
-      return `/remote${withoutPrefix}`
-    }
-    return `/remote/${withoutPrefix}`
+    return `/remote${remotePath}`
   }
   return ''
 }

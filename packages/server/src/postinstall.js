@@ -7,8 +7,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..', '..', '..')
 
 export const getRemoteUrl = (path) => {
-  const url = pathToFileURL(path).toString().slice(8)
-  return `/remote/${url}`
+  const url = pathToFileURL(path).toString().slice('file://'.length)
+  return `/remote${url}`
 }
 
 const nodeModulesPath = join(root, 'packages', 'server', 'node_modules')
