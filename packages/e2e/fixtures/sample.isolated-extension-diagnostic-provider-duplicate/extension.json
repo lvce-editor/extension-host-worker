@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-diagnostic-provider-duplicate",
+  "name": "Sample Isolated Extension Diagnostic Provider Duplicate",
+  "browser": "main.ts",
+  "isolated": true,
+  "diagnosticProviders": [
+    {
+      "id": "isolatedDiagnosticDuplicate",
+      "languageId": "javascript"
+    }
+  ]
+}

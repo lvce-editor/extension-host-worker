@@ -1,0 +1,18 @@
+{
+  "id": "sample.isolated-extension-diagnostic-provider",
+  "name": "Sample Isolated Extension Diagnostic Provider",
+  "browser": "main.ts",
+  "isolated": true,
+  "diagnosticProviders": [
+    {
+      "id": "isolatedDiagnostic",
+      "languageId": "xyz"
+    }
+  ],
+  "languages": [
+    {
+      "id": "xyz",
+      "extensions": [".xyz"]
+    }
+  ]
+}

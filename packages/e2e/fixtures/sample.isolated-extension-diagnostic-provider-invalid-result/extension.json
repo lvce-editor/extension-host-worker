@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-diagnostic-provider-invalid-result",
+  "name": "Sample Isolated Extension Diagnostic Provider Invalid Result",
+  "browser": "main.ts",
+  "isolated": true,
+  "diagnosticProviders": [
+    {
+      "id": "isolatedDiagnosticInvalidResult",
+      "languageId": "javascript"
+    }
+  ]
+}
