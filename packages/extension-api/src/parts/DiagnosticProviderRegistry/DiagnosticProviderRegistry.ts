@@ -66,7 +66,10 @@ export const getDiagnosticProviders = registry.getProviders
 
 export const getDiagnosticProviderRegistrySnapshot = (): DiagnosticProviderRegistrySnapshot => {
   return {
-    providers: registry.getProviders(),
+    providers: registry.getProviders().map((provider) => ({
+      id: provider.id,
+      languageId: provider.languageId,
+    })),
   }
 }
 

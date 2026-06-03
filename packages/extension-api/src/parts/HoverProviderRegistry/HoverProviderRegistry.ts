@@ -68,7 +68,10 @@ export const getHoverProviders = registry.getProviders
 
 export const getHoverProviderRegistrySnapshot = (): HoverProviderRegistrySnapshot => {
   return {
-    providers: registry.getProviders(),
+    providers: registry.getProviders().map((provider) => ({
+      id: provider.id,
+      languageId: provider.languageId,
+    })),
   }
 }
 

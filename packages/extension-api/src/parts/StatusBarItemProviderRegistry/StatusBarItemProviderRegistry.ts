@@ -51,7 +51,9 @@ export const getStatusBarItems = (): readonly StatusBarItem[] => {
 
 export const getStatusBarItemProviderRegistrySnapshot = (): StatusBarItemProviderRegistrySnapshot => {
   return {
-    providers: registry.getProviders(),
+    providers: registry.getProviders().map((provider) => ({
+      id: provider.id,
+    })),
   }
 }
 

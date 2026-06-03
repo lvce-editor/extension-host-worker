@@ -40,7 +40,10 @@ export const getFormattingProviders = registry.getProviders
 
 export const getFormattingProviderRegistrySnapshot = (): FormattingProviderRegistrySnapshot => {
   return {
-    providers: registry.getProviders(),
+    providers: registry.getProviders().map((provider) => ({
+      id: provider.id,
+      languageId: provider.languageId,
+    })),
   }
 }
 

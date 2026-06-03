@@ -192,3 +192,25 @@ test('getCompletionProviderRegistrySnapshot returns registered providers', () =>
     ['sample.completion'],
   )
 })
+
+test('getCompletionProviderRegistrySnapshot omits provider functions', () => {
+  registerCompletionProvider({
+    id: 'sample.completion',
+    languageId: 'sample',
+    provideCompletions() {
+      return []
+    },
+    resolveCompletionItem() {
+      return undefined
+    },
+  })
+
+  deepStrictEqual(getCompletionProviderRegistrySnapshot(), {
+    providers: [
+      {
+        id: 'sample.completion',
+        languageId: 'sample',
+      },
+    ],
+  })
+})

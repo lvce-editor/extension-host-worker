@@ -38,7 +38,9 @@ export const registerCommand = <TArgs extends readonly unknown[], TResult>(comma
 
 export const getCommandRegistrySnapshot = (): CommandRegistrySnapshot => {
   return {
-    commands: Object.values(commands),
+    commands: Object.values(commands).map((command) => ({
+      id: command.id,
+    })),
   }
 }
 

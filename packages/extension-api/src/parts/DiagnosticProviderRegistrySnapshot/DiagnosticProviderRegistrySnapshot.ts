@@ -1,5 +1,6 @@
-import type { RegisteredDiagnosticProvider } from '../RegisteredDiagnosticProvider/RegisteredDiagnosticProvider.ts'
-
 export interface DiagnosticProviderRegistrySnapshot {
-  readonly providers: readonly RegisteredDiagnosticProvider[]
+  readonly providers: readonly {
+    readonly id: string
+    readonly languageId: string
+  }[]
 }
