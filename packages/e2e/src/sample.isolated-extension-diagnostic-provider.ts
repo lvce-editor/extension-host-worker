@@ -15,11 +15,11 @@ export const test: Test = async ({ Command, Extension }) => {
     JSON.stringify(diagnostics) !==
     JSON.stringify([
       {
-        rowIndex: 0,
         columnIndex: 6,
-        endRowIndex: 0,
         endColumnIndex: 11,
+        endRowIndex: 0,
         message: 'isolated diagnostic result',
+        rowIndex: 0,
         source: 'isolated',
         type: 'error',
       },
