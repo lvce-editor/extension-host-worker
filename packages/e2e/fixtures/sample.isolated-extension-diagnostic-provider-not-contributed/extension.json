@@ -1,0 +1,7 @@
+{
+  "id": "sample.isolated-extension-diagnostic-provider-not-contributed",
+  "name": "Sample Isolated Extension Diagnostic Provider Not Contributed",
+  "browser": "main.ts",
+  "isolated": true,
+  "diagnosticProviders": []
+}

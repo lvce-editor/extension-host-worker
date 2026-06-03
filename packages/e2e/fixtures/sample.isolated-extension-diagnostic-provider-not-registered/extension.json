@@ -1,0 +1,12 @@
+{
+  "id": "sample.isolated-extension-diagnostic-provider-not-registered",
+  "name": "Sample Isolated Extension Diagnostic Provider Not Registered",
+  "browser": "main.ts",
+  "isolated": true,
+  "diagnosticProviders": [
+    {
+      "id": "isolatedDiagnosticMissingRegistration",
+      "languageId": "javascript"
+    }
+  ]
+}
