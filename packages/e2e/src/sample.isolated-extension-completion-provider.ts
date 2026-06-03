@@ -5,6 +5,7 @@ export const name = 'sample.isolated-extension-completion-provider'
 export const skip = true
 
 export const test: Test = async ({ Editor, expect, Extension, FileSystem, Locator, Main, Workspace }) => {
+  // arrange
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
   const tmpDir = await FileSystem.getTmpDir()
@@ -13,8 +14,10 @@ export const test: Test = async ({ Editor, expect, Extension, FileSystem, Locato
   await Main.openUri(`${tmpDir}/test.xyz`)
   await Editor.setCursor(0, 0)
 
+  // act
   await Editor.openCompletion()
 
+  // asser
   const completions = Locator('.EditorCompletion')
   await expect(completions).toBeVisible()
   const items = Locator('.EditorCompletionItem')
