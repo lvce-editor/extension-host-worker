@@ -2,8 +2,6 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'sample.isolated-extension-formatting-provider'
 
-export const skip = 1
-
 export const test: Test = async ({ Command, Editor, Extension, FileSystem, Main, Workspace }) => {
   const uri = import.meta.resolve(`../fixtures/${name}`)
   await Extension.addWebExtension(uri)
