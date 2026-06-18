@@ -36,6 +36,36 @@ test('executeCompletionProvider returns completions from matching provider', asy
   strictEqual(completions[0]?.label, 'sample:2')
 })
 
+test('executeCompletionProvider normalizes completion items for rpc', async () => {
+  registerCompletionProvider({
+    id: 'sample.completion',
+    languageId: 'sample',
+    provideCompletions() {
+      return [
+        {
+          execute() {
+            return undefined
+          },
+          label: 'sample',
+          type: 1,
+        },
+      ]
+    },
+  })
+
+  const completions = await executeCompletionProvider(textDocument, 2)
+
+  deepStrictEqual(completions, [
+    {
+      flags: 0,
+      kind: 1,
+      label: 'sample',
+      matches: [],
+      type: 1,
+    },
+  ])
+})
+
 test('executeResolveCompletionItemProvider returns resolved completion item', async () => {
   registerCompletionProvider({
     id: 'sample.completion',

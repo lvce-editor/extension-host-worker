@@ -22,14 +22,32 @@ export {
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
-export { executeViewProvider, getViewRegistrySnapshot, registerView, resetViewRegistry } from './parts/ViewRegistry/ViewRegistry.ts'
+export {
+  createViewInstance,
+  dispatchViewEvent,
+  disposeViewInstance,
+  executeViewProvider,
+  getViewRegistrySnapshot,
+  registerView,
+  resetViewRegistry,
+  saveViewInstanceState,
+} from './parts/ViewRegistry/ViewRegistry.ts'
 export { createOutputChannel, getOutputChannelRegistrySnapshot, resetOutputChannelRegistry } from './parts/OutputChannel/OutputChannel.ts'
 export {
   getStatusBarItemProviderRegistrySnapshot,
   registerStatusBarItemProvider,
   resetStatusBarItemProviderRegistry,
 } from './parts/StatusBar/StatusBar.ts'
-export type { RegisteredView, View, ViewRegistrySnapshot } from './parts/View/View.ts'
+export type {
+  RegisteredView,
+  View,
+  ViewContext,
+  ViewEvent,
+  ViewKind,
+  ViewRegistrySnapshot,
+  ViewRenderResult,
+  VirtualDomViewInstance,
+} from './parts/View/View.ts'
 export { handleExtensionManagementMessagePort } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { Command } from './parts/Command/Command.ts'
 export type { CommandCallback } from './parts/CommandCallback/CommandCallback.ts'

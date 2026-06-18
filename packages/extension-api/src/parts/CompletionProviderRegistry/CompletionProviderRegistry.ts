@@ -17,16 +17,41 @@ const getType = (value: unknown): string => {
   return typeof value
 }
 
+const sanitizeCompletionItem = (item: Record<string, unknown>): CompletionItem => {
+  const sanitizedItem: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(item)) {
+    if (typeof value !== 'function') {
+      sanitizedItem[key] = value
+    }
+  }
+  const { kind: itemKind, type } = item
+  let kind = 0
+  if (typeof itemKind === 'number') {
+    kind = itemKind
+  } else if (typeof type === 'number') {
+    kind = type
+  }
+  return {
+    ...sanitizedItem,
+    flags: typeof item.flags === 'number' ? item.flags : 0,
+    kind,
+    label: typeof item.label === 'string' ? item.label : '',
+    matches: Array.isArray(item.matches) ? item.matches : [],
+  }
+}
+
 const validateCompletionResult = (completion: unknown): readonly CompletionItem[] => {
   if (!Array.isArray(completion)) {
     throw new ExtensionApiError(`invalid completion result: completion must be of type array but is ${getType(completion)}`)
   }
+  const completionItems: CompletionItem[] = []
   for (const item of completion) {
     if (!item || typeof item !== 'object' || Array.isArray(item)) {
       throw new ExtensionApiError(`invalid completion result: expected completion item to be of type object but was of type ${getType(item)}`)
     }
+    completionItems.push(sanitizeCompletionItem(item as Record<string, unknown>))
   }
-  return completion
+  return completionItems
 }
 
 const registry = createProviderRegistry<CompletionProvider, RegisteredCompletionProvider>({
