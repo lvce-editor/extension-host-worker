@@ -88,8 +88,8 @@ test('createViewInstance renders initial virtual dom', async () => {
             {
               childCount: 0,
               className: 'TestView',
-              type: 4,
               text: `uid:${context?.uid}`,
+              type: 4,
             },
           ] as any
         },
@@ -99,7 +99,8 @@ test('createViewInstance renders initial virtual dom', async () => {
     kind: 'virtualDom',
   })
 
-  strictEqual((await createViewInstance('sample.views.testing', 1)).type, 'setDom')
+  const result = await createViewInstance('sample.views.testing', 1)
+  strictEqual(result.type, 'setDom')
 })
 
 test('dispatchViewEvent returns patches after handling event', async () => {
@@ -114,8 +115,8 @@ test('dispatchViewEvent returns patches after handling event', async () => {
           return [
             {
               childCount: 0,
-              type: 4,
               text: value,
+              type: 4,
             },
           ] as any
         },

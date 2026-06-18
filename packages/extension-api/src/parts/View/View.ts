@@ -3,9 +3,9 @@ import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 export type ViewKind = 'virtualDom'
 
 export interface ViewContext {
+  readonly state?: unknown
   readonly uid: number
   readonly viewId: string
-  readonly state?: unknown
 }
 
 export interface ViewEvent {

@@ -1,14 +1,6 @@
-import type { Disposable } from '../Disposable/Disposable.ts'
 import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
-import type {
-  RegisteredView,
-  View,
-  ViewContext,
-  ViewEvent,
-  ViewRegistrySnapshot,
-  ViewRenderResult,
-  VirtualDomViewInstance,
-} from '../View/View.ts'
+import type { Disposable } from '../Disposable/Disposable.ts'
+import type { RegisteredView, View, ViewContext, ViewEvent, ViewRegistrySnapshot, ViewRenderResult, VirtualDomViewInstance } from '../View/View.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const views: Record<string, View> = Object.create(null)
@@ -88,7 +80,7 @@ const renderDom = async (instance: VirtualDomViewInstance): Promise<readonly Vir
   return dom
 }
 
-export const createViewInstance = async (viewId: string, uid: number, context: ViewContext = { uid, viewId }): Promise<ViewRenderResult> => {
+export const createViewInstance = async (viewId: string, uid: number, context?: ViewContext): Promise<ViewRenderResult> => {
   const view = views[viewId]
   if (!view) {
     throw new ExtensionApiError(`view ${viewId} not found`)

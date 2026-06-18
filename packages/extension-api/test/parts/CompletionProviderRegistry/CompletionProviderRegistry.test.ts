@@ -43,11 +43,11 @@ test('executeCompletionProvider normalizes completion items for rpc', async () =
     provideCompletions() {
       return [
         {
-          label: 'sample',
-          type: 1,
           execute() {
             return undefined
           },
+          label: 'sample',
+          type: 1,
         },
       ]
     },

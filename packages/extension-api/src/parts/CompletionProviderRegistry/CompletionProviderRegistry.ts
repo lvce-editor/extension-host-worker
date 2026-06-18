@@ -24,10 +24,17 @@ const sanitizeCompletionItem = (item: Record<string, unknown>): CompletionItem =
       sanitizedItem[key] = value
     }
   }
+  const { kind: itemKind, type } = item
+  let kind = 0
+  if (typeof itemKind === 'number') {
+    kind = itemKind
+  } else if (typeof type === 'number') {
+    kind = type
+  }
   return {
     ...sanitizedItem,
     flags: typeof item.flags === 'number' ? item.flags : 0,
-    kind: typeof item.kind === 'number' ? item.kind : typeof item.type === 'number' ? item.type : 0,
+    kind,
     label: typeof item.label === 'string' ? item.label : '',
     matches: Array.isArray(item.matches) ? item.matches : [],
   }

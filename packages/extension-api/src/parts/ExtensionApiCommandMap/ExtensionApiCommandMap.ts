@@ -15,6 +15,9 @@ import {
 } from '../ViewRegistry/ViewRegistry.ts'
 
 export const commandMap = {
+  'ExtensionApi.createViewInstance': createViewInstance,
+  'ExtensionApi.dispatchViewEvent': dispatchViewEvent,
+  'ExtensionApi.disposeViewInstance': disposeViewInstance,
   'ExtensionApi.executeCommand': executeCommand,
   'ExtensionApi.executeCompletionProvider': executeCompletionProvider,
   'ExtensionApi.executeDiagnosticProvider': executeDiagnosticProvider,
@@ -22,9 +25,6 @@ export const commandMap = {
   'ExtensionApi.executeHoverProvider': executeHoverProvider,
   'ExtensionApi.executeResolveCompletionItemProvider': executeResolveCompletionItemProvider,
   'ExtensionApi.executeViewProvider': executeViewProvider,
-  'ExtensionApi.createViewInstance': createViewInstance,
-  'ExtensionApi.dispatchViewEvent': dispatchViewEvent,
-  'ExtensionApi.disposeViewInstance': disposeViewInstance,
   'ExtensionApi.getCommandRegistrySnapshot': getCommandRegistrySnapshot,
   'ExtensionApi.getCompletionProviderRegistrySnapshot': getCompletionProviderRegistrySnapshot,
   'ExtensionApi.getDiagnosticProviderRegistrySnapshot': getDiagnosticProviderRegistrySnapshot,
