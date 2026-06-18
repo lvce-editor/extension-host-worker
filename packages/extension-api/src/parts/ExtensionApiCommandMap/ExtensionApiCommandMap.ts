@@ -5,7 +5,14 @@ import { executeFormattingProvider, getFormattingProviderRegistrySnapshot } from
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
 import { executeHoverProvider, getHoverProviderRegistrySnapshot } from '../Hover/Hover.ts'
 import { getOutputChannelRegistrySnapshot } from '../OutputChannel/OutputChannel.ts'
-import { executeViewProvider, getViewRegistrySnapshot } from '../ViewRegistry/ViewRegistry.ts'
+import {
+  createViewInstance,
+  dispatchViewEvent,
+  disposeViewInstance,
+  executeViewProvider,
+  getViewRegistrySnapshot,
+  saveViewInstanceState,
+} from '../ViewRegistry/ViewRegistry.ts'
 
 export const commandMap = {
   'ExtensionApi.executeCommand': executeCommand,
@@ -15,6 +22,9 @@ export const commandMap = {
   'ExtensionApi.executeHoverProvider': executeHoverProvider,
   'ExtensionApi.executeResolveCompletionItemProvider': executeResolveCompletionItemProvider,
   'ExtensionApi.executeViewProvider': executeViewProvider,
+  'ExtensionApi.createViewInstance': createViewInstance,
+  'ExtensionApi.dispatchViewEvent': dispatchViewEvent,
+  'ExtensionApi.disposeViewInstance': disposeViewInstance,
   'ExtensionApi.getCommandRegistrySnapshot': getCommandRegistrySnapshot,
   'ExtensionApi.getCompletionProviderRegistrySnapshot': getCompletionProviderRegistrySnapshot,
   'ExtensionApi.getDiagnosticProviderRegistrySnapshot': getDiagnosticProviderRegistrySnapshot,
@@ -23,4 +33,5 @@ export const commandMap = {
   'ExtensionApi.getOutputChannelRegistrySnapshot': getOutputChannelRegistrySnapshot,
   'ExtensionApi.getStatusBarItems': getStatusBarItems,
   'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
+  'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
 }
