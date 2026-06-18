@@ -1,0 +1,13 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.virtualDomEvent"],
+  "views": [
+    {
+      "id": "sample.views.virtualDomEvent",
+      "title": "Virtual DOM Events",
+      "icon": "symbol-event",
+      "kind": "virtualDom"
+    }
+  ]
+}

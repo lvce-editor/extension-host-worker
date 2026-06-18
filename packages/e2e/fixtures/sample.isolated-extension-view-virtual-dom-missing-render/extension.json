@@ -1,0 +1,13 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.virtualDomMissingRender"],
+  "views": [
+    {
+      "id": "sample.views.virtualDomMissingRender",
+      "title": "Virtual DOM Missing Render",
+      "icon": "symbol-error",
+      "kind": "virtualDom"
+    }
+  ]
+}

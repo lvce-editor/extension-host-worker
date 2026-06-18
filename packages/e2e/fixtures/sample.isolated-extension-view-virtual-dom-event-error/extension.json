@@ -1,0 +1,13 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.virtualDomEventError"],
+  "views": [
+    {
+      "id": "sample.views.virtualDomEventError",
+      "title": "Virtual DOM Event Error",
+      "icon": "symbol-error",
+      "kind": "virtualDom"
+    }
+  ]
+}
