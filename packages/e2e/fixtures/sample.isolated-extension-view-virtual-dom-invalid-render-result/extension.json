@@ -1,0 +1,13 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.virtualDomInvalidRenderResult"],
+  "views": [
+    {
+      "id": "sample.views.virtualDomInvalidRenderResult",
+      "title": "Virtual DOM Invalid Render Result",
+      "icon": "symbol-error",
+      "kind": "virtualDom"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.virtualDom"],
+  "views": [
+    {
+      "id": "sample.views.virtualDom",
+      "title": "Virtual DOM",
+      "icon": "symbol-beaker",
+      "kind": "virtualDom"
+    }
+  ]
+}
