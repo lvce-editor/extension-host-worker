@@ -20,8 +20,8 @@ afterEach(async () => {
 test('initializeFileSystemWorker lazily transfers a message port on first file system use', async () => {
   const invocations: string[] = []
   mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
-    async 'ExtensionApi.sendMessagePortToFileSystemWorker'(port: MessagePort): Promise<void> {
-      invocations.push('ExtensionApi.sendMessagePortToFileSystemWorker')
+    async 'Extensions.sendMessagePortToFileSystemWorker'(port: MessagePort): Promise<void> {
+      invocations.push('Extensions.sendMessagePortToFileSystemWorker')
       await PlainMessagePortRpc.create({
         commandMap: {
           async 'FileSystem.readFile'(): Promise<string> {
@@ -40,13 +40,13 @@ test('initializeFileSystemWorker lazily transfers a message port on first file s
   const text = await FileSystemWorker.readFile('/tmp/sample.txt')
 
   strictEqual(text, 'sample content')
-  deepStrictEqual(invocations, ['ExtensionApi.sendMessagePortToFileSystemWorker'])
+  deepStrictEqual(invocations, ['Extensions.sendMessagePortToFileSystemWorker'])
 })
 
 test('initializeFileSystemWorker reuses the same lazy rpc', async () => {
   let transferCount = 0
   mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
-    async 'ExtensionApi.sendMessagePortToFileSystemWorker'(port: MessagePort): Promise<void> {
+    async 'Extensions.sendMessagePortToFileSystemWorker'(port: MessagePort): Promise<void> {
       transferCount++
       await PlainMessagePortRpc.create({
         commandMap: {
