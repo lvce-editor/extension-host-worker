@@ -20,6 +20,7 @@ import * as ExtensionHostConfiguration from '../ExtensionHostConfiguration/Exten
 import * as ExtensionHostDebug from '../ExtensionHostDebug/ExtensionHostDebug.ts'
 import * as ExtensionHostDefinition from '../ExtensionHostDefinition/ExtensionHostDefinition.ts'
 import * as ExtensionHostDiagnostic from '../ExtensionHostDiagnostic/ExtensionHostDiagnostic.ts'
+import * as ExtensionApiFileSystemWorker from '../ExtensionApiFileSystemWorker/ExtensionApiFileSystemWorker.ts'
 import * as ExtensionHostFileSystem from '../ExtensionHostFileSystem/ExtensionHostFileSystem.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
@@ -89,6 +90,7 @@ export const commandMap = {
   'ExtensionHost.importExtension': ImportExtension.importExtension,
   'ExtensionHost.importExtension2': importExtension2,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
+  'ExtensionApi.sendMessagePortToFileSystemWorker': ExtensionApiFileSystemWorker.sendMessagePortToFileSystemWorker,
   [ExtensionHostCommandType.BraceCompletionExecuteBraceCompletionProvider]: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
   [ExtensionHostCommandType.ClosingTagExecuteClosingTagProvider]: ExtensionHostClosingTag.executeClosingTagProvider,
   [ExtensionHostCommandType.CommandExecute]: ExtensionHostCommand.executeCommand,

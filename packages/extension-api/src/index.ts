@@ -21,6 +21,7 @@ export {
   registerFormattingProvider,
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
+export { exists, readDirWithFileTypes, readFile } from './parts/FileSystem/FileSystem.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export {
   createViewInstance,
@@ -71,6 +72,7 @@ export type {
   FormattingProviderRegistrySnapshot,
   RegisteredFormattingProvider,
 } from './parts/Formatting/Formatting.ts'
+export type { FileSystemDirent } from './parts/FileSystem/FileSystem.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
 export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHandle.ts'
