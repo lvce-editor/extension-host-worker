@@ -4,7 +4,7 @@ import { ExtensionManagementWorker, FileSystemWorker } from '@lvce-editor/rpc-re
 let fileSystemWorkerPromise: Promise<void> | undefined
 
 const send = async (port: MessagePort): Promise<void> => {
-  await ExtensionManagementWorker.invokeAndTransfer('Extensions.sendMessagePortToFileSystemWorker', port)
+  await ExtensionManagementWorker.invokeAndTransfer('ExtensionApi.sendMessagePortToFileSystemWorker', port)
 }
 
 export const initializeFileSystemWorker = async (): Promise<void> => {
