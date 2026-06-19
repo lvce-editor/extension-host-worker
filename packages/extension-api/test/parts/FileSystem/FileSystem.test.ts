@@ -1,4 +1,4 @@
-import { FileSystemWorker } from '@lvce-editor/rpc-registry'
+import { ExtensionManagementWorker, FileSystemWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import { exists, mkdir, readDirWithFileTypes, readFile, remove, writeFile } from '../../../src/parts/FileSystem/FileSystem.ts'
@@ -7,10 +7,13 @@ interface MockRpcDisposable {
   [Symbol.dispose](): void
 }
 
+let mockExtensionManagementRpc: MockRpcDisposable | undefined
 let mockRpc: MockRpcDisposable | undefined
 
 afterEach(() => {
+  mockExtensionManagementRpc?.[Symbol.dispose]()
   mockRpc?.[Symbol.dispose]()
+  mockExtensionManagementRpc = undefined
   mockRpc = undefined
 })
 
@@ -27,6 +30,21 @@ test('readFile reads through the file system worker', async () => {
 
   strictEqual(result, 'sample content')
   strictEqual(invokedUri, '/tmp/sample.txt')
+})
+
+test('readFile reads memfs files through the extension api host command', async () => {
+  let invokedUri = ''
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'ExtensionApi.readFile'(uri: string): Promise<string> {
+      invokedUri = uri
+      return 'ignored.js'
+    },
+  })
+
+  const result = await readFile('memfs:///workspace/.prettierignore')
+
+  strictEqual(result, 'ignored.js')
+  strictEqual(invokedUri, 'memfs:///workspace/.prettierignore')
 })
 
 test('exists checks through the file system worker', async () => {
