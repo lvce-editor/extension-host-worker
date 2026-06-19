@@ -9,6 +9,7 @@ import * as CreateWebViewRpc2 from '../CreateWebViewRpc2/CreateWebViewRpc2.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
 import * as ExecuteCommand from '../ExecuteCommand/ExecuteCommand.ts'
 import * as ExecuteExternalCommand from '../ExecuteExternalCommand/ExecuteExternalCommand.ts'
+import * as ExtensionApiFileSystemWorker from '../ExtensionApiFileSystemWorker/ExtensionApiFileSystemWorker.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
@@ -83,6 +84,7 @@ export const commandMap = {
   'ColorTheme.hydrate': ColorTheme.hydrate,
   'Commands.executeCommand': ExecuteCommand.executeCommand,
   'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
+  'ExtensionApi.sendMessagePortToFileSystemWorker': ExtensionApiFileSystemWorker.sendMessagePortToFileSystemWorker,
   'ExtensionHost.activateExtension2': ActivateExtension2.activateExtension2,
   'ExtensionHost.activateExtension3': activateExtension3,
   'ExtensionHost.getRuntimeStatus': GetRuntimeStatus.getRuntimeStatus,
