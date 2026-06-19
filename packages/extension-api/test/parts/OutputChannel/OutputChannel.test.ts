@@ -1,4 +1,3 @@
-import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
@@ -8,46 +7,8 @@ import {
   resetOutputChannelRegistry,
 } from '../../../src/parts/OutputChannel/OutputChannel.ts'
 
-interface MockRpcDisposable {
-  [Symbol.dispose](): void
-}
-
-interface Invocation {
-  readonly method: string
-  readonly params: readonly unknown[]
-}
-
-let mockRpc: MockRpcDisposable | undefined
-
-const registerOutputChannelMock = (): Invocation[] => {
-  const invocations: Invocation[] = []
-  mockRpc = ExtensionManagementWorker.registerMockRpc({
-    'ExtensionApi.appendOutputChannel'(id: string, text: string): void {
-      invocations.push({
-        method: 'ExtensionApi.appendOutputChannel',
-        params: [id, text],
-      })
-    },
-    'ExtensionApi.clearOutputChannel'(id: string): void {
-      invocations.push({
-        method: 'ExtensionApi.clearOutputChannel',
-        params: [id],
-      })
-    },
-    'ExtensionApi.replaceOutputChannel'(id: string, text: string): void {
-      invocations.push({
-        method: 'ExtensionApi.replaceOutputChannel',
-        params: [id, text],
-      })
-    },
-  })
-  return invocations
-}
-
 afterEach(() => {
   resetOutputChannelRegistry()
-  mockRpc?.[Symbol.dispose]()
-  mockRpc = undefined
 })
 
 test('createOutputChannel registers an output channel', () => {
@@ -68,6 +29,7 @@ test('createOutputChannel returns an output channel with write methods', () => {
   strictEqual(typeof output.append, 'function')
   strictEqual(typeof output.appendLine, 'function')
   strictEqual(typeof output.clear, 'function')
+  strictEqual(typeof output.getLogs, 'function')
   strictEqual(typeof output.replace, 'function')
 })
 
@@ -137,83 +99,70 @@ test('clear rejects before activation', async () => {
   await rejects(() => output.clear(), /output channel sample-output cannot be written before activate/)
 })
 
-test('append writes text to extension management worker', async () => {
-  const invocations = registerOutputChannelMock()
+test('getLogs rejects before activation', async () => {
+  const output = createOutputChannel('sample-output')
+
+  await rejects(() => output.getLogs(), /output channel sample-output cannot be written before activate/)
+})
+
+test('append writes text to output channel logs', async () => {
   const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.append('hello')
 
-  deepStrictEqual(invocations, [
-    {
-      method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample-output', 'hello'],
-    },
-  ])
+  strictEqual(await output.getLogs(), 'hello')
 })
 
 test('append allows empty text', async () => {
-  const invocations = registerOutputChannelMock()
   const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.append('')
 
-  deepStrictEqual(invocations, [
-    {
-      method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample-output', ''],
-    },
-  ])
+  strictEqual(await output.getLogs(), '')
 })
 
 test('appendLine appends a newline', async () => {
-  const invocations = registerOutputChannelMock()
   const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.appendLine('hello')
 
-  deepStrictEqual(invocations, [
-    {
-      method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample-output', 'hello\n'],
-    },
-  ])
+  strictEqual(await output.getLogs(), 'hello\n')
 })
 
 test('replace sends replacement text', async () => {
-  const invocations = registerOutputChannelMock()
   const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
   await output.replace('new content')
 
-  deepStrictEqual(invocations, [
-    {
-      method: 'ExtensionApi.replaceOutputChannel',
-      params: ['sample-output', 'new content'],
-    },
-  ])
+  strictEqual(await output.getLogs(), 'new content')
 })
 
 test('clear clears the output channel', async () => {
-  const invocations = registerOutputChannelMock()
   const output = createOutputChannel('sample-output')
   activateOutputChannels()
 
+  await output.append('old content')
   await output.clear()
 
-  deepStrictEqual(invocations, [
-    {
-      method: 'ExtensionApi.clearOutputChannel',
-      params: ['sample-output'],
-    },
-  ])
+  strictEqual(await output.getLogs(), '')
+})
+
+test('getLogs returns output channel logs', async () => {
+  const output = createOutputChannel('sample-output')
+  activateOutputChannels()
+
+  await output.appendLine('sample')
+  await output.append('logs')
+  const logs = await output.getLogs()
+
+  strictEqual(logs, 'sample\nlogs')
 })
 
 test('multiple channels invoke with their own ids', async () => {
-  const invocations = registerOutputChannelMock()
   const first = createOutputChannel('sample-first')
   const second = createOutputChannel('sample-second')
   activateOutputChannels()
@@ -221,16 +170,8 @@ test('multiple channels invoke with their own ids', async () => {
   await first.append('one')
   await second.append('two')
 
-  deepStrictEqual(invocations, [
-    {
-      method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample-first', 'one'],
-    },
-    {
-      method: 'ExtensionApi.appendOutputChannel',
-      params: ['sample-second', 'two'],
-    },
-  ])
+  strictEqual(await first.getLogs(), 'one')
+  strictEqual(await second.getLogs(), 'two')
 })
 
 test('resetOutputChannelRegistry clears registered output channels', () => {
