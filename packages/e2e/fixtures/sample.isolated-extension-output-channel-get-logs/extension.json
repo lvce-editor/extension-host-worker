@@ -1,0 +1,22 @@
+{
+  "browser": "main.ts",
+  "id": "sample.isolated-extension-output-channel-get-logs",
+  "isolated": true,
+  "activation": ["*", "onCommand:sample.output.getLogs", "onCommand:sample.output.replaceAndClear"],
+  "commands": [
+    {
+      "id": "sample.output.getLogs",
+      "label": "Get Output Logs"
+    },
+    {
+      "id": "sample.output.replaceAndClear",
+      "label": "Replace And Clear Output Logs"
+    }
+  ],
+  "outputChannels": [
+    {
+      "id": "sample-output-get-logs",
+      "label": "Sample Output Get Logs"
+    }
+  ]
+}

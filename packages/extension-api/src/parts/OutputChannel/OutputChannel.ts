@@ -1,10 +1,10 @@
-import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import type { OutputChannel } from '../OutputChannelHandle/OutputChannelHandle.ts'
 import type { OutputChannelRegistrySnapshot } from '../OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
 import type { RegisteredOutputChannel } from '../RegisteredOutputChannel/RegisteredOutputChannel.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const outputChannels: Record<string, RegisteredOutputChannel> = Object.create(null)
+const outputChannelLogs: Record<string, string> = Object.create(null)
 let isActivated = false
 const RE_DASH_CASE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
 
@@ -32,22 +32,27 @@ class ExtensionOutputChannel implements OutputChannel {
 
   async append(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    await ExtensionManagementWorker.invoke('ExtensionApi.appendOutputChannel', this.#id, text)
+    outputChannelLogs[this.#id] += text
   }
 
   async appendLine(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    await ExtensionManagementWorker.invoke('ExtensionApi.appendOutputChannel', this.#id, `${text}\n`)
+    outputChannelLogs[this.#id] += `${text}\n`
   }
 
   async clear(): Promise<void> {
     assertCanWrite(this.#id)
-    await ExtensionManagementWorker.invoke('ExtensionApi.clearOutputChannel', this.#id)
+    outputChannelLogs[this.#id] = ''
+  }
+
+  async getLogs(): Promise<string> {
+    assertCanWrite(this.#id)
+    return outputChannelLogs[this.#id]
   }
 
   async replace(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    await ExtensionManagementWorker.invoke('ExtensionApi.replaceOutputChannel', this.#id, text)
+    outputChannelLogs[this.#id] = text
   }
 }
 
@@ -63,6 +68,7 @@ export const createOutputChannel = (id: string): OutputChannel => {
   outputChannels[id] = {
     id,
   }
+  outputChannelLogs[id] = ''
   return new ExtensionOutputChannel(id)
 }
 
@@ -75,6 +81,9 @@ export const getOutputChannelRegistrySnapshot = (): OutputChannelRegistrySnapsho
 export const resetOutputChannelRegistry = (): void => {
   for (const id of Object.keys(outputChannels)) {
     delete outputChannels[id]
+  }
+  for (const id of Object.keys(outputChannelLogs)) {
+    delete outputChannelLogs[id]
   }
   isActivated = false
 }
