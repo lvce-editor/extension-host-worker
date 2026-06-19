@@ -13,4 +13,16 @@ export const readFile = async (uri: string): Promise<string> => {
   return FileSystemWorker.readFile(uri)
 }
 
+export const mkdir = async (uri: string): Promise<void> => {
+  await FileSystemWorker.mkdir(uri)
+}
+
+export const remove = async (uri: string): Promise<void> => {
+  await FileSystemWorker.remove(uri)
+}
+
+export const writeFile = async (uri: string, content: string): Promise<void> => {
+  await FileSystemWorker.writeFile(uri, content)
+}
+
 export type { FileSystemDirent } from '../FileSystemDirent/FileSystemDirent.ts'

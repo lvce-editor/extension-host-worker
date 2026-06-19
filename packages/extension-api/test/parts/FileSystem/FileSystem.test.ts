@@ -1,7 +1,7 @@
 import { FileSystemWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { exists, readDirWithFileTypes, readFile } from '../../../src/parts/FileSystem/FileSystem.ts'
+import { exists, mkdir, readDirWithFileTypes, readFile, remove, writeFile } from '../../../src/parts/FileSystem/FileSystem.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -63,4 +63,46 @@ test('readDirWithFileTypes reads through the file system worker', async () => {
 
   deepStrictEqual(result, dirents)
   strictEqual(invokedUri, '/tmp')
+})
+
+test('mkdir creates through the file system worker', async () => {
+  let invokedUri = ''
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.mkdir'(uri: string): Promise<void> {
+      invokedUri = uri
+    },
+  })
+
+  await mkdir('/tmp/folder')
+
+  strictEqual(invokedUri, '/tmp/folder')
+})
+
+test('remove deletes through the file system worker', async () => {
+  let invokedUri = ''
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.remove'(uri: string): Promise<void> {
+      invokedUri = uri
+    },
+  })
+
+  await remove('/tmp/sample.txt')
+
+  strictEqual(invokedUri, '/tmp/sample.txt')
+})
+
+test('writeFile writes through the file system worker', async () => {
+  let invokedUri = ''
+  let invokedContent = ''
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.writeFile'(uri: string, content: string): Promise<void> {
+      invokedUri = uri
+      invokedContent = content
+    },
+  })
+
+  await writeFile('/tmp/sample.txt', 'sample content')
+
+  strictEqual(invokedUri, '/tmp/sample.txt')
+  strictEqual(invokedContent, 'sample content')
 })
