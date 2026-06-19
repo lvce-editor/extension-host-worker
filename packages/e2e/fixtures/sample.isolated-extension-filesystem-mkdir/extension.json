@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedFilesystem.mkdir"],
+  "commands": [
+    {
+      "id": "isolatedFilesystem.mkdir",
+      "label": "Run Isolated Filesystem Mkdir Test"
+    }
+  ]
+}

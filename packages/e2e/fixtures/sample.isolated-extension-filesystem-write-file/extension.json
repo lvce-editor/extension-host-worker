@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedFilesystem.writeFile"],
+  "commands": [
+    {
+      "id": "isolatedFilesystem.writeFile",
+      "label": "Run Isolated Filesystem Write File Test"
+    }
+  ]
+}

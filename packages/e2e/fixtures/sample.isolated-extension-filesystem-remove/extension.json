@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedFilesystem.remove"],
+  "commands": [
+    {
+      "id": "isolatedFilesystem.remove",
+      "label": "Run Isolated Filesystem Remove Test"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedFilesystem.readDirWithFileTypes"],
+  "commands": [
+    {
+      "id": "isolatedFilesystem.readDirWithFileTypes",
+      "label": "Run Isolated Filesystem Read Dir With File Types Test"
+    }
+  ]
+}

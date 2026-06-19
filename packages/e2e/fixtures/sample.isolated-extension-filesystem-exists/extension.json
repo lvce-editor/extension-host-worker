@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedFilesystem.exists"],
+  "commands": [
+    {
+      "id": "isolatedFilesystem.exists",
+      "label": "Run Isolated Filesystem Exists Test"
+    }
+  ]
+}
