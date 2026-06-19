@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedFilesystem.readFile"],
+  "commands": [
+    {
+      "id": "isolatedFilesystem.readFile",
+      "label": "Run Isolated Filesystem Read File Test"
+    }
+  ]
+}
