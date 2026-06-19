@@ -9,6 +9,7 @@ import * as CreateWebViewRpc2 from '../CreateWebViewRpc2/CreateWebViewRpc2.ts'
 import * as CreateWebViewRpc from '../CreateWebViewRpc/CreateWebViewRpc.ts'
 import * as ExecuteCommand from '../ExecuteCommand/ExecuteCommand.ts'
 import * as ExecuteExternalCommand from '../ExecuteExternalCommand/ExecuteExternalCommand.ts'
+import * as ExtensionApiFileSystemWorker from '../ExtensionApiFileSystemWorker/ExtensionApiFileSystemWorker.ts'
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
@@ -20,7 +21,6 @@ import * as ExtensionHostConfiguration from '../ExtensionHostConfiguration/Exten
 import * as ExtensionHostDebug from '../ExtensionHostDebug/ExtensionHostDebug.ts'
 import * as ExtensionHostDefinition from '../ExtensionHostDefinition/ExtensionHostDefinition.ts'
 import * as ExtensionHostDiagnostic from '../ExtensionHostDiagnostic/ExtensionHostDiagnostic.ts'
-import * as ExtensionApiFileSystemWorker from '../ExtensionApiFileSystemWorker/ExtensionApiFileSystemWorker.ts'
 import * as ExtensionHostFileSystem from '../ExtensionHostFileSystem/ExtensionHostFileSystem.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
@@ -84,13 +84,13 @@ export const commandMap = {
   'ColorTheme.hydrate': ColorTheme.hydrate,
   'Commands.executeCommand': ExecuteCommand.executeCommand,
   'ExecuteExternalCommand.executeExternalCommand': ExecuteExternalCommand.executeExternalCommand,
+  'ExtensionApi.sendMessagePortToFileSystemWorker': ExtensionApiFileSystemWorker.sendMessagePortToFileSystemWorker,
   'ExtensionHost.activateExtension2': ActivateExtension2.activateExtension2,
   'ExtensionHost.activateExtension3': activateExtension3,
   'ExtensionHost.getRuntimeStatus': GetRuntimeStatus.getRuntimeStatus,
   'ExtensionHost.importExtension': ImportExtension.importExtension,
   'ExtensionHost.importExtension2': importExtension2,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
-  'ExtensionApi.sendMessagePortToFileSystemWorker': ExtensionApiFileSystemWorker.sendMessagePortToFileSystemWorker,
   [ExtensionHostCommandType.BraceCompletionExecuteBraceCompletionProvider]: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
   [ExtensionHostCommandType.ClosingTagExecuteClosingTagProvider]: ExtensionHostClosingTag.executeClosingTagProvider,
   [ExtensionHostCommandType.CommandExecute]: ExtensionHostCommand.executeCommand,
