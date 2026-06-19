@@ -21,7 +21,7 @@ export {
   registerFormattingProvider,
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
-export { exists, readDirWithFileTypes, readFile } from './parts/FileSystem/FileSystem.ts'
+export { exists, mkdir, readDirWithFileTypes, readFile, remove, writeFile } from './parts/FileSystem/FileSystem.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export {
   createViewInstance,
