@@ -76,7 +76,9 @@ import * as TextSearchHtml from '../TextSearchHtml/TextSearchHtml.ts'
 import * as TextSearchMemory from '../TextSearchMemory/TextSearchMemory.ts'
 import * as WebViewInterceptor from '../WebViewInterceptor/WebViewInterceptor.ts'
 
-export const commandMap = {
+type CommandHandler = (...args: readonly any[]) => any
+
+export const commandMap: Record<string, CommandHandler> = {
   'BulkReplacement.applyBulkReplacement': BulkReplacement.applyBulkReplacement,
   'ColorTheme.getColorThemeCssFromJson': GetColorThemeCss.getColorThemeCssFromJson,
   'ColorTheme.getColorThemeJson': GetColorThemeJson.getColorThemeJson,
@@ -139,7 +141,11 @@ export const commandMap = {
   [ExtensionHostCommandType.TextDocumentSyncIncremental]: TextDocument.syncIncremental,
   [ExtensionHostCommandType.TextSearchExecuteTextSearchProvider]: ExtensionHostTextSearch.executeTextSearchProvider,
   [ExtensionHostCommandType.TypeDefinitionExecuteTypeDefinitionProvider]: ExtensionHostTypeDefinition.executeTypeDefinitionProvider,
+  [ExtensionHostCommandType.ViewCreateInstance]: ExtensionHostView.createViewInstance,
+  [ExtensionHostCommandType.ViewDispatchEvent]: ExtensionHostView.dispatchViewEvent,
+  [ExtensionHostCommandType.ViewDisposeInstance]: ExtensionHostView.disposeViewInstance,
   [ExtensionHostCommandType.ViewExecute]: ExtensionHostView.executeViewProvider,
+  [ExtensionHostCommandType.ViewSaveInstanceState]: ExtensionHostView.saveViewInstanceState,
   [ExtensionHostCommandType.WorkspaceSetPath]: ExtensionHostWorkspace.setWorkspacePath,
   'ExtensionHostDebug.evaluate': ExtensionHostDebug.evaluate,
   'ExtensionHostDebug.getCallStack': ExtensionHostDebug.getCallStack,
