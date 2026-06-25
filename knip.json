@@ -1,0 +1,48 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "exclude": ["exports", "types"],
+  "ignore": [
+    "packages/extension-api/src/parts/AssertCompletionProvider/AssertCompletionProvider.ts",
+    "packages/extension-api/src/parts/AssertFormattingProvider/AssertFormattingProvider.ts",
+    "packages/extension-api/src/parts/AssertStatusBarItemProvider/AssertStatusBarItemProvider.ts",
+    "packages/extension-api/src/parts/CompletionProviderState/CompletionProviderState.ts",
+    "packages/extension-api/src/parts/FormattingProviderState/FormattingProviderState.ts",
+    "packages/extension-api/src/parts/StatusBarItemProviderState/StatusBarItemProviderState.ts",
+    "packages/extension-host-worker/src/parts/ExtensionHostNotification/ExtensionHostNotification.ts",
+    "packages/extension-host-worker/src/parts/FileSearchWorker/FileSearchWorker.ts",
+    "packages/extension-host-worker/src/parts/GetIconThemeUrl/GetIconThemeUrl.ts",
+    "packages/extension-host-worker/src/parts/GetRemoteSrc/GetRemoteSrc.ts",
+    "packages/extension-host-worker/src/parts/Id/Id.ts",
+    "packages/extension-host-worker/src/parts/RendererWorkerCommandType/RendererWorkerCommandType.ts"
+  ],
+  "workspaces": {
+    ".": {
+      "project": ["*.js"],
+      "ignoreDependencies": ["@lerna/legacy-package-management"]
+    },
+    "packages/build": {
+      "project": ["src/**/*.ts"],
+      "ignoreDependencies": ["@babel/preset-typescript", "@lvce-editor/verror", "esbuild"]
+    },
+    "packages/e2e": {
+      "entry": ["src/**/*.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/extension-api": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.ts", "test/**/*.ts"]
+    },
+    "packages/extension-host-worker": {
+      "entry": ["src/extensionHostWorkerMain.ts", "test/**/*.test.ts"],
+      "project": ["src/**/*.ts", "test/**/*.ts"],
+      "ignoreDependencies": ["ky"]
+    },
+    "packages/memory": {
+      "entry": ["src/measureMemory.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/server": {
+      "project": ["src/**/*.js"]
+    }
+  }
+}
