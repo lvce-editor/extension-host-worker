@@ -1,6 +1,7 @@
 export { activate } from './parts/Activation/Activation.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showQuickPick } from './parts/QuickPick/QuickPick.ts'
+export { getPreference, setPreference } from './parts/Preferences/Preferences.ts'
 export { registerCommand } from './parts/CommandRegistry/CommandRegistry.ts'
 export {
   executeCompletionProvider,
