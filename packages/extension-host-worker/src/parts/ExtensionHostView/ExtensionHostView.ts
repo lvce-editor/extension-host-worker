@@ -78,7 +78,7 @@ function assertVirtualDomViewInstance(id: string, instance: unknown): asserts in
     throw new Error(`view ${id} did not return a view instance`)
   }
   if (typeof (instance as VirtualDomViewInstance).render !== 'function') {
-    throw new Error(`view ${id} instance is missing render function`)
+    throw new TypeError(`view ${id} instance is missing render function`)
   }
 }
 
@@ -93,7 +93,7 @@ const getVirtualDomInstance = (uid: number): VirtualDomViewInstance => {
 const renderDom = async (instance: VirtualDomViewInstance): Promise<readonly VirtualDomNode[]> => {
   const dom = await instance.render()
   if (!Array.isArray(dom)) {
-    throw new Error('view render result must be an array')
+    throw new TypeError('view render result must be an array')
   }
   return dom
 }
