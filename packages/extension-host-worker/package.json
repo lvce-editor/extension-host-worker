@@ -59,5 +59,8 @@
     "jest": "^30.4.2",
     "ky": "^2.0.2",
     "ts-jest": "^29.4.11"
+  },
+  "dependencies": {
+    "@lvce-editor/virtual-dom-worker": "^10.2.0"
   }
 }
