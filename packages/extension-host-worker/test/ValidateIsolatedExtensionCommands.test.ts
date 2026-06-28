@@ -2,6 +2,7 @@ import { beforeEach, expect, test } from '@jest/globals'
 import * as ExtensionHostCommand from '../src/parts/ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostCompletion from '../src/parts/ExtensionHostCompletion/ExtensionHostCompletion.ts'
 import * as ExtensionHostFormatting from '../src/parts/ExtensionHostFormatting/ExtensionHostFormatting.ts'
+import * as ExtensionHostSourceControl from '../src/parts/ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
 import * as ExtensionHostView from '../src/parts/ExtensionHostView/ExtensionHostView.ts'
 import * as ValidateIsolatedExtensionCommands from '../src/parts/ValidateIsolatedExtensionCommands/ValidateIsolatedExtensionCommands.ts'
 
@@ -9,6 +10,7 @@ beforeEach(() => {
   ExtensionHostCommand.reset()
   ExtensionHostCompletion.reset()
   ExtensionHostFormatting.reset()
+  ExtensionHostSourceControl.reset()
   ExtensionHostView.reset()
 })
 
@@ -157,6 +159,49 @@ test('validateIsolatedExtensionCompletionProviders - contributed completion prov
       [],
     )
   }).toThrow(new Error('completion provider sample.missingCompletionRegistration is contributed in extension.json but not registered'))
+})
+
+test('validateIsolatedExtensionSourceControlProviders - duplicate source control provider contribution', () => {
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    id: 'sample.duplicateSourceControl',
+  })
+  expect(() => {
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionSourceControlProviders(
+      {
+        isolated: true,
+        sourceControlProviders: [{ id: 'sample.duplicateSourceControl' }, { id: 'sample.duplicateSourceControl' }],
+      },
+      [],
+    )
+  }).toThrow(new Error('source control provider sample.duplicateSourceControl is contributed multiple times'))
+})
+
+test('validateIsolatedExtensionSourceControlProviders - registered source control provider missing from extension json', () => {
+  const beforeSourceControlProviderIds = ValidateIsolatedExtensionCommands.getRegisteredSourceControlProviderIds()
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    id: 'sample.missingSourceControlContribution',
+  })
+  expect(() => {
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionSourceControlProviders(
+      {
+        isolated: true,
+        sourceControlProviders: [],
+      },
+      beforeSourceControlProviderIds,
+    )
+  }).toThrow(new Error('source control provider sample.missingSourceControlContribution is registered but not contributed in extension.json'))
+})
+
+test('validateIsolatedExtensionSourceControlProviders - contributed source control provider not registered', () => {
+  expect(() => {
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionSourceControlProviders(
+      {
+        isolated: true,
+        sourceControlProviders: [{ id: 'sample.missingSourceControlRegistration' }],
+      },
+      [],
+    )
+  }).toThrow(new Error('source control provider sample.missingSourceControlRegistration is contributed in extension.json but not registered'))
 })
 
 test('validateIsolatedExtensionViews - duplicate view contribution', () => {

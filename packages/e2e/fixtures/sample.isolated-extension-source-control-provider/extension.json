@@ -1,0 +1,11 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedSourceControl.run"],
+  "commands": [
+    {
+      "id": "isolatedSourceControl.run",
+      "label": "Run Isolated Source Control Provider"
+    }
+  ]
+}

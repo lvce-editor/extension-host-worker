@@ -40,6 +40,21 @@ export {
   registerStatusBarItemProvider,
   resetStatusBarItemProviderRegistry,
 } from './parts/StatusBar/StatusBar.ts'
+export {
+  acceptInput as sourceControlAcceptInput,
+  add as sourceControlAdd,
+  discard as sourceControlDiscard,
+  generateCommitMessage as sourceControlGenerateCommitMessage,
+  getChangedFiles as sourceControlGetChangedFiles,
+  getEnabledProviderIds as sourceControlGetEnabledProviderIds,
+  getFeatures as sourceControlGetFeatures,
+  getFileBefore as sourceControlGetFileBefore,
+  getFileDecorations as sourceControlGetFileDecorations,
+  getGroups as sourceControlGetGroups,
+  getSourceControlProviderRegistrySnapshot,
+  registerSourceControlProvider,
+  resetSourceControlProviderRegistry,
+} from './parts/SourceControl/SourceControl.ts'
 export type {
   RegisteredView,
   View,
@@ -87,3 +102,8 @@ export type {
   StatusBarItemProviderHandle,
   StatusBarItemProviderRegistrySnapshot,
 } from './parts/StatusBar/StatusBar.ts'
+export type {
+  RegisteredSourceControlProvider,
+  SourceControlProvider,
+  SourceControlProviderRegistrySnapshot,
+} from './parts/SourceControl/SourceControl.ts'
