@@ -1,0 +1,17 @@
+{
+  "id": "isolatedSourceControlError",
+  "name": "Sample Isolated Extension Source Control Provider Error",
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedSourceControlError.getChangedFiles"],
+  "commands": [
+    {
+      "id": "isolatedSourceControlError.getChangedFiles"
+    }
+  ],
+  "sourceControlProviders": [
+    {
+      "id": "isolatedSourceControlError"
+    }
+  ]
+}

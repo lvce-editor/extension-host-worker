@@ -11,6 +11,10 @@ export const registerSourceControlProvider = (provider) => {
   state.providers[provider.id] = provider
 }
 
+export const getRegisteredSourceControlProviderIds = (): readonly string[] => {
+  return Object.keys(state.providers)
+}
+
 const getProvider = (providerId) => {
   const provider = state.providers[providerId]
   if (!provider) {

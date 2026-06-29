@@ -1,0 +1,55 @@
+{
+  "id": "isolatedSourceControl",
+  "name": "Sample Isolated Extension Source Control Provider",
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": [
+    "onCommand:isolatedSourceControl.getChangedFiles",
+    "onCommand:isolatedSourceControl.getGroups",
+    "onCommand:isolatedSourceControl.getEnabledProviderIds",
+    "onCommand:isolatedSourceControl.getFeatures",
+    "onCommand:isolatedSourceControl.getFileBefore",
+    "onCommand:isolatedSourceControl.generateCommitMessage",
+    "onCommand:isolatedSourceControl.getFileDecorations",
+    "onCommand:isolatedSourceControl.acceptInput",
+    "onCommand:isolatedSourceControl.add",
+    "onCommand:isolatedSourceControl.discard"
+  ],
+  "commands": [
+    {
+      "id": "isolatedSourceControl.getChangedFiles"
+    },
+    {
+      "id": "isolatedSourceControl.getGroups"
+    },
+    {
+      "id": "isolatedSourceControl.getEnabledProviderIds"
+    },
+    {
+      "id": "isolatedSourceControl.getFeatures"
+    },
+    {
+      "id": "isolatedSourceControl.getFileBefore"
+    },
+    {
+      "id": "isolatedSourceControl.generateCommitMessage"
+    },
+    {
+      "id": "isolatedSourceControl.getFileDecorations"
+    },
+    {
+      "id": "isolatedSourceControl.acceptInput"
+    },
+    {
+      "id": "isolatedSourceControl.add"
+    },
+    {
+      "id": "isolatedSourceControl.discard"
+    }
+  ],
+  "sourceControlProviders": [
+    {
+      "id": "isolatedSourceControl"
+    }
+  ]
+}
