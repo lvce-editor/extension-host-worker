@@ -6,7 +6,7 @@ import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const commands: Record<string, RegisteredCommand> = Object.create(null)
 
-const assertCommand = <TArgs extends readonly unknown[], TResult>(command: Command<TArgs, TResult>): void => {
+const assertCommand = (command: Command<readonly any[], unknown>): void => {
   if (!command) {
     throw new ExtensionApiError('command is not defined')
   }
@@ -21,11 +21,11 @@ const assertCommand = <TArgs extends readonly unknown[], TResult>(command: Comma
   }
 }
 
-export const registerCommand = <TArgs extends readonly unknown[], TResult>(command: Command<TArgs, TResult>): Disposable => {
+export const registerCommand = (command: Command<readonly any[], unknown>): Disposable => {
   assertCommand(command)
   commands[command.id] = {
-    execute(...args: readonly unknown[]): TResult | Promise<TResult> {
-      return command.execute(...(args as unknown as TArgs))
+    execute(...args: readonly unknown[]): unknown | Promise<unknown> {
+      return command.execute(...args)
     },
     id: command.id,
   }
