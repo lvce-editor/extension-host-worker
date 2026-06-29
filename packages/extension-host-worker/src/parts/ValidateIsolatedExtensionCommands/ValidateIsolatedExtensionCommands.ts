@@ -3,6 +3,7 @@ import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHo
 import * as ExtensionHostDiagnostic from '../ExtensionHostDiagnostic/ExtensionHostDiagnostic.ts'
 import * as ExtensionHostFormatting from '../ExtensionHostFormatting/ExtensionHostFormatting.ts'
 import * as ExtensionHostHover from '../ExtensionHostHover/ExtensionHostHover.ts'
+import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
 import * as ExtensionHostView from '../ExtensionHostView/ExtensionHostView.ts'
 
 interface ManifestCommand {
@@ -25,6 +26,10 @@ interface ManifestDiagnosticProvider {
   readonly id?: unknown
 }
 
+interface ManifestSourceControlProvider {
+  readonly id?: unknown
+}
+
 interface ManifestView {
   readonly id?: unknown
 }
@@ -36,6 +41,7 @@ interface ExtensionManifest {
   readonly formattingProviders?: readonly ManifestFormattingProvider[]
   readonly hoverProviders?: readonly ManifestHoverProvider[]
   readonly isolated?: boolean
+  readonly sourceControlProviders?: readonly ManifestSourceControlProvider[]
   readonly views?: readonly ManifestView[]
 }
 
@@ -72,6 +78,13 @@ const getManifestDiagnosticProviderIds = (extension: ExtensionManifest): readonl
     return []
   }
   return extension.diagnosticProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
+}
+
+const getManifestSourceControlProviderIds = (extension: ExtensionManifest): readonly string[] => {
+  if (!Array.isArray(extension.sourceControlProviders)) {
+    return []
+  }
+  return extension.sourceControlProviders.map((provider) => provider.id).filter((id): id is string => typeof id === 'string')
 }
 
 const getManifestViewIds = (extension: ExtensionManifest): readonly string[] => {
@@ -116,6 +129,11 @@ const getNewRegisteredDiagnosticProviderIds = (beforeDiagnosticProviderIds: read
   return ExtensionHostDiagnostic.getRegisteredDiagnosticProviderIds().filter((providerId) => !before.has(providerId))
 }
 
+const getNewRegisteredSourceControlProviderIds = (beforeSourceControlProviderIds: readonly string[]): readonly string[] => {
+  const before = new Set(beforeSourceControlProviderIds)
+  return ExtensionHostSourceControl.getRegisteredSourceControlProviderIds().filter((providerId) => !before.has(providerId))
+}
+
 const getNewRegisteredViewIds = (beforeViewIds: readonly string[]): readonly string[] => {
   const before = new Set(beforeViewIds)
   return ExtensionHostView.getRegisteredViewIds().filter((viewId) => !before.has(viewId))
@@ -139,6 +157,10 @@ export const getRegisteredHoverProviderIds = (): readonly string[] => {
 
 export const getRegisteredDiagnosticProviderIds = (): readonly string[] => {
   return ExtensionHostDiagnostic.getRegisteredDiagnosticProviderIds()
+}
+
+export const getRegisteredSourceControlProviderIds = (): readonly string[] => {
+  return ExtensionHostSourceControl.getRegisteredSourceControlProviderIds()
 }
 
 export const getRegisteredViewIds = (): readonly string[] => {
@@ -204,6 +226,18 @@ export const validateIsolatedExtensionDiagnosticProviders = (extension: Extensio
   const manifestDiagnosticProviderIds = getManifestDiagnosticProviderIds(extension)
   const registeredDiagnosticProviderIds = getNewRegisteredDiagnosticProviderIds(beforeDiagnosticProviderIds)
   validateIsolatedExtensionContribution('diagnostic provider', manifestDiagnosticProviderIds, registeredDiagnosticProviderIds)
+}
+
+export const validateIsolatedExtensionSourceControlProviders = (
+  extension: ExtensionManifest,
+  beforeSourceControlProviderIds: readonly string[],
+): void => {
+  if (!extension.isolated) {
+    return
+  }
+  const manifestSourceControlProviderIds = getManifestSourceControlProviderIds(extension)
+  const registeredSourceControlProviderIds = getNewRegisteredSourceControlProviderIds(beforeSourceControlProviderIds)
+  validateIsolatedExtensionContribution('source control provider', manifestSourceControlProviderIds, registeredSourceControlProviderIds)
 }
 
 export const validateIsolatedExtensionViews = (extension: ExtensionManifest, beforeViewIds: readonly string[]): void => {

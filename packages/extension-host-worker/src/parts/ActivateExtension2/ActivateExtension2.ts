@@ -36,6 +36,7 @@ export const activateExtension2 = async (extensionId: string, extension: any, ab
     const beforeDiagnosticProviderIds = ValidateIsolatedExtensionCommands.getRegisteredDiagnosticProviderIds()
     const beforeFormattingProviderIds = ValidateIsolatedExtensionCommands.getRegisteredFormattingProviderIds()
     const beforeHoverProviderIds = ValidateIsolatedExtensionCommands.getRegisteredHoverProviderIds()
+    const beforeSourceControlProviderIds = ValidateIsolatedExtensionCommands.getRegisteredSourceControlProviderIds()
     const beforeViewIds = ValidateIsolatedExtensionCommands.getRegisteredViewIds()
     await Promise.race([activate(extension), rejectAfterTimeout(activationTimeout, token)])
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionCommands(extension, beforeCommandIds)
@@ -43,6 +44,7 @@ export const activateExtension2 = async (extensionId: string, extension: any, ab
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionDiagnosticProviders(extension, beforeDiagnosticProviderIds)
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionFormattingProviders(extension, beforeFormattingProviderIds)
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionHoverProviders(extension, beforeHoverProviderIds)
+    ValidateIsolatedExtensionCommands.validateIsolatedExtensionSourceControlProviders(extension, beforeSourceControlProviderIds)
     ValidateIsolatedExtensionCommands.validateIsolatedExtensionViews(extension, beforeViewIds)
     const endTime = performance.now()
     const time = endTime - startTime

@@ -1,0 +1,17 @@
+{
+  "id": "isolatedSourceControlMissingRegistration",
+  "name": "Sample Isolated Extension Source Control Provider Not Registered",
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedSourceControlMissingRegistration.activate"],
+  "commands": [
+    {
+      "id": "isolatedSourceControlMissingRegistration.activate"
+    }
+  ],
+  "sourceControlProviders": [
+    {
+      "id": "isolatedSourceControlMissingRegistration"
+    }
+  ]
+}

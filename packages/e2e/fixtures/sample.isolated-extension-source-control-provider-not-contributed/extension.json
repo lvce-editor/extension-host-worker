@@ -1,0 +1,13 @@
+{
+  "id": "isolatedSourceControlMissingContribution",
+  "name": "Sample Isolated Extension Source Control Provider Not Contributed",
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedSourceControlMissingContribution.activate"],
+  "commands": [
+    {
+      "id": "isolatedSourceControlMissingContribution.activate"
+    }
+  ],
+  "sourceControlProviders": []
+}

@@ -25,6 +25,20 @@ export {
 export { exists, mkdir, readDirWithFileTypes, readFile, remove, writeFile } from './parts/FileSystem/FileSystem.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export {
+  executeSourceControlAcceptInput,
+  executeSourceControlAdd,
+  executeSourceControlDiscard,
+  executeSourceControlGenerateCommitMessage,
+  executeSourceControlGetChangedFiles,
+  executeSourceControlGetFeatures,
+  executeSourceControlGetFileBefore,
+  executeSourceControlGetFileDecorations,
+  executeSourceControlGetGroups,
+  executeSourceControlIsActive,
+  registerSourceControlProvider,
+  resetSourceControlProviderRegistry,
+} from './parts/SourceControl/SourceControl.ts'
+export {
   createViewInstance,
   dispatchViewEvent,
   disposeViewInstance,
@@ -80,6 +94,11 @@ export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHan
 export type { OutputChannelRegistrySnapshot } from './parts/OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
 export type { RegisteredOutputChannel } from './parts/RegisteredOutputChannel/RegisteredOutputChannel.ts'
 export type { QuickPickItem } from './parts/QuickPickItem/QuickPickItem.ts'
+export type {
+  RegisteredSourceControlProvider,
+  SourceControlProvider,
+  SourceControlProviderRegistrySnapshot,
+} from './parts/SourceControl/SourceControl.ts'
 export type { ShowQuickPickOptions } from './parts/ShowQuickPickOptions/ShowQuickPickOptions.ts'
 export type {
   StatusBarItem,
