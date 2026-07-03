@@ -3,6 +3,7 @@ import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 export type ViewKind = 'virtualDom'
 
 export interface ViewContext {
+  readonly requestRerender: () => Promise<void>
   readonly state?: unknown
   readonly uid: number
   readonly viewId: string
@@ -23,16 +24,20 @@ export interface VirtualDomViewInstance {
 
 export interface View {
   readonly create: (context?: ViewContext) => unknown
+  readonly displayName?: string
   readonly icon?: string
   readonly id: string
   readonly kind?: ViewKind
+  readonly name?: string
   readonly title?: string
 }
 
 export interface RegisteredView {
+  readonly displayName?: string
   readonly icon?: string
   readonly id: string
   readonly kind?: ViewKind
+  readonly name?: string
   readonly title?: string
 }
 

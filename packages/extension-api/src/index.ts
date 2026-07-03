@@ -44,6 +44,7 @@ export {
   disposeViewInstance,
   executeViewProvider,
   getViewRegistrySnapshot,
+  renderViewInstance,
   registerView,
   resetViewRegistry,
   saveViewInstanceState,

@@ -1,5 +1,6 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
-import { beforeEach, test } from 'node:test'
+import { afterEach, beforeEach, test } from 'node:test'
 import {
   createViewInstance,
   dispatchViewEvent,
@@ -7,12 +8,24 @@ import {
   executeViewProvider,
   getViewRegistrySnapshot,
   registerView,
+  renderViewInstance,
   resetViewRegistry,
   saveViewInstanceState,
 } from '../../../src/parts/ViewRegistry/ViewRegistry.ts'
 
+interface MockRpcDisposable {
+  [Symbol.dispose](): void
+}
+
+let mockRpc: MockRpcDisposable | undefined
+
 beforeEach(() => {
   resetViewRegistry()
+})
+
+afterEach(() => {
+  mockRpc?.[Symbol.dispose]()
+  mockRpc = undefined
 })
 
 test('registerView registers and executes a view provider', () => {
@@ -29,9 +42,57 @@ test('registerView registers and executes a view provider', () => {
   deepStrictEqual(getViewRegistrySnapshot(), {
     views: [
       {
+        displayName: 'Testing',
         icon: 'symbol-beaker',
         id: 'sample.views.testing',
+        name: undefined,
         title: 'Testing',
+      },
+    ],
+  })
+})
+
+test('registerView uses displayName as canonical title in registry snapshot', () => {
+  registerView({
+    create() {
+      return 'created'
+    },
+    displayName: 'Testing Display',
+    id: 'sample.views.testing',
+    name: 'Testing Name',
+    title: 'Testing Title',
+  })
+
+  deepStrictEqual(getViewRegistrySnapshot(), {
+    views: [
+      {
+        displayName: 'Testing Display',
+        icon: undefined,
+        id: 'sample.views.testing',
+        name: 'Testing Name',
+        title: 'Testing Display',
+      },
+    ],
+  })
+})
+
+test('registerView falls back from title for registry displayName', () => {
+  registerView({
+    create() {
+      return 'created'
+    },
+    id: 'sample.views.testing',
+    title: 'Testing Title',
+  })
+
+  deepStrictEqual(getViewRegistrySnapshot(), {
+    views: [
+      {
+        displayName: 'Testing Title',
+        icon: undefined,
+        id: 'sample.views.testing',
+        name: undefined,
+        title: 'Testing Title',
       },
     ],
   })
@@ -70,9 +131,11 @@ test('registerView includes virtual dom kind in registry snapshot', () => {
   deepStrictEqual(getViewRegistrySnapshot(), {
     views: [
       {
+        displayName: undefined,
         icon: undefined,
         id: 'sample.views.testing',
         kind: 'virtualDom',
+        name: undefined,
         title: undefined,
       },
     ],
@@ -103,6 +166,33 @@ test('createViewInstance renders initial virtual dom', async () => {
   strictEqual(result.type, 'setDom')
 })
 
+test('createViewInstance passes requestRerender in context', async () => {
+  let requestRerender: (() => Promise<void>) | undefined
+  const invocations: unknown[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.requestViewRerender'(uid: number): Promise<void> {
+      invocations.push(uid)
+    },
+  })
+  registerView({
+    create(context) {
+      requestRerender = context?.requestRerender
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await requestRerender?.()
+
+  deepStrictEqual(invocations, [1])
+})
+
 test('dispatchViewEvent returns patches after handling event', async () => {
   let value = ''
   registerView({
@@ -131,6 +221,33 @@ test('dispatchViewEvent returns patches after handling event', async () => {
     type: 'input',
     value: 'abc',
   })
+
+  strictEqual(result.type, 'setPatches')
+})
+
+test('renderViewInstance returns patches after state changes', async () => {
+  let value = ''
+  registerView({
+    create() {
+      return {
+        render() {
+          return [
+            {
+              childCount: 0,
+              text: value,
+              type: 4,
+            },
+          ] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  value = 'abc'
+  const result = await renderViewInstance(1)
 
   strictEqual(result.type, 'setPatches')
 })
