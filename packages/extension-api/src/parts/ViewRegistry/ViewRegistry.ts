@@ -1,5 +1,5 @@
-import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
+import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type { RegisteredView, View, ViewContext, ViewEvent, ViewRegistrySnapshot, ViewRenderResult, VirtualDomViewInstance } from '../View/View.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
