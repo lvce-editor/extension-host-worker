@@ -1,3 +1,4 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type { RegisteredView, View, ViewContext, ViewEvent, ViewRegistrySnapshot, ViewRenderResult, VirtualDomViewInstance } from '../View/View.ts'
@@ -23,10 +24,13 @@ const assertView = (view: View): void => {
 }
 
 const toRegisteredView = (view: View): RegisteredView => {
+  const displayName = view.displayName || view.name || view.title
   const registeredView: RegisteredView = {
+    displayName,
     icon: view.icon,
     id: view.id,
-    title: view.title,
+    name: view.name,
+    title: displayName,
   }
   if (view.kind) {
     return {
@@ -80,6 +84,17 @@ const renderDom = async (instance: VirtualDomViewInstance): Promise<readonly Vir
   return dom
 }
 
+const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
+  const oldDom = renderedDoms[uid] || []
+  const newDom = await renderDom(instance)
+  renderedDoms[uid] = newDom
+  const patches = diffTree(oldDom, newDom)
+  return {
+    patches,
+    type: 'setPatches',
+  }
+}
+
 export const createViewInstance = async (viewId: string, uid: number, context?: ViewContext): Promise<ViewRenderResult> => {
   const view = views[viewId]
   if (!view) {
@@ -90,6 +105,9 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   }
   const instance = await view.create({
     ...context,
+    requestRerender() {
+      return ExtensionManagementWorker.invoke('Extensions.requestViewRerender', uid) as Promise<void>
+    },
     uid,
     viewId,
   })
@@ -108,14 +126,12 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
   if (typeof instance.handleEvent === 'function') {
     await instance.handleEvent(event)
   }
-  const oldDom = renderedDoms[uid] || []
-  const newDom = await renderDom(instance)
-  renderedDoms[uid] = newDom
-  const patches = diffTree(oldDom, newDom)
-  return {
-    patches,
-    type: 'setPatches',
-  }
+  return renderPatches(uid, instance)
+}
+
+export const renderViewInstance = async (uid: number): Promise<ViewRenderResult> => {
+  const instance = getVirtualDomInstance(uid)
+  return renderPatches(uid, instance)
 }
 
 export const disposeViewInstance = async (uid: number): Promise<void> => {

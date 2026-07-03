@@ -24,6 +24,7 @@ import {
   disposeViewInstance,
   executeViewProvider,
   getViewRegistrySnapshot,
+  renderViewInstance,
   saveViewInstanceState,
 } from '../ViewRegistry/ViewRegistry.ts'
 
@@ -57,5 +58,6 @@ export const commandMap = {
   'ExtensionApi.getSourceControlProviderRegistrySnapshot': getSourceControlProviderRegistrySnapshot,
   'ExtensionApi.getStatusBarItems': getStatusBarItems,
   'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
+  'ExtensionApi.renderViewInstance': renderViewInstance,
   'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
 }
