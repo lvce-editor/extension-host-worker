@@ -309,6 +309,47 @@ test('renderViewInstance returns patches after state changes', async () => {
   strictEqual(result.type, 'setPatches')
 })
 
+test('view context changes are reported after lifecycle updates', async () => {
+  const invocations: unknown[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.handleViewContextChange'(
+      uid: number,
+      viewId: string,
+      context: Readonly<Record<string, boolean>>,
+    ): Promise<void> {
+      invocations.push([uid, viewId, context])
+    },
+  })
+  let focused = true
+  registerView({
+    create() {
+      return {
+        getContext() {
+          return focused ? { 'sample.focus': true } : {}
+        },
+        handleEvent() {
+          focused = false
+        },
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await renderViewInstance(1)
+  await dispatchViewEvent(1, { type: 'blur' })
+  await disposeViewInstance(1)
+
+  deepStrictEqual(invocations, [
+    [1, 'sample.views.testing', { 'sample.focus': true }],
+    [1, 'sample.views.testing', {}],
+  ])
+})
+
 test('saveViewInstanceState returns instance state', async () => {
   registerView({
     create() {
