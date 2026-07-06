@@ -47,9 +47,9 @@ const assertEventListeners = (view: View): void => {
   if (!Array.isArray(view.eventListeners)) {
     throw new ExtensionApiError(`view ${view.id} eventListeners must be an array`)
   }
-  view.eventListeners.forEach((listener, index) => {
+  for (const [index, listener] of view.eventListeners.entries()) {
     assertEventListener(view.id, listener, index)
-  })
+  }
 }
 
 const assertView = (view: View): void => {
