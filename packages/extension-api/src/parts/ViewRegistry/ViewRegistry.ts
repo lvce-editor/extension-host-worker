@@ -16,6 +16,8 @@ import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 const views: Record<string, View> = Object.create(null)
 const instances: Record<number, VirtualDomViewInstance> = Object.create(null)
 const renderedDoms: Record<number, readonly VirtualDomNode[]> = Object.create(null)
+const contexts: Record<number, Readonly<Record<string, boolean>>> = Object.create(null)
+const contextViewIds: Record<number, string> = Object.create(null)
 
 const assertBoolean = (value: unknown, message: string): void => {
   if (value !== undefined && typeof value !== 'boolean') {
@@ -141,6 +143,58 @@ const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Pro
   }
 }
 
+const normalizeContext = (context: unknown): Readonly<Record<string, boolean>> => {
+  if (!context || typeof context !== 'object' || Array.isArray(context)) {
+    return {}
+  }
+  const normalized: Record<string, boolean> = {}
+  for (const [key, value] of Object.entries(context)) {
+    if (typeof value === 'boolean') {
+      normalized[key] = value
+    }
+  }
+  return normalized
+}
+
+const isSameContext = (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>): boolean => {
+  const oldKeys = Object.keys(oldContext)
+  const newKeys = Object.keys(newContext)
+  if (oldKeys.length !== newKeys.length) {
+    return false
+  }
+  for (const key of oldKeys) {
+    if (oldContext[key] !== newContext[key]) {
+      return false
+    }
+  }
+  return true
+}
+
+const maybeNotifyContextChanged = async (uid: number, viewId: string, instance: VirtualDomViewInstance): Promise<void> => {
+  if (typeof instance.getContext !== 'function') {
+    return
+  }
+  const oldContext = contexts[uid] || {}
+  const newContext = normalizeContext(instance.getContext())
+  if (isSameContext(oldContext, newContext)) {
+    return
+  }
+  if (Object.keys(newContext).length === 0) {
+    delete contexts[uid]
+  } else {
+    contexts[uid] = newContext
+  }
+  await ExtensionManagementWorker.invoke('Extensions.handleViewContextChange', uid, viewId, newContext)
+}
+
+const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
+  if (!contexts[uid]) {
+    return
+  }
+  delete contexts[uid]
+  await ExtensionManagementWorker.invoke('Extensions.handleViewContextChange', uid, viewId, {})
+}
+
 export const createViewInstance = async (viewId: string, uid: number, context?: ViewContext): Promise<ViewRenderResult> => {
   const view = views[viewId]
   if (!view) {
@@ -159,8 +213,10 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   })
   assertVirtualDomViewInstance(viewId, instance)
   instances[uid] = instance
+  contextViewIds[uid] = viewId
   const dom = await renderDom(instance)
   renderedDoms[uid] = dom
+  await maybeNotifyContextChanged(uid, viewId, instance)
   return {
     dom,
     type: 'setDom',
@@ -172,12 +228,16 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
   if (typeof instance.handleEvent === 'function') {
     await instance.handleEvent(event)
   }
-  return renderPatches(uid, instance)
+  const result = await renderPatches(uid, instance)
+  await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
+  return result
 }
 
 export const renderViewInstance = async (uid: number): Promise<ViewRenderResult> => {
   const instance = getVirtualDomInstance(uid)
-  return renderPatches(uid, instance)
+  const result = await renderPatches(uid, instance)
+  await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
+  return result
 }
 
 export const disposeViewInstance = async (uid: number): Promise<void> => {
@@ -185,8 +245,10 @@ export const disposeViewInstance = async (uid: number): Promise<void> => {
   if (instance && typeof instance.dispose === 'function') {
     await instance.dispose()
   }
+  await maybeClearContext(uid, contextViewIds[uid])
   delete instances[uid]
   delete renderedDoms[uid]
+  delete contextViewIds[uid]
 }
 
 export const saveViewInstanceState = async (uid: number): Promise<unknown> => {
@@ -212,5 +274,11 @@ export const resetViewRegistry = (): void => {
   }
   for (const uid of Object.keys(renderedDoms)) {
     delete renderedDoms[Number(uid)]
+  }
+  for (const uid of Object.keys(contexts)) {
+    delete contexts[Number(uid)]
+  }
+  for (const uid of Object.keys(contextViewIds)) {
+    delete contextViewIds[Number(uid)]
   }
 }

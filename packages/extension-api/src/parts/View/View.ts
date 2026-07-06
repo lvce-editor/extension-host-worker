@@ -26,6 +26,7 @@ export interface DomEventListener {
 
 export interface VirtualDomViewInstance {
   readonly dispose?: () => unknown
+  readonly getContext?: () => Readonly<Record<string, boolean>>
   readonly handleEvent?: (event: ViewEvent) => unknown
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly saveState?: () => unknown
