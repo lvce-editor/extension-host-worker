@@ -15,6 +15,15 @@ export interface ViewEvent {
   readonly value?: unknown
 }
 
+export interface DomEventListener {
+  readonly capture?: boolean
+  readonly name: string | number
+  readonly params: readonly string[]
+  readonly passive?: boolean
+  readonly preventDefault?: boolean
+  readonly stopPropagation?: boolean
+}
+
 export interface VirtualDomViewInstance {
   readonly dispose?: () => unknown
   readonly handleEvent?: (event: ViewEvent) => unknown
@@ -25,6 +34,7 @@ export interface VirtualDomViewInstance {
 export interface View {
   readonly create: (context?: ViewContext) => unknown
   readonly displayName?: string
+  readonly eventListeners?: readonly DomEventListener[]
   readonly icon?: string
   readonly id: string
   readonly kind?: ViewKind
@@ -34,6 +44,7 @@ export interface View {
 
 export interface RegisteredView {
   readonly displayName?: string
+  readonly eventListeners?: readonly DomEventListener[]
   readonly icon?: string
   readonly id: string
   readonly kind?: ViewKind

@@ -142,6 +142,63 @@ test('registerView includes virtual dom kind in registry snapshot', () => {
   })
 })
 
+test('registerView includes event listeners in registry snapshot', () => {
+  const eventListeners = [
+    {
+      name: 'handleDragStart',
+      params: ['handleViewEvent', 'dragstart', 'event.target.name'],
+    },
+    {
+      name: 'handleDrop',
+      params: ['handleViewEvent', 'drop', 'event.target.name'],
+      preventDefault: true,
+    },
+  ]
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    eventListeners,
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(getViewRegistrySnapshot(), {
+    views: [
+      {
+        displayName: undefined,
+        eventListeners,
+        icon: undefined,
+        id: 'sample.views.testing',
+        kind: 'virtualDom',
+        name: undefined,
+        title: undefined,
+      },
+    ],
+  })
+})
+
+test('registerView rejects invalid event listeners', () => {
+  throws(() => {
+    registerView({
+      create() {},
+      eventListeners: [
+        {
+          name: 'handleClick',
+          params: ['handleClick'],
+          preventDefault: 'yes',
+        },
+      ],
+      id: 'sample.views.testing',
+      kind: 'virtualDom',
+    } as any)
+  }, /view sample\.views\.testing event listener 0 has invalid preventDefault/)
+})
+
 test('createViewInstance renders initial virtual dom', async () => {
   registerView({
     create(context) {
