@@ -1,12 +1,56 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import type { Disposable } from '../Disposable/Disposable.ts'
-import type { RegisteredView, View, ViewContext, ViewEvent, ViewRegistrySnapshot, ViewRenderResult, VirtualDomViewInstance } from '../View/View.ts'
+import type {
+  DomEventListener,
+  RegisteredView,
+  View,
+  ViewContext,
+  ViewEvent,
+  ViewRegistrySnapshot,
+  ViewRenderResult,
+  VirtualDomViewInstance,
+} from '../View/View.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const views: Record<string, View> = Object.create(null)
 const instances: Record<number, VirtualDomViewInstance> = Object.create(null)
 const renderedDoms: Record<number, readonly VirtualDomNode[]> = Object.create(null)
+
+const assertBoolean = (value: unknown, message: string): void => {
+  if (value !== undefined && typeof value !== 'boolean') {
+    throw new ExtensionApiError(message)
+  }
+}
+
+const assertEventListener: (viewId: string, listener: unknown, index: number) => asserts listener is DomEventListener = (viewId, listener, index) => {
+  if (!listener || typeof listener !== 'object') {
+    throw new ExtensionApiError(`view ${viewId} event listener ${index} must be an object`)
+  }
+  const eventListener = listener as DomEventListener
+  if (typeof eventListener.name !== 'string' && typeof eventListener.name !== 'number') {
+    throw new ExtensionApiError(`view ${viewId} event listener ${index} is missing name`)
+  }
+  if (!Array.isArray(eventListener.params) || eventListener.params.some((param) => typeof param !== 'string')) {
+    throw new ExtensionApiError(`view ${viewId} event listener ${index} is missing params`)
+  }
+  assertBoolean(eventListener.capture, `view ${viewId} event listener ${index} has invalid capture`)
+  assertBoolean(eventListener.passive, `view ${viewId} event listener ${index} has invalid passive`)
+  assertBoolean(eventListener.preventDefault, `view ${viewId} event listener ${index} has invalid preventDefault`)
+  assertBoolean(eventListener.stopPropagation, `view ${viewId} event listener ${index} has invalid stopPropagation`)
+}
+
+const assertEventListeners = (view: View): void => {
+  if (view.eventListeners === undefined) {
+    return
+  }
+  if (!Array.isArray(view.eventListeners)) {
+    throw new ExtensionApiError(`view ${view.id} eventListeners must be an array`)
+  }
+  view.eventListeners.forEach((listener, index) => {
+    assertEventListener(view.id, listener, index)
+  })
+}
 
 const assertView = (view: View): void => {
   if (!view) {
@@ -21,12 +65,14 @@ const assertView = (view: View): void => {
   if (view.id in views) {
     throw new ExtensionApiError(`view ${view.id} is already registered`)
   }
+  assertEventListeners(view)
 }
 
 const toRegisteredView = (view: View): RegisteredView => {
   const displayName = view.displayName || view.name || view.title
   const registeredView: RegisteredView = {
     displayName,
+    ...(view.eventListeners && { eventListeners: view.eventListeners }),
     icon: view.icon,
     id: view.id,
     name: view.name,
