@@ -3,6 +3,7 @@ import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type {
   DomEventListener,
+  MenuEntry,
   RegisteredView,
   View,
   ViewContext,
@@ -21,6 +22,18 @@ const contextViewIds: Record<number, string> = Object.create(null)
 
 const assertBoolean = (value: unknown, message: string): void => {
   if (value !== undefined && typeof value !== 'boolean') {
+    throw new ExtensionApiError(message)
+  }
+}
+
+const assertNumber: (value: unknown, message: string) => asserts value is number = (value, message) => {
+  if (typeof value !== 'number') {
+    throw new ExtensionApiError(message)
+  }
+}
+
+const assertString: (value: unknown, message: string) => asserts value is string = (value, message) => {
+  if (typeof value !== 'string' || value.length === 0) {
     throw new ExtensionApiError(message)
   }
 }
@@ -132,6 +145,36 @@ const renderDom = async (instance: VirtualDomViewInstance): Promise<readonly Vir
   return dom
 }
 
+const normalizeMenuEntry = (entry: unknown, index: number): MenuEntry => {
+  if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+    throw new ExtensionApiError(`menu entry ${index} must be an object`)
+  }
+  const menuEntry = entry as MenuEntry
+  assertString(menuEntry.id, `menu entry ${index} is missing id`)
+  assertString(menuEntry.label, `menu entry ${index} is missing label`)
+  assertString(menuEntry.command, `menu entry ${index} is missing command`)
+  if (menuEntry.flags !== undefined && typeof menuEntry.flags !== 'number') {
+    throw new ExtensionApiError(`menu entry ${index} has invalid flags`)
+  }
+  if (menuEntry.args !== undefined && !Array.isArray(menuEntry.args)) {
+    throw new ExtensionApiError(`menu entry ${index} has invalid args`)
+  }
+  return {
+    command: menuEntry.command,
+    flags: menuEntry.flags ?? 0,
+    id: menuEntry.id,
+    label: menuEntry.label,
+    ...(menuEntry.args && { args: menuEntry.args }),
+  }
+}
+
+const normalizeMenuEntries = (entries: unknown): readonly MenuEntry[] => {
+  if (!Array.isArray(entries)) {
+    throw new ExtensionApiError('view menu entries must be an array')
+  }
+  return entries.map(normalizeMenuEntry)
+}
+
 const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
   const oldDom = renderedDoms[uid] || []
   const newDom = await renderDom(instance)
@@ -208,6 +251,12 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
     requestRerender() {
       return ExtensionManagementWorker.invoke('Extensions.requestViewRerender', uid) as Promise<void>
     },
+    showContextMenu(menuId: string, x: number, y: number) {
+      assertString(menuId, 'menuId must be a string')
+      assertNumber(x, 'x must be a number')
+      assertNumber(y, 'y must be a number')
+      return ExtensionManagementWorker.invoke('Extensions.showViewContextMenu', uid, viewId, menuId, x, y) as Promise<void>
+    },
     uid,
     viewId,
   })
@@ -257,6 +306,15 @@ export const saveViewInstanceState = async (uid: number): Promise<unknown> => {
     return undefined
   }
   return instance.saveState()
+}
+
+export const getViewMenuEntries = async (uid: number, menuId: string): Promise<readonly MenuEntry[]> => {
+  assertString(menuId, 'menuId must be a string')
+  const instance = getVirtualDomInstance(uid)
+  if (typeof instance.getMenuEntries !== 'function') {
+    return []
+  }
+  return normalizeMenuEntries(await instance.getMenuEntries(menuId))
 }
 
 export const getViewRegistrySnapshot = (): ViewRegistrySnapshot => {

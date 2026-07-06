@@ -61,6 +61,7 @@ export type {
   ViewContext,
   ViewEvent,
   ViewKind,
+  MenuEntry,
   ViewRegistrySnapshot,
   ViewRenderResult,
   VirtualDomViewInstance,
