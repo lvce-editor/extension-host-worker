@@ -312,11 +312,7 @@ test('renderViewInstance returns patches after state changes', async () => {
 test('view context changes are reported after lifecycle updates', async () => {
   const invocations: unknown[] = []
   mockRpc = ExtensionManagementWorker.registerMockRpc({
-    async 'Extensions.handleViewContextChange'(
-      uid: number,
-      viewId: string,
-      context: Readonly<Record<string, boolean>>,
-    ): Promise<void> {
+    async 'Extensions.handleViewContextChange'(uid: number, viewId: string, context: Readonly<Record<string, boolean>>): Promise<void> {
       invocations.push([uid, viewId, context])
     },
   })
