@@ -20,6 +20,12 @@ const renderedDoms: Record<number, readonly VirtualDomNode[]> = Object.create(nu
 const contexts: Record<number, Readonly<Record<string, boolean>>> = Object.create(null)
 const contextViewIds: Record<number, string> = Object.create(null)
 
+interface ContextChange {
+  readonly changed: boolean
+  readonly newContext: Readonly<Record<string, boolean>>
+  readonly oldContext: Readonly<Record<string, boolean>>
+}
+
 const assertBoolean = (value: unknown, message: string): void => {
   if (value !== undefined && typeof value !== 'boolean') {
     throw new ExtensionApiError(message)
@@ -213,14 +219,24 @@ const isSameContext = (oldContext: Readonly<Record<string, boolean>>, newContext
   return true
 }
 
-const maybeNotifyContextChanged = async (uid: number, viewId: string, instance: VirtualDomViewInstance): Promise<void> => {
+const unchangedContext: ContextChange = {
+  changed: false,
+  newContext: {},
+  oldContext: {},
+}
+
+const maybeNotifyContextChanged = async (uid: number, viewId: string, instance: VirtualDomViewInstance): Promise<ContextChange> => {
   if (typeof instance.getContext !== 'function') {
-    return
+    return unchangedContext
   }
   const oldContext = contexts[uid] || {}
   const newContext = normalizeContext(instance.getContext())
   if (isSameContext(oldContext, newContext)) {
-    return
+    return {
+      changed: false,
+      newContext,
+      oldContext,
+    }
   }
   if (Object.keys(newContext).length === 0) {
     delete contexts[uid]
@@ -228,6 +244,37 @@ const maybeNotifyContextChanged = async (uid: number, viewId: string, instance: 
     contexts[uid] = newContext
   }
   await ExtensionManagementWorker.invoke('Extensions.handleViewContextChange', uid, viewId, newContext)
+  return {
+    changed: true,
+    newContext,
+    oldContext,
+  }
+}
+
+const renderFocus = async (instance: VirtualDomViewInstance, contextChange: ContextChange): Promise<string> => {
+  if (!contextChange.changed || typeof instance.renderFocus !== 'function') {
+    return ''
+  }
+  const focusSelector = await instance.renderFocus(contextChange.oldContext, contextChange.newContext)
+  if (typeof focusSelector !== 'string') {
+    throw new ExtensionApiError('view renderFocus result must be a string')
+  }
+  return focusSelector
+}
+
+const withFocusSelector = async (
+  result: ViewRenderResult,
+  instance: VirtualDomViewInstance,
+  contextChange: ContextChange,
+): Promise<ViewRenderResult> => {
+  const focusSelector = await renderFocus(instance, contextChange)
+  if (!focusSelector) {
+    return result
+  }
+  return {
+    ...result,
+    focusSelector,
+  }
 }
 
 const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
@@ -265,11 +312,12 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   contextViewIds[uid] = viewId
   const dom = await renderDom(instance)
   renderedDoms[uid] = dom
-  await maybeNotifyContextChanged(uid, viewId, instance)
-  return {
+  const result: ViewRenderResult = {
     dom,
     type: 'setDom',
   }
+  const contextChange = await maybeNotifyContextChanged(uid, viewId, instance)
+  return withFocusSelector(result, instance, contextChange)
 }
 
 export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<ViewRenderResult> => {
@@ -278,15 +326,15 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
     await instance.handleEvent(event)
   }
   const result = await renderPatches(uid, instance)
-  await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return result
+  const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
+  return withFocusSelector(result, instance, contextChange)
 }
 
 export const renderViewInstance = async (uid: number): Promise<ViewRenderResult> => {
   const instance = getVirtualDomInstance(uid)
   const result = await renderPatches(uid, instance)
-  await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return result
+  const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
+  return withFocusSelector(result, instance, contextChange)
 }
 
 export const disposeViewInstance = async (uid: number): Promise<void> => {

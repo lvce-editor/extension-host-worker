@@ -374,6 +374,118 @@ test('view context changes are reported after lifecycle updates', async () => {
   ])
 })
 
+test('renderFocus is included after context changes', async () => {
+  const contextInvocations: unknown[] = []
+  const focusInvocations: unknown[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.handleViewContextChange'(uid: number, viewId: string, context: Readonly<Record<string, boolean>>): Promise<void> {
+      contextInvocations.push([uid, viewId, context])
+    },
+  })
+  let focused = true
+  registerView({
+    create() {
+      return {
+        getContext() {
+          return focused ? { 'sample.focus': true } : { 'sample.nextFocus': true }
+        },
+        handleEvent() {
+          focused = false
+        },
+        render() {
+          return []
+        },
+        renderFocus(oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) {
+          focusInvocations.push([oldContext, newContext])
+          if (newContext['sample.focus']) {
+            return '[name="first"]'
+          }
+          return '[name="next"]'
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    dom: [],
+    focusSelector: '[name="first"]',
+    type: 'setDom',
+  })
+  deepStrictEqual(await renderViewInstance(1), {
+    patches: [],
+    type: 'setPatches',
+  })
+  deepStrictEqual(await dispatchViewEvent(1, { type: 'click' }), {
+    focusSelector: '[name="next"]',
+    patches: [],
+    type: 'setPatches',
+  })
+
+  deepStrictEqual(contextInvocations, [
+    [1, 'sample.views.testing', { 'sample.focus': true }],
+    [1, 'sample.views.testing', { 'sample.nextFocus': true }],
+  ])
+  deepStrictEqual(focusInvocations, [
+    [{}, { 'sample.focus': true }],
+    [{ 'sample.focus': true }, { 'sample.nextFocus': true }],
+  ])
+})
+
+test('renderFocus empty selector is omitted', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.handleViewContextChange'(): Promise<void> {},
+  })
+  registerView({
+    create() {
+      return {
+        getContext() {
+          return { 'sample.focus': true }
+        },
+        render() {
+          return []
+        },
+        renderFocus() {
+          return ''
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    dom: [],
+    type: 'setDom',
+  })
+})
+
+test('renderFocus rejects non-string results', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.handleViewContextChange'(): Promise<void> {},
+  })
+  registerView({
+    create() {
+      return {
+        getContext() {
+          return { 'sample.focus': true }
+        },
+        render() {
+          return []
+        },
+        renderFocus() {
+          return 42 as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view renderFocus result must be a string/)
+})
+
 test('saveViewInstanceState returns instance state', async () => {
   registerView({
     create() {
