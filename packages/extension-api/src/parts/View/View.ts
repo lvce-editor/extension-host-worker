@@ -41,6 +41,7 @@ export interface VirtualDomViewInstance {
   readonly getMenuEntries?: (menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
   readonly handleEvent?: (event: ViewEvent) => unknown
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
+  readonly renderFocus?: (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) => string | Promise<string>
   readonly saveState?: () => unknown
 }
 
@@ -71,10 +72,12 @@ export interface ViewRegistrySnapshot {
 
 export interface ViewRenderResultDom {
   readonly dom: readonly VirtualDomNode[]
+  readonly focusSelector?: string
   readonly type: 'setDom'
 }
 
 export interface ViewRenderResultPatches {
+  readonly focusSelector?: string
   readonly patches: readonly unknown[]
   readonly type: 'setPatches'
 }
