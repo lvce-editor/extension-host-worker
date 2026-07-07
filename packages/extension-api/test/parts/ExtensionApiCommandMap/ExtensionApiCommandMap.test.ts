@@ -9,6 +9,7 @@ test('commandMap exposes hover provider commands', () => {
 
 test('commandMap exposes view commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.executeViewProvider'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.getViewMenuEntries'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.getViewRegistrySnapshot'], 'function')
 })
 

@@ -4,6 +4,7 @@ export type ViewKind = 'virtualDom'
 
 export interface ViewContext {
   readonly requestRerender: () => Promise<void>
+  readonly showContextMenu: (menuId: string, x: number, y: number) => Promise<void>
   readonly state?: unknown
   readonly uid: number
   readonly viewId: string
@@ -13,6 +14,16 @@ export interface ViewEvent {
   readonly name?: string
   readonly type: string
   readonly value?: unknown
+  readonly x?: number
+  readonly y?: number
+}
+
+export interface MenuEntry {
+  readonly args?: readonly unknown[]
+  readonly command: string
+  readonly flags?: number
+  readonly id: string
+  readonly label: string
 }
 
 export interface DomEventListener {
@@ -27,6 +38,7 @@ export interface DomEventListener {
 export interface VirtualDomViewInstance {
   readonly dispose?: () => unknown
   readonly getContext?: () => Readonly<Record<string, boolean>>
+  readonly getMenuEntries?: (menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
   readonly handleEvent?: (event: ViewEvent) => unknown
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly saveState?: () => unknown

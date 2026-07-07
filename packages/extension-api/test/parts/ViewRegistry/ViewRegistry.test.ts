@@ -6,6 +6,7 @@ import {
   dispatchViewEvent,
   disposeViewInstance,
   executeViewProvider,
+  getViewMenuEntries,
   getViewRegistrySnapshot,
   registerView,
   renderViewInstance,
@@ -250,6 +251,33 @@ test('createViewInstance passes requestRerender in context', async () => {
   deepStrictEqual(invocations, [1])
 })
 
+test('createViewInstance passes showContextMenu in context', async () => {
+  let showContextMenu: ((menuId: string, x: number, y: number) => Promise<void>) | undefined
+  const invocations: unknown[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.showViewContextMenu'(uid: number, viewId: string, menuId: string, x: number, y: number): Promise<void> {
+      invocations.push([uid, viewId, menuId, x, y])
+    },
+  })
+  registerView({
+    create(context) {
+      showContextMenu = context?.showContextMenu
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await showContextMenu?.('sample.menu', 10, 20)
+
+  deepStrictEqual(invocations, [[1, 'sample.views.testing', 'sample.menu', 10, 20]])
+})
+
 test('dispatchViewEvent returns patches after handling event', async () => {
   let value = ''
   registerView({
@@ -368,6 +396,86 @@ test('saveViewInstanceState returns instance state', async () => {
   deepStrictEqual(await saveViewInstanceState(1), {
     value: 'abc',
   })
+})
+
+test('getViewMenuEntries returns normalized menu entries', async () => {
+  registerView({
+    create() {
+      return {
+        getMenuEntries(menuId: string) {
+          return [
+            {
+              args: ['card-1'],
+              command: 'sample.open',
+              id: menuId,
+              label: 'Open',
+            },
+          ]
+        },
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  deepStrictEqual(await getViewMenuEntries(1, 'sample.card'), [
+    {
+      args: ['card-1'],
+      command: 'sample.open',
+      flags: 0,
+      id: 'sample.card',
+      label: 'Open',
+    },
+  ])
+})
+
+test('getViewMenuEntries returns empty array when instance has no menu provider', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  deepStrictEqual(await getViewMenuEntries(1, 'sample.card'), [])
+})
+
+test('getViewMenuEntries rejects invalid menu entries', async () => {
+  registerView({
+    create() {
+      return {
+        getMenuEntries() {
+          return [
+            {
+              command: 'sample.open',
+              id: 'open',
+            },
+          ] as any
+        },
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  await rejects(async () => getViewMenuEntries(1, 'sample.card'), /menu entry 0 is missing label/)
 })
 
 test('disposeViewInstance disposes and removes instance', async () => {
