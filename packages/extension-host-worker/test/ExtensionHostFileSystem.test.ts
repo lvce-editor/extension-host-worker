@@ -156,3 +156,32 @@ test('getPathSeparator - backslash', () => {
   })
   expect(ExtensionHostFileSystem.getPathSeparator('memfs')).toBe('\\')
 })
+
+test('isReadonly - default false', async () => {
+  ExtensionHostFileSystem.registerFileSystemProvider({
+    id: 'memfs',
+  })
+  await expect(ExtensionHostFileSystem.isReadonly('memfs')).resolves.toBe(false)
+})
+
+test('isReadonly', async () => {
+  ExtensionHostFileSystem.registerFileSystemProvider({
+    id: 'memfs',
+    isReadonly() {
+      return true
+    },
+  })
+  await expect(ExtensionHostFileSystem.isReadonly('memfs')).resolves.toBe(true)
+})
+
+test('isReadonly - when file system provider throws error', async () => {
+  ExtensionHostFileSystem.registerFileSystemProvider({
+    id: 'memfs',
+    isReadonly() {
+      throw new Error('x is not a function')
+    },
+  })
+  await expect(ExtensionHostFileSystem.isReadonly('memfs')).rejects.toThrow(
+    new Error('Failed to execute file system provider: x is not a function'),
+  )
+})

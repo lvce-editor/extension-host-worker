@@ -9,6 +9,7 @@ export const DefinitionExecuteDefinitionProvider = 'ExtensionHostDefinition.exec
 export const DiagnosticExecuteDiagnosticProvider = 'ExtensionHost.executeDiagnosticProvider'
 export const ExtensionActivate = 'ExtensionHostExtension.activate'
 export const FileSystemGetPathSeparator = 'ExtensionHostFileSystem.getPathSeparator'
+export const FileSystemIsReadonly = 'ExtensionHostFileSystem.isReadonly'
 export const FileSystemMkdir = 'ExtensionHostFileSystem.mkdir'
 export const FileSystemReadDirWithFileTypes = 'ExtensionHostFileSystem.readDirWithFileTypes'
 export const FileSystemReadFile = 'ExtensionHostFileSystem.readFile'
