@@ -26,6 +26,12 @@ export interface MenuEntry {
   readonly label: string
 }
 
+export interface ViewAction {
+  readonly command: string
+  readonly icon: string
+  readonly title: string
+}
+
 export interface DomEventListener {
   readonly capture?: boolean
   readonly name: string | number
@@ -41,6 +47,7 @@ export interface VirtualDomViewInstance {
   readonly getMenuEntries?: (menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
   readonly handleEvent?: (event: ViewEvent) => unknown
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
+  readonly renderActions?: () => readonly ViewAction[] | Promise<readonly ViewAction[]>
   readonly renderFocus?: (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) => string | Promise<string>
   readonly saveState?: () => unknown
 }

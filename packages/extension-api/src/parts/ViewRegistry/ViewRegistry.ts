@@ -6,6 +6,7 @@ import type {
   MenuEntry,
   RegisteredView,
   View,
+  ViewAction,
   ViewContext,
   ViewEvent,
   ViewRegistrySnapshot,
@@ -179,6 +180,28 @@ const normalizeMenuEntries = (entries: unknown): readonly MenuEntry[] => {
     throw new ExtensionApiError('view menu entries must be an array')
   }
   return entries.map(normalizeMenuEntry)
+}
+
+const normalizeViewAction = (action: unknown, index: number): ViewAction => {
+  if (!action || typeof action !== 'object' || Array.isArray(action)) {
+    throw new ExtensionApiError(`view action ${index} must be an object`)
+  }
+  const viewAction = action as ViewAction
+  assertString(viewAction.title, `view action ${index} is missing title`)
+  assertString(viewAction.icon, `view action ${index} is missing icon`)
+  assertString(viewAction.command, `view action ${index} is missing command`)
+  return {
+    command: viewAction.command,
+    icon: viewAction.icon,
+    title: viewAction.title,
+  }
+}
+
+const normalizeViewActions = (actions: unknown): readonly ViewAction[] => {
+  if (!Array.isArray(actions)) {
+    throw new ExtensionApiError('view actions must be an array')
+  }
+  return actions.map(normalizeViewAction)
 }
 
 const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
@@ -363,6 +386,14 @@ export const getViewMenuEntries = async (uid: number, menuId: string): Promise<r
     return []
   }
   return normalizeMenuEntries(await instance.getMenuEntries(menuId))
+}
+
+export const getViewActions = async (uid: number): Promise<readonly ViewAction[]> => {
+  const instance = getVirtualDomInstance(uid)
+  if (typeof instance.renderActions !== 'function') {
+    return []
+  }
+  return normalizeViewActions(await instance.renderActions())
 }
 
 export const getViewRegistrySnapshot = (): ViewRegistrySnapshot => {
