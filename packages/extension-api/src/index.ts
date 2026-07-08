@@ -58,6 +58,7 @@ export {
 export type {
   RegisteredView,
   View,
+  ViewAction,
   ViewContext,
   ViewEvent,
   ViewKind,

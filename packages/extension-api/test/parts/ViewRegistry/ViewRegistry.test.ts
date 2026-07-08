@@ -6,6 +6,7 @@ import {
   dispatchViewEvent,
   disposeViewInstance,
   executeViewProvider,
+  getViewActions,
   getViewMenuEntries,
   getViewRegistrySnapshot,
   registerView,
@@ -588,6 +589,83 @@ test('getViewMenuEntries rejects invalid menu entries', async () => {
   await createViewInstance('sample.views.testing', 1)
 
   await rejects(async () => getViewMenuEntries(1, 'sample.card'), /menu entry 0 is missing label/)
+})
+
+test('getViewActions returns normalized view actions', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderActions() {
+          return [
+            {
+              command: 'sample.refresh',
+              icon: 'Refresh',
+              title: 'Refresh',
+            },
+          ]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  deepStrictEqual(await getViewActions(1), [
+    {
+      command: 'sample.refresh',
+      icon: 'Refresh',
+      title: 'Refresh',
+    },
+  ])
+})
+
+test('getViewActions returns empty array when instance has no action renderer', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  deepStrictEqual(await getViewActions(1), [])
+})
+
+test('getViewActions rejects invalid action result', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderActions() {
+          return [
+            {
+              command: 'sample.refresh',
+              title: 'Refresh',
+            },
+          ] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  await rejects(async () => getViewActions(1), /view action 0 is missing icon/)
 })
 
 test('disposeViewInstance disposes and removes instance', async () => {
