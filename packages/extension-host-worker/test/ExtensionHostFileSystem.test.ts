@@ -181,7 +181,5 @@ test('isReadonly - when file system provider throws error', async () => {
       throw new Error('x is not a function')
     },
   })
-  await expect(ExtensionHostFileSystem.isReadonly('memfs')).rejects.toThrow(
-    new Error('Failed to execute file system provider: x is not a function'),
-  )
+  await expect(ExtensionHostFileSystem.isReadonly('memfs')).rejects.toThrow(new Error('Failed to execute file system provider: x is not a function'))
 })
