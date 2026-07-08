@@ -104,6 +104,7 @@ export const commandMap: Record<string, CommandHandler> = {
   [ExtensionHostCommandType.DiagnosticExecuteDiagnosticProvider]: ExtensionHostDiagnostic.executeDiagnosticProvider,
   [ExtensionHostCommandType.ExtensionActivate]: ExtensionHostExtension.activateExtension,
   [ExtensionHostCommandType.FileSystemGetPathSeparator]: ExtensionHostFileSystem.getPathSeparator,
+  [ExtensionHostCommandType.FileSystemIsReadonly]: ExtensionHostFileSystem.isReadonly,
   [ExtensionHostCommandType.FileSystemMkdir]: ExtensionHostFileSystem.mkdir,
   [ExtensionHostCommandType.FileSystemReadDirWithFileTypes]: ExtensionHostFileSystem.readDirWithFileTypes,
   [ExtensionHostCommandType.FileSystemReadFile]: ExtensionHostFileSystem.readFile,

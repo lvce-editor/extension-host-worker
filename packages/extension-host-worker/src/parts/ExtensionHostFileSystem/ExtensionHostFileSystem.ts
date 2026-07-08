@@ -123,3 +123,15 @@ export const getPathSeparator = (protocol) => {
     throw new VError(error, 'Failed to execute file system provider')
   }
 }
+
+export const isReadonly = async (protocol) => {
+  try {
+    const provider = FileSystemProviderState.get(protocol)
+    if (!provider.isReadonly) {
+      return false
+    }
+    return await provider.isReadonly()
+  } catch (error) {
+    throw new VError(error, 'Failed to execute file system provider')
+  }
+}
