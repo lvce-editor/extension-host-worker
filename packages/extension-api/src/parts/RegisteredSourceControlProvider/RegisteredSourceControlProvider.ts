@@ -3,6 +3,7 @@ export interface RegisteredSourceControlProvider {
   readonly add?: (path: string) => unknown | Promise<unknown>
   readonly discard?: (path: string) => unknown | Promise<unknown>
   readonly generateCommitMessage?: () => unknown | Promise<unknown>
+  readonly getBadgeCount?: () => number | Promise<number>
   readonly getChangedFiles: () => readonly unknown[] | Promise<readonly unknown[]>
   readonly getFeatures?: () => unknown | Promise<unknown>
   readonly getFileBefore?: (uri: string) => unknown | Promise<unknown>

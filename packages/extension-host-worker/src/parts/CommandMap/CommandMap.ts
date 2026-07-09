@@ -125,6 +125,7 @@ export const commandMap: Record<string, CommandHandler> = {
   [ExtensionHostCommandType.SourceControlAdd]: ExtensionHostSourceControl.add,
   [ExtensionHostCommandType.SourceControlDiscard]: ExtensionHostSourceControl.discard,
   [ExtensionHostCommandType.SourceControlGenerateCommitMessage]: ExtensionHostSourceControl.generateCommitMessage,
+  [ExtensionHostCommandType.SourceControlGetBadgeCount]: ExtensionHostSourceControl.getBadgeCount,
   [ExtensionHostCommandType.SourceControlGetChangedFiles]: ExtensionHostSourceControl.getChangedFiles,
   [ExtensionHostCommandType.SourceControlGetEnabledProviderIds]: ExtensionHostSourceControl.getEnabledProviderIds,
   [ExtensionHostCommandType.SourceControlGetFeatures]: ExtensionHostSourceControl.getFeatures,
