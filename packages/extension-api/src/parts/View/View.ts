@@ -52,8 +52,14 @@ export interface VirtualDomViewInstance {
   readonly saveState?: () => unknown
 }
 
-export interface View {
-  readonly create: (context?: ViewContext) => unknown
+export type ViewCommand<State = VirtualDomViewInstance, Args extends readonly any[] = readonly any[]> = (
+  state: State,
+  ...args: Args
+) => State | Promise<State>
+
+export interface View<State = unknown> {
+  readonly commands?: Readonly<Record<string, ViewCommand<State>>>
+  readonly create: (context?: ViewContext) => State | Promise<State>
   readonly displayName?: string
   readonly eventListeners?: readonly DomEventListener[]
   readonly icon?: string

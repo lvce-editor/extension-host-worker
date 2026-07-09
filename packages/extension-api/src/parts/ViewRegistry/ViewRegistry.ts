@@ -13,13 +13,16 @@ import type {
   ViewRenderResult,
   VirtualDomViewInstance,
 } from '../View/View.ts'
+import { registerCommand } from '../CommandRegistry/CommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
-const views: Record<string, View> = Object.create(null)
+const views: Record<string, View<any>> = Object.create(null)
 const instances: Record<number, VirtualDomViewInstance> = Object.create(null)
+const instanceUidsByView: Record<string, Set<number>> = Object.create(null)
 const renderedDoms: Record<number, readonly VirtualDomNode[]> = Object.create(null)
 const contexts: Record<number, Readonly<Record<string, boolean>>> = Object.create(null)
 const contextViewIds: Record<number, string> = Object.create(null)
+const viewCommandDisposables: Record<string, readonly Disposable[]> = Object.create(null)
 
 interface ContextChange {
   readonly changed: boolean
@@ -62,7 +65,7 @@ const assertEventListener: (viewId: string, listener: unknown, index: number) =>
   assertBoolean(eventListener.stopPropagation, `view ${viewId} event listener ${index} has invalid stopPropagation`)
 }
 
-const assertEventListeners = (view: View): void => {
+const assertEventListeners = (view: View<any>): void => {
   if (view.eventListeners === undefined) {
     return
   }
@@ -74,7 +77,25 @@ const assertEventListeners = (view: View): void => {
   }
 }
 
-const assertView = (view: View): void => {
+const assertCommands = (view: View<any>): void => {
+  if (view.commands === undefined) {
+    return
+  }
+  if (view.kind !== 'virtualDom') {
+    throw new ExtensionApiError(`view ${view.id} commands require virtualDom kind`)
+  }
+  if (!view.commands || typeof view.commands !== 'object' || Array.isArray(view.commands)) {
+    throw new ExtensionApiError(`view ${view.id} commands must be an object`)
+  }
+  for (const [id, command] of Object.entries(view.commands)) {
+    assertString(id, `view ${view.id} command is missing id`)
+    if (typeof command !== 'function') {
+      throw new ExtensionApiError(`view ${view.id} command ${id} must be a function`)
+    }
+  }
+}
+
+const assertView = (view: View<any>): void => {
   if (!view) {
     throw new ExtensionApiError('view is not defined')
   }
@@ -87,10 +108,11 @@ const assertView = (view: View): void => {
   if (view.id in views) {
     throw new ExtensionApiError(`view ${view.id} is already registered`)
   }
+  assertCommands(view)
   assertEventListeners(view)
 }
 
-const toRegisteredView = (view: View): RegisteredView => {
+const toRegisteredView = (view: View<any>): RegisteredView => {
   const displayName = view.displayName || view.name || view.title
   const registeredView: RegisteredView = {
     displayName,
@@ -109,12 +131,65 @@ const toRegisteredView = (view: View): RegisteredView => {
   return registeredView
 }
 
-export const registerView = (view: View): Disposable => {
+const getActiveViewInstance = (viewId: string): [number, VirtualDomViewInstance] | undefined => {
+  const instanceUids = instanceUidsByView[viewId]
+  if (!instanceUids) {
+    return undefined
+  }
+  const uid = [...instanceUids].at(-1)
+  if (uid === undefined) {
+    return undefined
+  }
+  return [uid, instances[uid]]
+}
+
+const executeViewCommand = async (view: View<any>, commandId: string, args: readonly unknown[]): Promise<void> => {
+  const activeInstance = getActiveViewInstance(view.id)
+  if (!activeInstance) {
+    return
+  }
+  const [uid, instance] = activeInstance
+  const command = view.commands![commandId]
+  const newInstance = await command(instance, ...args)
+  assertVirtualDomViewInstance(view.id, newInstance)
+  instances[uid] = newInstance
+  await ExtensionManagementWorker.invoke('Extensions.requestViewRerender', uid)
+}
+
+const registerViewCommands = (view: View<any>): readonly Disposable[] => {
+  const disposables: Disposable[] = []
+  try {
+    for (const id of Object.keys(view.commands || {})) {
+      disposables.push(
+        registerCommand({
+          execute(...args: readonly unknown[]) {
+            return executeViewCommand(view, id, args)
+          },
+          id,
+        }),
+      )
+    }
+  } catch (error) {
+    for (const disposable of disposables) {
+      disposable.dispose()
+    }
+    throw error
+  }
+  return disposables
+}
+
+export const registerView = <State>(view: View<State>): Disposable => {
   assertView(view)
+  const commandDisposables = registerViewCommands(view)
   views[view.id] = view
+  viewCommandDisposables[view.id] = commandDisposables
   return {
     dispose(): void {
+      for (const disposable of commandDisposables) {
+        disposable.dispose()
+      }
       delete views[view.id]
+      delete viewCommandDisposables[view.id]
     },
   }
 }
@@ -332,6 +407,9 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   })
   assertVirtualDomViewInstance(viewId, instance)
   instances[uid] = instance
+  const instanceUids = instanceUidsByView[viewId] || new Set<number>()
+  instanceUids.add(uid)
+  instanceUidsByView[viewId] = instanceUids
   contextViewIds[uid] = viewId
   const dom = await renderDom(instance)
   renderedDoms[uid] = dom
@@ -345,6 +423,9 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
 
 export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<ViewRenderResult> => {
   const instance = getVirtualDomInstance(uid)
+  const instanceUids = instanceUidsByView[contextViewIds[uid]]
+  instanceUids.delete(uid)
+  instanceUids.add(uid)
   if (typeof instance.handleEvent === 'function') {
     await instance.handleEvent(event)
   }
@@ -366,6 +447,12 @@ export const disposeViewInstance = async (uid: number): Promise<void> => {
     await instance.dispose()
   }
   await maybeClearContext(uid, contextViewIds[uid])
+  const viewId = contextViewIds[uid]
+  const instanceUids = instanceUidsByView[viewId]
+  instanceUids?.delete(uid)
+  if (instanceUids?.size === 0) {
+    delete instanceUidsByView[viewId]
+  }
   delete instances[uid]
   delete renderedDoms[uid]
   delete contextViewIds[uid]
@@ -404,7 +491,11 @@ export const getViewRegistrySnapshot = (): ViewRegistrySnapshot => {
 
 export const resetViewRegistry = (): void => {
   for (const id of Object.keys(views)) {
+    for (const disposable of viewCommandDisposables[id] || []) {
+      disposable.dispose()
+    }
     delete views[id]
+    delete viewCommandDisposables[id]
   }
   for (const uid of Object.keys(instances)) {
     delete instances[Number(uid)]
@@ -417,5 +508,8 @@ export const resetViewRegistry = (): void => {
   }
   for (const uid of Object.keys(contextViewIds)) {
     delete contextViewIds[Number(uid)]
+  }
+  for (const viewId of Object.keys(instanceUidsByView)) {
+    delete instanceUidsByView[viewId]
   }
 }

@@ -1,6 +1,8 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, beforeEach, test } from 'node:test'
+import type { VirtualDomViewInstance } from '../../../src/parts/View/View.ts'
+import { executeCommand, getCommandRegistrySnapshot } from '../../../src/parts/CommandRegistry/CommandRegistry.ts'
 import {
   createViewInstance,
   dispatchViewEvent,
@@ -20,6 +22,14 @@ interface MockRpcDisposable {
 }
 
 let mockRpc: MockRpcDisposable | undefined
+
+interface CounterViewInstance extends VirtualDomViewInstance {
+  readonly value: number
+}
+
+interface UidViewInstance extends VirtualDomViewInstance {
+  readonly uid: number
+}
 
 beforeEach(() => {
   resetViewRegistry()
@@ -115,6 +125,62 @@ test('registerView rejects duplicate id', () => {
   throws(() => {
     registerView(view)
   }, /view sample\.views\.testing is already registered/)
+})
+
+test('registerView registers and disposes view commands', () => {
+  const disposable = registerView({
+    commands: {
+      'sample.increment'(state) {
+        return state
+      },
+    },
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(
+    getCommandRegistrySnapshot().commands.map((command) => command.id),
+    ['sample.increment'],
+  )
+
+  disposable.dispose()
+  deepStrictEqual(getCommandRegistrySnapshot().commands, [])
+})
+
+test('registerView rejects invalid view commands', () => {
+  throws(() => {
+    registerView({
+      commands: {
+        'sample.increment': undefined,
+      },
+      create() {
+        return {
+          render() {
+            return []
+          },
+        }
+      },
+      id: 'sample.views.testing',
+      kind: 'virtualDom',
+    } as any)
+  }, /view sample\.views\.testing command sample\.increment must be a function/)
+})
+
+test('registerView rejects commands for non-virtual-dom views', () => {
+  throws(() => {
+    registerView({
+      commands: {},
+      create() {},
+      id: 'sample.views.testing',
+    })
+  }, /view sample\.views\.testing commands require virtualDom kind/)
 })
 
 test('registerView includes virtual dom kind in registry snapshot', () => {
@@ -277,6 +343,152 @@ test('createViewInstance passes showContextMenu in context', async () => {
   await showContextMenu?.('sample.menu', 10, 20)
 
   deepStrictEqual(invocations, [[1, 'sample.views.testing', 'sample.menu', 10, 20]])
+})
+
+test('view command updates the active instance and requests a rerender', async () => {
+  const rerenderedUids: number[] = []
+  const values: number[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.requestViewRerender'(uid: number): Promise<void> {
+      rerenderedUids.push(uid)
+    },
+  })
+  registerView<CounterViewInstance>({
+    commands: {
+      'sample.increment'(state, amount: number) {
+        values.push(state.value)
+        return {
+          ...state,
+          value: state.value + amount,
+        }
+      },
+    },
+    create() {
+      return {
+        render() {
+          return []
+        },
+        value: 0,
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await executeCommand('sample.increment', 2)
+  await executeCommand('sample.increment', 3)
+
+  deepStrictEqual(values, [0, 2])
+  deepStrictEqual(rerenderedUids, [1, 1])
+})
+
+test('view command targets the most recently used instance', async () => {
+  const executedUids: number[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.requestViewRerender'(): Promise<void> {},
+  })
+  registerView<UidViewInstance>({
+    commands: {
+      'sample.run'(state) {
+        executedUids.push(state.uid)
+        return state
+      },
+    },
+    create(context) {
+      return {
+        render() {
+          return []
+        },
+        uid: context!.uid,
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await createViewInstance('sample.views.testing', 2)
+  await executeCommand('sample.run')
+  await dispatchViewEvent(1, { type: 'focus' })
+  await executeCommand('sample.run')
+
+  deepStrictEqual(executedUids, [2, 1])
+})
+
+test('view command falls back to the previous instance after disposal', async () => {
+  const executedUids: number[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.requestViewRerender'(): Promise<void> {},
+  })
+  registerView<UidViewInstance>({
+    commands: {
+      'sample.run'(state) {
+        executedUids.push(state.uid)
+        return state
+      },
+    },
+    create(context) {
+      return {
+        render() {
+          return []
+        },
+        uid: context!.uid,
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await createViewInstance('sample.views.testing', 2)
+  await disposeViewInstance(2)
+  await executeCommand('sample.run')
+
+  deepStrictEqual(executedUids, [1])
+})
+
+test('view command is a no-op when no instance exists', async () => {
+  registerView({
+    commands: {
+      'sample.run'(state) {
+        return state
+      },
+    },
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await executeCommand('sample.run')
+})
+
+test('view command rejects an invalid state result', async () => {
+  registerView({
+    commands: {
+      'sample.run'() {
+        return undefined as any
+      },
+    },
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await rejects(executeCommand('sample.run'), /view sample\.views\.testing did not return a view instance/)
 })
 
 test('dispatchViewEvent returns patches after handling event', async () => {
