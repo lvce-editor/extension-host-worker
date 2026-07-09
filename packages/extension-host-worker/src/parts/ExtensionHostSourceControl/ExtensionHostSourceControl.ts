@@ -34,6 +34,15 @@ export const getChangedFiles = async (providerId) => {
   return flattenedChangedFiles
 }
 
+export const getBadgeCount = async (providerId) => {
+  const provider = getProvider(providerId)
+  if (typeof provider.getBadgeCount === 'function') {
+    return provider.getBadgeCount()
+  }
+  const changedFiles = await getFilesFromProvider(provider)
+  return changedFiles.length
+}
+
 export const getFileBefore = async (providerId, uri) => {
   Assert.string(providerId)
   Assert.string(uri)

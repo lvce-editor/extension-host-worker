@@ -11,6 +11,7 @@ const optionalMethods = [
   'add',
   'discard',
   'generateCommitMessage',
+  'getBadgeCount',
   'getFeatures',
   'getFileBefore',
   'getFileDecorations',
@@ -73,6 +74,9 @@ const mapSourceControlProvider = (provider: SourceControlProvider): RegisteredSo
   if (provider.generateCommitMessage) {
     registeredProvider.generateCommitMessage = () => provider.generateCommitMessage!()
   }
+  if (provider.getBadgeCount) {
+    registeredProvider.getBadgeCount = () => provider.getBadgeCount!()
+  }
   if (provider.getFeatures) {
     registeredProvider.getFeatures = () => provider.getFeatures!()
   }
@@ -119,6 +123,15 @@ export const executeSourceControlGenerateCommitMessage = async (id: string): Pro
 
 export const executeSourceControlGetChangedFiles = async (id: string): Promise<readonly unknown[]> => {
   return getProvider(id).getChangedFiles()
+}
+
+export const executeSourceControlGetBadgeCount = async (id: string): Promise<number> => {
+  const provider = getProvider(id)
+  if (provider.getBadgeCount) {
+    return provider.getBadgeCount()
+  }
+  const files = await provider.getChangedFiles()
+  return files.length
 }
 
 export const executeSourceControlGetFeatures = async (id: string): Promise<unknown> => {

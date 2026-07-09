@@ -31,6 +31,31 @@ test('getChangedFiles - error - no provider id specified', async () => {
   await expect(ExtensionHostSourceControl.getChangedFiles()).rejects.toThrow(new Error('no source control provider found'))
 })
 
+test('getBadgeCount', async () => {
+  const getBadgeCount = jest.fn(() => 7)
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    getBadgeCount,
+    getChangedFiles() {
+      return []
+    },
+    id: 'test',
+  })
+
+  expect(await ExtensionHostSourceControl.getBadgeCount('test')).toBe(7)
+  expect(getBadgeCount).toHaveBeenCalledTimes(1)
+})
+
+test('getBadgeCount - fallback to changed files', async () => {
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    getChangedFiles() {
+      return [{ file: '/test/file-1.txt', status: 1 }]
+    },
+    id: 'test',
+  })
+
+  expect(await ExtensionHostSourceControl.getBadgeCount('test')).toBe(1)
+})
+
 test('getEnabledProviderIds', async () => {
   const provider1 = {
     id: 'test-source-control-provider-1',
