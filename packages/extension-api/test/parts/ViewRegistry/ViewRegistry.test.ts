@@ -587,6 +587,62 @@ test('view context changes are reported after lifecycle updates', async () => {
   ])
 })
 
+test('renderTitle is included after lifecycle updates', async () => {
+  let title = 'Testing'
+  registerView({
+    create() {
+      return {
+        handleEvent() {
+          title = 'Testing: Updated'
+        },
+        render() {
+          return []
+        },
+        renderTitle() {
+          return title
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    dom: [],
+    title: 'Testing',
+    type: 'setDom',
+  })
+  deepStrictEqual(await dispatchViewEvent(1, { type: 'click' }), {
+    patches: [],
+    title: 'Testing: Updated',
+    type: 'setPatches',
+  })
+  deepStrictEqual(await renderViewInstance(1), {
+    patches: [],
+    title: 'Testing: Updated',
+    type: 'setPatches',
+  })
+})
+
+test('renderTitle rejects non-string results', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderTitle() {
+          return 42 as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view renderTitle result must be a string/)
+})
+
 test('renderFocus is included after context changes', async () => {
   const contextInvocations: unknown[] = []
   const focusInvocations: unknown[] = []

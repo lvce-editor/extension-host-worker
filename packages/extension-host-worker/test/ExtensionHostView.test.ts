@@ -66,6 +66,59 @@ test('dispatchViewEvent - returns patches after handling event', async () => {
   expect(result.type).toBe('setPatches')
 })
 
+test('renderTitle - returns dynamic title after lifecycle updates', async () => {
+  let title = 'Testing'
+  ExtensionHostView.registerView({
+    create() {
+      return {
+        handleEvent() {
+          title = 'Testing: Updated'
+        },
+        render() {
+          return []
+        },
+        renderTitle() {
+          return title
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await expect(ExtensionHostView.createViewInstance('sample.views.testing', 1)).resolves.toEqual({
+    dom: [],
+    title: 'Testing',
+    type: 'setDom',
+  })
+  await expect(ExtensionHostView.dispatchViewEvent(1, { type: 'click' })).resolves.toEqual({
+    patches: [],
+    title: 'Testing: Updated',
+    type: 'setPatches',
+  })
+})
+
+test('renderTitle - rejects non-string result', async () => {
+  ExtensionHostView.registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderTitle() {
+          return 42
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await expect(ExtensionHostView.createViewInstance('sample.views.testing', 1)).rejects.toThrow(
+    new TypeError('view renderTitle result must be a string'),
+  )
+})
+
 test('saveViewInstanceState - returns saved state', async () => {
   ExtensionHostView.registerView({
     create() {

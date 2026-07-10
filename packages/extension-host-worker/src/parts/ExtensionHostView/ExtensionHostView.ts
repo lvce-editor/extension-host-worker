@@ -17,16 +17,19 @@ export interface VirtualDomViewInstance {
   readonly dispose?: () => unknown
   readonly handleEvent?: (event: ViewEvent) => unknown
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
+  readonly renderTitle?: () => string | Promise<string>
   readonly saveState?: () => unknown
 }
 
 export interface ViewRenderResultDom {
   readonly dom: readonly VirtualDomNode[]
+  readonly title?: string
   readonly type: 'setDom'
 }
 
 export interface ViewRenderResultPatches {
   readonly patches: readonly unknown[]
+  readonly title?: string
   readonly type: 'setPatches'
 }
 
@@ -98,6 +101,20 @@ const renderDom = async (instance: VirtualDomViewInstance): Promise<readonly Vir
   return dom
 }
 
+const withTitle = async (result: ViewRenderResult, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
+  if (typeof instance.renderTitle !== 'function') {
+    return result
+  }
+  const title = await instance.renderTitle()
+  if (typeof title !== 'string') {
+    throw new TypeError('view renderTitle result must be a string')
+  }
+  return {
+    ...result,
+    title,
+  }
+}
+
 export const createViewInstance = async (viewId: string, uid: number, context?: ViewContext): Promise<ViewRenderResult> => {
   const view = state.views[viewId]
   if (!view) {
@@ -115,10 +132,13 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   state.instances[uid] = instance
   const dom = await renderDom(instance)
   state.renderedDoms[uid] = dom
-  return {
-    dom,
-    type: 'setDom',
-  }
+  return withTitle(
+    {
+      dom,
+      type: 'setDom',
+    },
+    instance,
+  )
 }
 
 export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<ViewRenderResult> => {
@@ -130,10 +150,13 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
   const newDom = await renderDom(instance)
   state.renderedDoms[uid] = newDom
   const patches = diffTree(oldDom, newDom)
-  return {
-    patches,
-    type: 'setPatches',
-  }
+  return withTitle(
+    {
+      patches,
+      type: 'setPatches',
+    },
+    instance,
+  )
 }
 
 export const saveViewInstanceState = async (uid: number): Promise<unknown> => {

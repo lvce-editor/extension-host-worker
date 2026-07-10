@@ -49,6 +49,7 @@ export interface VirtualDomViewInstance {
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly renderActions?: () => readonly ViewAction[] | Promise<readonly ViewAction[]>
   readonly renderFocus?: (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) => string | Promise<string>
+  readonly renderTitle?: () => string | Promise<string>
   readonly saveState?: () => unknown
 }
 
@@ -86,12 +87,14 @@ export interface ViewRegistrySnapshot {
 export interface ViewRenderResultDom {
   readonly dom: readonly VirtualDomNode[]
   readonly focusSelector?: string
+  readonly title?: string
   readonly type: 'setDom'
 }
 
 export interface ViewRenderResultPatches {
   readonly focusSelector?: string
   readonly patches: readonly unknown[]
+  readonly title?: string
   readonly type: 'setPatches'
 }
 
