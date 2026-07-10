@@ -1,7 +1,7 @@
 import { ExtensionManagementWorker, FileSystemWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { exists, mkdir, readDirWithFileTypes, readFile, remove, writeFile } from '../../../src/parts/FileSystem/FileSystem.ts'
+import { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from '../../../src/parts/FileSystem/FileSystem.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -106,6 +106,25 @@ test('remove deletes through the file system worker', async () => {
 
   await remove('/tmp/sample.txt')
 
+  strictEqual(invokedUri, '/tmp/sample.txt')
+})
+
+test('stat reads file metadata through the file system worker', async () => {
+  let invokedUri = ''
+  const stats = {
+    isDirectory: false,
+    size: 42,
+  }
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.stat'(uri: string): Promise<unknown> {
+      invokedUri = uri
+      return stats
+    },
+  })
+
+  const result = await stat('/tmp/sample.txt')
+
+  deepStrictEqual(result, stats)
   strictEqual(invokedUri, '/tmp/sample.txt')
 })
 

@@ -22,7 +22,8 @@ export {
   registerFormattingProvider,
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
-export { exists, mkdir, readDirWithFileTypes, readFile, remove, writeFile } from './parts/FileSystem/FileSystem.ts'
+export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from './parts/FileSystem/FileSystem.ts'
+export { confirm, getWorkspaceFolder, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export {
   executeSourceControlAcceptInput,
@@ -70,6 +71,7 @@ export type {
   VirtualDomViewInstance,
 } from './parts/View/View.ts'
 export { handleExtensionManagementMessagePort } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
+export { createNodeRpc, createRpc } from './parts/Rpc/Rpc.ts'
 export type { Command } from './parts/Command/Command.ts'
 export type { CommandCallback } from './parts/CommandCallback/CommandCallback.ts'
 export type { CommandRegistrySnapshot } from './parts/CommandRegistrySnapshot/CommandRegistrySnapshot.ts'
@@ -99,6 +101,7 @@ export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHan
 export type { OutputChannelRegistrySnapshot } from './parts/OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
 export type { RegisteredOutputChannel } from './parts/RegisteredOutputChannel/RegisteredOutputChannel.ts'
 export type { QuickPickItem } from './parts/QuickPickItem/QuickPickItem.ts'
+export type { CreateNodeRpcOptions, CreateRpcOptions } from './parts/Rpc/Rpc.ts'
 export type {
   RegisteredSourceControlProvider,
   SourceControlProvider,
