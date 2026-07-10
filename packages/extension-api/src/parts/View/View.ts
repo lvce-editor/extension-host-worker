@@ -32,6 +32,12 @@ export interface ViewAction {
   readonly title: string
 }
 
+export interface ViewSelection {
+  readonly end: number
+  readonly name: string
+  readonly start: number
+}
+
 export interface DomEventListener {
   readonly capture?: boolean
   readonly name: string | number
@@ -49,6 +55,7 @@ export interface VirtualDomViewInstance {
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly renderActions?: () => readonly ViewAction[] | Promise<readonly ViewAction[]>
   readonly renderFocus?: (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) => string | Promise<string>
+  readonly renderSelections?: () => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
   readonly renderTitle?: () => string | Promise<string>
   readonly saveState?: () => unknown
 }
@@ -87,6 +94,7 @@ export interface ViewRegistrySnapshot {
 export interface ViewRenderResultDom {
   readonly dom: readonly VirtualDomNode[]
   readonly focusSelector?: string
+  readonly selections?: readonly ViewSelection[]
   readonly title?: string
   readonly type: 'setDom'
 }
@@ -94,6 +102,7 @@ export interface ViewRenderResultDom {
 export interface ViewRenderResultPatches {
   readonly focusSelector?: string
   readonly patches: readonly unknown[]
+  readonly selections?: readonly ViewSelection[]
   readonly title?: string
   readonly type: 'setPatches'
 }

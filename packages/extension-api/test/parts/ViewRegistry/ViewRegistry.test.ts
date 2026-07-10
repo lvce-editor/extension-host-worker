@@ -755,6 +755,90 @@ test('renderFocus rejects non-string results', async () => {
   await rejects(createViewInstance('sample.views.testing', 1), /view renderFocus result must be a string/)
 })
 
+test('renderSelections is included after every view render', async () => {
+  let selectionStart = 0
+  registerView({
+    create() {
+      return {
+        handleEvent() {
+          selectionStart = 1
+        },
+        render() {
+          return []
+        },
+        renderSelections() {
+          return [
+            {
+              end: 4,
+              name: 'title',
+              start: selectionStart,
+            },
+          ]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    dom: [],
+    selections: [{ end: 4, name: 'title', start: 0 }],
+    type: 'setDom',
+  })
+  deepStrictEqual(await dispatchViewEvent(1, { type: 'focus' }), {
+    patches: [],
+    selections: [{ end: 4, name: 'title', start: 1 }],
+    type: 'setPatches',
+  })
+  deepStrictEqual(await renderViewInstance(1), {
+    patches: [],
+    selections: [{ end: 4, name: 'title', start: 1 }],
+    type: 'setPatches',
+  })
+})
+
+test('renderSelections empty result is omitted', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderSelections() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    dom: [],
+    type: 'setDom',
+  })
+})
+
+test('renderSelections rejects invalid results', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderSelections() {
+          return [{ end: 4, name: '', start: 0 }]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view selection 0 is missing name/)
+})
+
 test('saveViewInstanceState returns instance state', async () => {
   registerView({
     create() {
