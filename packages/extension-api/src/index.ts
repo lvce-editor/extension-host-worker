@@ -68,6 +68,7 @@ export type {
   MenuEntry,
   ViewRegistrySnapshot,
   ViewRenderResult,
+  ViewSelection,
   VirtualDomViewInstance,
 } from './parts/View/View.ts'
 export { handleExtensionManagementMessagePort } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'

@@ -11,6 +11,7 @@ import type {
   ViewEvent,
   ViewRegistrySnapshot,
   ViewRenderResult,
+  ViewSelection,
   VirtualDomViewInstance,
 } from '../View/View.ts'
 import { registerCommand } from '../CommandRegistry/CommandRegistry.ts'
@@ -279,6 +280,28 @@ const normalizeViewActions = (actions: unknown): readonly ViewAction[] => {
   return actions.map(normalizeViewAction)
 }
 
+const normalizeViewSelection = (selection: unknown, index: number): ViewSelection => {
+  if (!selection || typeof selection !== 'object' || Array.isArray(selection)) {
+    throw new ExtensionApiError(`view selection ${index} must be an object`)
+  }
+  const viewSelection = selection as ViewSelection
+  assertString(viewSelection.name, `view selection ${index} is missing name`)
+  assertNumber(viewSelection.start, `view selection ${index} is missing start`)
+  assertNumber(viewSelection.end, `view selection ${index} is missing end`)
+  return {
+    end: viewSelection.end,
+    name: viewSelection.name,
+    start: viewSelection.start,
+  }
+}
+
+const normalizeViewSelections = (selections: unknown): readonly ViewSelection[] => {
+  if (!Array.isArray(selections)) {
+    throw new ExtensionApiError('view selections must be an array')
+  }
+  return selections.map(normalizeViewSelection)
+}
+
 const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
   const oldDom = renderedDoms[uid] || []
   const newDom = await renderDom(instance)
@@ -389,13 +412,28 @@ const withTitle = async (result: ViewRenderResult, instance: VirtualDomViewInsta
   }
 }
 
+const withSelections = async (result: ViewRenderResult, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
+  if (typeof instance.renderSelections !== 'function') {
+    return result
+  }
+  const selections = normalizeViewSelections(await instance.renderSelections())
+  if (selections.length === 0) {
+    return result
+  }
+  return {
+    ...result,
+    selections,
+  }
+}
+
 const withRenderMetadata = async (
   result: ViewRenderResult,
   instance: VirtualDomViewInstance,
   contextChange: ContextChange,
 ): Promise<ViewRenderResult> => {
   const resultWithFocus = await withFocusSelector(result, instance, contextChange)
-  return withTitle(resultWithFocus, instance)
+  const resultWithSelections = await withSelections(resultWithFocus, instance)
+  return withTitle(resultWithSelections, instance)
 }
 
 const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
