@@ -375,6 +375,29 @@ const withFocusSelector = async (
   }
 }
 
+const withTitle = async (result: ViewRenderResult, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
+  if (typeof instance.renderTitle !== 'function') {
+    return result
+  }
+  const title = await instance.renderTitle()
+  if (typeof title !== 'string') {
+    throw new ExtensionApiError('view renderTitle result must be a string')
+  }
+  return {
+    ...result,
+    title,
+  }
+}
+
+const withRenderMetadata = async (
+  result: ViewRenderResult,
+  instance: VirtualDomViewInstance,
+  contextChange: ContextChange,
+): Promise<ViewRenderResult> => {
+  const resultWithFocus = await withFocusSelector(result, instance, contextChange)
+  return withTitle(resultWithFocus, instance)
+}
+
 const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
   if (!contexts[uid]) {
     return
@@ -418,7 +441,7 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
     type: 'setDom',
   }
   const contextChange = await maybeNotifyContextChanged(uid, viewId, instance)
-  return withFocusSelector(result, instance, contextChange)
+  return withRenderMetadata(result, instance, contextChange)
 }
 
 export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<ViewRenderResult> => {
@@ -431,14 +454,14 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
   }
   const result = await renderPatches(uid, instance)
   const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return withFocusSelector(result, instance, contextChange)
+  return withRenderMetadata(result, instance, contextChange)
 }
 
 export const renderViewInstance = async (uid: number): Promise<ViewRenderResult> => {
   const instance = getVirtualDomInstance(uid)
   const result = await renderPatches(uid, instance)
   const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return withFocusSelector(result, instance, contextChange)
+  return withRenderMetadata(result, instance, contextChange)
 }
 
 export const disposeViewInstance = async (uid: number): Promise<void> => {
