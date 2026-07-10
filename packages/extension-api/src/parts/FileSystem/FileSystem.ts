@@ -30,6 +30,10 @@ export const remove = async (uri: string): Promise<void> => {
   await FileSystemWorker.remove(uri)
 }
 
+export const stat = async (uri: string): Promise<unknown> => {
+  return FileSystemWorker.stat(uri)
+}
+
 export const writeFile = async (uri: string, content: string): Promise<void> => {
   await FileSystemWorker.writeFile(uri, content)
 }
