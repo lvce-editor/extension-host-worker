@@ -1,4 +1,4 @@
-import { LazyTransferMessagePortRpcParent, ModuleWorkerRpcParent, type Rpc } from '@lvce-editor/rpc'
+import { LazyTransferMessagePortRpcParent, type Rpc } from '@lvce-editor/rpc'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export interface CreateRpcOptions {
@@ -20,12 +20,19 @@ const sendMessagePortToNode = async (port: MessagePort): Promise<void> => {
   )
 }
 
+const sendMessagePortToWebWorker = async (port: MessagePort, name: string): Promise<void> => {
+  await ExtensionManagementWorker.invokeAndTransfer('Extensions.createWebViewWorkerRpc', { name }, port)
+}
+
 export const createRpc = async ({ commandMap = {}, name = '', url }: CreateRpcOptions): Promise<Rpc> => {
-  return ModuleWorkerRpcParent.create({
+  const rpc = await LazyTransferMessagePortRpcParent.create({
     commandMap,
-    name,
-    url,
+    send(port): Promise<void> {
+      return sendMessagePortToWebWorker(port, name)
+    },
   })
+  await rpc.invoke('LoadFile.loadFile', url)
+  return rpc
 }
 
 export const createNodeRpc = async ({ path }: CreateNodeRpcOptions): Promise<Rpc> => {
