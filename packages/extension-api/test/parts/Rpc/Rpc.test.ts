@@ -15,20 +15,18 @@ afterEach(() => {
   mockRpc = undefined
 })
 
-test('createNodeRpc transfers a port and loads the requested file', async () => {
-  const invocations: string[] = []
-  let loadedPath = ''
+test('createNodeRpc proxies calls through the renderer worker', async () => {
+  const invocations: unknown[][] = []
   mockRpc = ExtensionManagementWorker.registerMockRpc({
-    async 'Extensions.sendMessagePortToElectron'(port: MessagePort, initialCommand: string): Promise<void> {
-      invocations.push(initialCommand)
-      await PlainMessagePortRpc.create({
-        commandMap: {
-          'LoadFile.loadFile'(path: string): void {
-            loadedPath = path
-          },
-        },
-        messagePort: port,
-      })
+    async 'Extensions.executeCommand'(id: string, ...params: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...params])
+      if (id === 'ExtensionNodeRpc.create') {
+        return 42
+      }
+      if (id === 'ExtensionNodeRpc.invoke') {
+        return 'ok'
+      }
+      return undefined
     },
   })
 
@@ -37,21 +35,24 @@ test('createNodeRpc transfers a port and loads the requested file', async () => 
     path: '/extensions/git/node/gitClient.js',
   })
 
-  strictEqual(loadedPath, '/extensions/git/node/gitClient.js')
-  deepStrictEqual(invocations, ['HandleMessagePortForExtensionHostHelperProcess.handleMessagePortForExtensionHostHelperProcess'])
+  strictEqual(await rpc.invoke('Git.status'), 'ok')
   await rpc.dispose()
+  deepStrictEqual(invocations, [
+    ['ExtensionNodeRpc.create', 'Git', '/extensions/git/node/gitClient.js'],
+    ['ExtensionNodeRpc.invoke', 42, 'Git.status'],
+    ['ExtensionNodeRpc.dispose', 42],
+  ])
 })
 
-test('createRpc transfers a port and loads the requested file', async () => {
+test('createRpc transfers a port and worker options', async () => {
   const invocations: unknown[] = []
-  let loadedUrl = ''
   mockRpc = ExtensionManagementWorker.registerMockRpc({
-    async 'Extensions.createWebViewWorkerRpc'(rpcInfo: unknown, port: MessagePort): Promise<void> {
+    async 'Extensions.createWebViewWorkerRpc2'(rpcInfo: unknown, port: MessagePort): Promise<void> {
       invocations.push(rpcInfo)
       await PlainMessagePortRpc.create({
         commandMap: {
-          'LoadFile.loadFile'(url: string): void {
-            loadedUrl = url
+          'Git.status'(): string {
+            return 'ok'
           },
         },
         messagePort: port,
@@ -65,7 +66,7 @@ test('createRpc transfers a port and loads the requested file', async () => {
     url: '/extensions/git/gitWorkerMain.js',
   })
 
-  strictEqual(loadedUrl, '/extensions/git/gitWorkerMain.js')
-  deepStrictEqual(invocations, [{ name: 'Git Worker' }])
+  strictEqual(await rpc.invoke('Git.status'), 'ok')
+  deepStrictEqual(invocations, [{ name: 'Git Worker', url: '/extensions/git/gitWorkerMain.js' }])
   await rpc.dispose()
 })
