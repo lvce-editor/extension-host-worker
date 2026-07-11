@@ -1,4 +1,4 @@
-import { LazyTransferMessagePortRpcParent, type Rpc } from '@lvce-editor/rpc'
+import { MessagePortRpcParent, type Rpc } from '@lvce-editor/rpc'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export interface CreateRpcOptions {
@@ -12,34 +12,39 @@ export interface CreateNodeRpcOptions {
   readonly path: string
 }
 
-const sendMessagePortToNode = async (port: MessagePort): Promise<void> => {
-  await ExtensionManagementWorker.invokeAndTransfer(
-    'Extensions.sendMessagePortToElectron',
-    port,
-    'HandleMessagePortForExtensionHostHelperProcess.handleMessagePortForExtensionHostHelperProcess',
-  )
+const sendMessagePortToWebWorker = async (port: MessagePort, name: string, url: string): Promise<void> => {
+  await ExtensionManagementWorker.invokeAndTransfer('Extensions.createWebViewWorkerRpc2', { name, url }, port)
 }
 
-const sendMessagePortToWebWorker = async (port: MessagePort, name: string): Promise<void> => {
-  await ExtensionManagementWorker.invokeAndTransfer('Extensions.createWebViewWorkerRpc', { name }, port)
+const createMessagePortRpc = async (commandMap: Record<string, unknown>, send: (port: MessagePort) => Promise<void>): Promise<Rpc> => {
+  const { port1, port2 } = new MessageChannel()
+  const rpcPromise = MessagePortRpcParent.create({
+    commandMap,
+    isMessagePortOpen: true,
+    messagePort: port2,
+  })
+  port2.start()
+  await send(port1)
+  return rpcPromise
 }
 
 export const createRpc = async ({ commandMap = {}, name = '', url }: CreateRpcOptions): Promise<Rpc> => {
-  const rpc = await LazyTransferMessagePortRpcParent.create({
-    commandMap,
-    send(port): Promise<void> {
-      return sendMessagePortToWebWorker(port, name)
-    },
-  })
-  await rpc.invoke('LoadFile.loadFile', url)
-  return rpc
+  return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, name, url))
 }
 
-export const createNodeRpc = async ({ path }: CreateNodeRpcOptions): Promise<Rpc> => {
-  const rpc = await LazyTransferMessagePortRpcParent.create({
-    commandMap: {},
-    send: sendMessagePortToNode,
-  })
-  await rpc.invoke('LoadFile.loadFile', path)
-  return rpc
+export const createNodeRpc = async ({ name = '', path }: CreateNodeRpcOptions): Promise<Rpc> => {
+  const id = await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.create', name, path)
+  const invoke = (method: string, ...params: readonly any[]): Promise<any> => {
+    return ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.invoke', id, method, ...params)
+  }
+  return {
+    async dispose(): Promise<void> {
+      await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.dispose', id)
+    },
+    invoke,
+    invokeAndTransfer: invoke,
+    send(method: string, ...params: readonly any[]): void {
+      void invoke(method, ...params)
+    },
+  }
 }
