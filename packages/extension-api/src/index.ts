@@ -26,6 +26,21 @@ export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile 
 export { confirm, getWorkspaceFolder, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export {
+  registerBraceCompletionProvider,
+  registerClosingTagProvider,
+  registerCodeActionsProvider,
+  registerCommentProvider,
+  registerDefinitionProvider,
+  registerImplementationProvider,
+  registerReferenceProvider,
+  registerRenameProvider,
+  registerSelectionProvider,
+  registerTabCompletionProvider,
+  registerTypeDefinitionProvider,
+  resetLanguageProviderRegistry,
+} from './parts/LanguageProvider/LanguageProvider.ts'
+export type { LanguageProvider } from './parts/LanguageProvider/LanguageProvider.ts'
+export {
   executeSourceControlAcceptInput,
   executeSourceControlAdd,
   executeSourceControlDiscard,
