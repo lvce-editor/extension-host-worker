@@ -1,8 +1,9 @@
+import * as ExecuteIsolatedLanguageProvider from '../ExecuteIsolatedLanguageProvider/ExecuteIsolatedLanguageProvider.ts'
 import * as ExtensionHostTextDocument from '../ExtensionHostTextDocument/ExtensionHostTextDocument.ts'
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { executeCodeActionProvider, registerCodeActionProvider } = Registry.create({
+const { executeCodeActionProvider, getProvider, registerCodeActionProvider } = Registry.create({
   name: 'CodeAction',
   resultShape: {
     items: {
@@ -20,6 +21,12 @@ const isOrganizeImports = (action) => {
 
 // TODO handle case when multiple organize imports providers are registered
 export const executeOrganizeImports = async (uid) => {
+  if (!ExecuteIsolatedLanguageProvider.hasLegacyProvider(getProvider, uid)) {
+    const isolated = await ExecuteIsolatedLanguageProvider.executeOrganizeImports(uid)
+    if (isolated.found) {
+      return isolated.result
+    }
+  }
   const actions = await executeCodeActionProvider(uid)
   // @ts-ignore
   if (!actions || actions.length === 0) {

@@ -31,7 +31,13 @@ const validateResult = (renameResult: any): string => {
   return ''
 }
 
-const { executeprepareRenameProvider, executeRenameProvider, registerRenameProvider, reset } = Registry.create({
+const {
+  executeprepareRenameProvider: executeLegacyPrepareRenameProvider,
+  executeRenameProvider: executeLegacyRenameProvider,
+  getProvider,
+  registerRenameProvider,
+  reset,
+} = Registry.create({
   additionalMethodNames: [
     // @ts-ignore
     {
@@ -47,4 +53,21 @@ const { executeprepareRenameProvider, executeRenameProvider, registerRenameProvi
   resultShape: validateResult,
 })
 
-export { registerRenameProvider, executeRenameProvider, executeprepareRenameProvider, reset }
+export const executeRenameProvider = async (textDocumentId: number, ...args: readonly unknown[]): Promise<unknown> => {
+  if (ExecuteIsolatedLanguageProvider.hasLegacyProvider(getProvider, textDocumentId)) {
+    return ExecuteIsolatedLanguageProvider.executeLegacy(executeLegacyRenameProvider, textDocumentId, args)
+  }
+  const isolated = await ExecuteIsolatedLanguageProvider.execute('rename', 'provideRename', textDocumentId, ...args)
+  return isolated.found ? isolated.result : ExecuteIsolatedLanguageProvider.executeLegacy(executeLegacyRenameProvider, textDocumentId, args)
+}
+
+export const executeprepareRenameProvider = async (textDocumentId: number, ...args: readonly unknown[]): Promise<unknown> => {
+  if (ExecuteIsolatedLanguageProvider.hasLegacyProvider(getProvider, textDocumentId)) {
+    return ExecuteIsolatedLanguageProvider.executeLegacy(executeLegacyPrepareRenameProvider, textDocumentId, args)
+  }
+  const isolated = await ExecuteIsolatedLanguageProvider.execute('rename', 'prepareRename', textDocumentId, ...args)
+  return isolated.found ? isolated.result : ExecuteIsolatedLanguageProvider.executeLegacy(executeLegacyPrepareRenameProvider, textDocumentId, args)
+}
+
+export { registerRenameProvider, reset }
+import * as ExecuteIsolatedLanguageProvider from '../ExecuteIsolatedLanguageProvider/ExecuteIsolatedLanguageProvider.ts'

@@ -4,6 +4,8 @@ import { commandMap } from '../../../src/parts/ExtensionApiCommandMap/ExtensionA
 
 test('commandMap exposes hover provider commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.executeHoverProvider'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.executeLanguageProvider'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.executeOrganizeImportsProvider'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.getHoverProviderRegistrySnapshot'], 'function')
 })
 

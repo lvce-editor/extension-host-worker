@@ -4,6 +4,7 @@ import { executeDiagnosticProvider, getDiagnosticProviderRegistrySnapshot } from
 import { executeFormattingProvider, getFormattingProviderRegistrySnapshot } from '../Formatting/Formatting.ts'
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
 import { executeHoverProvider, getHoverProviderRegistrySnapshot } from '../Hover/Hover.ts'
+import { executeLanguageProvider, executeOrganizeImportsProvider } from '../LanguageProvider/LanguageProvider.ts'
 import { getOutputChannelRegistrySnapshot } from '../OutputChannel/OutputChannel.ts'
 import {
   executeSourceControlAcceptInput,
@@ -40,6 +41,8 @@ export const commandMap = {
   'ExtensionApi.executeDiagnosticProvider': executeDiagnosticProvider,
   'ExtensionApi.executeFormattingProvider': executeFormattingProvider,
   'ExtensionApi.executeHoverProvider': executeHoverProvider,
+  'ExtensionApi.executeLanguageProvider': executeLanguageProvider,
+  'ExtensionApi.executeOrganizeImportsProvider': executeOrganizeImportsProvider,
   'ExtensionApi.executeResolveCompletionItemProvider': executeResolveCompletionItemProvider,
   'ExtensionApi.executeSourceControlAcceptInput': executeSourceControlAcceptInput,
   'ExtensionApi.executeSourceControlAdd': executeSourceControlAdd,
