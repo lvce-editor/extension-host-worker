@@ -93,6 +93,7 @@ export const commandMap: Record<string, CommandHandler> = {
   'ExtensionHost.importExtension': ImportExtension.importExtension,
   'ExtensionHost.importExtension2': importExtension2,
   'ExtensionHost.launchIframeWorker': LaunchIframeWorker.launchIframeWorker,
+  'ExtensionHostCodeActions.getSourceActions': ExtensionHostCodeActions.getSourceActions,
   [ExtensionHostCommandType.BraceCompletionExecuteBraceCompletionProvider]: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
   [ExtensionHostCommandType.ClosingTagExecuteClosingTagProvider]: ExtensionHostClosingTag.executeClosingTagProvider,
   [ExtensionHostCommandType.CommandExecute]: ExtensionHostCommand.executeCommand,
