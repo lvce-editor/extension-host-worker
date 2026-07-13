@@ -3,7 +3,12 @@ import * as ExtensionHostTextDocument from '../ExtensionHostTextDocument/Extensi
 import * as Registry from '../Registry/Registry.ts'
 import * as Types from '../Types/Types.ts'
 
-const { executeCodeActionProvider, getProvider, registerCodeActionProvider } = Registry.create({
+const {
+  executeCodeActionProvider: executeRegisteredCodeActionProvider,
+  getProvider,
+  registerCodeActionProvider,
+  reset,
+} = Registry.create({
   name: 'CodeAction',
   resultShape: {
     items: {
@@ -13,7 +18,39 @@ const { executeCodeActionProvider, getProvider, registerCodeActionProvider } = R
   },
 })
 
-export { registerCodeActionProvider }
+export { registerCodeActionProvider, reset }
+
+interface CodeAction {
+  readonly kind: string
+  readonly name: string
+}
+
+const executeCodeActionProvider = async (uid): Promise<readonly CodeAction[]> => {
+  if (!ExecuteIsolatedLanguageProvider.hasLegacyProvider(getProvider, uid)) {
+    const isolated = await ExecuteIsolatedLanguageProvider.execute('code action', 'provideCodeActions', uid)
+    if (isolated.found) {
+      return isolated.result as readonly CodeAction[]
+    }
+  }
+  return (await executeRegisteredCodeActionProvider(uid)) as unknown as readonly CodeAction[]
+}
+
+const toSourceAction = (languageId: string, action: CodeAction) => {
+  return {
+    kind: action.kind,
+    languageId,
+    name: action.name,
+  }
+}
+
+export const getSourceActions = async (uid) => {
+  const textDocument = ExtensionHostTextDocument.get(uid)
+  if (!textDocument) {
+    return []
+  }
+  const actions = await executeCodeActionProvider(uid)
+  return actions.map((action) => toSourceAction(textDocument.languageId, action))
+}
 
 const isOrganizeImports = (action) => {
   return action.kind === 'source.organizeImports'
@@ -27,7 +64,7 @@ export const executeOrganizeImports = async (uid) => {
       return isolated.result
     }
   }
-  const actions = await executeCodeActionProvider(uid)
+  const actions = await executeRegisteredCodeActionProvider(uid)
   // @ts-ignore
   if (!actions || actions.length === 0) {
     return []
