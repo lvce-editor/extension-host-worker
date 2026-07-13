@@ -1,4 +1,5 @@
 export { activate } from './parts/Activation/Activation.ts'
+export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showQuickPick } from './parts/QuickPick/QuickPick.ts'
 export { getPreference, setPreference } from './parts/Preferences/Preferences.ts'
@@ -104,6 +105,11 @@ export type {
   RegisteredDiagnosticProvider,
 } from './parts/Diagnostic/Diagnostic.ts'
 export type { Disposable } from './parts/Disposable/Disposable.ts'
+export type {
+  CreateElectronWebContentsViewOptions,
+  ElectronWebContentsView,
+  ElectronWebContentsViewStats,
+} from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export type {
   FormattingEdit,
   FormattingProvider,
