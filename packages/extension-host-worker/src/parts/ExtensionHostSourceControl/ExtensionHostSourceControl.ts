@@ -1,5 +1,6 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import * as Assert from '../Assert/Assert.ts'
+import * as ExecuteIsolatedSourceControlProvider from '../ExecuteIsolatedSourceControlProvider/ExecuteIsolatedSourceControlProvider.ts'
 import { getRemoteUrlSync } from '../ExtensionHostUrl/ExtensionHostUrl.ts'
 import { getExtensions } from '../GetExtensions/GetExtensions.ts'
 
@@ -28,26 +29,45 @@ const getFilesFromProvider = (provider) => {
 }
 
 export const getChangedFiles = async (providerId) => {
-  const provider = getProvider(providerId)
-  const changedFiles = await getFilesFromProvider(provider)
-  const flattenedChangedFiles = changedFiles
-  return flattenedChangedFiles
+  const provider = state.providers[providerId]
+  if (provider) {
+    return getFilesFromProvider(provider)
+  }
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGetChangedFiles')
+  if (isolated.found) {
+    return isolated.result
+  }
+  return getFilesFromProvider(getProvider(providerId))
 }
 
 export const getBadgeCount = async (providerId) => {
-  const provider = getProvider(providerId)
-  if (typeof provider.getBadgeCount === 'function') {
-    return provider.getBadgeCount()
+  const provider = state.providers[providerId]
+  if (provider) {
+    if (typeof provider.getBadgeCount === 'function') {
+      return provider.getBadgeCount()
+    }
+    const changedFiles = await getFilesFromProvider(provider)
+    return changedFiles.length
   }
-  const changedFiles = await getFilesFromProvider(provider)
-  return changedFiles.length
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGetBadgeCount')
+  if (isolated.found) {
+    return isolated.result
+  }
+  return getFilesFromProvider(getProvider(providerId))
 }
 
 export const getFileBefore = async (providerId, uri) => {
   Assert.string(providerId)
   Assert.string(uri)
-  const provider = getProvider(providerId)
-  return provider.getFileBefore(uri)
+  const provider = state.providers[providerId]
+  if (provider) {
+    return provider.getFileBefore(uri)
+  }
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGetFileBefore', uri)
+  if (isolated.found) {
+    return isolated.result
+  }
+  return getProvider(providerId).getFileBefore(uri)
 }
 
 const getGroupsFromProvider = async (provider, cwd) => {
@@ -69,56 +89,105 @@ const getGroupsFromProvider = async (provider, cwd) => {
 }
 
 export const getGroups = async (providerId, cwd) => {
-  const provider = getProvider(providerId)
-  const groups = await getGroupsFromProvider(provider, cwd)
-  return groups
+  const provider = state.providers[providerId]
+  if (provider) {
+    return getGroupsFromProvider(provider, cwd)
+  }
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGetGroups', cwd)
+  if (isolated.found) {
+    return isolated.result
+  }
+  return getGroupsFromProvider(getProvider(providerId), cwd)
 }
 
 export const acceptInput = async (providerId, value) => {
-  const provider = getProvider(providerId)
-  await provider.acceptInput(value)
+  const provider = state.providers[providerId]
+  if (provider) {
+    await provider.acceptInput(value)
+    return
+  }
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlAcceptInput', value)
+  if (!isolated.found) {
+    getProvider(providerId)
+  }
 }
 
 export const generateCommitMessage = async (providerId) => {
-  const provider = getProvider(providerId)
-  if (typeof provider.generateCommitMessage !== 'function') {
-    throw new TypeError('source control provider is missing required function generateCommitMessage')
+  const provider = state.providers[providerId]
+  if (provider) {
+    if (typeof provider.generateCommitMessage !== 'function') {
+      throw new TypeError('source control provider is missing required function generateCommitMessage')
+    }
+    return provider.generateCommitMessage()
   }
-  return provider.generateCommitMessage()
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGenerateCommitMessage')
+  if (isolated.found) {
+    return isolated.result
+  }
+  return getProvider(providerId)
 }
 
 export const getFeatures = async (providerId) => {
-  const provider = getProvider(providerId)
-  if (typeof provider.getFeatures === 'function') {
-    return provider.getFeatures()
-  }
-  if (provider.features && typeof provider.features === 'object') {
-    return provider.features
-  }
-  if ('showGenerateCommitMessageButton' in provider) {
-    return {
-      showGenerateCommitMessageButton: provider.showGenerateCommitMessageButton,
+  const provider = state.providers[providerId]
+  if (provider) {
+    if (typeof provider.getFeatures === 'function') {
+      return provider.getFeatures()
     }
+    if (provider.features && typeof provider.features === 'object') {
+      return provider.features
+    }
+    if ('showGenerateCommitMessageButton' in provider) {
+      return {
+        showGenerateCommitMessageButton: provider.showGenerateCommitMessageButton,
+      }
+    }
+    return {}
   }
-  return {}
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGetFeatures')
+  if (isolated.found) {
+    return isolated.result
+  }
+  return getProvider(providerId)
 }
 
-export const add = async (path) => {
-  const provider = Object.values(state.providers)[0]
-  if (!provider) {
+export const add = async (providerId, path?) => {
+  if (path === undefined) {
+    const provider = Object.values(state.providers)[0]
+    if (provider) {
+      // @ts-ignore
+      await provider.add(providerId)
+    }
     return
   }
-  // @ts-ignore
-  await provider.add(path)
+  const provider = state.providers[providerId]
+  if (provider) {
+    await provider.add(path)
+    return
+  }
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlAdd', path)
+  if (!isolated.found) {
+    getProvider(providerId)
+  }
 }
 
-export const discard = async (path) => {
-  const provider = Object.values(state.providers)[0]
-  if (!provider) {
+export const discard = async (providerId, path?) => {
+  if (path === undefined) {
+    const provider = Object.values(state.providers)[0]
+    if (provider) {
+      // @ts-ignore
+      await provider.discard(providerId)
+    }
     return
   }
-  // @ts-ignore
-  await provider.discard(path)
+  const provider = state.providers[providerId]
+  if (provider) {
+    await provider.discard(path)
+    return
+  }
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlDiscard', path)
+  if (!isolated.found) {
+    getProvider(providerId)
+  }
 }
 
 export const getEnabledProviderIds = async (scheme, root) => {
@@ -138,7 +207,8 @@ export const getEnabledProviderIds = async (scheme, root) => {
       enabledIds.push(provider.id)
     }
   }
-  return enabledIds
+  const isolatedIds = await ExecuteIsolatedSourceControlProvider.getEnabledProviderIds(scheme, root)
+  return [...new Set([...enabledIds, ...isolatedIds])]
 }
 
 export const reset = () => {
@@ -166,11 +236,10 @@ export const getIconDefinitions = async (providerId): Promise<readonly string[]>
 
 export const getFileDecorations = async (providerId: any, uris: readonly string[]): Promise<readonly any[]> => {
   const provider = state.providers[providerId]
-  // @ts-ignore
-  if (!provider || !provider.getFileDecorations) {
-    return []
+  if (provider) {
+    // @ts-ignore
+    return provider.getFileDecorations ? provider.getFileDecorations(uris) : []
   }
-  // @ts-ignore
-  const decorations = await provider.getFileDecorations(uris)
-  return decorations
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGetFileDecorations', uris)
+  return isolated.found ? (isolated.result as readonly any[]) : []
 }
