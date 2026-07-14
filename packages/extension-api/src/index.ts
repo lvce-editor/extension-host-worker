@@ -1,4 +1,5 @@
 export { activate } from './parts/Activation/Activation.ts'
+export { getAccessToken } from './parts/Authentication/Authentication.ts'
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showQuickPick } from './parts/QuickPick/QuickPick.ts'
