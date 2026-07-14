@@ -64,6 +64,13 @@ const assertEventListener: (viewId: string, listener: unknown, index: number) =>
   assertBoolean(eventListener.passive, `view ${viewId} event listener ${index} has invalid passive`)
   assertBoolean(eventListener.preventDefault, `view ${viewId} event listener ${index} has invalid preventDefault`)
   assertBoolean(eventListener.stopPropagation, `view ${viewId} event listener ${index} has invalid stopPropagation`)
+  if (
+    eventListener.trackPointerEvents !== undefined &&
+    (!Array.isArray(eventListener.trackPointerEvents) ||
+      eventListener.trackPointerEvents.some((event) => typeof event !== 'string' && typeof event !== 'number'))
+  ) {
+    throw new ExtensionApiError(`view ${viewId} event listener ${index} has invalid trackPointerEvents`)
+  }
 }
 
 const assertEventListeners = (view: View<any>): void => {
