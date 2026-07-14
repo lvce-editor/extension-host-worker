@@ -220,6 +220,7 @@ test('registerView includes event listeners in registry snapshot', () => {
       name: 'handleDrop',
       params: ['handleViewEvent', 'drop', 'event.target.name'],
       preventDefault: true,
+      trackPointerEvents: ['handlePointerMove', 'handlePointerUp'],
     },
   ]
   registerView({
@@ -265,6 +266,23 @@ test('registerView rejects invalid event listeners', () => {
       kind: 'virtualDom',
     } as any)
   }, /view sample\.views\.testing event listener 0 has invalid preventDefault/)
+})
+
+test('registerView rejects invalid tracked pointer events', () => {
+  throws(() => {
+    registerView({
+      create() {},
+      eventListeners: [
+        {
+          name: 'handlePointerDown',
+          params: ['handlePointerDown'],
+          trackPointerEvents: ['handlePointerMove', true],
+        },
+      ],
+      id: 'sample.views.testing',
+      kind: 'virtualDom',
+    } as any)
+  }, /view sample\.views\.testing event listener 0 has invalid trackPointerEvents/)
 })
 
 test('createViewInstance renders initial virtual dom', async () => {
