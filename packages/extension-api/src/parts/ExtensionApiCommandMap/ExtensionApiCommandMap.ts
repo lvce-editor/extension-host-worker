@@ -5,6 +5,7 @@ import { executeFormattingProvider, getFormattingProviderRegistrySnapshot } from
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
 import { executeHoverProvider, getHoverProviderRegistrySnapshot } from '../Hover/Hover.ts'
 import { executeLanguageProvider, executeOrganizeImportsProvider } from '../LanguageProvider/LanguageProvider.ts'
+import { getLanguageServerRegistrySnapshot } from '../LanguageServer/LanguageServer.ts'
 import { getOutputChannelRegistrySnapshot } from '../OutputChannel/OutputChannel.ts'
 import {
   executeSourceControlAcceptInput,
@@ -61,6 +62,7 @@ export const commandMap = {
   'ExtensionApi.getDiagnosticProviderRegistrySnapshot': getDiagnosticProviderRegistrySnapshot,
   'ExtensionApi.getFormattingProviderRegistrySnapshot': getFormattingProviderRegistrySnapshot,
   'ExtensionApi.getHoverProviderRegistrySnapshot': getHoverProviderRegistrySnapshot,
+  'ExtensionApi.getLanguageServerRegistrySnapshot': getLanguageServerRegistrySnapshot,
   'ExtensionApi.getOutputChannelRegistrySnapshot': getOutputChannelRegistrySnapshot,
   'ExtensionApi.getSourceControlProviderRegistrySnapshot': getSourceControlProviderRegistrySnapshot,
   'ExtensionApi.getStatusBarItems': getStatusBarItems,

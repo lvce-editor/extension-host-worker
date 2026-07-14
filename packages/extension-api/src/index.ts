@@ -27,6 +27,7 @@ export {
 export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from './parts/FileSystem/FileSystem.ts'
 export { confirm, getWorkspaceFolder, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
+export { getLanguageServerRegistrySnapshot, registerLanguageServer, resetLanguageServerRegistry } from './parts/LanguageServer/LanguageServer.ts'
 export {
   registerBraceCompletionProvider,
   registerClosingTagProvider,
@@ -120,6 +121,7 @@ export type {
 export type { FileSystemDirent } from './parts/FileSystem/FileSystem.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
+export type { LanguageServerOptions, LanguageServerRegistrySnapshot } from './parts/LanguageServer/LanguageServer.ts'
 export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHandle.ts'
 export type { OutputChannelRegistrySnapshot } from './parts/OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
 export type { RegisteredOutputChannel } from './parts/RegisteredOutputChannel/RegisteredOutputChannel.ts'
