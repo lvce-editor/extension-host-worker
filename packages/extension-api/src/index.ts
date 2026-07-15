@@ -86,6 +86,7 @@ export type {
   MenuEntry,
   ViewRegistrySnapshot,
   ViewRenderResult,
+  ViewScrollPosition,
   ViewSelection,
   VirtualDomViewInstance,
 } from './parts/View/View.ts'

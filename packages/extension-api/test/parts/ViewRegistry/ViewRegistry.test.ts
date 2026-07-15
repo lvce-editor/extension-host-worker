@@ -857,6 +857,84 @@ test('renderSelections rejects invalid results', async () => {
   await rejects(createViewInstance('sample.views.testing', 1), /view selection 0 is missing name/)
 })
 
+test('renderScrollPosition is included after every view render', async () => {
+  let scrollTop = 100
+  registerView({
+    create() {
+      return {
+        handleEvent() {
+          scrollTop = 200
+        },
+        render() {
+          return []
+        },
+        renderScrollPosition() {
+          return ['.Messages', scrollTop] as const
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    dom: [],
+    scrollPosition: ['.Messages', 100],
+    type: 'setDom',
+  })
+  deepStrictEqual(await dispatchViewEvent(1, { type: 'click' }), {
+    patches: [],
+    scrollPosition: ['.Messages', 200],
+    type: 'setPatches',
+  })
+  deepStrictEqual(await renderViewInstance(1), {
+    patches: [],
+    scrollPosition: ['.Messages', 200],
+    type: 'setPatches',
+  })
+})
+
+test('renderScrollPosition empty result is omitted', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderScrollPosition() {
+          return [] as const
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    dom: [],
+    type: 'setDom',
+  })
+})
+
+test('renderScrollPosition rejects invalid results', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderScrollPosition() {
+          return ['.Messages'] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view scroll position must contain a selector and scroll top/)
+})
+
 test('saveViewInstanceState returns instance state', async () => {
   registerView({
     create() {
