@@ -11,6 +11,7 @@ import type {
   ViewEvent,
   ViewRegistrySnapshot,
   ViewRenderResult,
+  ViewScrollPosition,
   ViewSelection,
   VirtualDomViewInstance,
 } from '../View/View.ts'
@@ -309,6 +310,21 @@ const normalizeViewSelections = (selections: unknown): readonly ViewSelection[] 
   return selections.map(normalizeViewSelection)
 }
 
+const normalizeViewScrollPosition = (scrollPosition: unknown): readonly [] | ViewScrollPosition => {
+  if (!Array.isArray(scrollPosition)) {
+    throw new ExtensionApiError('view scroll position must be an array')
+  }
+  if (scrollPosition.length === 0) {
+    return []
+  }
+  if (scrollPosition.length !== 2) {
+    throw new ExtensionApiError('view scroll position must contain a selector and scroll top')
+  }
+  assertString(scrollPosition[0], 'view scroll position is missing selector')
+  assertNumber(scrollPosition[1], 'view scroll position is missing scroll top')
+  return [scrollPosition[0], scrollPosition[1]]
+}
+
 const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
   const oldDom = renderedDoms[uid] || []
   const newDom = await renderDom(instance)
@@ -433,6 +449,20 @@ const withSelections = async (result: ViewRenderResult, instance: VirtualDomView
   }
 }
 
+const withScrollPosition = async (result: ViewRenderResult, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
+  if (typeof instance.renderScrollPosition !== 'function') {
+    return result
+  }
+  const scrollPosition = normalizeViewScrollPosition(await instance.renderScrollPosition())
+  if (scrollPosition.length === 0) {
+    return result
+  }
+  return {
+    ...result,
+    scrollPosition,
+  }
+}
+
 const withRenderMetadata = async (
   result: ViewRenderResult,
   instance: VirtualDomViewInstance,
@@ -440,7 +470,8 @@ const withRenderMetadata = async (
 ): Promise<ViewRenderResult> => {
   const resultWithFocus = await withFocusSelector(result, instance, contextChange)
   const resultWithSelections = await withSelections(resultWithFocus, instance)
-  return withTitle(resultWithSelections, instance)
+  const resultWithScrollPosition = await withScrollPosition(resultWithSelections, instance)
+  return withTitle(resultWithScrollPosition, instance)
 }
 
 const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
