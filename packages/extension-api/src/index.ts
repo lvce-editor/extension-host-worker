@@ -25,7 +25,7 @@ export {
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
 export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from './parts/FileSystem/FileSystem.ts'
-export { confirm, getWorkspaceFolder, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
+export { confirm, getWorkspaceFolder, getWorkspaceUri, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export { getLanguageServerRegistrySnapshot, registerLanguageServer, resetLanguageServerRegistry } from './parts/LanguageServer/LanguageServer.ts'
 export {
