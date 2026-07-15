@@ -1,6 +1,6 @@
 import { PlainMessagePortRpc } from '@lvce-editor/rpc'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import { deepStrictEqual, strictEqual } from 'node:assert/strict'
+import { deepStrictEqual, rejects, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import { createNodeRpc, createRpc } from '../../../src/parts/Rpc/Rpc.ts'
 
@@ -42,6 +42,41 @@ test('createNodeRpc proxies calls through the renderer worker', async () => {
     ['ExtensionNodeRpc.invoke', 42, 'Git.status'],
     ['ExtensionNodeRpc.dispose', 42],
   ])
+})
+
+test('createNodeRpc resolves a declared rpc entry', async () => {
+  const invocations: unknown[][] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...params: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...params])
+      if (id === 'ExtensionNodeRpc.create') {
+        return 42
+      }
+      return undefined
+    },
+    async 'Extensions.getNodeRpcInfo'(id: string): Promise<{ name: string; path: string }> {
+      invocations.push(['Extensions.getNodeRpcInfo', id])
+      return {
+        name: 'Git',
+        path: '/extensions/git/node/gitClient.js',
+      }
+    },
+  })
+
+  const rpc = await createNodeRpc({
+    id: 'git-client',
+  })
+
+  await rpc.dispose()
+  deepStrictEqual(invocations, [
+    ['Extensions.getNodeRpcInfo', 'git-client'],
+    ['ExtensionNodeRpc.create', 'Git', '/extensions/git/node/gitClient.js'],
+    ['ExtensionNodeRpc.dispose', 42],
+  ])
+})
+
+test('createNodeRpc requires an id or path', async () => {
+  await rejects(createNodeRpc({}), new TypeError('createNodeRpc requires an id or path'))
 })
 
 test('createRpc transfers a port and worker options', async () => {
