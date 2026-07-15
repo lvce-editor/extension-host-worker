@@ -8,8 +8,9 @@ export interface CreateRpcOptions {
 }
 
 export interface CreateNodeRpcOptions {
+  readonly id?: string
   readonly name?: string
-  readonly path: string
+  readonly path?: string
 }
 
 const sendMessagePortToWebWorker = async (port: MessagePort, name: string, url: string): Promise<void> => {
@@ -32,14 +33,30 @@ export const createRpc = async ({ commandMap = {}, name = '', url }: CreateRpcOp
   return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, name, url))
 }
 
-export const createNodeRpc = async ({ name = '', path }: CreateNodeRpcOptions): Promise<Rpc> => {
-  const id = await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.create', name, path)
+interface ResolvedNodeRpcOptions {
+  readonly name: string
+  readonly path: string
+}
+
+const resolveNodeRpcOptions = async ({ id, name = '', path }: CreateNodeRpcOptions): Promise<ResolvedNodeRpcOptions> => {
+  if (id) {
+    return ExtensionManagementWorker.invoke('Extensions.getNodeRpcInfo', id) as Promise<ResolvedNodeRpcOptions>
+  }
+  if (path) {
+    return { name, path }
+  }
+  throw new TypeError('createNodeRpc requires an id or path')
+}
+
+export const createNodeRpc = async (options: CreateNodeRpcOptions): Promise<Rpc> => {
+  const { name, path } = await resolveNodeRpcOptions(options)
+  const rpcId = await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.create', name, path)
   const invoke = (method: string, ...params: readonly any[]): Promise<any> => {
-    return ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.invoke', id, method, ...params)
+    return ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.invoke', rpcId, method, ...params)
   }
   return {
     async dispose(): Promise<void> {
-      await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.dispose', id)
+      await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.dispose', rpcId)
     },
     invoke,
     invokeAndTransfer: invoke,
