@@ -8,6 +8,10 @@ export const getWorkspaceFolder = async (): Promise<string> => {
   return (await executeCommand('Workspace.getPath')) as string
 }
 
+export const getWorkspaceUri = async (): Promise<string> => {
+  return (await executeCommand('Workspace.getUri')) as string
+}
+
 export const handleWorkspaceRefresh = async (): Promise<void> => {
   await executeCommand('Layout.handleWorkspaceRefresh')
 }
