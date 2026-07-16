@@ -1,13 +1,9 @@
-import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import { strictEqual } from 'node:assert/strict'
+import { type DisposableMockRpc, ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
+import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import { getAccessToken } from '../../../src/parts/Authentication/Authentication.ts'
 
-interface MockRpcDisposable {
-  [Symbol.dispose](): void
-}
-
-let mockRpc: MockRpcDisposable | undefined
+let mockRpc: DisposableMockRpc | undefined
 
 afterEach(() => {
   mockRpc?.[Symbol.dispose]()
@@ -22,4 +18,14 @@ test('getAccessToken invokes extension management worker', async () => {
   })
 
   strictEqual(await getAccessToken(), 'token-1')
+  strictEqual(
+    await getAccessToken({
+      refresh: 'if-needed',
+    }),
+    'token-1',
+  )
+  deepStrictEqual(mockRpc.invocations, [
+    ['Extensions.getAccessToken', {}],
+    ['Extensions.getAccessToken', { refresh: 'if-needed' }],
+  ])
 })
