@@ -1,4 +1,4 @@
-import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
+import * as ExecuteCommand from '../ExecuteCommand/ExecuteCommand.ts'
 import * as ExtensionHostSourceControl from '../ExtensionHostSourceControl/ExtensionHostSourceControl.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
 import { VError } from '../VError/VError.ts'
@@ -43,7 +43,7 @@ export const registerChangeListener = () => {
 }
 
 export const executeCommand = async (name: string): Promise<void> => {
-  await ExtensionHostCommand.executeCommand(name)
+  await ExecuteCommand.executeCommand(name)
 }
 
 export interface StatusBarItemProvider {
