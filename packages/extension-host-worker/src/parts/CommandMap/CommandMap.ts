@@ -13,7 +13,6 @@ import * as ExtensionApiFileSystemWorker from '../ExtensionApiFileSystemWorker/E
 import * as ExtensionHostBraceCompletion from '../ExtensionHostBraceCompletion/ExtensionHostBraceCompletion.ts'
 import * as ExtensionHostClosingTag from '../ExtensionHostClosingTag/ExtensionHostClosingTag.ts'
 import * as ExtensionHostCodeActions from '../ExtensionHostCodeActions/ExtensionHostCodeActions.ts'
-import * as ExtensionHostCommand from '../ExtensionHostCommand/ExtensionHostCommand.ts'
 import * as ExtensionHostCommandType from '../ExtensionHostCommandType/ExtensionHostCommandType.ts'
 import { executeCommentProvider } from '../ExtensionHostComment/ExtensionHostComment.ts'
 import * as ExtensionHostCompletion from '../ExtensionHostCompletion/ExtensionHostCompletion.ts'
@@ -96,7 +95,7 @@ export const commandMap: Record<string, CommandHandler> = {
   'ExtensionHostCodeActions.getSourceActions': ExtensionHostCodeActions.getSourceActions,
   [ExtensionHostCommandType.BraceCompletionExecuteBraceCompletionProvider]: ExtensionHostBraceCompletion.executeBraceCompletionProvider,
   [ExtensionHostCommandType.ClosingTagExecuteClosingTagProvider]: ExtensionHostClosingTag.executeClosingTagProvider,
-  [ExtensionHostCommandType.CommandExecute]: ExtensionHostCommand.executeCommand,
+  [ExtensionHostCommandType.CommandExecute]: ExecuteCommand.executeCommand,
   [ExtensionHostCommandType.CommentProviderExecute]: executeCommentProvider,
   [ExtensionHostCommandType.CompletionExecute]: ExtensionHostCompletion.executeCompletionProvider,
   [ExtensionHostCommandType.CompletionResolveExecute]: ExtensionHostCompletion.executeresolveCompletionItemProvider,
