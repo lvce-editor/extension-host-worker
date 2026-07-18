@@ -21,34 +21,40 @@ const {
 export { registerCodeActionProvider, reset }
 
 interface CodeAction {
+  readonly edits?: readonly unknown[]
   readonly kind: string
   readonly name: string
 }
 
-const executeCodeActionProvider = async (uid): Promise<readonly CodeAction[]> => {
+const executeCodeActionProvider = async (uid, ...args: readonly unknown[]): Promise<readonly CodeAction[]> => {
   if (!ExecuteIsolatedLanguageProvider.hasLegacyProvider(getProvider, uid)) {
-    const isolated = await ExecuteIsolatedLanguageProvider.execute('code action', 'provideCodeActions', uid)
+    const isolated = await ExecuteIsolatedLanguageProvider.execute('code action', 'provideCodeActions', uid, ...args)
     if (isolated.found) {
       return isolated.result as readonly CodeAction[]
     }
   }
-  return (await executeRegisteredCodeActionProvider(uid)) as unknown as readonly CodeAction[]
+  const executeProvider = executeRegisteredCodeActionProvider as unknown as (
+    uid: number,
+    ...args: readonly unknown[]
+  ) => Promise<readonly CodeAction[]>
+  return executeProvider(uid, ...args)
 }
 
 const toSourceAction = (languageId: string, action: CodeAction) => {
   return {
+    ...(action.edits && { edits: action.edits }),
     kind: action.kind,
     languageId,
     name: action.name,
   }
 }
 
-export const getSourceActions = async (uid) => {
+export const getSourceActions = async (uid, ...args: readonly unknown[]) => {
   const textDocument = ExtensionHostTextDocument.get(uid)
   if (!textDocument) {
     return []
   }
-  const actions = await executeCodeActionProvider(uid)
+  const actions = await executeCodeActionProvider(uid, ...args)
   return actions.map((action) => toSourceAction(textDocument.languageId, action))
 }
 

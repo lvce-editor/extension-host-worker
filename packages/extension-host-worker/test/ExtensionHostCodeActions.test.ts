@@ -19,6 +19,15 @@ beforeEach(() => {
 })
 
 test('getSourceActions returns serializable legacy code actions', async () => {
+  const provideCodeActions = jest.fn((_textDocument: unknown, _offset: number) => {
+    return [
+      {
+        execute() {},
+        kind: 'source.organizeImports',
+        name: 'Organize Imports',
+      },
+    ]
+  })
   TextDocument.setFiles([
     {
       id: 1,
@@ -29,28 +38,21 @@ test('getSourceActions returns serializable legacy code actions', async () => {
   ])
   ExtensionHostCodeActions.registerCodeActionProvider({
     languageId: 'typescript',
-    provideCodeActions() {
-      return [
-        {
-          execute() {},
-          kind: 'source.organizeImports',
-          name: 'Organize Imports',
-        },
-      ]
-    },
+    provideCodeActions,
   })
 
-  await expect(ExtensionHostCodeActions.getSourceActions(1)).resolves.toEqual([
+  await expect(ExtensionHostCodeActions.getSourceActions(1, 14)).resolves.toEqual([
     {
       kind: 'source.organizeImports',
       languageId: 'typescript',
       name: 'Organize Imports',
     },
   ])
+  expect(provideCodeActions).toHaveBeenCalledWith(TextDocument.get(1), 14)
   expect(executeMock).not.toHaveBeenCalled()
 })
 
-test('getSourceActions returns serializable isolated code actions', async () => {
+test('getSourceActions forwards arguments and returns isolated code action edits', async () => {
   TextDocument.setFiles([
     {
       id: 2,
@@ -63,20 +65,34 @@ test('getSourceActions returns serializable isolated code actions', async () => 
     found: true,
     result: [
       {
+        edits: [
+          {
+            endOffset: 28,
+            inserted: 'abort',
+            startOffset: 23,
+          },
+        ],
         kind: 'source.organizeImports',
         name: 'Organize Imports',
       },
     ],
   })
 
-  await expect(ExtensionHostCodeActions.getSourceActions(2)).resolves.toEqual([
+  await expect(ExtensionHostCodeActions.getSourceActions(2, 28)).resolves.toEqual([
     {
+      edits: [
+        {
+          endOffset: 28,
+          inserted: 'abort',
+          startOffset: 23,
+        },
+      ],
       kind: 'source.organizeImports',
       languageId: 'typescript',
       name: 'Organize Imports',
     },
   ])
-  expect(executeMock).toHaveBeenCalledWith('code action', 'provideCodeActions', 2)
+  expect(executeMock).toHaveBeenCalledWith('code action', 'provideCodeActions', 2, 28)
 })
 
 test('getSourceActions returns an empty array for a missing text document', async () => {
