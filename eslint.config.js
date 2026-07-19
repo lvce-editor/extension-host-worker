@@ -3,6 +3,7 @@ import * as actions from '@lvce-editor/eslint-plugin-github-actions'
 
 export default [
   ...config.default,
+  ...config.recommendedVirtualDom,
   ...actions.default,
   {
     ignores: [
@@ -64,6 +65,21 @@ export default [
       'unicorn/prefer-continue': 'off',
       'unicorn/prefer-early-return': 'off',
       'unicorn/prefer-url-href': 'off',
+    },
+  },
+  {
+    files: ['packages/extension-host-worker/src/**/*.ts'],
+    rules: {
+      'virtual-dom/no-object-attribute-values': 'off',
+      'virtual-dom/prefer-state-destructuring': 'off',
+    },
+  },
+  {
+    files: ['packages/**/test/**/*.ts'],
+    rules: {
+      'virtual-dom/no-object-attribute-values': 'off',
+      'virtual-dom/prefer-constants': 'off',
+      'virtual-dom/prefer-state-destructuring': 'off',
     },
   },
 ]
