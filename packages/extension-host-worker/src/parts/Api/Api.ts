@@ -39,6 +39,7 @@ import * as ExtensionHostView from '../ExtensionHostView/ExtensionHostView.ts'
 import * as ExtensionHostWebView from '../ExtensionHostWebView/ExtensionHostWebView.ts'
 import * as ExtensionHostWorker from '../ExtensionHostWorker/ExtensionHostWorker.ts'
 import * as ExtensionHostWorkspace from '../ExtensionHostWorkspace/ExtensionHostWorkspace.ts'
+import * as GetJsonSchemas from '../GetJsonSchemas/GetJsonSchemas.ts'
 import { FormattingError } from '../FormattingError/FormattingError.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 import { VError } from '../VError/VError.ts'
@@ -99,6 +100,7 @@ export const api = {
   getConfiguration: ExtensionHostConfiguration.getConfiguration,
   // Ajax
   getJson: ExtensionHostAjax.getJson,
+  getJsonSchemas: GetJsonSchemas.getJsonSchemas,
   // Get Offset
   getOffset: ExtensionHostGetOffset.getOffset,
   // Get Position
