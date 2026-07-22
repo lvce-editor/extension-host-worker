@@ -48,6 +48,7 @@ import * as GetColorThemeNames from '../GetColorThemeNames/GetColorThemeNames.ts
 import * as GetExtension from '../GetExtension/GetExtension.ts'
 import * as GetExtensions from '../GetExtensions/GetExtensions.ts'
 import * as GetIconThemeJson from '../GetIconThemeJson/GetIconThemeJson.ts'
+import * as GetJsonSchemas from '../GetJsonSchemas/GetJsonSchemas.ts'
 import * as GetRpcInfo from '../GetRpcInfo/GetRpcInfo.ts'
 import * as GetRuntimeStatus from '../GetRuntimeStatus/GetRuntimeStatus.ts'
 import * as GetWebViewInfo2 from '../GetWebViewInfo2/GetWebViewInfo2.ts'
@@ -178,6 +179,7 @@ export const commandMap: Record<string, CommandHandler> = {
   'Extensions.addWebExtension': AddWebExtension.addWebExtension,
   'Extensions.getExtension': GetExtension.getExtension,
   'Extensions.getExtensions': GetExtensions.getExtensions,
+  'Extensions.getJsonSchemas': GetJsonSchemas.getJsonSchemas,
   'Extensions.invalidateExtensionsCache': InvalidateExtensionsCache.invalidateExtensionsCache,
   'FileSystemFetch.chmod': FileSystemFetch.chmod,
   'FileSystemFetch.exists': FileSystemFetch.exists,
