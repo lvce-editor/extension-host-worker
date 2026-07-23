@@ -603,6 +603,18 @@ export const getViewActions = async (uid: number): Promise<readonly ViewAction[]
   return normalizeViewActions(await instance.renderActions())
 }
 
+export const getViewActionsDom = (uid: number): readonly VirtualDomNode[] | undefined => {
+  const instance = getVirtualDomInstance(uid)
+  if (typeof instance.renderActionsDom !== 'function') {
+    return undefined
+  }
+  const dom = instance.renderActionsDom()
+  if (!Array.isArray(dom)) {
+    throw new TypeError('view renderActionsDom result must be an array')
+  }
+  return dom
+}
+
 export const getViewRegistrySnapshot = (): ViewRegistrySnapshot => {
   return {
     views: Object.values(views).map(toRegisteredView),

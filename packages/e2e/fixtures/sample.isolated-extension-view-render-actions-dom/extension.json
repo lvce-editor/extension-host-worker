@@ -1,0 +1,13 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.renderActionsDom"],
+  "views": [
+    {
+      "id": "sample.views.renderActionsDom",
+      "title": "Render Actions DOM",
+      "icon": "symbol-beaker",
+      "kind": "virtualDom"
+    }
+  ]
+}
