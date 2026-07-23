@@ -421,6 +421,20 @@ const withFocusSelector = async (
   }
 }
 
+const withCss = async (result: ViewRenderResult, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
+  if (typeof instance.getCss !== 'function') {
+    return result
+  }
+  const css = await instance.getCss()
+  if (typeof css !== 'string') {
+    throw new ExtensionApiError('view getCss result must be a string')
+  }
+  return {
+    ...result,
+    css,
+  }
+}
+
 const withTitle = async (result: ViewRenderResult, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
   if (typeof instance.renderTitle !== 'function') {
     return result
@@ -468,7 +482,8 @@ const withRenderMetadata = async (
   instance: VirtualDomViewInstance,
   contextChange: ContextChange,
 ): Promise<ViewRenderResult> => {
-  const resultWithFocus = await withFocusSelector(result, instance, contextChange)
+  const resultWithCss = await withCss(result, instance)
+  const resultWithFocus = await withFocusSelector(resultWithCss, instance, contextChange)
   const resultWithSelections = await withSelections(resultWithFocus, instance)
   const resultWithScrollPosition = await withScrollPosition(resultWithSelections, instance)
   return withTitle(resultWithScrollPosition, instance)

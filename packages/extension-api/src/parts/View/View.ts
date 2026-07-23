@@ -53,6 +53,7 @@ export interface DomEventListener {
 export interface VirtualDomViewInstance {
   readonly dispose?: () => unknown
   readonly getContext?: () => Readonly<Record<string, boolean>>
+  readonly getCss?: () => string | Promise<string>
   readonly getMenuEntries?: (menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
   readonly handleEvent?: (event: ViewEvent) => unknown
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
@@ -96,6 +97,7 @@ export interface ViewRegistrySnapshot {
 }
 
 export interface ViewRenderResultDom {
+  readonly css?: string
   readonly dom: readonly VirtualDomNode[]
   readonly focusSelector?: string
   readonly scrollPosition?: ViewScrollPosition
@@ -105,6 +107,7 @@ export interface ViewRenderResultDom {
 }
 
 export interface ViewRenderResultPatches {
+  readonly css?: string
   readonly focusSelector?: string
   readonly patches: readonly unknown[]
   readonly scrollPosition?: ViewScrollPosition
