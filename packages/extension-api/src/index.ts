@@ -27,6 +27,7 @@ export {
 export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from './parts/FileSystem/FileSystem.ts'
 export { confirm, getWorkspaceFolder, getWorkspaceUri, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
+export { getPlatform, type Platform } from './parts/Platform/Platform.ts'
 export { getLanguageServerRegistrySnapshot, registerLanguageServer, resetLanguageServerRegistry } from './parts/LanguageServer/LanguageServer.ts'
 export {
   registerBraceCompletionProvider,
