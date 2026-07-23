@@ -568,6 +568,62 @@ test('renderViewInstance returns patches after state changes', async () => {
   strictEqual(result.type, 'setPatches')
 })
 
+test('getCss is included after every view render', async () => {
+  let width = 360
+  registerView({
+    create() {
+      return {
+        getCss() {
+          return `.Detail { --DetailWidth: ${width}px; }`
+        },
+        handleEvent() {
+          width = 400
+        },
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  deepStrictEqual(await createViewInstance('sample.views.testing', 1), {
+    css: '.Detail { --DetailWidth: 360px; }',
+    dom: [],
+    type: 'setDom',
+  })
+  deepStrictEqual(await dispatchViewEvent(1, { type: 'pointermove' }), {
+    css: '.Detail { --DetailWidth: 400px; }',
+    patches: [],
+    type: 'setPatches',
+  })
+  deepStrictEqual(await renderViewInstance(1), {
+    css: '.Detail { --DetailWidth: 400px; }',
+    patches: [],
+    type: 'setPatches',
+  })
+})
+
+test('getCss rejects non-string results', async () => {
+  registerView({
+    create() {
+      return {
+        getCss() {
+          return 42 as any
+        },
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view getCss result must be a string/)
+})
+
 test('view context changes are reported after lifecycle updates', async () => {
   const invocations: unknown[] = []
   mockRpc = ExtensionManagementWorker.registerMockRpc({
