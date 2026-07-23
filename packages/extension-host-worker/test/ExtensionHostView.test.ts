@@ -66,6 +66,56 @@ test('dispatchViewEvent - returns patches after handling event', async () => {
   expect(result.type).toBe('setPatches')
 })
 
+test('dispatchViewEvent - invokes a direct event handler', async () => {
+  let value = ''
+  ExtensionHostView.registerView({
+    create() {
+      return {
+        handleInput(name: string, inputValue: string) {
+          value = `${name}:${inputValue}`
+        },
+        render() {
+          return [textNode(value)]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await ExtensionHostView.createViewInstance('sample.views.testing', 1)
+  const result = await ExtensionHostView.dispatchViewEvent(1, {
+    args: ['title', 'abc'],
+    handler: 'handleInput',
+    type: 'command',
+  })
+
+  expect(result.type).toBe('setPatches')
+  expect(value).toBe('title:abc')
+})
+
+test('dispatchViewEvent - rejects a missing direct event handler', async () => {
+  ExtensionHostView.registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await ExtensionHostView.createViewInstance('sample.views.testing', 1)
+  await expect(
+    ExtensionHostView.dispatchViewEvent(1, {
+      handler: 'handleInput',
+      type: 'command',
+    }),
+  ).rejects.toThrow(new TypeError('view event handler handleInput is not a function'))
+})
+
 test('renderTitle - returns dynamic title after lifecycle updates', async () => {
   let title = 'Testing'
   ExtensionHostView.registerView({

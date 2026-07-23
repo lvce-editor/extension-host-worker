@@ -11,6 +11,8 @@ export interface ViewContext {
 }
 
 export interface ViewEvent {
+  readonly args?: readonly unknown[]
+  readonly handler?: string
   readonly name?: string
   readonly type: string
   readonly value?: unknown

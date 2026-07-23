@@ -540,7 +540,13 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
   const instanceUids = instanceUidsByView[contextViewIds[uid]]
   instanceUids.delete(uid)
   instanceUids.add(uid)
-  if (typeof instance.handleEvent === 'function') {
+  if (event.handler) {
+    const handler = (instance as unknown as Readonly<Record<string, unknown>>)[event.handler]
+    if (typeof handler !== 'function') {
+      throw new TypeError(`view event handler ${event.handler} is not a function`)
+    }
+    await Reflect.apply(handler, instance, event.args || [])
+  } else if (typeof instance.handleEvent === 'function') {
     await instance.handleEvent(event)
   }
   const result = await renderPatches(uid, instance)

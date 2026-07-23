@@ -2,6 +2,8 @@ import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import { VError } from '../VError/VError.ts'
 
 export interface ViewEvent {
+  readonly args?: readonly unknown[]
+  readonly handler?: string
   readonly name?: string
   readonly type: string
   readonly value?: unknown
@@ -143,7 +145,13 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
 
 export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<ViewRenderResult> => {
   const instance = getVirtualDomInstance(uid)
-  if (typeof instance.handleEvent === 'function') {
+  if (event.handler) {
+    const handler = (instance as unknown as Readonly<Record<string, unknown>>)[event.handler]
+    if (typeof handler !== 'function') {
+      throw new TypeError(`view event handler ${event.handler} is not a function`)
+    }
+    await Reflect.apply(handler, instance, event.args || [])
+  } else if (typeof instance.handleEvent === 'function') {
     await instance.handleEvent(event)
   }
   const oldDom = state.renderedDoms[uid] || []

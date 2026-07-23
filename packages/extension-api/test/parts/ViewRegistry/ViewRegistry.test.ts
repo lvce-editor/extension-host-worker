@@ -541,6 +541,63 @@ test('dispatchViewEvent returns patches after handling event', async () => {
   strictEqual(result.type, 'setPatches')
 })
 
+test('dispatchViewEvent invokes a direct event handler', async () => {
+  let value = ''
+  registerView({
+    create() {
+      return {
+        handleInput(name: string, inputValue: string) {
+          value = `${name}:${inputValue}`
+        },
+        render() {
+          return [
+            {
+              childCount: 0,
+              text: value,
+              type: 4,
+            },
+          ] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  const result = await dispatchViewEvent(1, {
+    args: ['title', 'abc'],
+    handler: 'handleInput',
+    type: 'command',
+  })
+
+  strictEqual(result.type, 'setPatches')
+  strictEqual(value, 'title:abc')
+})
+
+test('dispatchViewEvent rejects a missing direct event handler', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await rejects(
+    dispatchViewEvent(1, {
+      handler: 'handleInput',
+      type: 'command',
+    }),
+    /view event handler handleInput is not a function/,
+  )
+})
+
 test('renderViewInstance returns patches after state changes', async () => {
   let value = ''
   registerView({
