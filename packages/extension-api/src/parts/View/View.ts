@@ -60,6 +60,7 @@ export interface VirtualDomViewInstance {
   readonly handleEvent?: (event: ViewEvent) => unknown
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly renderActions?: () => readonly ViewAction[] | Promise<readonly ViewAction[]>
+  readonly renderActionsDom?: () => readonly VirtualDomNode[]
   readonly renderFocus?: (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) => string | Promise<string>
   readonly renderScrollPosition?: () => readonly [] | ViewScrollPosition | Promise<readonly [] | ViewScrollPosition>
   readonly renderSelections?: () => readonly ViewSelection[] | Promise<readonly ViewSelection[]>

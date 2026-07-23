@@ -9,6 +9,7 @@ import {
   disposeViewInstance,
   executeViewProvider,
   getViewActions,
+  getViewActionsDom,
   getViewMenuEntries,
   getViewRegistrySnapshot,
   registerView,
@@ -1227,6 +1228,78 @@ test('getViewActions rejects invalid action result', async () => {
   await createViewInstance('sample.views.testing', 1)
 
   await rejects(async () => getViewActions(1), /view action 0 is missing icon/)
+})
+
+test('getViewActionsDom returns custom action dom', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderActionsDom() {
+          return [
+            {
+              childCount: 0,
+              className: 'CustomAction',
+              type: 1,
+            },
+          ]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  deepStrictEqual(getViewActionsDom(1), [
+    {
+      childCount: 0,
+      className: 'CustomAction',
+      type: 1,
+    },
+  ])
+})
+
+test('getViewActionsDom returns undefined when instance has no custom action renderer', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  strictEqual(getViewActionsDom(1), undefined)
+})
+
+test('getViewActionsDom rejects invalid dom result', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderActionsDom() {
+          return undefined as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  throws(() => getViewActionsDom(1), /view renderActionsDom result must be an array/)
 })
 
 test('disposeViewInstance disposes and removes instance', async () => {
