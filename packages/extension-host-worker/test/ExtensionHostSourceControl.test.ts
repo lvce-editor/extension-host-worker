@@ -114,6 +114,45 @@ test('getChangedFiles - isolated provider', async () => {
   expect(invocations).toEqual([['git', 'executeSourceControlGetChangedFiles']])
 })
 
+test('getFileBeforeUri', async () => {
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    getFileBeforeUri(uri: string) {
+      return `git-file-before://${uri}`
+    },
+    id: 'git',
+  })
+
+  await expect(ExtensionHostSourceControl.getFileBeforeUri('git', 'file:///workspace/file.txt')).resolves.toBe(
+    'git-file-before://file:///workspace/file.txt',
+  )
+})
+
+test('getFileBeforeUri - legacy content provider', async () => {
+  ExtensionHostSourceControl.registerSourceControlProvider({
+    getFileBefore() {
+      return 'before content'
+    },
+    id: 'legacy',
+  })
+
+  await expect(ExtensionHostSourceControl.getFileBeforeUri('legacy', 'file:///workspace/file.txt')).resolves.toBe('data://before content')
+})
+
+test('getFileBeforeUri - isolated provider', async () => {
+  const invocations: unknown[] = []
+  state.extensionManagementWorker = ExtensionManagementWorker.registerMockRpc({
+    'Extensions.executeSourceControlProvider': async (...args: readonly unknown[]) => {
+      invocations.push(args)
+      return { found: true, result: 'git-file-before://file:///workspace/file.txt' }
+    },
+  })
+
+  await expect(ExtensionHostSourceControl.getFileBeforeUri('git', 'file:///workspace/file.txt')).resolves.toBe(
+    'git-file-before://file:///workspace/file.txt',
+  )
+  expect(invocations).toEqual([['git', 'executeSourceControlGetFileBeforeUri', 'file:///workspace/file.txt']])
+})
+
 test('getGroups - isolated provider', async () => {
   const invocations: unknown[] = []
   state.extensionManagementWorker = ExtensionManagementWorker.registerMockRpc({

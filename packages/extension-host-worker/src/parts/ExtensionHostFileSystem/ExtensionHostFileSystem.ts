@@ -1,3 +1,4 @@
+import * as ExecuteIsolatedFileSystemProvider from '../ExecuteIsolatedFileSystemProvider/ExecuteIsolatedFileSystemProvider.ts'
 import * as FileSystemProviderState from '../FileSystemProviderState/FileSystemProviderState.ts'
 import * as Rpc from '../Rpc/Rpc.ts'
 import { VError } from '../VError/VError.ts'
@@ -20,8 +21,15 @@ export const readDirWithFileTypes = async (protocol, path) => {
 
 export const readFile = async (protocol, path) => {
   try {
-    const provider = FileSystemProviderState.get(protocol)
-    return await provider.readFile(path)
+    const provider = FileSystemProviderState.getOptional(protocol)
+    if (provider) {
+      return await provider.readFile(path)
+    }
+    const isolated = await ExecuteIsolatedFileSystemProvider.execute(protocol, path)
+    if (isolated.found) {
+      return isolated.result
+    }
+    return await FileSystemProviderState.get(protocol).readFile(path)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
   }

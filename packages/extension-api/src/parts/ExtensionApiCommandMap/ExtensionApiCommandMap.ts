@@ -1,6 +1,7 @@
 import { executeCommand, getCommandRegistrySnapshot } from '../CommandRegistry/CommandRegistry.ts'
 import { executeCompletionProvider, executeResolveCompletionItemProvider, getCompletionProviderRegistrySnapshot } from '../Completion/Completion.ts'
 import { executeDiagnosticProvider, getDiagnosticProviderRegistrySnapshot } from '../Diagnostic/Diagnostic.ts'
+import { executeFileSystemProviderReadFile, getFileSystemProviderRegistrySnapshot } from '../FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 import { executeFormattingProvider, getFormattingProviderRegistrySnapshot } from '../Formatting/Formatting.ts'
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
 import { executeHoverProvider, getHoverProviderRegistrySnapshot } from '../Hover/Hover.ts'
@@ -16,6 +17,7 @@ import {
   executeSourceControlGetChangedFiles,
   executeSourceControlGetFeatures,
   executeSourceControlGetFileBefore,
+  executeSourceControlGetFileBeforeUri,
   executeSourceControlGetFileDecorations,
   executeSourceControlGetGroups,
   executeSourceControlIsActive,
@@ -41,6 +43,7 @@ export const commandMap = {
   'ExtensionApi.executeCommand': executeCommand,
   'ExtensionApi.executeCompletionProvider': executeCompletionProvider,
   'ExtensionApi.executeDiagnosticProvider': executeDiagnosticProvider,
+  'ExtensionApi.executeFileSystemProviderReadFile': executeFileSystemProviderReadFile,
   'ExtensionApi.executeFormattingProvider': executeFormattingProvider,
   'ExtensionApi.executeHoverProvider': executeHoverProvider,
   'ExtensionApi.executeLanguageProvider': executeLanguageProvider,
@@ -54,6 +57,7 @@ export const commandMap = {
   'ExtensionApi.executeSourceControlGetChangedFiles': executeSourceControlGetChangedFiles,
   'ExtensionApi.executeSourceControlGetFeatures': executeSourceControlGetFeatures,
   'ExtensionApi.executeSourceControlGetFileBefore': executeSourceControlGetFileBefore,
+  'ExtensionApi.executeSourceControlGetFileBeforeUri': executeSourceControlGetFileBeforeUri,
   'ExtensionApi.executeSourceControlGetFileDecorations': executeSourceControlGetFileDecorations,
   'ExtensionApi.executeSourceControlGetGroups': executeSourceControlGetGroups,
   'ExtensionApi.executeSourceControlIsActive': executeSourceControlIsActive,
@@ -61,6 +65,7 @@ export const commandMap = {
   'ExtensionApi.getCommandRegistrySnapshot': getCommandRegistrySnapshot,
   'ExtensionApi.getCompletionProviderRegistrySnapshot': getCompletionProviderRegistrySnapshot,
   'ExtensionApi.getDiagnosticProviderRegistrySnapshot': getDiagnosticProviderRegistrySnapshot,
+  'ExtensionApi.getFileSystemProviderRegistrySnapshot': getFileSystemProviderRegistrySnapshot,
   'ExtensionApi.getFormattingProviderRegistrySnapshot': getFormattingProviderRegistrySnapshot,
   'ExtensionApi.getHoverProviderRegistrySnapshot': getHoverProviderRegistrySnapshot,
   'ExtensionApi.getLanguageServerRegistrySnapshot': getLanguageServerRegistrySnapshot,

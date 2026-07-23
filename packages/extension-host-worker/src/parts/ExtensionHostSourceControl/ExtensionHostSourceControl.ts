@@ -70,6 +70,28 @@ export const getFileBefore = async (providerId, uri) => {
   return getProvider(providerId).getFileBefore(uri)
 }
 
+const getFileBeforeUriFromProvider = async (provider, uri): Promise<string> => {
+  if (typeof provider.getFileBeforeUri === 'function') {
+    return provider.getFileBeforeUri(uri)
+  }
+  const content = await provider.getFileBefore?.(uri)
+  return `data://${content ?? ''}`
+}
+
+export const getFileBeforeUri = async (providerId, uri): Promise<string> => {
+  Assert.string(providerId)
+  Assert.string(uri)
+  const provider = state.providers[providerId]
+  if (provider) {
+    return getFileBeforeUriFromProvider(provider, uri)
+  }
+  const isolated = await ExecuteIsolatedSourceControlProvider.execute(providerId, 'executeSourceControlGetFileBeforeUri', uri)
+  if (isolated.found) {
+    return isolated.result as string
+  }
+  return getFileBeforeUriFromProvider(getProvider(providerId), uri)
+}
+
 const getGroupsFromProvider = async (provider, cwd) => {
   if (provider.getGroups) {
     return provider.getGroups(cwd)

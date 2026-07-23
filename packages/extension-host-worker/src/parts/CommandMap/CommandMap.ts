@@ -131,6 +131,7 @@ export const commandMap: Record<string, CommandHandler> = {
   [ExtensionHostCommandType.SourceControlGetFeatures]: ExtensionHostSourceControl.getFeatures,
   [ExtensionHostCommandType.SourceControlGetFileBefore]: ExtensionHostSourceControl.getFileBefore,
   [ExtensionHostCommandType.SourceControlGetFileBefore2]: ExtensionHostSourceControl.getFileBefore,
+  [ExtensionHostCommandType.SourceControlGetFileBeforeUri]: ExtensionHostSourceControl.getFileBeforeUri,
   [ExtensionHostCommandType.SourceControlGetFileDecorations]: ExtensionHostSourceControl.getFileDecorations,
   [ExtensionHostCommandType.SourceControlGetGroups]: ExtensionHostSourceControl.getGroups,
   [ExtensionHostCommandType.StatusBarExecuteCommand]: ExtensionHostStatusBar.executeCommand,

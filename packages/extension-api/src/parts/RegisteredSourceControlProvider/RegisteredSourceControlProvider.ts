@@ -7,6 +7,7 @@ export interface RegisteredSourceControlProvider {
   readonly getChangedFiles: () => readonly unknown[] | Promise<readonly unknown[]>
   readonly getFeatures?: () => unknown | Promise<unknown>
   readonly getFileBefore?: (uri: string) => unknown | Promise<unknown>
+  readonly getFileBeforeUri?: (uri: string) => string | Promise<string>
   readonly getFileDecorations?: (uris: readonly string[]) => unknown | Promise<unknown>
   readonly getGroups?: (cwd: string) => unknown | Promise<unknown>
   readonly id: string
