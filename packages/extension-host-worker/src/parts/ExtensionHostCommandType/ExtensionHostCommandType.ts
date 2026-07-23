@@ -36,6 +36,7 @@ export const SourceControlGetEnabledProviderIds = 'ExtensionHostSourceControl.ge
 export const SourceControlGetFeatures = 'ExtensionHostSourceControl.getFeatures'
 export const SourceControlGetFileBefore = 'ExtensionHostSourceControl.GetFileBefore'
 export const SourceControlGetFileBefore2 = 'ExtensionHostSourceControl.getFileBefore'
+export const SourceControlGetFileBeforeUri = 'ExtensionHostSourceControl.getFileBeforeUri'
 export const SourceControlGetFileDecorations = 'ExtensionHostSourceControl.getFileDecorations'
 export const SourceControlGetGroups = 'ExtensionHostSourceControl.getGroups'
 export const StatusBarExecuteCommand = 'ExtensionHostStatusBar.executeCommand'

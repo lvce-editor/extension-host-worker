@@ -11,6 +11,10 @@ export const get = (protocol) => {
   return provider
 }
 
+export const getOptional = (protocol) => {
+  return fileSystemProviderMap[protocol]
+}
+
 export const set = (id, provider) => {
   if (!id) {
     throw new Error('Failed to register file system provider: missing id')

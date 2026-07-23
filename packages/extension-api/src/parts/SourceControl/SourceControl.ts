@@ -7,6 +7,7 @@ export {
   executeSourceControlGetChangedFiles,
   executeSourceControlGetFeatures,
   executeSourceControlGetFileBefore,
+  executeSourceControlGetFileBeforeUri,
   executeSourceControlGetFileDecorations,
   executeSourceControlGetGroups,
   executeSourceControlIsActive,

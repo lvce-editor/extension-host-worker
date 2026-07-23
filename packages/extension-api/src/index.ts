@@ -25,6 +25,12 @@ export {
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
 export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from './parts/FileSystem/FileSystem.ts'
+export {
+  executeFileSystemProviderReadFile,
+  getFileSystemProviderRegistrySnapshot,
+  registerFileSystemProvider,
+  resetFileSystemProviderRegistry,
+} from './parts/FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 export { confirm, getWorkspaceFolder, getWorkspaceUri, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export { getPlatform, type Platform } from './parts/Platform/Platform.ts'
@@ -53,6 +59,7 @@ export {
   executeSourceControlGetChangedFiles,
   executeSourceControlGetFeatures,
   executeSourceControlGetFileBefore,
+  executeSourceControlGetFileBeforeUri,
   executeSourceControlGetFileDecorations,
   executeSourceControlGetGroups,
   executeSourceControlIsActive,
@@ -121,6 +128,9 @@ export type {
   RegisteredFormattingProvider,
 } from './parts/Formatting/Formatting.ts'
 export type { FileSystemDirent } from './parts/FileSystem/FileSystem.ts'
+export type { FileSystemProvider } from './parts/FileSystemProvider/FileSystemProvider.ts'
+export type { FileSystemProviderRegistrySnapshot } from './parts/FileSystemProviderRegistrySnapshot/FileSystemProviderRegistrySnapshot.ts'
+export type { RegisteredFileSystemProvider } from './parts/RegisteredFileSystemProvider/RegisteredFileSystemProvider.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
 export type { LanguageServerOptions, LanguageServerRegistrySnapshot } from './parts/LanguageServer/LanguageServer.ts'

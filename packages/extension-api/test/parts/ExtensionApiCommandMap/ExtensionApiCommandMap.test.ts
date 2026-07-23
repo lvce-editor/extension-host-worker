@@ -27,3 +27,8 @@ test('commandMap keeps completion, diagnostic and formatting provider commands',
   strictEqual(typeof commandMap['ExtensionApi.executeFormattingProvider'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.executeResolveCompletionItemProvider'], 'function')
 })
+
+test('commandMap exposes file system provider commands', () => {
+  strictEqual(typeof commandMap['ExtensionApi.executeFileSystemProviderReadFile'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.getFileSystemProviderRegistrySnapshot'], 'function')
+})

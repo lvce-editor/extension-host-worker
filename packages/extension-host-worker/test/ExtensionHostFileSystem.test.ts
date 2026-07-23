@@ -1,4 +1,5 @@
 import { beforeEach, expect, jest, test } from '@jest/globals'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import * as ExtensionHostFileSystem from '../src/parts/ExtensionHostFileSystem/ExtensionHostFileSystem.ts'
 import * as FileSystemProviderState from '../src/parts/FileSystemProviderState/FileSystemProviderState.ts'
 
@@ -19,6 +20,22 @@ test('registerFileSystemProvider - error - missing id', () => {
       },
     })
   }).toThrow(new Error('Failed to register file system provider: missing id'))
+})
+
+test('readFile - isolated provider', async () => {
+  using mockRpc = ExtensionManagementWorker.registerMockRpc({
+    'Extensions.executeFileSystemProviderReadFile': async (providerId: string, uri: string) => {
+      return {
+        found: true,
+        result: `${providerId}:${uri}`,
+      }
+    },
+  })
+
+  await expect(ExtensionHostFileSystem.readFile('git-file-before', 'file:///workspace/file.txt')).resolves.toBe(
+    'git-file-before:file:///workspace/file.txt',
+  )
+  expect(mockRpc.invocations).toEqual([['Extensions.executeFileSystemProviderReadFile', 'git-file-before', 'file:///workspace/file.txt']])
 })
 
 test('readDirWithFileTypes', async () => {

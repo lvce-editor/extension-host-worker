@@ -14,6 +14,7 @@ const optionalMethods = [
   'getBadgeCount',
   'getFeatures',
   'getFileBefore',
+  'getFileBeforeUri',
   'getFileDecorations',
   'getGroups',
   'isActive',
@@ -83,6 +84,9 @@ const mapSourceControlProvider = (provider: SourceControlProvider): RegisteredSo
   if (provider.getFileBefore) {
     registeredProvider.getFileBefore = (uri) => provider.getFileBefore!(uri)
   }
+  if (provider.getFileBeforeUri) {
+    registeredProvider.getFileBeforeUri = (uri) => provider.getFileBeforeUri!(uri)
+  }
   if (provider.getFileDecorations) {
     registeredProvider.getFileDecorations = (uris) => provider.getFileDecorations!(uris)
   }
@@ -140,6 +144,21 @@ export const executeSourceControlGetFeatures = async (id: string): Promise<unkno
 
 export const executeSourceControlGetFileBefore = async (id: string, uri: string): Promise<unknown> => {
   return getProvider(id).getFileBefore?.(uri)
+}
+
+export const executeSourceControlGetFileBeforeUri = async (id: string, uri: string): Promise<string> => {
+  const provider = getProvider(id)
+  if (provider.getFileBeforeUri) {
+    return provider.getFileBeforeUri(uri)
+  }
+  const content = await provider.getFileBefore?.(uri)
+  if (content === undefined) {
+    return 'data://'
+  }
+  if (typeof content !== 'string') {
+    throw new ExtensionApiError(`source control provider ${id} returned an invalid getFileBefore result`)
+  }
+  return `data://${content}`
 }
 
 export const executeSourceControlGetFileDecorations = async (id: string, uris: readonly string[]): Promise<unknown> => {
