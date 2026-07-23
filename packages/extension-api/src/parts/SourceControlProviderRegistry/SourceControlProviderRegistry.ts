@@ -152,7 +152,13 @@ export const executeSourceControlGetFileBeforeUri = async (id: string, uri: stri
     return provider.getFileBeforeUri(uri)
   }
   const content = await provider.getFileBefore?.(uri)
-  return `data://${content ?? ''}`
+  if (content === undefined) {
+    return 'data://'
+  }
+  if (typeof content !== 'string') {
+    throw new ExtensionApiError(`source control provider ${id} returned an invalid getFileBefore result`)
+  }
+  return `data://${content}`
 }
 
 export const executeSourceControlGetFileDecorations = async (id: string, uris: readonly string[]): Promise<unknown> => {

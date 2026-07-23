@@ -1,8 +1,8 @@
 import type { Disposable } from '../Disposable/Disposable.ts'
-import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import type { FileSystemProvider } from '../FileSystemProvider/FileSystemProvider.ts'
 import type { FileSystemProviderRegistrySnapshot } from '../FileSystemProviderRegistrySnapshot/FileSystemProviderRegistrySnapshot.ts'
 import type { RegisteredFileSystemProvider } from '../RegisteredFileSystemProvider/RegisteredFileSystemProvider.ts'
+import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const providers: Record<string, RegisteredFileSystemProvider> = Object.create(null)
 
