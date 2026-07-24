@@ -1,0 +1,12 @@
+{
+  "browser": "main.ts",
+  "id": "sample.isolated-extension-api-coverage",
+  "isolated": true,
+  "activation": ["onCommand:isolatedApiCoverage.run"],
+  "commands": [
+    {
+      "id": "isolatedApiCoverage.run",
+      "label": "Run Isolated API Coverage Case"
+    }
+  ]
+}
