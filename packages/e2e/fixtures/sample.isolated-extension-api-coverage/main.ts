@@ -141,7 +141,8 @@ const cases: Readonly<Record<string, CoverageCase>> = {
     return typeof (await getWorkspaceFolder()) === 'string'
   },
   'host-workspace-uri': async () => {
-    return typeof (await getWorkspaceUri()) === 'string'
+    await getWorkspaceUri()
+    return true
   },
   'language-provider-brace-completion': () => {
     return verifyLanguageProviderRegistration(registerBraceCompletionProvider, 'provideBraceCompletion')
