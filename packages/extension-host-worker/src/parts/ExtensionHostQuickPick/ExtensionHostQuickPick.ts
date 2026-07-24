@@ -7,6 +7,7 @@ export interface QuickPickItem {
 }
 
 export interface ShowQuickPickOptions {
+  readonly acceptInput?: boolean
   readonly items: readonly QuickPickItem[]
   readonly placeholder?: string
 }
@@ -26,7 +27,7 @@ const validateQuickPickItem = (item: QuickPickItem): void => {
   }
 }
 
-export const showQuickPick = async ({ items, placeholder }: ShowQuickPickOptions): Promise<unknown> => {
+export const showQuickPick = async ({ acceptInput = false, items, placeholder }: ShowQuickPickOptions): Promise<unknown> => {
   if (!Array.isArray(items)) {
     throw new TypeError('showQuickPick items must be an array')
   }
@@ -34,6 +35,7 @@ export const showQuickPick = async ({ items, placeholder }: ShowQuickPickOptions
     validateQuickPickItem(item)
   }
   return QuickPickWorker.invoke('QuickPick.showQuickPick', {
+    acceptInput,
     items,
     placeholder,
   })
