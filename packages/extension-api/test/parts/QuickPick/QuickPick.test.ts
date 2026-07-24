@@ -23,6 +23,7 @@ test('showQuickPick invokes extension host quick pick command', async () => {
     },
   })
   const options = {
+    acceptInput: true,
     items: [
       {
         description: 'First option',

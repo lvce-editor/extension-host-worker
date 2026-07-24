@@ -33,6 +33,7 @@ test('showQuickPick', async () => {
   ]
 
   const result = await ExtensionHostQuickPick.showQuickPick({
+    acceptInput: true,
     items,
     placeholder: 'Select branch',
   })
@@ -40,6 +41,7 @@ test('showQuickPick', async () => {
   expect(result).toBe('branch-2')
   expect(quickPickInvoke).toHaveBeenCalledTimes(1)
   expect(quickPickInvoke).toHaveBeenCalledWith('QuickPick.showQuickPick', {
+    acceptInput: true,
     items,
     placeholder: 'Select branch',
   })
@@ -59,6 +61,17 @@ test('showQuickPick - canceled', async () => {
   })
 
   expect(result).toBeUndefined()
+  expect(quickPickInvoke).toHaveBeenCalledWith('QuickPick.showQuickPick', {
+    acceptInput: false,
+    items: [
+      {
+        description: 'Local branch',
+        label: 'branch 1',
+        value: 'branch-1',
+      },
+    ],
+    placeholder: undefined,
+  })
 })
 
 test('showQuickPick - missing description', async () => {
