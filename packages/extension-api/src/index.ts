@@ -32,6 +32,7 @@ export {
   resetFileSystemProviderRegistry,
 } from './parts/FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 export { confirm, getWorkspaceFolder, getWorkspaceUri, handleWorkspaceRefresh, openUri } from './parts/Host/Host.ts'
+export { getJsonSchemas } from './parts/GetJsonSchemas/GetJsonSchemas.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export { getPlatform, type Platform } from './parts/Platform/Platform.ts'
 export { getLanguageServerRegistrySnapshot, registerLanguageServer, resetLanguageServerRegistry } from './parts/LanguageServer/LanguageServer.ts'
@@ -132,6 +133,7 @@ export type { FileSystemProvider } from './parts/FileSystemProvider/FileSystemPr
 export type { FileSystemProviderRegistrySnapshot } from './parts/FileSystemProviderRegistrySnapshot/FileSystemProviderRegistrySnapshot.ts'
 export type { RegisteredFileSystemProvider } from './parts/RegisteredFileSystemProvider/RegisteredFileSystemProvider.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
+export type { JsonSchemaContribution } from './parts/JsonSchemaContribution/JsonSchemaContribution.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
 export type { LanguageServerOptions, LanguageServerRegistrySnapshot } from './parts/LanguageServer/LanguageServer.ts'
 export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHandle.ts'
