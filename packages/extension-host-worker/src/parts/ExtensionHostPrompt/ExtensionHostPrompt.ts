@@ -1,8 +1,8 @@
+import { DialogWorker } from '@lvce-editor/rpc-registry'
 import * as Assert from '../Assert/Assert.ts'
-import * as Rpc from '../Rpc/Rpc.ts'
 
 export const confirm = (message) => {
   Assert.string(message)
-  const result = Rpc.invoke('ConfirmPrompt.prompt', message)
+  const result = DialogWorker.invoke('ConfirmPrompt.prompt', message)
   return result
 }
