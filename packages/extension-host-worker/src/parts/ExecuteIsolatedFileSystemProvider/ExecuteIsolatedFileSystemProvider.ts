@@ -12,13 +12,29 @@ const isUnavailableError = (error: unknown): boolean => {
   )
 }
 
-export const execute = async (providerId: string, uri: string): Promise<FileSystemProviderResult> => {
+const executeMethod = async (method: string, providerId: string, ...args: readonly unknown[]): Promise<FileSystemProviderResult> => {
   try {
-    return await ExtensionManagementWorker.invoke('Extensions.executeFileSystemProviderReadFile', providerId, uri)
+    return await ExtensionManagementWorker.invoke(method, providerId, ...args)
   } catch (error) {
     if (isUnavailableError(error)) {
       return { found: false }
     }
     throw error
   }
+}
+
+export const execute = (providerId: string, uri: string): Promise<FileSystemProviderResult> => {
+  return executeMethod('Extensions.executeFileSystemProviderReadFile', providerId, uri)
+}
+
+export const getPathSeparator = (providerId: string): Promise<FileSystemProviderResult> => {
+  return executeMethod('Extensions.executeFileSystemProviderGetPathSeparator', providerId)
+}
+
+export const isReadonly = (providerId: string): Promise<FileSystemProviderResult> => {
+  return executeMethod('Extensions.executeFileSystemProviderIsReadonly', providerId)
+}
+
+export const readDirWithFileTypes = (providerId: string, uri: string): Promise<FileSystemProviderResult> => {
+  return executeMethod('Extensions.executeFileSystemProviderReadDirWithFileTypes', providerId, uri)
 }

@@ -26,6 +26,9 @@ export {
 } from './parts/Formatting/Formatting.ts'
 export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from './parts/FileSystem/FileSystem.ts'
 export {
+  executeFileSystemProviderGetPathSeparator,
+  executeFileSystemProviderIsReadonly,
+  executeFileSystemProviderReadDirWithFileTypes,
   executeFileSystemProviderReadFile,
   getFileSystemProviderRegistrySnapshot,
   registerFileSystemProvider,

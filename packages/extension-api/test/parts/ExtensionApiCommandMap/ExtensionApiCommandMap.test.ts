@@ -29,6 +29,9 @@ test('commandMap keeps completion, diagnostic and formatting provider commands',
 })
 
 test('commandMap exposes file system provider commands', () => {
+  strictEqual(typeof commandMap['ExtensionApi.executeFileSystemProviderGetPathSeparator'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.executeFileSystemProviderIsReadonly'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.executeFileSystemProviderReadDirWithFileTypes'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.executeFileSystemProviderReadFile'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.getFileSystemProviderRegistrySnapshot'], 'function')
 })

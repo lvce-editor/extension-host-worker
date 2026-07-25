@@ -12,8 +12,15 @@ export const registerFileSystemProvider = (fileSystemProvider) => {
 
 export const readDirWithFileTypes = async (protocol, path) => {
   try {
-    const provider = FileSystemProviderState.get(protocol)
-    return await provider.readDirWithFileTypes(path)
+    const provider = FileSystemProviderState.getOptional(protocol)
+    if (provider) {
+      return await provider.readDirWithFileTypes(path)
+    }
+    const isolated = await ExecuteIsolatedFileSystemProvider.readDirWithFileTypes(protocol, path)
+    if (isolated.found) {
+      return isolated.result
+    }
+    return await FileSystemProviderState.get(protocol).readDirWithFileTypes(path)
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
   }
@@ -123,10 +130,17 @@ export const exists = async (protocol, uri) => {
   }
 }
 
-export const getPathSeparator = (protocol) => {
+export const getPathSeparator = async (protocol) => {
   try {
-    const provider = FileSystemProviderState.get(protocol)
-    return provider.pathSeparator
+    const provider = FileSystemProviderState.getOptional(protocol)
+    if (provider) {
+      return provider.pathSeparator
+    }
+    const isolated = await ExecuteIsolatedFileSystemProvider.getPathSeparator(protocol)
+    if (isolated.found) {
+      return isolated.result
+    }
+    return FileSystemProviderState.get(protocol).pathSeparator
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
   }
@@ -134,11 +148,18 @@ export const getPathSeparator = (protocol) => {
 
 export const isReadonly = async (protocol) => {
   try {
-    const provider = FileSystemProviderState.get(protocol)
-    if (!provider.isReadonly) {
-      return false
+    const provider = FileSystemProviderState.getOptional(protocol)
+    if (provider) {
+      if (!provider.isReadonly) {
+        return false
+      }
+      return await provider.isReadonly()
     }
-    return await provider.isReadonly()
+    const isolated = await ExecuteIsolatedFileSystemProvider.isReadonly(protocol)
+    if (isolated.found) {
+      return isolated.result
+    }
+    return await FileSystemProviderState.get(protocol).isReadonly()
   } catch (error) {
     throw new VError(error, 'Failed to execute file system provider')
   }
