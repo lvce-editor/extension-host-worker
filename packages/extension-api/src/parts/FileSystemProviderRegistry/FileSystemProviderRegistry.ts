@@ -1,4 +1,5 @@
 import type { Disposable } from '../Disposable/Disposable.ts'
+import type { FileSystemDirent } from '../FileSystemDirent/FileSystemDirent.ts'
 import type { FileSystemProvider } from '../FileSystemProvider/FileSystemProvider.ts'
 import type { FileSystemProviderRegistrySnapshot } from '../FileSystemProviderRegistrySnapshot/FileSystemProviderRegistrySnapshot.ts'
 import type { RegisteredFileSystemProvider } from '../RegisteredFileSystemProvider/RegisteredFileSystemProvider.ts'
@@ -15,6 +16,15 @@ const assertFileSystemProvider = (provider: FileSystemProvider): void => {
   }
   if (typeof provider.readFile !== 'function') {
     throw new ExtensionApiError(`file system provider ${provider.id} is missing readFile function`)
+  }
+  if (provider.readDirWithFileTypes !== undefined && typeof provider.readDirWithFileTypes !== 'function') {
+    throw new ExtensionApiError(`file system provider ${provider.id} has invalid readDirWithFileTypes function`)
+  }
+  if (provider.isReadonly !== undefined && typeof provider.isReadonly !== 'function') {
+    throw new ExtensionApiError(`file system provider ${provider.id} has invalid isReadonly function`)
+  }
+  if (provider.pathSeparator !== undefined && typeof provider.pathSeparator !== 'string') {
+    throw new ExtensionApiError(`file system provider ${provider.id} has invalid pathSeparator`)
   }
   if (provider.id in providers) {
     throw new ExtensionApiError(`file system provider ${provider.id} is already registered`)
@@ -33,6 +43,23 @@ export const executeFileSystemProviderReadFile = async (id: string, uri: string)
   return getProvider(id).readFile(uri)
 }
 
+export const executeFileSystemProviderReadDirWithFileTypes = async (id: string, uri: string): Promise<readonly FileSystemDirent[]> => {
+  const provider = getProvider(id)
+  if (!provider.readDirWithFileTypes) {
+    throw new ExtensionApiError(`file system provider ${id} is missing readDirWithFileTypes function`)
+  }
+  return provider.readDirWithFileTypes(uri)
+}
+
+export const executeFileSystemProviderGetPathSeparator = (id: string): string => {
+  return getProvider(id).pathSeparator || '/'
+}
+
+export const executeFileSystemProviderIsReadonly = async (id: string): Promise<boolean> => {
+  const provider = getProvider(id)
+  return provider.isReadonly ? provider.isReadonly() : false
+}
+
 export const getFileSystemProviderRegistrySnapshot = (): FileSystemProviderRegistrySnapshot => {
   return {
     providers: Object.values(providers).map((provider) => ({
@@ -45,6 +72,9 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
   assertFileSystemProvider(provider)
   providers[provider.id] = {
     id: provider.id,
+    isReadonly: provider.isReadonly,
+    pathSeparator: provider.pathSeparator,
+    readDirWithFileTypes: provider.readDirWithFileTypes,
     readFile: (uri) => provider.readFile(uri),
   }
   return {

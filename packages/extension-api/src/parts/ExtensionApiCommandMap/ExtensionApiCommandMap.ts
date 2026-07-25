@@ -1,7 +1,13 @@
 import { executeCommand, getCommandRegistrySnapshot } from '../CommandRegistry/CommandRegistry.ts'
 import { executeCompletionProvider, executeResolveCompletionItemProvider, getCompletionProviderRegistrySnapshot } from '../Completion/Completion.ts'
 import { executeDiagnosticProvider, getDiagnosticProviderRegistrySnapshot } from '../Diagnostic/Diagnostic.ts'
-import { executeFileSystemProviderReadFile, getFileSystemProviderRegistrySnapshot } from '../FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
+import {
+  executeFileSystemProviderGetPathSeparator,
+  executeFileSystemProviderIsReadonly,
+  executeFileSystemProviderReadDirWithFileTypes,
+  executeFileSystemProviderReadFile,
+  getFileSystemProviderRegistrySnapshot,
+} from '../FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 import { executeFormattingProvider, getFormattingProviderRegistrySnapshot } from '../Formatting/Formatting.ts'
 import { getStatusBarItems } from '../GetStatusBarItems/GetStatusBarItems.ts'
 import { executeHoverProvider, getHoverProviderRegistrySnapshot } from '../Hover/Hover.ts'
@@ -43,6 +49,9 @@ export const commandMap = {
   'ExtensionApi.executeCommand': executeCommand,
   'ExtensionApi.executeCompletionProvider': executeCompletionProvider,
   'ExtensionApi.executeDiagnosticProvider': executeDiagnosticProvider,
+  'ExtensionApi.executeFileSystemProviderGetPathSeparator': executeFileSystemProviderGetPathSeparator,
+  'ExtensionApi.executeFileSystemProviderIsReadonly': executeFileSystemProviderIsReadonly,
+  'ExtensionApi.executeFileSystemProviderReadDirWithFileTypes': executeFileSystemProviderReadDirWithFileTypes,
   'ExtensionApi.executeFileSystemProviderReadFile': executeFileSystemProviderReadFile,
   'ExtensionApi.executeFormattingProvider': executeFormattingProvider,
   'ExtensionApi.executeHoverProvider': executeHoverProvider,

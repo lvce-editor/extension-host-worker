@@ -58,6 +58,22 @@ test('readDirWithFileTypes', async () => {
   ])
 })
 
+test('readDirWithFileTypes - isolated provider', async () => {
+  using mockRpc = ExtensionManagementWorker.registerMockRpc({
+    'Extensions.executeFileSystemProviderReadDirWithFileTypes': async (providerId: string, uri: string) => {
+      return {
+        found: true,
+        result: [{ name: `${providerId}:${uri}`, type: 'file' }],
+      }
+    },
+  })
+
+  await expect(ExtensionHostFileSystem.readDirWithFileTypes('fetch', 'fetch:///workspace')).resolves.toEqual([
+    { name: 'fetch:fetch:///workspace', type: 'file' },
+  ])
+  expect(mockRpc.invocations).toEqual([['Extensions.executeFileSystemProviderReadDirWithFileTypes', 'fetch', 'fetch:///workspace']])
+})
+
 test('readDirWithFileTypes - when file system provider throws error', async () => {
   ExtensionHostFileSystem.registerFileSystemProvider({
     id: 'memfs',
@@ -142,7 +158,7 @@ test('rename - when file system provider is not registered', async () => {
   )
 })
 
-test('getPathSeparator - slash', () => {
+test('getPathSeparator - slash', async () => {
   ExtensionHostFileSystem.registerFileSystemProvider({
     id: 'memfs',
     pathSeparator: '/',
@@ -155,10 +171,10 @@ test('getPathSeparator - slash', () => {
       ]
     },
   })
-  expect(ExtensionHostFileSystem.getPathSeparator('memfs')).toBe('/')
+  await expect(ExtensionHostFileSystem.getPathSeparator('memfs')).resolves.toBe('/')
 })
 
-test('getPathSeparator - backslash', () => {
+test('getPathSeparator - backslash', async () => {
   ExtensionHostFileSystem.registerFileSystemProvider({
     id: 'memfs',
     pathSeparator: '\\',
@@ -171,7 +187,21 @@ test('getPathSeparator - backslash', () => {
       ]
     },
   })
-  expect(ExtensionHostFileSystem.getPathSeparator('memfs')).toBe('\\')
+  await expect(ExtensionHostFileSystem.getPathSeparator('memfs')).resolves.toBe('\\')
+})
+
+test('getPathSeparator - isolated provider', async () => {
+  using mockRpc = ExtensionManagementWorker.registerMockRpc({
+    'Extensions.executeFileSystemProviderGetPathSeparator': async () => {
+      return {
+        found: true,
+        result: '/',
+      }
+    },
+  })
+
+  await expect(ExtensionHostFileSystem.getPathSeparator('fetch')).resolves.toBe('/')
+  expect(mockRpc.invocations).toEqual([['Extensions.executeFileSystemProviderGetPathSeparator', 'fetch']])
 })
 
 test('isReadonly - default false', async () => {
@@ -189,6 +219,20 @@ test('isReadonly', async () => {
     },
   })
   await expect(ExtensionHostFileSystem.isReadonly('memfs')).resolves.toBe(true)
+})
+
+test('isReadonly - isolated provider', async () => {
+  using mockRpc = ExtensionManagementWorker.registerMockRpc({
+    'Extensions.executeFileSystemProviderIsReadonly': async () => {
+      return {
+        found: true,
+        result: true,
+      }
+    },
+  })
+
+  await expect(ExtensionHostFileSystem.isReadonly('fetch')).resolves.toBe(true)
+  expect(mockRpc.invocations).toEqual([['Extensions.executeFileSystemProviderIsReadonly', 'fetch']])
 })
 
 test('isReadonly - when file system provider throws error', async () => {
