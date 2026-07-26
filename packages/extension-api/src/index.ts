@@ -25,7 +25,17 @@ export {
   registerFormattingProvider,
   resetFormattingProviderRegistry,
 } from './parts/Formatting/Formatting.ts'
-export { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from './parts/FileSystem/FileSystem.ts'
+export {
+  exists,
+  mkdir,
+  readAsObjectUrl,
+  readDirWithFileTypes,
+  readFile,
+  remove,
+  stat,
+  writeFile,
+  type ReadAsObjectUrlResult,
+} from './parts/FileSystem/FileSystem.ts'
 export {
   executeFileSystemProviderGetPathSeparator,
   executeFileSystemProviderIsReadonly,

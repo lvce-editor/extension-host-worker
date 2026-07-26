@@ -1,10 +1,43 @@
 import { ExtensionManagementWorker, FileSystemWorker } from '@lvce-editor/rpc-registry'
 import type { FileSystemDirent } from '../FileSystemDirent/FileSystemDirent.ts'
+import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
+import { getPlatform } from '../Platform/Platform.ts'
 
 const MemfsPrefix = 'memfs://'
 
+export interface ReadAsObjectUrlResult {
+  readonly error: string
+  readonly objectUrl: string
+  readonly wasFound: boolean
+}
+
 const isMemory = (uri: string): boolean => {
   return uri.startsWith(MemfsPrefix)
+}
+
+const isHttp = (uri: string): boolean => {
+  return uri.startsWith('http://') || uri.startsWith('https://')
+}
+
+const getRemoteUrl = (uri: string): string => {
+  const withoutPrefix = uri.startsWith('file://') ? uri.slice('file://'.length) : uri
+  const normalized = withoutPrefix.replaceAll('\\', '/')
+  return normalized.startsWith('/') ? `/remote${normalized}` : `/remote/${normalized}`
+}
+
+const getObjectUrl = async (uri: string): Promise<string> => {
+  if (isHttp(uri)) {
+    return uri
+  }
+  const platform = await getPlatform()
+  if (platform === 'web') {
+    return (await executeCommand('Blob.getSrc', uri)) as string
+  }
+  return getRemoteUrl(uri)
+}
+
+const getErrorMessage = (error: unknown): string => {
+  return error instanceof Error ? error.message : String(error)
 }
 
 export const exists = async (uri: string): Promise<boolean> => {
@@ -20,6 +53,23 @@ export const readFile = async (uri: string): Promise<string> => {
     return ExtensionManagementWorker.invoke('ExtensionApi.readFile', uri)
   }
   return FileSystemWorker.readFile(uri)
+}
+
+export const readAsObjectUrl = async (uri: string): Promise<ReadAsObjectUrlResult> => {
+  try {
+    const objectUrl = await getObjectUrl(uri)
+    return {
+      error: '',
+      objectUrl,
+      wasFound: true,
+    }
+  } catch (error) {
+    return {
+      error: getErrorMessage(error),
+      objectUrl: '',
+      wasFound: false,
+    }
+  }
 }
 
 export const mkdir = async (uri: string): Promise<void> => {
