@@ -35,3 +35,10 @@ test('commandMap exposes file system provider commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.executeFileSystemProviderReadFile'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.getFileSystemProviderRegistrySnapshot'], 'function')
 })
+
+test('commandMap exposes debug provider commands', () => {
+  strictEqual(typeof commandMap['ExtensionHostDebug.start'], 'function')
+  strictEqual(typeof commandMap['ExtensionHostDebug.pause'], 'function')
+  strictEqual(typeof commandMap['ExtensionHostDebug.resume'], 'function')
+  strictEqual(typeof commandMap['ExtensionHostDebug.evaluate'], 'function')
+})

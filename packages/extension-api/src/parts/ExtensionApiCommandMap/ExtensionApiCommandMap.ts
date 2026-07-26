@@ -1,5 +1,18 @@
 import { executeCommand, getCommandRegistrySnapshot } from '../CommandRegistry/CommandRegistry.ts'
 import { executeCompletionProvider, executeResolveCompletionItemProvider, getCompletionProviderRegistrySnapshot } from '../Completion/Completion.ts'
+import {
+  executeDebugEvaluate,
+  executeDebugGetProperties,
+  executeDebugListProcesses,
+  executeDebugPause,
+  executeDebugResume,
+  executeDebugSetPauseOnExceptions,
+  executeDebugStart,
+  executeDebugStep,
+  executeDebugStepInto,
+  executeDebugStepOut,
+  executeDebugStepOver,
+} from '../Debug/Debug.ts'
 import { executeDiagnosticProvider, getDiagnosticProviderRegistrySnapshot } from '../Diagnostic/Diagnostic.ts'
 import {
   executeFileSystemProviderGetPathSeparator,
@@ -87,4 +100,15 @@ export const commandMap = {
   'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
   'ExtensionApi.renderViewInstance': renderViewInstance,
   'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
+  'ExtensionHostDebug.evaluate': executeDebugEvaluate,
+  'ExtensionHostDebug.getProperties': executeDebugGetProperties,
+  'ExtensionHostDebug.listProcesses': executeDebugListProcesses,
+  'ExtensionHostDebug.pause': executeDebugPause,
+  'ExtensionHostDebug.resume': executeDebugResume,
+  'ExtensionHostDebug.setPauseOnExceptions': executeDebugSetPauseOnExceptions,
+  'ExtensionHostDebug.start': executeDebugStart,
+  'ExtensionHostDebug.step': executeDebugStep,
+  'ExtensionHostDebug.stepInto': executeDebugStepInto,
+  'ExtensionHostDebug.stepOut': executeDebugStepOut,
+  'ExtensionHostDebug.stepOver': executeDebugStepOver,
 }
