@@ -3,6 +3,7 @@ import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export interface CreateRpcOptions {
   readonly commandMap?: Record<string, unknown>
+  readonly contentSecurityPolicy?: string
   readonly name?: string
   readonly url: string
 }
@@ -13,8 +14,8 @@ export interface CreateNodeRpcOptions {
   readonly path?: string
 }
 
-const sendMessagePortToWebWorker = async (port: MessagePort, name: string, url: string): Promise<void> => {
-  await ExtensionManagementWorker.invokeAndTransfer('Extensions.createWebViewWorkerRpc2', { name, url }, port)
+const sendMessagePortToWebWorker = async (port: MessagePort, contentSecurityPolicy: string, name: string, url: string): Promise<void> => {
+  await ExtensionManagementWorker.invokeAndTransfer('Extensions.createWebViewWorkerRpc2', { contentSecurityPolicy, name, url }, port)
 }
 
 const createMessagePortRpc = async (commandMap: Record<string, unknown>, send: (port: MessagePort) => Promise<void>): Promise<Rpc> => {
@@ -29,8 +30,8 @@ const createMessagePortRpc = async (commandMap: Record<string, unknown>, send: (
   return rpcPromise
 }
 
-export const createRpc = async ({ commandMap = {}, name = '', url }: CreateRpcOptions): Promise<Rpc> => {
-  return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, name, url))
+export const createRpc = async ({ commandMap = {}, contentSecurityPolicy = '', name = '', url }: CreateRpcOptions): Promise<Rpc> => {
+  return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, contentSecurityPolicy, name, url))
 }
 
 interface ResolvedNodeRpcOptions {
