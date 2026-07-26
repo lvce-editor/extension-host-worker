@@ -215,11 +215,11 @@ test('registerView includes event listeners in registry snapshot', () => {
   const eventListeners = [
     {
       name: 'handleDragStart',
-      params: ['handleViewEvent', 'dragstart', 'event.target.name'],
+      params: ['handleDragStart', 'event.target.name'],
     },
     {
       name: 'handleDrop',
-      params: ['handleViewEvent', 'drop', 'event.target.name'],
+      params: ['handleDrop', 'event.target.name'],
       preventDefault: true,
       trackPointerEvents: ['handlePointerMove', 'handlePointerUp'],
     },
