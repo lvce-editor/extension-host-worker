@@ -97,11 +97,18 @@ test('createRpc transfers a port and worker options', async () => {
 
   const rpc = await createRpc({
     commandMap: {},
+    contentSecurityPolicy: `default-src 'none'; script-src 'self' 'unsafe-eval';`,
     name: 'Git Worker',
     url: '/extensions/git/gitWorkerMain.js',
   })
 
   strictEqual(await rpc.invoke('Git.status'), 'ok')
-  deepStrictEqual(invocations, [{ name: 'Git Worker', url: '/extensions/git/gitWorkerMain.js' }])
+  deepStrictEqual(invocations, [
+    {
+      contentSecurityPolicy: `default-src 'none'; script-src 'self' 'unsafe-eval';`,
+      name: 'Git Worker',
+      url: '/extensions/git/gitWorkerMain.js',
+    },
+  ])
   await rpc.dispose()
 })
