@@ -66,10 +66,7 @@ test('readAsObjectUrl reads a web file as a browser object URL', async () => {
     objectUrl: 'blob:https://example.com/image-id',
     wasFound: true,
   })
-  deepStrictEqual(invocations, [
-    ['Layout.getPlatform'],
-    ['Blob.getSrc', 'html:///workspace/image.png'],
-  ])
+  deepStrictEqual(invocations, [['Layout.getPlatform'], ['Blob.getSrc', 'html:///workspace/image.png']])
 })
 
 test('readAsObjectUrl returns a remote URL for an Electron file', async () => {
