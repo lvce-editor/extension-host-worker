@@ -1,7 +1,7 @@
 import { ExtensionManagementWorker, FileSystemWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { exists, mkdir, readDirWithFileTypes, readFile, remove, stat, writeFile } from '../../../src/parts/FileSystem/FileSystem.ts'
+import { exists, mkdir, readAsObjectUrl, readDirWithFileTypes, readFile, remove, stat, writeFile } from '../../../src/parts/FileSystem/FileSystem.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -45,6 +45,91 @@ test('readFile reads memfs files through the extension api host command', async 
 
   strictEqual(result, 'ignored.js')
   strictEqual(invokedUri, 'memfs:///workspace/.prettierignore')
+})
+
+test('readAsObjectUrl reads a web file as a browser object URL', async () => {
+  const invocations: [string, ...unknown[]][] = []
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      if (id === 'Layout.getPlatform') {
+        return 1
+      }
+      return 'blob:https://example.com/image-id'
+    },
+  })
+
+  const result = await readAsObjectUrl('html:///workspace/image.png')
+
+  deepStrictEqual(result, {
+    error: '',
+    objectUrl: 'blob:https://example.com/image-id',
+    wasFound: true,
+  })
+  deepStrictEqual(invocations, [['Layout.getPlatform'], ['Blob.getSrc', 'html:///workspace/image.png']])
+})
+
+test('readAsObjectUrl returns a remote URL for an Electron file', async () => {
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string): Promise<number> {
+      strictEqual(id, 'Layout.getPlatform')
+      return 2
+    },
+  })
+
+  const result = await readAsObjectUrl('file:///workspace/image.png')
+
+  deepStrictEqual(result, {
+    error: '',
+    objectUrl: '/remote/workspace/image.png',
+    wasFound: true,
+  })
+})
+
+test('readAsObjectUrl returns a remote URL for a Windows file', async () => {
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string): Promise<number> {
+      strictEqual(id, 'Layout.getPlatform')
+      return 3
+    },
+  })
+
+  const result = await readAsObjectUrl('file:///C:\\workspace\\image.png')
+
+  deepStrictEqual(result, {
+    error: '',
+    objectUrl: '/remote/C:/workspace/image.png',
+    wasFound: true,
+  })
+})
+
+test('readAsObjectUrl preserves an HTTP URL', async () => {
+  const result = await readAsObjectUrl('https://example.com/image.png')
+
+  deepStrictEqual(result, {
+    error: '',
+    objectUrl: 'https://example.com/image.png',
+    wasFound: true,
+  })
+})
+
+test('readAsObjectUrl returns the error when the file cannot be read', async () => {
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string): Promise<number> {
+      if (id === 'Layout.getPlatform') {
+        return 1
+      }
+      throw new Error('File not found')
+    },
+  })
+
+  const result = await readAsObjectUrl('html:///workspace/missing.png')
+
+  deepStrictEqual(result, {
+    error: 'File not found',
+    objectUrl: '',
+    wasFound: false,
+  })
 })
 
 test('exists checks through the file system worker', async () => {
