@@ -5,6 +5,7 @@ export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showQuickPick } from './parts/QuickPick/QuickPick.ts'
 export { getPreference, setPreference } from './parts/Preferences/Preferences.ts'
 export { registerCommand } from './parts/CommandRegistry/CommandRegistry.ts'
+export { registerDebugProvider, resetDebugProviderRegistry } from './parts/Debug/Debug.ts'
 export {
   executeCompletionProvider,
   executeResolveCompletionItemProvider,
@@ -126,6 +127,7 @@ export type {
   DiagnosticProviderRegistrySnapshot,
   RegisteredDiagnosticProvider,
 } from './parts/Diagnostic/Diagnostic.ts'
+export type { DebugEmitter, DebugProvider } from './parts/Debug/Debug.ts'
 export type { Disposable } from './parts/Disposable/Disposable.ts'
 export type {
   CreateElectronWebContentsViewOptions,
