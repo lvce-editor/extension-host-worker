@@ -8,6 +8,9 @@
   "directories": {
     "test": "test"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "benchmark:isolated-extension-api": "node packages/build/src/benchmark-isolated-extension-api-size.ts",
     "build": "node packages/build/src/build.ts",
@@ -15,10 +18,9 @@
     "build:watch": "node packages/build/src/build-watch.ts",
     "dev": "node packages/build/src/dev.ts",
     "format": "prettier --write .",
-    "postinstall": "lerna bootstrap --ci && npm --prefix packages/server run postinstall",
     "lint": "eslint . && prettier --check .",
     "measure": "cd packages/memory && npm run measure",
-    "test": "lerna run test",
+    "test": "npm test --workspaces --if-present",
     "type-check": "tsc -b"
   },
   "prettier": {
@@ -27,12 +29,10 @@
     "printWidth": 150
   },
   "devDependencies": {
-    "@lerna/legacy-package-management": "^8.2.4",
     "@lvce-editor/eslint-config": "^17.0.3",
     "@lvce-editor/eslint-plugin-github-actions": "^11.2.0",
     "eslint": "^10.7.0",
     "knip": "^6.23.0",
-    "lerna": "^8.2.4",
     "prettier": "^3.9.1",
     "typescript": "^6.0.3"
   }

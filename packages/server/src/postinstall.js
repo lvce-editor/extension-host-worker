@@ -11,13 +11,14 @@ export const getRemoteUrl = (path) => {
   return `/remote${url}`
 }
 
-const nodeModulesPath = join(root, 'packages', 'server', 'node_modules')
+const rootNodeModulesPath = join(root, 'node_modules')
+const serverNodeModulesPath = join(root, 'packages', 'server', 'node_modules')
 
 const extensionHostWorkerPath = join(root, '.tmp', 'dist', 'dist', 'extensionHostWorkerMain.js')
-const typescriptCompileProcessPath = join(nodeModulesPath, '@lvce-editor', 'typescript-compile-process', 'dist', 'index.js')
-const typescriptCompileCachePath = join(nodeModulesPath, '@lvce-editor', 'packages', 'build', '.tmp', 'typescript-compile-cache')
+const typescriptCompileProcessPath = join(rootNodeModulesPath, '@lvce-editor', 'typescript-compile-process', 'dist', 'index.js')
+const typescriptCompileCachePath = join(rootNodeModulesPath, '@lvce-editor', 'packages', 'build', '.tmp', 'typescript-compile-cache')
 
-const staticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'static')
+const staticPath = join(serverNodeModulesPath, '@lvce-editor', 'static-server', 'static')
 const indexHtmlPath = join(staticPath, 'index.html')
 
 const remoteUrl = getRemoteUrl(extensionHostWorkerPath)

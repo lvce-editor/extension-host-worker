@@ -19,7 +19,7 @@
   "workspaces": {
     ".": {
       "project": ["*.js"],
-      "ignoreDependencies": ["@lerna/legacy-package-management"]
+      "ignoreDependencies": []
     },
     "packages/build": {
       "project": ["src/**/*.ts"],
