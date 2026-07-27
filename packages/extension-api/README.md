@@ -31,3 +31,13 @@ const view = await createElectronWebContentsView({ url: 'https://example.com' })
 const title = await view.executeJavaScript<string>('document.title')
 await view.dispose()
 ```
+
+Extensions can persist sensitive strings without depending on the editor's browser cache. Values are scoped to the calling extension.
+
+```ts
+import { deleteSecret, getSecret, storeSecret } from '@lvce-editor/api'
+
+await storeSecret('access-token', token)
+const savedToken = await getSecret('access-token')
+await deleteSecret('access-token')
+```
