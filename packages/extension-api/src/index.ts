@@ -114,6 +114,7 @@ export type {
   ViewContext,
   ViewEvent,
   ViewKind,
+  ViewPreferredLocation,
   MenuEntry,
   ViewRegistrySnapshot,
   ViewRenderResult,

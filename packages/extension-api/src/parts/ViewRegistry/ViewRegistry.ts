@@ -117,6 +117,9 @@ const assertView = (view: View<any>): void => {
   if (view.id in views) {
     throw new ExtensionApiError(`view ${view.id} is already registered`)
   }
+  if (view.preferredLocation !== undefined && view.preferredLocation !== 'preview' && view.preferredLocation !== 'sideBar') {
+    throw new ExtensionApiError(`view ${view.id} has invalid preferredLocation`)
+  }
   assertCommands(view)
   assertEventListeners(view)
 }
@@ -129,6 +132,7 @@ const toRegisteredView = (view: View<any>): RegisteredView => {
     icon: view.icon,
     id: view.id,
     name: view.name,
+    preferredLocation: view.preferredLocation || 'sideBar',
     title: displayName,
   }
   if (view.kind) {

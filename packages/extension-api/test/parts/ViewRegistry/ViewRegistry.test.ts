@@ -59,6 +59,7 @@ test('registerView registers and executes a view provider', () => {
         icon: 'symbol-beaker',
         id: 'sample.views.testing',
         name: undefined,
+        preferredLocation: 'sideBar',
         title: 'Testing',
       },
     ],
@@ -83,6 +84,7 @@ test('registerView uses displayName as canonical title in registry snapshot', ()
         icon: undefined,
         id: 'sample.views.testing',
         name: 'Testing Name',
+        preferredLocation: 'sideBar',
         title: 'Testing Display',
       },
     ],
@@ -105,6 +107,7 @@ test('registerView falls back from title for registry displayName', () => {
         icon: undefined,
         id: 'sample.views.testing',
         name: undefined,
+        preferredLocation: 'sideBar',
         title: 'Testing Title',
       },
     ],
@@ -126,6 +129,41 @@ test('registerView rejects duplicate id', () => {
   throws(() => {
     registerView(view)
   }, /view sample\.views\.testing is already registered/)
+})
+
+test('registerView includes preferred preview location in registry snapshot', () => {
+  registerView({
+    create() {
+      return 'created'
+    },
+    id: 'sample.views.testing',
+    preferredLocation: 'preview',
+  })
+
+  deepStrictEqual(getViewRegistrySnapshot(), {
+    views: [
+      {
+        displayName: undefined,
+        icon: undefined,
+        id: 'sample.views.testing',
+        name: undefined,
+        preferredLocation: 'preview',
+        title: undefined,
+      },
+    ],
+  })
+})
+
+test('registerView rejects invalid preferred location', () => {
+  throws(() => {
+    registerView({
+      create() {
+        return 'created'
+      },
+      id: 'sample.views.testing',
+      preferredLocation: 'panel',
+    } as any)
+  }, /view sample\.views\.testing has invalid preferredLocation/)
 })
 
 test('registerView registers and disposes view commands', () => {
@@ -205,6 +243,7 @@ test('registerView includes virtual dom kind in registry snapshot', () => {
         id: 'sample.views.testing',
         kind: 'virtualDom',
         name: undefined,
+        preferredLocation: 'sideBar',
         title: undefined,
       },
     ],
@@ -246,6 +285,7 @@ test('registerView includes event listeners in registry snapshot', () => {
         id: 'sample.views.testing',
         kind: 'virtualDom',
         name: undefined,
+        preferredLocation: 'sideBar',
         title: undefined,
       },
     ],
