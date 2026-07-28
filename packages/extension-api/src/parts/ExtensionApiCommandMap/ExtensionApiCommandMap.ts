@@ -14,6 +14,7 @@ import {
   executeDebugStepOver,
 } from '../Debug/Debug.ts'
 import { executeDiagnosticProvider, getDiagnosticProviderRegistrySnapshot } from '../Diagnostic/Diagnostic.ts'
+import { handleFileChanges } from '../FileChangeHandler/FileChangeHandler.ts'
 import {
   executeFileSystemProviderGetPathSeparator,
   executeFileSystemProviderIsReadonly,
@@ -98,6 +99,7 @@ export const commandMap = {
   'ExtensionApi.getViewActionsDom': getViewActionsDom,
   'ExtensionApi.getViewMenuEntries': getViewMenuEntries,
   'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
+  'ExtensionApi.handleFileChanges': handleFileChanges,
   'ExtensionApi.renderViewInstance': renderViewInstance,
   'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
   'ExtensionHostDebug.evaluate': executeDebugEvaluate,

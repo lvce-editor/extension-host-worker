@@ -37,6 +37,7 @@ export {
   writeFile,
   type ReadAsObjectUrlResult,
 } from './parts/FileSystem/FileSystem.ts'
+export { registerFileChangeHandler, type FileChangeHandler, type FileChanges } from './parts/FileChangeHandler/FileChangeHandler.ts'
 export {
   executeFileSystemProviderGetPathSeparator,
   executeFileSystemProviderIsReadonly,
