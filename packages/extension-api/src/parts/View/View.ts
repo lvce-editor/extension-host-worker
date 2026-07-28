@@ -2,6 +2,8 @@ import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 
 export type ViewKind = 'virtualDom'
 
+export type ViewPreferredLocation = 'preview' | 'sideBar'
+
 export interface ViewContext {
   readonly requestRerender: () => Promise<void>
   readonly showContextMenu: (menuId: string, x: number, y: number) => Promise<void>
@@ -82,6 +84,7 @@ export interface View<State = unknown> {
   readonly id: string
   readonly kind?: ViewKind
   readonly name?: string
+  readonly preferredLocation?: ViewPreferredLocation
   readonly title?: string
 }
 
@@ -92,6 +95,7 @@ export interface RegisteredView {
   readonly id: string
   readonly kind?: ViewKind
   readonly name?: string
+  readonly preferredLocation: ViewPreferredLocation
   readonly title?: string
 }
 

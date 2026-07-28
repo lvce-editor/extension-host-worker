@@ -1,0 +1,14 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.preferredPreview"],
+  "views": [
+    {
+      "id": "sample.views.preferredPreview",
+      "title": "Preferred Preview",
+      "icon": "symbol-beaker",
+      "kind": "virtualDom",
+      "preferredLocation": "preview"
+    }
+  ]
+}
