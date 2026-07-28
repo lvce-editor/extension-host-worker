@@ -100,6 +100,30 @@ test('executeStatusBarItemProvider - returns error item for invalid text', () =>
   expect(errorSpy).toHaveBeenCalledWith(expect.any(Error))
 })
 
+test('executeStatusBarItemProvider - returns error item for invalid aria label', () => {
+  const provider = {
+    getStatusBarItem() {
+      return {
+        ariaLabel: 1,
+        name: 'xyz',
+        text: 'passed',
+      }
+    },
+    id: 'xyz',
+  }
+
+  ExtensionHostStatusBar.registerStatuBarItemProvider(provider)
+
+  expect(ExtensionHostStatusBar.executeStatusBarItemProvider('xyz')).toEqual({
+    icon: '',
+    name: 'error',
+    onClick: '',
+    text: 'error',
+    title: 'Failed to execute status bar item provider xyz: status bar item.ariaLabel must be a string, got number',
+  })
+  expect(errorSpy).toHaveBeenCalledWith(expect.any(Error))
+})
+
 test('executeStatusBarItemProvider - returns error item for invalid name', () => {
   const provider = {
     getStatusBarItem() {

@@ -82,6 +82,9 @@ const validateStatusBarItem = (item: any): void => {
   if (!item || typeof item !== 'object') {
     throw new Error(`status bar item must be an object, got ${getType(item)}`)
   }
+  if ('ariaLabel' in item && typeof item.ariaLabel !== 'string') {
+    throw new Error(`status bar item.ariaLabel must be a string, got ${getType(item.ariaLabel)}`)
+  }
   if ('text' in item && typeof item.text !== 'string') {
     throw new Error(`status bar item.text must be a string, got ${getType(item.text)}`)
   }

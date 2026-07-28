@@ -34,6 +34,7 @@ test('registerStatusBarItemProvider registers and returns items', () => {
   const handle = registerStatusBarItemProvider({
     getStatusBarItem() {
       return {
+        ariaLabel: 'Sample status is ready',
         name: 'sample.status',
         spinning: true,
         text: 'Ready',
@@ -43,6 +44,7 @@ test('registerStatusBarItemProvider registers and returns items', () => {
   })
 
   strictEqual(getStatusBarItemProviderRegistrySnapshot().providers.length, 1)
+  strictEqual(getStatusBarItems()[0]?.ariaLabel, 'Sample status is ready')
   strictEqual(getStatusBarItems()[0]?.spinning, true)
   strictEqual(getStatusBarItems()[0]?.text, 'Ready')
 
