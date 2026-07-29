@@ -2,6 +2,7 @@ import { QuickPickWorker } from '@lvce-editor/rpc-registry'
 
 export interface QuickPickItem {
   readonly description: string
+  readonly icon?: string
   readonly label: string
   readonly value: unknown
 }
@@ -21,6 +22,9 @@ const validateQuickPickItem = (item: QuickPickItem): void => {
   }
   if (typeof item.description !== 'string') {
     throw new TypeError('quick pick item.description must be a string')
+  }
+  if (item.icon !== undefined && typeof item.icon !== 'string') {
+    throw new TypeError('quick pick item.icon must be a string')
   }
   if (!('value' in item)) {
     throw new TypeError('quick pick item.value is required')
