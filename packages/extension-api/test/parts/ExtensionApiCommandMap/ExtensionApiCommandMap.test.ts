@@ -9,6 +9,11 @@ test('commandMap exposes hover provider commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.getHoverProviderRegistrySnapshot'], 'function')
 })
 
+test('commandMap exposes signature help provider commands', () => {
+  strictEqual(typeof commandMap['ExtensionApi.executeSignatureHelpProvider'], 'function')
+  strictEqual(typeof commandMap['ExtensionApi.getSignatureHelpProviderRegistrySnapshot'], 'function')
+})
+
 test('commandMap exposes view commands', () => {
   strictEqual(typeof commandMap['ExtensionApi.executeViewProvider'], 'function')
   strictEqual(typeof commandMap['ExtensionApi.getViewActions'], 'function')
