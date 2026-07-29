@@ -28,6 +28,7 @@ import { executeHoverProvider, getHoverProviderRegistrySnapshot } from '../Hover
 import { executeLanguageProvider, executeOrganizeImportsProvider } from '../LanguageProvider/LanguageProvider.ts'
 import { getLanguageServerRegistrySnapshot } from '../LanguageServer/LanguageServer.ts'
 import { getOutputChannelRegistrySnapshot } from '../OutputChannel/OutputChannel.ts'
+import { executeSignatureHelpProvider, getSignatureHelpProviderRegistrySnapshot } from '../SignatureHelp/SignatureHelp.ts'
 import {
   executeSourceControlAcceptInput,
   executeSourceControlAdd,
@@ -72,6 +73,7 @@ export const commandMap = {
   'ExtensionApi.executeLanguageProvider': executeLanguageProvider,
   'ExtensionApi.executeOrganizeImportsProvider': executeOrganizeImportsProvider,
   'ExtensionApi.executeResolveCompletionItemProvider': executeResolveCompletionItemProvider,
+  'ExtensionApi.executeSignatureHelpProvider': executeSignatureHelpProvider,
   'ExtensionApi.executeSourceControlAcceptInput': executeSourceControlAcceptInput,
   'ExtensionApi.executeSourceControlAdd': executeSourceControlAdd,
   'ExtensionApi.executeSourceControlDiscard': executeSourceControlDiscard,
@@ -93,6 +95,7 @@ export const commandMap = {
   'ExtensionApi.getHoverProviderRegistrySnapshot': getHoverProviderRegistrySnapshot,
   'ExtensionApi.getLanguageServerRegistrySnapshot': getLanguageServerRegistrySnapshot,
   'ExtensionApi.getOutputChannelRegistrySnapshot': getOutputChannelRegistrySnapshot,
+  'ExtensionApi.getSignatureHelpProviderRegistrySnapshot': getSignatureHelpProviderRegistrySnapshot,
   'ExtensionApi.getSourceControlProviderRegistrySnapshot': getSourceControlProviderRegistrySnapshot,
   'ExtensionApi.getStatusBarItems': getStatusBarItems,
   'ExtensionApi.getViewActions': getViewActions,

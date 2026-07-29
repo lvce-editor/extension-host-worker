@@ -57,6 +57,12 @@ export {
   type NotificationType,
 } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
+export {
+  executeSignatureHelpProvider,
+  getSignatureHelpProviderRegistrySnapshot,
+  registerSignatureHelpProvider,
+  resetSignatureHelpProviderRegistry,
+} from './parts/SignatureHelp/SignatureHelp.ts'
 export { getPlatform, type Platform } from './parts/Platform/Platform.ts'
 export { getLanguageServerRegistrySnapshot, registerLanguageServer, resetLanguageServerRegistry } from './parts/LanguageServer/LanguageServer.ts'
 export {
@@ -159,6 +165,14 @@ export type { FileSystemProviderRegistrySnapshot } from './parts/FileSystemProvi
 export type { RegisteredFileSystemProvider } from './parts/RegisteredFileSystemProvider/RegisteredFileSystemProvider.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
+export type {
+  RegisteredSignatureHelpProvider,
+  SignatureHelpParameter,
+  SignatureHelpProvider,
+  SignatureHelpProviderRegistrySnapshot,
+  SignatureHelpResult,
+  SignatureHelpSignature,
+} from './parts/SignatureHelp/SignatureHelp.ts'
 export type { LanguageServerOptions, LanguageServerRegistrySnapshot } from './parts/LanguageServer/LanguageServer.ts'
 export type { OutputChannel } from './parts/OutputChannelHandle/OutputChannelHandle.ts'
 export type { OutputChannelRegistrySnapshot } from './parts/OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
