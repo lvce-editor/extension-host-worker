@@ -27,6 +27,7 @@ test('showQuickPick', async () => {
     },
     {
       description: 'Remote branch',
+      icon: 'Cloud',
       label: 'branch 2',
       value: 'branch-2',
     },
@@ -85,4 +86,19 @@ test('showQuickPick - missing description', async () => {
       ],
     }),
   ).rejects.toThrow(new TypeError('quick pick item.description must be a string'))
+})
+
+test('showQuickPick - invalid icon', async () => {
+  await expect(
+    ExtensionHostQuickPick.showQuickPick({
+      items: [
+        {
+          description: 'Remote branch',
+          icon: 2,
+          label: 'branch 1',
+          value: 'branch-1',
+        } as any,
+      ],
+    }),
+  ).rejects.toThrow(new TypeError('quick pick item.icon must be a string'))
 })
