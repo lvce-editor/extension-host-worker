@@ -28,6 +28,6 @@ export const test: Test = async ({ expect, Extension, Locator, QuickPick }) => {
 
   await QuickPick.selectItem('feature/search')
 
-  await expect(quickPick).not.toBeVisible()
+  await expect(quickPick).toBeHidden()
   await expect(result).toHaveText('feature/search')
 }

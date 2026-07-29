@@ -19,5 +19,5 @@ export const test: Test = async ({ ActivityBar, expect, Extension, Locator }) =>
   await expect(item).toHaveAttribute('aria-selected', 'true')
   await expect(heading).toBeVisible()
   await expect(heading).toHaveText('Hello world')
-  await expect(iframe).not.toBeVisible()
+  await expect(iframe).toBeHidden()
 }

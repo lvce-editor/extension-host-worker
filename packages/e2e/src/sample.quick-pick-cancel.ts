@@ -22,6 +22,6 @@ export const test: Test = async ({ expect, Extension, Locator, QuickPick }) => {
   // @ts-ignore
   await input.press('Escape')
 
-  await expect(quickPick).not.toBeVisible()
+  await expect(quickPick).toBeHidden()
   await expect(result).toHaveText('canceled')
 }
