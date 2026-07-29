@@ -32,7 +32,7 @@ export const test: Test = async ({ expect, Extension, FileSystem, Locator, Main 
   await input.press('Escape')
 
   // assert - verify quick pick is closed
-  await expect(quickPick).not.toBeVisible()
+  await expect(quickPick).toBeHidden()
 
   // The extension logs "Quick pick was canceled" in this case.
 }
