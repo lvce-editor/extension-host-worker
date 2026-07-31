@@ -4,6 +4,7 @@ import type { SignatureHelpProvider } from '../SignatureHelpProvider/SignatureHe
 import type { SignatureHelpProviderRegistrySnapshot } from '../SignatureHelpProviderRegistrySnapshot/SignatureHelpProviderRegistrySnapshot.ts'
 import type { SignatureHelpResult } from '../SignatureHelpResult/SignatureHelpResult.ts'
 import type { TextDocument } from '../SignatureHelpTextDocument/SignatureHelpTextDocument.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
@@ -49,6 +50,7 @@ export const hasSignatureHelpProvider = registry.hasProvider
 
 export const registerSignatureHelpProvider = (provider: SignatureHelpProvider): Disposable => {
   const registeredProvider = registry.registerProvider(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       registry.deleteProvider(registeredProvider.id)
@@ -78,6 +80,11 @@ export const getSignatureHelpProviderRegistrySnapshot = (): SignatureHelpProvide
       languageId: provider.languageId,
     })),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.executeSignatureHelpProvider': executeSignatureHelpProvider,
+  'ExtensionApi.getSignatureHelpProviderRegistrySnapshot': getSignatureHelpProviderRegistrySnapshot,
 }
 
 export const resetSignatureHelpProviderRegistry = registry.reset

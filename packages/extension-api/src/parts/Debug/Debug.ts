@@ -1,5 +1,6 @@
 import type { Disposable } from '../Disposable/Disposable.ts'
 import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 export interface DebugEmitter {
@@ -81,6 +82,7 @@ const emitter: DebugEmitter = {
 export const registerDebugProvider = (provider: DebugProvider): Disposable => {
   assertDebugProvider(provider)
   providers[provider.id] = provider
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       delete providers[provider.id]
@@ -130,6 +132,20 @@ export const executeDebugGetProperties = async (id: string, objectId: string): P
 
 export const executeDebugEvaluate = async (id: string, expression: string, callFrameId: string): Promise<unknown> => {
   return getProvider(id).evaluate(expression, callFrameId)
+}
+
+const commandMap = {
+  'ExtensionHostDebug.evaluate': executeDebugEvaluate,
+  'ExtensionHostDebug.getProperties': executeDebugGetProperties,
+  'ExtensionHostDebug.listProcesses': executeDebugListProcesses,
+  'ExtensionHostDebug.pause': executeDebugPause,
+  'ExtensionHostDebug.resume': executeDebugResume,
+  'ExtensionHostDebug.setPauseOnExceptions': executeDebugSetPauseOnExceptions,
+  'ExtensionHostDebug.start': executeDebugStart,
+  'ExtensionHostDebug.step': executeDebugStep,
+  'ExtensionHostDebug.stepInto': executeDebugStepInto,
+  'ExtensionHostDebug.stepOut': executeDebugStepOut,
+  'ExtensionHostDebug.stepOver': executeDebugStepOver,
 }
 
 export const resetDebugProviderRegistry = (): void => {

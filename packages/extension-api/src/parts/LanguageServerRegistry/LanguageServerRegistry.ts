@@ -1,6 +1,7 @@
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type { LanguageServerOptions } from '../LanguageServerOptions/LanguageServerOptions.ts'
 import type { LanguageServerRegistrySnapshot } from '../LanguageServerRegistrySnapshot/LanguageServerRegistrySnapshot.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const languageServers: Record<string, LanguageServerOptions> = Object.create(null)
@@ -34,6 +35,7 @@ export const registerLanguageServer = (options: LanguageServerOptions): Disposab
     languageId: options.languageId,
     uri: options.uri,
   }
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       delete languageServers[options.id]
@@ -45,6 +47,10 @@ export const getLanguageServerRegistrySnapshot = (): LanguageServerRegistrySnaps
   return {
     languageServers: Object.values(languageServers),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.getLanguageServerRegistrySnapshot': getLanguageServerRegistrySnapshot,
 }
 
 export const resetLanguageServerRegistry = (): void => {
