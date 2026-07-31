@@ -12,33 +12,8 @@ export const getRemoteUrl = (path) => {
 }
 
 const rootNodeModulesPath = join(root, 'node_modules')
-const serverNodeModulesPath = join(root, 'packages', 'server', 'node_modules')
-
-const extensionHostWorkerPath = join(root, '.tmp', 'dist', 'dist', 'extensionHostWorkerMain.js')
 const typescriptCompileProcessPath = join(rootNodeModulesPath, '@lvce-editor', 'typescript-compile-process', 'dist', 'index.js')
 const typescriptCompileCachePath = join(rootNodeModulesPath, '@lvce-editor', 'packages', 'build', '.tmp', 'typescript-compile-cache')
-
-const staticPath = join(serverNodeModulesPath, '@lvce-editor', 'static-server', 'static')
-const indexHtmlPath = join(staticPath, 'index.html')
-
-const remoteUrl = getRemoteUrl(extensionHostWorkerPath)
-
-const config = {
-  'develop.extensionHostWorkerPath': remoteUrl,
-  extensionHostWorkerUrl: remoteUrl,
-}
-const stringifiedConfig = JSON.stringify(config, null, 2)
-
-const patchIndexHtml = async () => {
-  const indexHtmlContent = await readFile(indexHtmlPath, 'utf8')
-  const contentWithoutConfig = indexHtmlContent.replace(/\n\s*<script type="application\/json" id="Config">[\s\S]*?<\/script>/, '')
-  const newContent = contentWithoutConfig.replace(
-    '</title>',
-    `</title>
-  <script type="application/json" id="Config">${stringifiedConfig}</script>`,
-  )
-  await writeFile(indexHtmlPath, newContent)
-}
 
 const getPatchHelper = (extensionApiUrl) => {
   return `
@@ -105,6 +80,5 @@ const clearTypeScriptCompileCache = async () => {
   await rm(typescriptCompileCachePath, { recursive: true, force: true })
 }
 
-await patchIndexHtml()
 await patchTypeScriptCompileProcess()
 await clearTypeScriptCompileCache()

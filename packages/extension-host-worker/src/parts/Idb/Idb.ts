@@ -1,1 +1,0 @@
-export { openDB } from 'idb'

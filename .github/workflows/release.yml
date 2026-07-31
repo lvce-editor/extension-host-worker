@@ -77,11 +77,6 @@ jobs:
         run: npm run e2e:headless
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
-      - name: measure
-        working-directory: ./packages/memory
-        run: npm run measure
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: 0
       - uses: actions/upload-artifact@v6
         if: matrix.os == 'ubuntu-24.04'
         with:
@@ -102,9 +97,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
-
-      - run: npm publish --access public
-        working-directory: ./.tmp/dist
 
       - run: npm publish --access public
         working-directory: ./.tmp/dist/extension-api
