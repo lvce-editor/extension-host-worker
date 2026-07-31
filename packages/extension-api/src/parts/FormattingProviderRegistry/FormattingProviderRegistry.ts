@@ -4,6 +4,7 @@ import type { FormattingProvider } from '../FormattingProvider/FormattingProvide
 import type { FormattingProviderRegistrySnapshot } from '../FormattingProviderRegistrySnapshot/FormattingProviderRegistrySnapshot.ts'
 import type { TextDocument } from '../FormattingTextDocument/FormattingTextDocument.ts'
 import type { RegisteredFormattingProvider } from '../RegisteredFormattingProvider/RegisteredFormattingProvider.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
 const registry = createProviderRegistry<FormattingProvider, RegisteredFormattingProvider>({
@@ -25,6 +26,7 @@ export const hasFormattingProvider = registry.hasProvider
 
 export const registerFormattingProvider = (provider: FormattingProvider): Disposable => {
   const registeredProvider = registry.registerProvider(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       registry.deleteProvider(registeredProvider.id)
@@ -45,6 +47,11 @@ export const getFormattingProviderRegistrySnapshot = (): FormattingProviderRegis
       languageId: provider.languageId,
     })),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.executeFormattingProvider': executeFormattingProvider,
+  'ExtensionApi.getFormattingProviderRegistrySnapshot': getFormattingProviderRegistrySnapshot,
 }
 
 export const resetFormattingProviderRegistry = registry.reset

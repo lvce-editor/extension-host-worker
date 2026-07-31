@@ -1,4 +1,5 @@
 import type { Disposable } from '../Disposable/Disposable.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 export interface LanguageProvider {
@@ -35,6 +36,7 @@ const registerProvider = (kind: string, provider: LanguageProvider, requiredMeth
     throw new ExtensionApiError(`${kind} provider ${provider.id} is already registered`)
   }
   kindProviders.push(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       const index = kindProviders.indexOf(provider)
@@ -95,6 +97,11 @@ export const registerTabCompletionProvider = (provider: LanguageProvider): Dispo
   registerProvider('tab completion', provider, ['provideTabCompletion'])
 export const registerTypeDefinitionProvider = (provider: LanguageProvider): Disposable =>
   registerProvider('type definition', provider, ['provideTypeDefinition'])
+
+const commandMap = {
+  'ExtensionApi.executeLanguageProvider': executeLanguageProvider,
+  'ExtensionApi.executeOrganizeImportsProvider': executeOrganizeImportsProvider,
+}
 
 export const resetLanguageProviderRegistry = (): void => {
   for (const kind of Object.keys(providers)) {

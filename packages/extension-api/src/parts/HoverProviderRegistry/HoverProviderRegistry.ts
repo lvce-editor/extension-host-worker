@@ -4,6 +4,7 @@ import type { HoverProviderRegistrySnapshot } from '../HoverProviderRegistrySnap
 import type { HoverResult } from '../HoverResult/HoverResult.ts'
 import type { TextDocument } from '../HoverTextDocument/HoverTextDocument.ts'
 import type { RegisteredHoverProvider } from '../RegisteredHoverProvider/RegisteredHoverProvider.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
@@ -49,6 +50,7 @@ export const hasHoverProvider = registry.hasProvider
 
 export const registerHoverProvider = (provider: HoverProvider): Disposable => {
   const registeredProvider = registry.registerProvider(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       registry.deleteProvider(registeredProvider.id)
@@ -73,6 +75,11 @@ export const getHoverProviderRegistrySnapshot = (): HoverProviderRegistrySnapsho
       languageId: provider.languageId,
     })),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.executeHoverProvider': executeHoverProvider,
+  'ExtensionApi.getHoverProviderRegistrySnapshot': getHoverProviderRegistrySnapshot,
 }
 
 export const resetHoverProviderRegistry = registry.reset

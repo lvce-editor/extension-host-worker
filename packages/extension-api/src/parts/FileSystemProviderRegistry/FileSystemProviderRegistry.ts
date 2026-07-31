@@ -3,6 +3,7 @@ import type { FileSystemDirent } from '../FileSystemDirent/FileSystemDirent.ts'
 import type { FileSystemProvider } from '../FileSystemProvider/FileSystemProvider.ts'
 import type { FileSystemProviderRegistrySnapshot } from '../FileSystemProviderRegistrySnapshot/FileSystemProviderRegistrySnapshot.ts'
 import type { RegisteredFileSystemProvider } from '../RegisteredFileSystemProvider/RegisteredFileSystemProvider.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const providers: Record<string, RegisteredFileSystemProvider> = Object.create(null)
@@ -77,11 +78,20 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
     readDirWithFileTypes: provider.readDirWithFileTypes,
     readFile: (uri) => provider.readFile(uri),
   }
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       delete providers[provider.id]
     },
   }
+}
+
+const commandMap = {
+  'ExtensionApi.executeFileSystemProviderGetPathSeparator': executeFileSystemProviderGetPathSeparator,
+  'ExtensionApi.executeFileSystemProviderIsReadonly': executeFileSystemProviderIsReadonly,
+  'ExtensionApi.executeFileSystemProviderReadDirWithFileTypes': executeFileSystemProviderReadDirWithFileTypes,
+  'ExtensionApi.executeFileSystemProviderReadFile': executeFileSystemProviderReadFile,
+  'ExtensionApi.getFileSystemProviderRegistrySnapshot': getFileSystemProviderRegistrySnapshot,
 }
 
 export const resetFileSystemProviderRegistry = (): void => {

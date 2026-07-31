@@ -78,6 +78,30 @@ export const activate = async (): Promise<void> => {
 `,
   },
   {
+    id: 'debug',
+    label: 'Debug provider',
+    source: `import { activate as activateExtensionApi, registerDebugProvider } from '@lvce-editor/api'
+
+export const activate = async (): Promise<void> => {
+  await activateExtensionApi()
+  registerDebugProvider({
+    evaluate() {},
+    getProperties() {},
+    id: 'benchmarkDebug',
+    listProcesses() {},
+    pause() {},
+    resume() {},
+    setPauseOnExceptions() {},
+    start() {},
+    step() {},
+    stepInto() {},
+    stepOut() {},
+    stepOver() {},
+  })
+}
+`,
+  },
+  {
     id: 'output-channel',
     label: 'Output channel',
     source: `import { activate as activateExtensionApi, createOutputChannel } from '@lvce-editor/api'

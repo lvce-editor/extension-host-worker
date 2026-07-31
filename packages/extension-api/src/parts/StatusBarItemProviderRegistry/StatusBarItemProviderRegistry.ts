@@ -3,6 +3,7 @@ import type { StatusBarItem } from '../StatusBarItem/StatusBarItem.ts'
 import type { StatusBarItemProvider } from '../StatusBarItemProvider/StatusBarItemProvider.ts'
 import type { StatusBarItemProviderHandle } from '../StatusBarItemProviderHandle/StatusBarItemProviderHandle.ts'
 import type { StatusBarItemProviderRegistrySnapshot } from '../StatusBarItemProviderRegistrySnapshot/StatusBarItemProviderRegistrySnapshot.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import * as NotifyStatusBarChange from '../NotifyStatusBarChange/NotifyStatusBarChange.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
@@ -31,6 +32,7 @@ export const hasStatusBarItemProvider = registry.hasProvider
 
 export const registerStatusBarItemProvider = (provider: StatusBarItemProvider): StatusBarItemProviderHandle => {
   const registeredProvider = registry.registerProvider(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   void NotifyStatusBarChange.notifyStatusBarChange(registeredProvider.id)
   return {
     dispose(): void {
@@ -55,6 +57,10 @@ export const getStatusBarItemProviderRegistrySnapshot = (): StatusBarItemProvide
       id: provider.id,
     })),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.getStatusBarItems': getStatusBarItems,
 }
 
 export const resetStatusBarItemProviderRegistry = registry.reset

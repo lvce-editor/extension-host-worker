@@ -4,6 +4,7 @@ import type { CompletionProviderRegistrySnapshot } from '../CompletionProviderRe
 import type { TextDocument } from '../CompletionTextDocument/CompletionTextDocument.ts'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type { RegisteredCompletionProvider } from '../RegisteredCompletionProvider/RegisteredCompletionProvider.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
@@ -78,6 +79,7 @@ export const hasCompletionProvider = registry.hasProvider
 
 export const registerCompletionProvider = (provider: CompletionProvider): Disposable => {
   const registeredProvider = registry.registerProvider(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       registry.deleteProvider(registeredProvider.id)
@@ -121,6 +123,12 @@ export const getCompletionProviderRegistrySnapshot = (): CompletionProviderRegis
       languageId: provider.languageId,
     })),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.executeCompletionProvider': executeCompletionProvider,
+  'ExtensionApi.executeResolveCompletionItemProvider': executeResolveCompletionItemProvider,
+  'ExtensionApi.getCompletionProviderRegistrySnapshot': getCompletionProviderRegistrySnapshot,
 }
 
 export const resetCompletionProviderRegistry = registry.reset

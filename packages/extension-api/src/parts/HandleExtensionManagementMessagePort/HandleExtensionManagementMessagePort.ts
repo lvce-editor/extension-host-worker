@@ -1,4 +1,4 @@
-import { commandMap as extensionApiCommandMap } from '../CommandMap/CommandMap.ts'
+import * as CommandMap from '../CommandMap/CommandMap.ts'
 
 export interface HandleExtensionManagementMessagePortOptions {
   readonly commandMap: Record<string, unknown>
@@ -16,7 +16,7 @@ export const handleExtensionManagementMessagePort = async ({
 }: HandleExtensionManagementMessagePortOptions): Promise<void> => {
   await createMessagePortRpcClient({
     commandMap: {
-      ...extensionApiCommandMap,
+      ...CommandMap.getCommandMap(),
       ...commandMap,
     },
     messagePort: port,

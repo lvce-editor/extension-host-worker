@@ -1,6 +1,7 @@
 import type { OutputChannel } from '../OutputChannelHandle/OutputChannelHandle.ts'
 import type { OutputChannelRegistrySnapshot } from '../OutputChannelRegistrySnapshot/OutputChannelRegistrySnapshot.ts'
 import type { RegisteredOutputChannel } from '../RegisteredOutputChannel/RegisteredOutputChannel.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const outputChannels: Record<string, RegisteredOutputChannel> = Object.create(null)
@@ -69,6 +70,7 @@ export const createOutputChannel = (id: string): OutputChannel => {
     id,
   }
   outputChannelLogs[id] = ''
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return new ExtensionOutputChannel(id)
 }
 
@@ -76,6 +78,10 @@ export const getOutputChannelRegistrySnapshot = (): OutputChannelRegistrySnapsho
   return {
     outputChannels: Object.values(outputChannels),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.getOutputChannelRegistrySnapshot': getOutputChannelRegistrySnapshot,
 }
 
 export const resetOutputChannelRegistry = (): void => {

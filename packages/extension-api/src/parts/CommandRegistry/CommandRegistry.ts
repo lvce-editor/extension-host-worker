@@ -2,6 +2,7 @@ import type { Command } from '../Command/Command.ts'
 import type { CommandRegistrySnapshot } from '../CommandRegistrySnapshot/CommandRegistrySnapshot.ts'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type { RegisteredCommand } from '../RegisteredCommand/RegisteredCommand.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const commands: Record<string, RegisteredCommand> = Object.create(null)
@@ -29,6 +30,7 @@ export const registerCommand = (command: Command<readonly any[], unknown>): Disp
     },
     id: command.id,
   }
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       delete commands[command.id]
@@ -50,6 +52,11 @@ export const executeCommand = async (id: string, ...args: readonly unknown[]): P
     throw new ExtensionApiError(`command ${id} not found`)
   }
   return command.execute(...args)
+}
+
+const commandMap = {
+  'ExtensionApi.executeCommand': executeCommand,
+  'ExtensionApi.getCommandRegistrySnapshot': getCommandRegistrySnapshot,
 }
 
 export const resetCommandRegistry = (): void => {

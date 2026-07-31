@@ -1,5 +1,6 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import type { Disposable } from '../Disposable/Disposable.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 type UriRename = readonly [oldUri: string, newUri: string]
@@ -31,6 +32,7 @@ export const registerFileChangeHandler = (handler: FileChangeHandler): Disposabl
   }
   const wasEmpty = handlers.size === 0
   handlers.add(handler)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   if (wasEmpty) {
     registerWithExtensionManagement()
   }
@@ -48,6 +50,10 @@ export const registerFileChangeHandler = (handler: FileChangeHandler): Disposabl
 
 export const handleFileChanges = async (changes: Readonly<FileChanges> = {}): Promise<void> => {
   await Promise.all(Array.from(handlers, async (handler) => handler(changes)))
+}
+
+const commandMap = {
+  'ExtensionApi.handleFileChanges': handleFileChanges,
 }
 
 export const resetFileChangeHandlers = (): void => {

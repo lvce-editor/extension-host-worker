@@ -2,6 +2,7 @@ import type { Disposable } from '../Disposable/Disposable.ts'
 import type { RegisteredSourceControlProvider } from '../RegisteredSourceControlProvider/RegisteredSourceControlProvider.ts'
 import type { SourceControlProvider } from '../SourceControlProvider/SourceControlProvider.ts'
 import type { SourceControlProviderRegistrySnapshot } from '../SourceControlProviderRegistrySnapshot/SourceControlProviderRegistrySnapshot.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const providers: Record<string, RegisteredSourceControlProvider> = Object.create(null)
@@ -102,6 +103,7 @@ const mapSourceControlProvider = (provider: SourceControlProvider): RegisteredSo
 export const registerSourceControlProvider = (provider: SourceControlProvider): Disposable => {
   assertSourceControlProvider(provider)
   providers[provider.id] = mapSourceControlProvider(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       delete providers[provider.id]
@@ -189,6 +191,22 @@ export const getSourceControlProviderRegistrySnapshot = (): SourceControlProvide
       id: provider.id,
     })),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.executeSourceControlAcceptInput': executeSourceControlAcceptInput,
+  'ExtensionApi.executeSourceControlAdd': executeSourceControlAdd,
+  'ExtensionApi.executeSourceControlDiscard': executeSourceControlDiscard,
+  'ExtensionApi.executeSourceControlGenerateCommitMessage': executeSourceControlGenerateCommitMessage,
+  'ExtensionApi.executeSourceControlGetBadgeCount': executeSourceControlGetBadgeCount,
+  'ExtensionApi.executeSourceControlGetChangedFiles': executeSourceControlGetChangedFiles,
+  'ExtensionApi.executeSourceControlGetFeatures': executeSourceControlGetFeatures,
+  'ExtensionApi.executeSourceControlGetFileBefore': executeSourceControlGetFileBefore,
+  'ExtensionApi.executeSourceControlGetFileBeforeUri': executeSourceControlGetFileBeforeUri,
+  'ExtensionApi.executeSourceControlGetFileDecorations': executeSourceControlGetFileDecorations,
+  'ExtensionApi.executeSourceControlGetGroups': executeSourceControlGetGroups,
+  'ExtensionApi.executeSourceControlIsActive': executeSourceControlIsActive,
+  'ExtensionApi.getSourceControlProviderRegistrySnapshot': getSourceControlProviderRegistrySnapshot,
 }
 
 export const resetSourceControlProviderRegistry = (): void => {

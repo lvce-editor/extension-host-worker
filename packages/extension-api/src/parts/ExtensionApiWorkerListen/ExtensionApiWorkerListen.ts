@@ -7,7 +7,7 @@ export const listen = async (): Promise<Rpc> => {
   globalThis.addEventListener('error', HandleUnhandledError.handleUnhandledError)
   globalThis.addEventListener('unhandledrejection', HandleUnhandledRejection.handleUnhandledRejection)
   const rpc = WebWorkerRpcClient.create({
-    commandMap: ExtensionApiWorkerCommandMap.commandMap,
+    commandMap: ExtensionApiWorkerCommandMap.getCommandMap(),
   })
   return rpc
 }

@@ -16,6 +16,7 @@ import type {
   VirtualDomViewInstance,
 } from '../View/View.ts'
 import { registerCommand } from '../CommandRegistry/CommandRegistry.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 
 const views: Record<string, View<any>> = Object.create(null)
@@ -196,6 +197,7 @@ export const registerView = <State>(view: View<State>): Disposable => {
   const commandDisposables = registerViewCommands(view)
   views[view.id] = view
   viewCommandDisposables[view.id] = commandDisposables
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       for (const disposable of commandDisposables) {
@@ -623,6 +625,19 @@ export const getViewRegistrySnapshot = (): ViewRegistrySnapshot => {
   return {
     views: Object.values(views).map(toRegisteredView),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.createViewInstance': createViewInstance,
+  'ExtensionApi.dispatchViewEvent': dispatchViewEvent,
+  'ExtensionApi.disposeViewInstance': disposeViewInstance,
+  'ExtensionApi.executeViewProvider': executeViewProvider,
+  'ExtensionApi.getViewActions': getViewActions,
+  'ExtensionApi.getViewActionsDom': getViewActionsDom,
+  'ExtensionApi.getViewMenuEntries': getViewMenuEntries,
+  'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
+  'ExtensionApi.renderViewInstance': renderViewInstance,
+  'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
 }
 
 export const resetViewRegistry = (): void => {

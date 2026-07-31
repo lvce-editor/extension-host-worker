@@ -4,6 +4,7 @@ import type { Diagnostic } from '../DiagnosticResult/DiagnosticResult.ts'
 import type { TextDocument } from '../DiagnosticTextDocument/DiagnosticTextDocument.ts'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type { RegisteredDiagnosticProvider } from '../RegisteredDiagnosticProvider/RegisteredDiagnosticProvider.ts'
+import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 
@@ -51,6 +52,7 @@ export const hasDiagnosticProvider = registry.hasProvider
 
 export const registerDiagnosticProvider = (provider: DiagnosticProvider): Disposable => {
   const registeredProvider = registry.registerProvider(provider)
+  ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
     dispose(): void {
       registry.deleteProvider(registeredProvider.id)
@@ -71,6 +73,11 @@ export const getDiagnosticProviderRegistrySnapshot = (): DiagnosticProviderRegis
       languageId: provider.languageId,
     })),
   }
+}
+
+const commandMap = {
+  'ExtensionApi.executeDiagnosticProvider': executeDiagnosticProvider,
+  'ExtensionApi.getDiagnosticProviderRegistrySnapshot': getDiagnosticProviderRegistrySnapshot,
 }
 
 export const resetDiagnosticProviderRegistry = registry.reset
