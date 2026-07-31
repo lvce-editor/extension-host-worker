@@ -1,13 +1,9 @@
 {
-  "name": "@lvce-editor/extension-host-worker-monorepo",
+  "name": "@lvce-editor/extension-api-monorepo",
   "version": "0.0.0-dev",
   "license": "MIT",
   "author": "Lvce Editor",
   "type": "module",
-  "main": "src/extensionHostWorkerMain.ts",
-  "directories": {
-    "test": "test"
-  },
   "workspaces": [
     "packages/*"
   ],
@@ -19,7 +15,6 @@
     "dev": "node packages/build/src/dev.ts",
     "format": "prettier --write .",
     "lint": "eslint . && prettier --check .",
-    "measure": "cd packages/memory && npm run measure",
     "test": "npm test --workspaces --if-present",
     "type-check": "tsc -b"
   },

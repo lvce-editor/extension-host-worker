@@ -1,5 +1,3 @@
-# Extension Host Worker
+# Extension API
 
-Webworker for the extension host functionality in Lvce Editor.
-
-<!--  -->
+Modern isolated extension API for Lvce Editor extensions.

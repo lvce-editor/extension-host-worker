@@ -2,7 +2,6 @@ import { execa } from 'execa'
 import { build } from 'esbuild'
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { bundleJs } from './bundleJs.ts'
 import { root } from './root.ts'
 
 const dist = join(root, '.tmp', 'dist')
@@ -12,7 +11,6 @@ const extensionApiDist = join(dist, 'extension-api')
 interface PackageJson {
   [key: string]: unknown
   version?: string
-  main?: string
   scripts?: unknown
   devDependencies?: unknown
   prettier?: unknown
@@ -94,11 +92,6 @@ await mkdir(dist, { recursive: true })
 
 const version = await getVersion()
 
-await bundleJs({
-  inFile: 'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
-  outFile: '.tmp/dist/dist/extensionHostWorkerMain.js',
-})
-
 await build({
   bundle: false,
   entryPoints: await walk(join(root, 'packages', 'extension-api', 'src')),
@@ -128,17 +121,6 @@ for (const file of extensionApiFiles) {
 await execa('npm', ['--prefix', 'packages/extension-api', 'run', 'build'], {
   stdio: 'inherit',
 })
-
-const packageJson = await readJson(join(root, 'packages', 'extension-host-worker', 'package.json'))
-
-removePackageJsonFields(packageJson)
-packageJson.version = version
-packageJson.main = 'dist/extensionHostWorkerMain.js'
-
-await writeJson(join(dist, 'package.json'), packageJson)
-
-await cp(join(root, 'README.md'), join(dist, 'README.md'))
-await cp(join(root, 'LICENSE'), join(dist, 'LICENSE'))
 
 const extensionApiPackageJson = await readJson(join(root, 'packages', 'extension-api', 'package.json'))
 

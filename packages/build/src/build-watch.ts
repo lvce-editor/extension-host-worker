@@ -8,15 +8,6 @@ const dist = join(root, '.tmp', 'dist', 'dist')
 
 await mkdir(join(dist, 'extension-api'), { recursive: true })
 
-const extensionHostWorkerContext = await context({
-  bundle: true,
-  entryPoints: [join(root, 'packages', 'extension-host-worker', 'src', 'extensionHostWorkerMain.ts')],
-  external,
-  format: 'esm',
-  outfile: join(dist, 'extensionHostWorkerMain.js'),
-  platform: 'browser',
-})
-
 const extensionApiContext = await context({
   bundle: true,
   entryPoints: [join(root, 'packages', 'extension-api', 'src', 'index.ts')],
@@ -26,6 +17,6 @@ const extensionApiContext = await context({
   platform: 'browser',
 })
 
-await Promise.all([extensionHostWorkerContext.watch(), extensionApiContext.watch()])
+await extensionApiContext.watch()
 
-console.log('watching extension host worker and extension api')
+console.log('watching extension api')

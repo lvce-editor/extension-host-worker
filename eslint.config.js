@@ -11,8 +11,6 @@ export default [
       '**/coverage/**',
       '**/server/**',
       '**/.tmp/**',
-      '**/memory/**',
-      '**/extension-host-sub-worker/**',
       '**/test-integration/**',
       '**/test-integration-util/**',
       'dist',
@@ -20,7 +18,6 @@ export default [
       'scripts',
       'rollup.config.js',
       'eslint.config.js',
-      'packages/extension-host-worker/src/extensionHostWorkerMain.ts',
     ],
   },
   {
@@ -65,13 +62,6 @@ export default [
       'unicorn/prefer-continue': 'off',
       'unicorn/prefer-early-return': 'off',
       'unicorn/prefer-url-href': 'off',
-    },
-  },
-  {
-    files: ['packages/extension-host-worker/src/**/*.ts'],
-    rules: {
-      'virtual-dom/no-object-attribute-values': 'off',
-      'virtual-dom/prefer-state-destructuring': 'off',
     },
   },
   {
