@@ -84,7 +84,16 @@ export const getOutputChannelLogs = (id: string): string | undefined => {
   return outputChannelLogs[id]
 }
 
+export const clearOutputChannel = (id: string): boolean => {
+  if (!(id in outputChannelLogs)) {
+    return false
+  }
+  outputChannelLogs[id] = ''
+  return true
+}
+
 const commandMap = {
+  'ExtensionApi.clearOutputChannel': clearOutputChannel,
   'ExtensionApi.getOutputChannelLogs': getOutputChannelLogs,
   'ExtensionApi.getOutputChannelRegistrySnapshot': getOutputChannelRegistrySnapshot,
 }
