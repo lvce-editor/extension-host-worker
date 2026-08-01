@@ -55,8 +55,9 @@ test('debug bundle includes debug commands only', async () => {
   doesNotMatch(bundle, /ExtensionApi\.executeHoverProvider/)
 })
 
-test('output-channel bundle includes its snapshot command only', async () => {
+test('output-channel bundle includes its output channel commands only', async () => {
   const bundle = await readBundle('output-channel')
+  match(bundle, /ExtensionApi\.getOutputChannelLogs/)
   match(bundle, /ExtensionApi\.getOutputChannelRegistrySnapshot/)
   doesNotMatch(bundle, /ExtensionApi\.executeCompletionProvider/)
   doesNotMatch(bundle, /ExtensionHostDebug\.evaluate/)

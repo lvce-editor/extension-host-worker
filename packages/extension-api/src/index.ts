@@ -107,7 +107,12 @@ export {
   resetViewRegistry,
   saveViewInstanceState,
 } from './parts/ViewRegistry/ViewRegistry.ts'
-export { createOutputChannel, getOutputChannelRegistrySnapshot, resetOutputChannelRegistry } from './parts/OutputChannel/OutputChannel.ts'
+export {
+  createOutputChannel,
+  getOutputChannelLogs,
+  getOutputChannelRegistrySnapshot,
+  resetOutputChannelRegistry,
+} from './parts/OutputChannel/OutputChannel.ts'
 export {
   getStatusBarItemProviderRegistrySnapshot,
   registerStatusBarItemProvider,
