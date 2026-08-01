@@ -1,4 +1,4 @@
-import { MessagePortRpcParent, type Rpc } from '@lvce-editor/rpc'
+import { MessagePortRpcParent, type Rpc, WebSocketRpcParent } from '@lvce-editor/rpc'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export interface CreateRpcOptions {
@@ -9,9 +9,7 @@ export interface CreateRpcOptions {
 }
 
 export interface CreateNodeRpcOptions {
-  readonly id?: string
-  readonly name?: string
-  readonly path?: string
+  readonly id: string
 }
 
 const sendMessagePortToWebWorker = async (port: MessagePort, contentSecurityPolicy: string, name: string, url: string): Promise<void> => {
@@ -34,35 +32,93 @@ export const createRpc = async ({ commandMap = {}, contentSecurityPolicy = '', n
   return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, contentSecurityPolicy, name, url))
 }
 
-interface ResolvedNodeRpcOptions {
+interface WebSocketConnectionInfo {
+  readonly protocols: string[]
+  readonly type: 'websocket'
+  readonly url: string
+}
+
+interface MessagePortConnectionInfo {
+  readonly type: 'message-port'
+}
+
+interface LegacyProxyConnectionInfo {
+  readonly type: 'legacy-proxy'
+}
+
+interface OldLegacyProxyConnectionInfo {
   readonly name: string
   readonly path: string
+  readonly type: 'old-legacy-proxy'
 }
 
-const resolveNodeRpcOptions = async ({ id, name = '', path }: CreateNodeRpcOptions): Promise<ResolvedNodeRpcOptions> => {
-  if (id) {
-    return ExtensionManagementWorker.invoke('Extensions.getNodeRpcInfo', id) as Promise<ResolvedNodeRpcOptions>
-  }
-  if (path) {
-    return { name, path }
-  }
-  throw new TypeError('createNodeRpc requires an id or path')
+type NodeRpcConnectionInfo = LegacyProxyConnectionInfo | MessagePortConnectionInfo | OldLegacyProxyConnectionInfo | WebSocketConnectionInfo
+
+const isMissingCommand = (error: unknown, command: string): boolean => {
+  return error instanceof Error && error.message.includes(command) && /command not found|not found/i.test(error.message)
 }
 
-export const createNodeRpc = async (options: CreateNodeRpcOptions): Promise<Rpc> => {
-  const { name, path } = await resolveNodeRpcOptions(options)
-  const rpcId = await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.create', name, path)
-  const invoke = (method: string, ...params: readonly any[]): Promise<any> => {
-    return ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.invoke', rpcId, method, ...params)
+const getNodeRpcConnection = async (id: string): Promise<NodeRpcConnectionInfo> => {
+  if (!id) {
+    throw new TypeError('createNodeRpc requires an id')
   }
+  try {
+    const connectionInfo = (await ExtensionManagementWorker.invoke('Extensions.createNodeRpcConnection', id)) as NodeRpcConnectionInfo
+    return connectionInfo
+  } catch (error) {
+    if (!isMissingCommand(error, 'Extensions.createNodeRpcConnection')) {
+      throw error
+    }
+    const { name, path } = (await ExtensionManagementWorker.invoke('Extensions.getNodeRpcInfo', id)) as {
+      readonly name: string
+      readonly path: string
+    }
+    return { name, path, type: 'old-legacy-proxy' }
+  }
+}
+
+const createProxyRpc = (invoke: (method: string, ...params: readonly any[]) => Promise<any>, dispose: () => Promise<void>): Rpc => {
   return {
-    async dispose(): Promise<void> {
-      await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.dispose', rpcId)
-    },
+    dispose,
     invoke,
     invokeAndTransfer: invoke,
     send(method: string, ...params: readonly any[]): void {
       void invoke(method, ...params)
     },
   }
+}
+
+const createLegacyProxyRpc = async (id: string): Promise<Rpc> => {
+  const rpcId = await ExtensionManagementWorker.invoke('Extensions.createLegacyNodeRpc', id)
+  return createProxyRpc(
+    (method, ...params) => ExtensionManagementWorker.invoke('Extensions.invokeLegacyNodeRpc', rpcId, method, ...params),
+    () => ExtensionManagementWorker.invoke('Extensions.disposeLegacyNodeRpc', rpcId) as Promise<void>,
+  )
+}
+
+const createOldLegacyProxyRpc = async (name: string, path: string): Promise<Rpc> => {
+  const rpcId = await ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.create', name, path)
+  return createProxyRpc(
+    (method, ...params) => ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.invoke', rpcId, method, ...params),
+    () => ExtensionManagementWorker.invoke('Extensions.executeCommand', 'ExtensionNodeRpc.dispose', rpcId) as Promise<void>,
+  )
+}
+
+export const createNodeRpc = async ({ id }: CreateNodeRpcOptions): Promise<Rpc> => {
+  const connectionInfo = await getNodeRpcConnection(id)
+  if (connectionInfo.type === 'message-port') {
+    return createMessagePortRpc({}, (port) => ExtensionManagementWorker.invokeAndTransfer('Extensions.createNodeRpcMessagePort', id, port))
+  }
+  if (connectionInfo.type === 'legacy-proxy') {
+    return createLegacyProxyRpc(id)
+  }
+  if (connectionInfo.type === 'old-legacy-proxy') {
+    return createOldLegacyProxyRpc(connectionInfo.name, connectionInfo.path)
+  }
+  const { protocols, url } = connectionInfo
+  const webSocket = new WebSocket(url, protocols)
+  return WebSocketRpcParent.create({
+    commandMap: {},
+    webSocket,
+  })
 }
