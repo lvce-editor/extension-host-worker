@@ -80,7 +80,12 @@ export const getOutputChannelRegistrySnapshot = (): OutputChannelRegistrySnapsho
   }
 }
 
+export const getOutputChannelLogs = (id: string): string | undefined => {
+  return outputChannelLogs[id]
+}
+
 const commandMap = {
+  'ExtensionApi.getOutputChannelLogs': getOutputChannelLogs,
   'ExtensionApi.getOutputChannelRegistrySnapshot': getOutputChannelRegistrySnapshot,
 }
 

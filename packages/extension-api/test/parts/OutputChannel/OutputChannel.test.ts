@@ -3,6 +3,7 @@ import { afterEach, test } from 'node:test'
 import {
   activateOutputChannels,
   createOutputChannel,
+  getOutputChannelLogs,
   getOutputChannelRegistrySnapshot,
   resetOutputChannelRegistry,
 } from '../../../src/parts/OutputChannel/OutputChannel.ts'
@@ -160,6 +161,19 @@ test('getLogs returns output channel logs', async () => {
   const logs = await output.getLogs()
 
   strictEqual(logs, 'sample\nlogs')
+})
+
+test('getOutputChannelLogs returns output channel logs by id', async () => {
+  const output = createOutputChannel('sample-output')
+  activateOutputChannels()
+  await output.appendLine('sample')
+  await output.append('logs')
+
+  strictEqual(getOutputChannelLogs('sample-output'), 'sample\nlogs')
+})
+
+test('getOutputChannelLogs returns undefined for an unknown id', () => {
+  strictEqual(getOutputChannelLogs('unknown-output'), undefined)
 })
 
 test('multiple channels invoke with their own ids', async () => {
