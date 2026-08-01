@@ -2,6 +2,7 @@ import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/stric
 import { afterEach, test } from 'node:test'
 import {
   activateOutputChannels,
+  clearOutputChannel,
   createOutputChannel,
   getOutputChannelLogs,
   getOutputChannelRegistrySnapshot,
@@ -174,6 +175,19 @@ test('getOutputChannelLogs returns output channel logs by id', async () => {
 
 test('getOutputChannelLogs returns undefined for an unknown id', () => {
   strictEqual(getOutputChannelLogs('unknown-output'), undefined)
+})
+
+test('clearOutputChannel clears output channel logs by id', async () => {
+  const output = createOutputChannel('sample-output')
+  activateOutputChannels()
+  await output.append('sample logs')
+
+  strictEqual(clearOutputChannel('sample-output'), true)
+  strictEqual(getOutputChannelLogs('sample-output'), '')
+})
+
+test('clearOutputChannel returns false for an unknown id', () => {
+  strictEqual(clearOutputChannel('unknown-output'), false)
 })
 
 test('multiple channels invoke with their own ids', async () => {

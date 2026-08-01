@@ -57,6 +57,7 @@ test('debug bundle includes debug commands only', async () => {
 
 test('output-channel bundle includes its output channel commands only', async () => {
   const bundle = await readBundle('output-channel')
+  match(bundle, /ExtensionApi\.clearOutputChannel/)
   match(bundle, /ExtensionApi\.getOutputChannelLogs/)
   match(bundle, /ExtensionApi\.getOutputChannelRegistrySnapshot/)
   doesNotMatch(bundle, /ExtensionApi\.executeCompletionProvider/)
