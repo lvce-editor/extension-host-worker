@@ -157,6 +157,39 @@ test('createNodeRpc remains compatible with older extension management', async (
   ])
 })
 
+test('createNodeRpc uses caller-provided compatibility info when manifest lookup is unavailable', async () => {
+  const invocations: unknown[][] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.createNodeRpcConnection'(): Promise<never> {
+      throw new Error('Command not found Extensions.createNodeRpcConnection')
+    },
+    async 'Extensions.executeCommand'(command: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([command, ...args])
+      if (command === 'ExtensionNodeRpc.create') {
+        return 7
+      }
+      if (command === 'ExtensionNodeRpc.invoke') {
+        return 'ok'
+      }
+      return undefined
+    },
+  })
+
+  const rpc = await createNodeRpc({
+    id: 'codex-app-server',
+    legacyName: 'Codex App Server',
+    legacyPath: '/extensions/codex/node/dist/codexClient.js',
+  })
+
+  strictEqual(await rpc.invoke('Codex.listSessions'), 'ok')
+  await rpc.dispose()
+  deepStrictEqual(invocations, [
+    ['ExtensionNodeRpc.create', 'Codex App Server', '/extensions/codex/node/dist/codexClient.js'],
+    ['ExtensionNodeRpc.invoke', 7, 'Codex.listSessions'],
+    ['ExtensionNodeRpc.dispose', 7],
+  ])
+})
+
 test('createRpc transfers a port and worker options', async () => {
   const invocations: unknown[] = []
   mockRpc = ExtensionManagementWorker.registerMockRpc({
