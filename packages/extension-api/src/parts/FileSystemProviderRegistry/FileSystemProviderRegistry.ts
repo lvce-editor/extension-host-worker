@@ -93,6 +93,14 @@ export const executeFileSystemProviderGetPathSeparator = (id: string): string =>
   return getProvider(id).pathSeparator || '/'
 }
 
+export const getFileSystemProviderPathSeparator = (id: string): string | undefined => {
+  const provider = providers[id]
+  if (!provider) {
+    return undefined
+  }
+  return provider.pathSeparator || '/'
+}
+
 export const executeFileSystemProviderIsReadonly = async (id: string): Promise<boolean> => {
   const provider = getProvider(id)
   return provider.isReadonly ? provider.isReadonly() : false

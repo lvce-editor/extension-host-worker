@@ -1,4 +1,5 @@
 import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
+import { getFileSystemProviderPathSeparator } from '../FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 
 export type NotificationType = 'error' | 'info' | 'warning'
 
@@ -27,5 +28,12 @@ export const showNotification = async (type: NotificationType, message: string):
 }
 
 export const setWorkspaceUri = async (uri: string): Promise<void> => {
-  await executeCommand('Workspace.setUri', uri)
+  const protocolEnd = uri.indexOf(':')
+  const protocol = protocolEnd === -1 ? '' : uri.slice(0, protocolEnd)
+  const pathSeparator = getFileSystemProviderPathSeparator(protocol)
+  if (pathSeparator === undefined) {
+    await executeCommand('Workspace.setUri', uri)
+    return
+  }
+  await executeCommand('Workspace.setUri', uri, pathSeparator)
 }
