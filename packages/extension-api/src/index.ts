@@ -2,7 +2,7 @@ export { activate } from './parts/Activation/Activation.ts'
 export { getAccessToken, type GetAccessTokenOptions } from './parts/Authentication/Authentication.ts'
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
-export { showQuickPick } from './parts/QuickPick/QuickPick.ts'
+export { showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
 export { getPreference, setPreference } from './parts/Preferences/Preferences.ts'
 export { deleteSecret, getSecret, storeSecret } from './parts/SecretStorage/SecretStorage.ts'
 export { registerCommand } from './parts/CommandRegistry/CommandRegistry.ts'
@@ -41,8 +41,12 @@ export { registerFileChangeHandler, type FileChangeHandler, type FileChanges } f
 export {
   executeFileSystemProviderGetPathSeparator,
   executeFileSystemProviderIsReadonly,
+  executeFileSystemProviderMkdir,
   executeFileSystemProviderReadDirWithFileTypes,
   executeFileSystemProviderReadFile,
+  executeFileSystemProviderRemove,
+  executeFileSystemProviderRename,
+  executeFileSystemProviderWriteFile,
   getFileSystemProviderRegistrySnapshot,
   registerFileSystemProvider,
   resetFileSystemProviderRegistry,
@@ -53,6 +57,7 @@ export {
   getWorkspaceUri,
   handleWorkspaceRefresh,
   openUri,
+  setWorkspaceUri,
   showNotification,
   type NotificationType,
 } from './parts/Host/Host.ts'
@@ -168,6 +173,7 @@ export type { FileSystemDirent } from './parts/FileSystem/FileSystem.ts'
 export type { FileSystemProvider } from './parts/FileSystemProvider/FileSystemProvider.ts'
 export type { FileSystemProviderRegistrySnapshot } from './parts/FileSystemProviderRegistrySnapshot/FileSystemProviderRegistrySnapshot.ts'
 export type { RegisteredFileSystemProvider } from './parts/RegisteredFileSystemProvider/RegisteredFileSystemProvider.ts'
+export type { ShowQuickInputOptions } from './parts/ShowQuickInputOptions/ShowQuickInputOptions.ts'
 export type { HandleExtensionManagementMessagePortOptions } from './parts/HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
 export type { HoverProvider, HoverProviderRegistrySnapshot, HoverResult, RegisteredHoverProvider } from './parts/Hover/Hover.ts'
 export type {

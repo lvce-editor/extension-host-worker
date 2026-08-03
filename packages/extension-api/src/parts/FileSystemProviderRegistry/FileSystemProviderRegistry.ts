@@ -24,6 +24,11 @@ const assertFileSystemProvider = (provider: FileSystemProvider): void => {
   if (provider.isReadonly !== undefined && typeof provider.isReadonly !== 'function') {
     throw new ExtensionApiError(`file system provider ${provider.id} has invalid isReadonly function`)
   }
+  for (const method of ['mkdir', 'remove', 'rename', 'writeFile'] as const) {
+    if (provider[method] !== undefined && typeof provider[method] !== 'function') {
+      throw new ExtensionApiError(`file system provider ${provider.id} has invalid ${method} function`)
+    }
+  }
   if (provider.pathSeparator !== undefined && typeof provider.pathSeparator !== 'string') {
     throw new ExtensionApiError(`file system provider ${provider.id} has invalid pathSeparator`)
   }
@@ -42,6 +47,38 @@ const getProvider = (id: string): RegisteredFileSystemProvider => {
 
 export const executeFileSystemProviderReadFile = async (id: string, uri: string): Promise<string> => {
   return getProvider(id).readFile(uri)
+}
+
+export const executeFileSystemProviderMkdir = async (id: string, uri: string): Promise<void> => {
+  const provider = getProvider(id)
+  if (!provider.mkdir) {
+    throw new ExtensionApiError(`file system provider ${id} is missing mkdir function`)
+  }
+  await provider.mkdir(uri)
+}
+
+export const executeFileSystemProviderRemove = async (id: string, uri: string): Promise<void> => {
+  const provider = getProvider(id)
+  if (!provider.remove) {
+    throw new ExtensionApiError(`file system provider ${id} is missing remove function`)
+  }
+  await provider.remove(uri)
+}
+
+export const executeFileSystemProviderRename = async (id: string, oldUri: string, newUri: string): Promise<void> => {
+  const provider = getProvider(id)
+  if (!provider.rename) {
+    throw new ExtensionApiError(`file system provider ${id} is missing rename function`)
+  }
+  await provider.rename(oldUri, newUri)
+}
+
+export const executeFileSystemProviderWriteFile = async (id: string, uri: string, content: string): Promise<void> => {
+  const provider = getProvider(id)
+  if (!provider.writeFile) {
+    throw new ExtensionApiError(`file system provider ${id} is missing writeFile function`)
+  }
+  await provider.writeFile(uri, content)
 }
 
 export const executeFileSystemProviderReadDirWithFileTypes = async (id: string, uri: string): Promise<readonly FileSystemDirent[]> => {
@@ -74,9 +111,13 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
   providers[provider.id] = {
     id: provider.id,
     isReadonly: provider.isReadonly,
+    mkdir: provider.mkdir,
     pathSeparator: provider.pathSeparator,
     readDirWithFileTypes: provider.readDirWithFileTypes,
     readFile: (uri) => provider.readFile(uri),
+    remove: provider.remove,
+    rename: provider.rename,
+    writeFile: provider.writeFile,
   }
   ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   return {
@@ -89,8 +130,12 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
 const commandMap = {
   'ExtensionApi.executeFileSystemProviderGetPathSeparator': executeFileSystemProviderGetPathSeparator,
   'ExtensionApi.executeFileSystemProviderIsReadonly': executeFileSystemProviderIsReadonly,
+  'ExtensionApi.executeFileSystemProviderMkdir': executeFileSystemProviderMkdir,
   'ExtensionApi.executeFileSystemProviderReadDirWithFileTypes': executeFileSystemProviderReadDirWithFileTypes,
   'ExtensionApi.executeFileSystemProviderReadFile': executeFileSystemProviderReadFile,
+  'ExtensionApi.executeFileSystemProviderRemove': executeFileSystemProviderRemove,
+  'ExtensionApi.executeFileSystemProviderRename': executeFileSystemProviderRename,
+  'ExtensionApi.executeFileSystemProviderWriteFile': executeFileSystemProviderWriteFile,
   'ExtensionApi.getFileSystemProviderRegistrySnapshot': getFileSystemProviderRegistrySnapshot,
 }
 

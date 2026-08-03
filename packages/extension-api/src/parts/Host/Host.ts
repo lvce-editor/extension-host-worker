@@ -25,3 +25,7 @@ export const openUri = async (uri: string): Promise<void> => {
 export const showNotification = async (type: NotificationType, message: string): Promise<void> => {
   await executeCommand('Notification.create', type, message)
 }
+
+export const setWorkspaceUri = async (uri: string): Promise<void> => {
+  await executeCommand('Workspace.setUri', uri)
+}
