@@ -1,7 +1,15 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { confirm, getWorkspaceFolder, getWorkspaceUri, handleWorkspaceRefresh, openUri, showNotification } from '../../../src/parts/Host/Host.ts'
+import {
+  confirm,
+  getWorkspaceFolder,
+  getWorkspaceUri,
+  handleWorkspaceRefresh,
+  openUri,
+  setWorkspaceUri,
+  showNotification,
+} from '../../../src/parts/Host/Host.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -37,6 +45,7 @@ test('host helpers execute renderer commands through extension management', asyn
   strictEqual(await confirm('Discard changes?'), true)
   await handleWorkspaceRefresh()
   await openUri('/workspace/file.txt')
+  await setWorkspaceUri('remote-ssh:///test-folder')
   await showNotification('info', 'File created successfully')
 
   deepStrictEqual(invocations, [
@@ -45,6 +54,7 @@ test('host helpers execute renderer commands through extension management', asyn
     ['ConfirmPrompt.prompt', 'Discard changes?'],
     ['Layout.handleWorkspaceRefresh'],
     ['Main.openUri', '/workspace/file.txt'],
+    ['Workspace.setUri', 'remote-ssh:///test-folder'],
     ['Notification.create', 'info', 'File created successfully'],
   ])
 })

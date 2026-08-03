@@ -1,7 +1,7 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { showQuickPick } from '../../../src/parts/QuickPick/QuickPick.ts'
+import { showQuickInput, showQuickPick } from '../../../src/parts/QuickPick/QuickPick.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -38,4 +38,31 @@ test('showQuickPick invokes extension host quick pick command', async () => {
 
   strictEqual(result, 'option-1')
   deepStrictEqual(invokedOptions, options)
+})
+
+test('showQuickInput invokes extension host quick input command', async () => {
+  let invokedOptions: unknown
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'ExtensionHostQuickPick.showQuickInput'(options: unknown): Promise<unknown> {
+      invokedOptions = options
+      return 'user@example.com'
+    },
+  })
+  const options = {
+    placeholder: 'Enter SSH host',
+    value: 'user@',
+  }
+
+  strictEqual(await showQuickInput(options), 'user@example.com')
+  deepStrictEqual(invokedOptions, options)
+})
+
+test('showQuickInput preserves cancellation', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'ExtensionHostQuickPick.showQuickInput'(): Promise<unknown> {
+      return undefined
+    },
+  })
+
+  strictEqual(await showQuickInput(), undefined)
 })
