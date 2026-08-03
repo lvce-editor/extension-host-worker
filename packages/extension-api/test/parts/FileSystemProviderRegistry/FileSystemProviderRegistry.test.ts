@@ -25,10 +25,10 @@ test('registerFileSystemProvider registers and executes provider operations', as
     isReadonly() {
       return true
     },
-    pathSeparator: '/',
     mkdir(uri) {
       invocations.push(['mkdir', uri])
     },
+    pathSeparator: '/',
     readDirWithFileTypes(uri) {
       return [{ name: uri, type: 1 }]
     },
