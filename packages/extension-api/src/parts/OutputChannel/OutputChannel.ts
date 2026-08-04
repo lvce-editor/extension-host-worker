@@ -3,9 +3,10 @@ import type { OutputChannelRegistrySnapshot } from '../OutputChannelRegistrySnap
 import type { RegisteredOutputChannel } from '../RegisteredOutputChannel/RegisteredOutputChannel.ts'
 import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
+import * as OutputChannelStorage from '../OutputChannelStorage/OutputChannelStorage.ts'
 
 const outputChannels: Record<string, RegisteredOutputChannel> = Object.create(null)
-const outputChannelLogs: Record<string, string> = Object.create(null)
+const outputChannelHandles: Record<string, ExtensionOutputChannel> = Object.create(null)
 let isActivated = false
 const RE_DASH_CASE = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/
 
@@ -26,34 +27,42 @@ const assertCanWrite = (id: string): void => {
 
 class ExtensionOutputChannel implements OutputChannel {
   readonly #id: string
+  #pendingWrite: Promise<void>
 
-  constructor(id: string) {
+  constructor(id: string, pendingWrite: Promise<void>) {
     this.#id = id
+    this.#pendingWrite = pendingWrite
+  }
+
+  #queueWrite(write: () => Promise<void>): Promise<void> {
+    this.#pendingWrite = this.#pendingWrite.then(write)
+    return this.#pendingWrite
   }
 
   async append(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    outputChannelLogs[this.#id] += text
+    await this.#queueWrite(() => OutputChannelStorage.append(this.#id, text))
   }
 
   async appendLine(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    outputChannelLogs[this.#id] += `${text}\n`
+    await this.#queueWrite(() => OutputChannelStorage.append(this.#id, `${text}\n`))
   }
 
   async clear(): Promise<void> {
     assertCanWrite(this.#id)
-    outputChannelLogs[this.#id] = ''
+    await this.#queueWrite(() => OutputChannelStorage.clear(this.#id))
   }
 
   async getLogs(): Promise<string> {
     assertCanWrite(this.#id)
-    return outputChannelLogs[this.#id]
+    await this.#pendingWrite
+    return OutputChannelStorage.getLogs(this.#id)
   }
 
   async replace(text: string): Promise<void> {
     assertCanWrite(this.#id)
-    outputChannelLogs[this.#id] = text
+    await this.#queueWrite(() => OutputChannelStorage.replace(this.#id, text))
   }
 }
 
@@ -69,9 +78,10 @@ export const createOutputChannel = (id: string): OutputChannel => {
   outputChannels[id] = {
     id,
   }
-  outputChannelLogs[id] = ''
   ExtensionApiCommandRegistry.registerCommandMap(commandMap)
-  return new ExtensionOutputChannel(id)
+  const handle = new ExtensionOutputChannel(id, OutputChannelStorage.clear(id))
+  outputChannelHandles[id] = handle
+  return handle
 }
 
 export const getOutputChannelRegistrySnapshot = (): OutputChannelRegistrySnapshot => {
@@ -80,15 +90,16 @@ export const getOutputChannelRegistrySnapshot = (): OutputChannelRegistrySnapsho
   }
 }
 
-export const getOutputChannelLogs = (id: string): string | undefined => {
-  return outputChannelLogs[id]
+export const getOutputChannelLogs = async (id: string): Promise<string | undefined> => {
+  return outputChannelHandles[id]?.getLogs()
 }
 
-export const clearOutputChannel = (id: string): boolean => {
-  if (!(id in outputChannelLogs)) {
+export const clearOutputChannel = async (id: string): Promise<boolean> => {
+  const handle = outputChannelHandles[id]
+  if (!handle) {
     return false
   }
-  outputChannelLogs[id] = ''
+  await handle.clear()
   return true
 }
 
@@ -102,8 +113,8 @@ export const resetOutputChannelRegistry = (): void => {
   for (const id of Object.keys(outputChannels)) {
     delete outputChannels[id]
   }
-  for (const id of Object.keys(outputChannelLogs)) {
-    delete outputChannelLogs[id]
+  for (const id of Object.keys(outputChannelHandles)) {
+    delete outputChannelHandles[id]
   }
   isActivated = false
 }
