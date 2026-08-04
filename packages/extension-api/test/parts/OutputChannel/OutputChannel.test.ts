@@ -1,5 +1,6 @@
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
+import 'fake-indexeddb/auto'
 import {
   activateOutputChannels,
   clearOutputChannel,
@@ -170,11 +171,11 @@ test('getOutputChannelLogs returns output channel logs by id', async () => {
   await output.appendLine('sample')
   await output.append('logs')
 
-  strictEqual(getOutputChannelLogs('sample-output'), 'sample\nlogs')
+  strictEqual(await getOutputChannelLogs('sample-output'), 'sample\nlogs')
 })
 
-test('getOutputChannelLogs returns undefined for an unknown id', () => {
-  strictEqual(getOutputChannelLogs('unknown-output'), undefined)
+test('getOutputChannelLogs returns undefined for an unknown id', async () => {
+  strictEqual(await getOutputChannelLogs('unknown-output'), undefined)
 })
 
 test('clearOutputChannel clears output channel logs by id', async () => {
@@ -182,12 +183,25 @@ test('clearOutputChannel clears output channel logs by id', async () => {
   activateOutputChannels()
   await output.append('sample logs')
 
-  strictEqual(clearOutputChannel('sample-output'), true)
-  strictEqual(getOutputChannelLogs('sample-output'), '')
+  strictEqual(await clearOutputChannel('sample-output'), true)
+  strictEqual(await getOutputChannelLogs('sample-output'), '')
 })
 
-test('clearOutputChannel returns false for an unknown id', () => {
-  strictEqual(clearOutputChannel('unknown-output'), false)
+test('clearOutputChannel returns false for an unknown id', async () => {
+  strictEqual(await clearOutputChannel('unknown-output'), false)
+})
+
+test('preserves the order of many small output chunks', async () => {
+  const output = createOutputChannel('sample-output')
+  activateOutputChannels()
+  const writes: Promise<void>[] = []
+
+  for (let i = 0; i < 100; i++) {
+    writes.push(output.append(`${i},`))
+  }
+  await Promise.all(writes)
+
+  strictEqual(await output.getLogs(), `${Array.from({ length: 100 }, (_, index) => index).join(',')},`)
 })
 
 test('multiple channels invoke with their own ids', async () => {

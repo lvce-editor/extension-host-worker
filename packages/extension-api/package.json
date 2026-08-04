@@ -38,6 +38,7 @@
     "type-check": "tsc"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1"
+    "@types/node": "^25.9.1",
+    "fake-indexeddb": "^6.2.5"
   }
 }
