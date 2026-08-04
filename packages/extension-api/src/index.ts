@@ -28,6 +28,7 @@ export {
 } from './parts/Formatting/Formatting.ts'
 export {
   exists,
+  getFileHash,
   mkdir,
   readAsObjectUrl,
   readDirWithFileTypes,

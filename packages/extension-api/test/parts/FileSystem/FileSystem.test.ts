@@ -1,7 +1,17 @@
 import { ExtensionManagementWorker, FileSystemWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { exists, mkdir, readAsObjectUrl, readDirWithFileTypes, readFile, remove, stat, writeFile } from '../../../src/parts/FileSystem/FileSystem.ts'
+import {
+  exists,
+  getFileHash,
+  mkdir,
+  readAsObjectUrl,
+  readDirWithFileTypes,
+  readFile,
+  remove,
+  stat,
+  writeFile,
+} from '../../../src/parts/FileSystem/FileSystem.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -29,6 +39,21 @@ test('readFile reads through the file system worker', async () => {
   const result = await readFile('/tmp/sample.txt')
 
   strictEqual(result, 'sample content')
+  strictEqual(invokedUri, '/tmp/sample.txt')
+})
+
+test('getFileHash reads the content hash through the file system worker', async () => {
+  let invokedUri = ''
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.getFileHash'(uri: string): Promise<string> {
+      invokedUri = uri
+      return 'sample-hash'
+    },
+  })
+
+  const result = await getFileHash('/tmp/sample.txt')
+
+  strictEqual(result, 'sample-hash')
   strictEqual(invokedUri, '/tmp/sample.txt')
 })
 
