@@ -48,6 +48,10 @@ export const readDirWithFileTypes = async (uri: string): Promise<readonly FileSy
   return FileSystemWorker.readDirWithFileTypes(uri)
 }
 
+export const getFileHash = async (uri: string): Promise<string> => {
+  return FileSystemWorker.invoke('FileSystem.getFileHash', uri)
+}
+
 export const readFile = async (uri: string): Promise<string> => {
   if (isMemory(uri)) {
     return ExtensionManagementWorker.invoke('ExtensionApi.readFile', uri)
