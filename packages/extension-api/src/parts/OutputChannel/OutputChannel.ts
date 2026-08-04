@@ -27,15 +27,19 @@ const assertCanWrite = (id: string): void => {
 
 class ExtensionOutputChannel implements OutputChannel {
   readonly #id: string
-  #pendingWrite: Promise<void>
+  #pendingWrite: Promise<void> | undefined
 
-  constructor(id: string, pendingWrite: Promise<void>) {
+  constructor(id: string) {
     this.#id = id
-    this.#pendingWrite = pendingWrite
+  }
+
+  #initialize(): Promise<void> {
+    this.#pendingWrite ||= OutputChannelStorage.clear(this.#id)
+    return this.#pendingWrite
   }
 
   #queueWrite(write: () => Promise<void>): Promise<void> {
-    this.#pendingWrite = this.#pendingWrite.then(write)
+    this.#pendingWrite = this.#initialize().then(write)
     return this.#pendingWrite
   }
 
@@ -56,7 +60,7 @@ class ExtensionOutputChannel implements OutputChannel {
 
   async getLogs(): Promise<string> {
     assertCanWrite(this.#id)
-    await this.#pendingWrite
+    await this.#initialize()
     return OutputChannelStorage.getLogs(this.#id)
   }
 
@@ -79,7 +83,7 @@ export const createOutputChannel = (id: string): OutputChannel => {
     id,
   }
   ExtensionApiCommandRegistry.registerCommandMap(commandMap)
-  const handle = new ExtensionOutputChannel(id, OutputChannelStorage.clear(id))
+  const handle = new ExtensionOutputChannel(id)
   outputChannelHandles[id] = handle
   return handle
 }
