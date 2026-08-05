@@ -29,6 +29,9 @@ const getObjectUrl = async (uri: string): Promise<string> => {
   if (isHttp(uri)) {
     return uri
   }
+  if (isMemory(uri)) {
+    return (await executeCommand('Blob.getSrc', uri)) as string
+  }
   const platform = await getPlatform()
   if (platform === 'web') {
     return (await executeCommand('Blob.getSrc', uri)) as string

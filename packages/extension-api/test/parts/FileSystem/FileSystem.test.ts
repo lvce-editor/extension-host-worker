@@ -94,6 +94,25 @@ test('readAsObjectUrl reads a web file as a browser object URL', async () => {
   deepStrictEqual(invocations, [['Layout.getPlatform'], ['Blob.getSrc', 'html:///workspace/image.png']])
 })
 
+test('readAsObjectUrl reads a memfs file as a browser object URL', async () => {
+  const invocations: [string, ...unknown[]][] = []
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      return 'blob:https://example.com/image-id'
+    },
+  })
+
+  const result = await readAsObjectUrl('memfs:///workspace/image.png')
+
+  deepStrictEqual(result, {
+    error: '',
+    objectUrl: 'blob:https://example.com/image-id',
+    wasFound: true,
+  })
+  deepStrictEqual(invocations, [['Blob.getSrc', 'memfs:///workspace/image.png']])
+})
+
 test('readAsObjectUrl returns a remote URL for an Electron file', async () => {
   mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
     async 'Extensions.executeCommand'(id: string): Promise<number> {
