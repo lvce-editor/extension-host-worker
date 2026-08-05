@@ -46,7 +46,11 @@ test('extension api commands are registered by capability', async () => {
 
   registerDebugProvider({
     evaluate() {},
+    getCallStack() {},
     getProperties() {},
+    getScripts() {},
+    getScriptSource() {},
+    getStatus() {},
     id: 'sample.debug',
     listProcesses() {},
     pause() {},
@@ -64,4 +68,8 @@ test('extension api commands are registered by capability', async () => {
   strictEqual(typeof debugCommandMap['ExtensionHostDebug.pause'], 'function')
   strictEqual(typeof debugCommandMap['ExtensionHostDebug.resume'], 'function')
   strictEqual(typeof debugCommandMap['ExtensionHostDebug.evaluate'], 'function')
+  strictEqual(typeof debugCommandMap['ExtensionHostDebug.getCallStack'], 'function')
+  strictEqual(typeof debugCommandMap['ExtensionHostDebug.getPausedStatus'], 'function')
+  strictEqual(typeof debugCommandMap['ExtensionHostDebug.getScripts'], 'function')
+  strictEqual(typeof debugCommandMap['ExtensionHostDebug.getScriptSource'], 'function')
 })

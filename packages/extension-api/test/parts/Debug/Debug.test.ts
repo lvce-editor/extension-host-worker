@@ -3,7 +3,11 @@ import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/stric
 import { afterEach, test } from 'node:test'
 import {
   executeDebugEvaluate,
+  executeDebugGetCallStack,
+  executeDebugGetPausedStatus,
   executeDebugGetProperties,
+  executeDebugGetScripts,
+  executeDebugGetScriptSource,
   executeDebugListProcesses,
   executeDebugPause,
   executeDebugResume,
@@ -28,7 +32,11 @@ let mockRpc: MockRpcDisposable | undefined
 const createProvider = (overrides: Partial<DebugProvider> = {}): DebugProvider => {
   return {
     evaluate: () => 'evaluate',
+    getCallStack: () => ['frame-1'],
     getProperties: () => 'properties',
+    getScripts: () => ['script-1'],
+    getScriptSource: (scriptId) => `source:${scriptId}`,
+    getStatus: () => ({ status: 'unavailable' }),
     id: 'node-debug',
     listProcesses: () => [],
     pause: () => 'pause',
@@ -62,6 +70,10 @@ test('registerDebugProvider exposes provider methods', async () => {
   strictEqual(await executeDebugSetPauseOnExceptions('node-debug', 2), 'set-pause')
   strictEqual(await executeDebugGetProperties('node-debug', 'object-1'), 'properties')
   strictEqual(await executeDebugEvaluate('node-debug', '1 + 1', 'frame-1'), 'evaluate')
+  deepStrictEqual(await executeDebugGetCallStack('node-debug'), ['frame-1'])
+  deepStrictEqual(await executeDebugGetPausedStatus('node-debug'), { status: 'unavailable' })
+  deepStrictEqual(await executeDebugGetScripts('node-debug'), ['script-1'])
+  strictEqual(await executeDebugGetScriptSource('node-debug', 'script-1'), 'source:script-1')
 })
 
 test('executeDebugStart supplies a host event emitter', async () => {

@@ -12,7 +12,11 @@ export interface DebugEmitter {
 
 export interface DebugProvider {
   readonly evaluate: (expression: string, callFrameId: string) => unknown
+  readonly getCallStack: () => unknown
   readonly getProperties: (objectId: string) => unknown
+  readonly getScripts: () => unknown
+  readonly getScriptSource: (scriptId: string) => unknown
+  readonly getStatus: () => unknown
   readonly id: string
   readonly listProcesses: (path?: string) => unknown
   readonly pause: () => unknown
@@ -29,7 +33,11 @@ const providers: Record<string, DebugProvider> = Object.create(null)
 
 const requiredMethods = [
   'evaluate',
+  'getCallStack',
   'getProperties',
+  'getScripts',
+  'getScriptSource',
+  'getStatus',
   'listProcesses',
   'pause',
   'resume',
@@ -130,13 +138,33 @@ export const executeDebugGetProperties = async (id: string, objectId: string): P
   return getProvider(id).getProperties(objectId)
 }
 
+export const executeDebugGetCallStack = async (id: string): Promise<unknown> => {
+  return getProvider(id).getCallStack()
+}
+
+export const executeDebugGetPausedStatus = async (id: string): Promise<unknown> => {
+  return getProvider(id).getStatus()
+}
+
+export const executeDebugGetScripts = async (id: string): Promise<unknown> => {
+  return getProvider(id).getScripts()
+}
+
+export const executeDebugGetScriptSource = async (id: string, scriptId: string): Promise<unknown> => {
+  return getProvider(id).getScriptSource(scriptId)
+}
+
 export const executeDebugEvaluate = async (id: string, expression: string, callFrameId: string): Promise<unknown> => {
   return getProvider(id).evaluate(expression, callFrameId)
 }
 
 const commandMap = {
   'ExtensionHostDebug.evaluate': executeDebugEvaluate,
+  'ExtensionHostDebug.getCallStack': executeDebugGetCallStack,
+  'ExtensionHostDebug.getPausedStatus': executeDebugGetPausedStatus,
   'ExtensionHostDebug.getProperties': executeDebugGetProperties,
+  'ExtensionHostDebug.getScripts': executeDebugGetScripts,
+  'ExtensionHostDebug.getScriptSource': executeDebugGetScriptSource,
   'ExtensionHostDebug.listProcesses': executeDebugListProcesses,
   'ExtensionHostDebug.pause': executeDebugPause,
   'ExtensionHostDebug.resume': executeDebugResume,
