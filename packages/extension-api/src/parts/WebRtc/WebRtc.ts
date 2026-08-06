@@ -1,4 +1,4 @@
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export interface StartWebRpcAudioStreamOptions {
   readonly elementLocator: string
@@ -7,7 +7,7 @@ export interface StartWebRpcAudioStreamOptions {
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions): Promise<string> => {
-  return await RendererWorker.invoke('WebView.compatRendererProcessInvoke', 'WebRtc.startWebRtcAudioStream', options)
+  return await ExtensionManagementWorker.invoke('WebRtc.startWebRtcAudioStream', options)
 }
 
 export interface SetRemoteDescriptionOptions {
@@ -17,5 +17,5 @@ export interface SetRemoteDescriptionOptions {
 }
 
 export const setRemoteDescription = async (options: SetRemoteDescriptionOptions): Promise<void> => {
-  await RendererWorker.invoke('WebView.compatRendererProcessInvoke', 'WebRtc.setRemoteDescription', options)
+  await ExtensionManagementWorker.invoke('WebRtc.setRemoteDescription', options)
 }
