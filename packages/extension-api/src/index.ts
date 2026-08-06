@@ -203,3 +203,5 @@ export type {
   StatusBarItemProviderHandle,
   StatusBarItemProviderRegistrySnapshot,
 } from './parts/StatusBar/StatusBar.ts'
+export { setRemoteDescription, startWebRtcAudioStream, stopWebRtcAudioStream } from './parts/WebRtc/WebRtc.ts'
+export type { SetRemoteDescriptionOptions, StartWebRpcAudioStreamOptions } from './parts/WebRtc/WebRtc.ts'
