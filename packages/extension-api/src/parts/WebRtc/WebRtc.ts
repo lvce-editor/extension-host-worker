@@ -19,3 +19,7 @@ export interface SetRemoteDescriptionOptions {
 export const setRemoteDescription = async (options: SetRemoteDescriptionOptions): Promise<void> => {
   await ExtensionManagementWorker.invoke('WebRtc.setRemoteDescription', options)
 }
+
+export const stopWebRtcAudioStream = async (uid: number): Promise<string> => {
+  return await ExtensionManagementWorker.invoke('WebRtc.stopWebRtcAudioStream', uid)
+}
