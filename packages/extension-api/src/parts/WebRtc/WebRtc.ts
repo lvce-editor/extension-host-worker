@@ -3,12 +3,20 @@ import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 export interface StartWebRpcAudioStreamOptions {
   readonly elementLocator: string
   readonly ephemeralKey: string
-  readonly port: MessagePort
+  readonly onData: (data: string) => void
   readonly uid: number
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions): Promise<string> => {
-  return await ExtensionManagementWorker.invokeAndTransfer('WebRtc.startWebRtcAudioStream', options)
+  const { onData, ...rest } = options
+  const { port1, port2 } = new MessageChannel()
+  port2.onmessage = (event: MessageEvent) => {
+    onData(event.data)
+  }
+  return await ExtensionManagementWorker.invokeAndTransfer('WebRtc.startWebRtcAudioStream', {
+    ...rest,
+    port: port1,
+  })
 }
 
 export interface SetRemoteDescriptionOptions {
@@ -22,5 +30,6 @@ export const setRemoteDescription = async (options: SetRemoteDescriptionOptions)
 }
 
 export const stopWebRtcAudioStream = async (uid: number): Promise<string> => {
+  // TODO close port2 maybe?
   return await ExtensionManagementWorker.invoke('WebRtc.stopWebRtcAudioStream', uid)
 }
