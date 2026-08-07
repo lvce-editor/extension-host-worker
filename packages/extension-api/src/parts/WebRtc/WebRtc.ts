@@ -5,6 +5,7 @@ export interface StartWebRpcAudioStreamOptions {
   readonly ephemeralKey: string
   readonly onData: (data: string) => void
   readonly uid: number
+  readonly trackAudioData: boolean
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions): Promise<string> => {
@@ -32,4 +33,17 @@ export const setRemoteDescription = async (options: SetRemoteDescriptionOptions)
 export const stopWebRtcAudioStream = async (uid: number): Promise<string> => {
   // TODO close port2 maybe?
   return await ExtensionManagementWorker.invoke('WebRtc.stopWebRtcAudioStream', uid)
+}
+
+export interface ReadMicLevelOptions {
+  readonly uid: number
+}
+
+export interface MicLevelsResult {
+  readonly micAnalyzerData: Uint8Array
+  readonly remoteAnalyzerData: Uint8Array
+}
+
+export const readMicLevels = async (options: ReadMicLevelOptions): Promise<MicLevelsResult> => {
+  return await ExtensionManagementWorker.invoke('WebRtc.readMicLevels', options)
 }
