@@ -4,8 +4,8 @@ export interface StartWebRpcAudioStreamOptions {
   readonly elementLocator: string
   readonly ephemeralKey: string
   readonly onData: (data: string) => void
-  readonly uid: number
   readonly trackAudioData: boolean
+  readonly uid: number
 }
 
 export const startWebRtcAudioStream = async (options: StartWebRpcAudioStreamOptions): Promise<string> => {
