@@ -1,7 +1,7 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { showQuickInput, showQuickPick } from '../../../src/parts/QuickPick/QuickPick.ts'
+import { showFileQuickPick, showQuickInput, showQuickPick } from '../../../src/parts/QuickPick/QuickPick.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -38,6 +38,20 @@ test('showQuickPick invokes extension host quick pick command', async () => {
 
   strictEqual(result, 'option-1')
   deepStrictEqual(invokedOptions, options)
+})
+
+test('showFileQuickPick opens the file quick pick', async () => {
+  const invocations: unknown[][] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      return undefined
+    },
+  })
+
+  await showFileQuickPick()
+
+  deepStrictEqual(invocations, [['QuickPick.showFile']])
 })
 
 test('showQuickInput invokes extension host quick input command', async () => {
