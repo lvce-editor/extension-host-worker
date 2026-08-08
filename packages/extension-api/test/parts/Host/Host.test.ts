@@ -6,6 +6,7 @@ import {
   resetFileSystemProviderRegistry,
 } from '../../../src/parts/FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 import {
+  closeUri,
   confirm,
   getWorkspaceFolder,
   getWorkspaceUri,
@@ -69,6 +70,7 @@ test('host helpers execute renderer commands through extension management', asyn
   strictEqual(await confirm('Discard changes?'), true)
   await handleWorkspaceRefresh()
   await openUri('/workspace/file.txt')
+  await closeUri('/workspace/file.txt')
   await setWorkspaceUri('remote-ssh:///test-folder')
   await showNotification('info', 'File created successfully')
 
@@ -78,6 +80,7 @@ test('host helpers execute renderer commands through extension management', asyn
     ['ConfirmPrompt.prompt', 'Discard changes?'],
     ['Layout.handleWorkspaceRefresh'],
     ['Main.openUri', '/workspace/file.txt'],
+    ['Main.closeTabsByUris', ['/workspace/file.txt']],
     ['Workspace.setUri', 'remote-ssh:///test-folder'],
     ['Notification.create', 'info', 'File created successfully'],
   ])

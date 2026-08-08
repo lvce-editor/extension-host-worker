@@ -3,6 +3,10 @@ import { getFileSystemProviderPathSeparator } from '../FileSystemProviderRegistr
 
 export type NotificationType = 'error' | 'info' | 'warning'
 
+export const closeUri = async (uri: string): Promise<void> => {
+  await executeCommand('Main.closeTabsByUris', [uri])
+}
+
 export const confirm = async (message: string): Promise<boolean> => {
   return Boolean(await executeCommand('ConfirmPrompt.prompt', message))
 }
