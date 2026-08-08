@@ -8,6 +8,7 @@ import {
   readAsObjectUrl,
   readDirWithFileTypes,
   readFile,
+  readFileAsBlob,
   remove,
   stat,
   writeFile,
@@ -40,6 +41,22 @@ test('readFile reads through the file system worker', async () => {
 
   strictEqual(result, 'sample content')
   strictEqual(invokedUri, '/tmp/sample.txt')
+})
+
+test('readFileAsBlob reads binary content through the file system worker', async () => {
+  let invokedUri = ''
+  const blob = new Blob(['sample content'])
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.readFileAsBlob'(uri: string): Promise<Blob> {
+      invokedUri = uri
+      return blob
+    },
+  })
+
+  const result = await readFileAsBlob('/tmp/sample.bin')
+
+  strictEqual(result, blob)
+  strictEqual(invokedUri, '/tmp/sample.bin')
 })
 
 test('getFileHash reads the content hash through the file system worker', async () => {

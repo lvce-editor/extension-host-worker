@@ -33,6 +33,7 @@ export {
   readAsObjectUrl,
   readDirWithFileTypes,
   readFile,
+  readFileAsBlob,
   remove,
   stat,
   writeFile,
