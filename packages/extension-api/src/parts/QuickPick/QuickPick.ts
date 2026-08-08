@@ -1,7 +1,7 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 import type { ShowQuickInputOptions } from '../ShowQuickInputOptions/ShowQuickInputOptions.ts'
 import type { ShowQuickPickOptions } from '../ShowQuickPickOptions/ShowQuickPickOptions.ts'
+import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 
 export const showFileQuickPick = async (): Promise<void> => {
   await executeCommand('QuickPick.showFile')
