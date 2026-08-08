@@ -53,6 +53,7 @@ export {
   resetFileSystemProviderRegistry,
 } from './parts/FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 export {
+  closeUri,
   confirm,
   getWorkspaceFolder,
   getWorkspaceUri,
