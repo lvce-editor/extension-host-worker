@@ -71,6 +71,14 @@ export {
   resetSignatureHelpProviderRegistry,
 } from './parts/SignatureHelp/SignatureHelp.ts'
 export { getPlatform, type Platform } from './parts/Platform/Platform.ts'
+export {
+  openDebugConsole,
+  openOutputView,
+  openProblemsView,
+  type OpenDebugConsoleOptions,
+  type OpenOutputViewOptions,
+  type OpenProblemsViewOptions,
+} from './parts/Panel/Panel.ts'
 export { getLanguageServerRegistrySnapshot, registerLanguageServer, resetLanguageServerRegistry } from './parts/LanguageServer/LanguageServer.ts'
 export {
   registerBraceCompletionProvider,
