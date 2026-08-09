@@ -1,7 +1,7 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { formatDocument, getDiagnostics, showCompletions } from '../../../src/parts/Editor/Editor.ts'
+import { formatDocument, getDiagnostics, getEditorSelections, setEditorSelections, showCompletions } from '../../../src/parts/Editor/Editor.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -23,13 +23,27 @@ test('executes active editor commands', async () => {
       if (id === 'GetActiveEditor.getDiagnostics') {
         return diagnostics
       }
+      if (id === 'GetActiveEditor.getSelections') {
+        return [1, 2, 3, 4, 5, 6, 7, 8]
+      }
       return undefined
     },
   })
 
   await formatDocument()
   deepStrictEqual(await getDiagnostics(), diagnostics)
+  deepStrictEqual(await getEditorSelections(), [
+    { endColumnIndex: 4, endRowIndex: 3, startColumnIndex: 2, startRowIndex: 1 },
+    { endColumnIndex: 8, endRowIndex: 7, startColumnIndex: 6, startRowIndex: 5 },
+  ])
+  await setEditorSelections([{ endColumnIndex: 12, endRowIndex: 10, startColumnIndex: 4, startRowIndex: 9 }])
   await showCompletions()
 
-  deepStrictEqual(invocations, [['Editor.format'], ['GetActiveEditor.getDiagnostics'], ['Editor.openCompletion']])
+  deepStrictEqual(invocations, [
+    ['Editor.format'],
+    ['GetActiveEditor.getDiagnostics'],
+    ['GetActiveEditor.getSelections'],
+    ['GetActiveEditor.setSelections', [9, 4, 10, 12]],
+    ['Editor.openCompletion'],
+  ])
 })
