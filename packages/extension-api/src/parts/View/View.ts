@@ -1,4 +1,5 @@
 import type { VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
+import type { StatusBarItem } from '../StatusBarItem/StatusBarItem.ts'
 
 export type ViewKind = 'virtualDom'
 
@@ -66,6 +67,7 @@ export interface VirtualDomViewInstance {
   readonly renderFocus?: (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) => string | Promise<string>
   readonly renderScrollPosition?: () => readonly [] | ViewScrollPosition | Promise<readonly [] | ViewScrollPosition>
   readonly renderSelections?: () => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
+  readonly renderStatusBarItems?: () => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
   readonly renderTitle?: () => string | Promise<string>
   readonly saveState?: () => unknown
 }
