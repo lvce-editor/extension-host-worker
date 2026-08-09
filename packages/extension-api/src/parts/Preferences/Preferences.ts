@@ -9,6 +9,10 @@ export const openSettings = async (): Promise<void> => {
   await executeCommand('Preferences.openSettingsUi')
 }
 
+export const setSettingsSearchValue = async (value: string): Promise<void> => {
+  await executeCommand('Settings.handleInput', value)
+}
+
 export const setPreference = async (key: string, value: unknown): Promise<void> => {
   await ExtensionManagementWorker.invoke('Extensions.setPreference', key, value)
 }

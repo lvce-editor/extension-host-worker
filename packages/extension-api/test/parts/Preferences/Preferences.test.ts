@@ -1,7 +1,7 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { getPreference, openSettings, setPreference } from '../../../src/parts/Preferences/Preferences.ts'
+import { getPreference, openSettings, setPreference, setSettingsSearchValue } from '../../../src/parts/Preferences/Preferences.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -41,6 +41,20 @@ test('openSettings opens the settings UI', async () => {
   await openSettings()
 
   deepStrictEqual(invocations, [['Preferences.openSettingsUi']])
+})
+
+test('setSettingsSearchValue updates the settings search input', async () => {
+  const invocations: unknown[][] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      return undefined
+    },
+  })
+
+  await setSettingsSearchValue('font size')
+
+  deepStrictEqual(invocations, [['Settings.handleInput', 'font size']])
 })
 
 test('setPreference invokes extension management worker', async () => {
