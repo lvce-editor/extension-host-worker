@@ -1,5 +1,5 @@
-import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
+import { openUri } from '../Host/Host.ts'
 
 export const openProcessExplorer = async (): Promise<void> => {
-  await executeCommand('Developer.openProcessExplorer')
+  await openUri('process-explorer://')
 }

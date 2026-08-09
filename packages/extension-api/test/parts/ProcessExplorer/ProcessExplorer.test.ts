@@ -25,5 +25,5 @@ test('opens the process explorer', async () => {
 
   await openProcessExplorer()
 
-  deepStrictEqual(invocations, [['Developer.openProcessExplorer']])
+  deepStrictEqual(invocations, [['Main.openUri', 'process-explorer://']])
 })
