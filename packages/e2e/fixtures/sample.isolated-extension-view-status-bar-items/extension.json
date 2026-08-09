@@ -1,0 +1,14 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.statusBarItems"],
+  "views": [
+    {
+      "id": "sample.views.statusBarItems",
+      "title": "View Status Bar Items",
+      "icon": "symbol-image",
+      "kind": "virtualDom",
+      "preferredLocation": "preview"
+    }
+  ]
+}

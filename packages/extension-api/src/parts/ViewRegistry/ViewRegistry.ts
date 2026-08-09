@@ -18,6 +18,7 @@ import type {
 import { registerCommand } from '../CommandRegistry/CommandRegistry.ts'
 import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
+import * as ViewStatusBarItems from '../ViewStatusBarItems/ViewStatusBarItems.ts'
 
 const views: Record<string, View<any>> = Object.create(null)
 const instances: Record<number, VirtualDomViewInstance> = Object.create(null)
@@ -484,6 +485,8 @@ const withScrollPosition = async (result: ViewRenderResult, instance: VirtualDom
 }
 
 const withRenderMetadata = async (
+  uid: number,
+  viewId: string,
   result: ViewRenderResult,
   instance: VirtualDomViewInstance,
   contextChange: ContextChange,
@@ -492,7 +495,9 @@ const withRenderMetadata = async (
   const resultWithFocus = await withFocusSelector(resultWithCss, instance, contextChange)
   const resultWithSelections = await withSelections(resultWithFocus, instance)
   const resultWithScrollPosition = await withScrollPosition(resultWithSelections, instance)
-  return withTitle(resultWithScrollPosition, instance)
+  const resultWithTitle = await withTitle(resultWithScrollPosition, instance)
+  await ViewStatusBarItems.renderViewStatusBarItems(uid, viewId, instance)
+  return resultWithTitle
 }
 
 const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
@@ -538,7 +543,7 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
     type: 'setDom',
   }
   const contextChange = await maybeNotifyContextChanged(uid, viewId, instance)
-  return withRenderMetadata(result, instance, contextChange)
+  return withRenderMetadata(uid, viewId, result, instance, contextChange)
 }
 
 export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<ViewRenderResult> => {
@@ -557,31 +562,38 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
   }
   const result = await renderPatches(uid, instance)
   const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return withRenderMetadata(result, instance, contextChange)
+  return withRenderMetadata(uid, contextViewIds[uid], result, instance, contextChange)
 }
 
 export const renderViewInstance = async (uid: number): Promise<ViewRenderResult> => {
   const instance = getVirtualDomInstance(uid)
   const result = await renderPatches(uid, instance)
   const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return withRenderMetadata(result, instance, contextChange)
+  return withRenderMetadata(uid, contextViewIds[uid], result, instance, contextChange)
 }
 
 export const disposeViewInstance = async (uid: number): Promise<void> => {
   const instance = instances[uid]
-  if (instance && typeof instance.dispose === 'function') {
-    await instance.dispose()
-  }
-  await maybeClearContext(uid, contextViewIds[uid])
   const viewId = contextViewIds[uid]
-  const instanceUids = instanceUidsByView[viewId]
-  instanceUids?.delete(uid)
-  if (instanceUids?.size === 0) {
-    delete instanceUidsByView[viewId]
+  try {
+    if (instance && typeof instance.dispose === 'function') {
+      await instance.dispose()
+    }
+  } finally {
+    ViewStatusBarItems.disposeViewStatusBarItems(uid)
+    try {
+      await maybeClearContext(uid, viewId)
+    } finally {
+      const instanceUids = instanceUidsByView[viewId]
+      instanceUids?.delete(uid)
+      if (instanceUids?.size === 0) {
+        delete instanceUidsByView[viewId]
+      }
+      delete instances[uid]
+      delete renderedDoms[uid]
+      delete contextViewIds[uid]
+    }
   }
-  delete instances[uid]
-  delete renderedDoms[uid]
-  delete contextViewIds[uid]
 }
 
 export const saveViewInstanceState = async (uid: number): Promise<unknown> => {
@@ -641,6 +653,7 @@ const commandMap = {
 }
 
 export const resetViewRegistry = (): void => {
+  ViewStatusBarItems.resetViewStatusBarItems()
   for (const id of Object.keys(views)) {
     for (const disposable of viewCommandDisposables[id] || []) {
       disposable.dispose()

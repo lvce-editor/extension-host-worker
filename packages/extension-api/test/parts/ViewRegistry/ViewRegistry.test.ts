@@ -3,6 +3,7 @@ import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/stric
 import { afterEach, beforeEach, test } from 'node:test'
 import type { VirtualDomViewInstance } from '../../../src/parts/View/View.ts'
 import { executeCommand, getCommandRegistrySnapshot } from '../../../src/parts/CommandRegistry/CommandRegistry.ts'
+import { getStatusBarItems } from '../../../src/parts/StatusBarItemProviderRegistry/StatusBarItemProviderRegistry.ts'
 import {
   createViewInstance,
   dispatchViewEvent,
@@ -37,6 +38,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  resetViewRegistry()
   mockRpc?.[Symbol.dispose]()
   mockRpc = undefined
 })
@@ -720,6 +722,220 @@ test('getCss rejects non-string results', async () => {
   })
 
   await rejects(createViewInstance('sample.views.testing', 1), /view getCss result must be a string/)
+})
+
+test('renderStatusBarItems contributes items after every view render and removes them on dispose', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'StatusBar.handleChange'(): Promise<void> {},
+  })
+  let dimensions = '640x480'
+  registerView({
+    create() {
+      return {
+        handleEvent() {
+          dimensions = '800x600'
+        },
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          return [
+            {
+              ariaLabel: 'Image dimensions',
+              name: 'image-dimensions',
+              text: dimensions,
+              title: 'Image dimensions',
+            },
+            {
+              name: 'image-size',
+              text: '42 KB',
+            },
+          ]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  deepStrictEqual(getStatusBarItems(), [
+    {
+      ariaLabel: 'Image dimensions',
+      name: 'image-dimensions',
+      text: '640x480',
+      title: 'Image dimensions',
+    },
+    {
+      name: 'image-size',
+      text: '42 KB',
+    },
+  ])
+
+  await dispatchViewEvent(1, { type: 'load' })
+  strictEqual(getStatusBarItems()[0]?.text, '800x600')
+
+  await renderViewInstance(1)
+  strictEqual(getStatusBarItems()[0]?.text, '800x600')
+
+  await disposeViewInstance(1)
+  deepStrictEqual(getStatusBarItems(), [])
+})
+
+test('renderStatusBarItems supports async results', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'StatusBar.handleChange'(): Promise<void> {},
+  })
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        async renderStatusBarItems() {
+          return [{ name: 'async-status', text: 'Ready' }]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+
+  deepStrictEqual(getStatusBarItems(), [{ name: 'async-status', text: 'Ready' }])
+  await disposeViewInstance(1)
+})
+
+test('renderStatusBarItems propagates extension errors', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          throw new Error('status render failed')
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /status render failed/)
+  deepStrictEqual(getStatusBarItems(), [])
+})
+
+test('renderStatusBarItems rejects non-array results', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          return {} as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view renderStatusBarItems result must be an array/)
+  deepStrictEqual(getStatusBarItems(), [])
+})
+
+test('renderStatusBarItems rejects non-object items', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          return ['invalid'] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view status bar item 0 must be an object/)
+  deepStrictEqual(getStatusBarItems(), [])
+})
+
+for (const property of ['ariaLabel', 'icon', 'name', 'onClick', 'text', 'title'] as const) {
+  test(`renderStatusBarItems rejects invalid ${property}`, async () => {
+    registerView({
+      create() {
+        return {
+          render() {
+            return []
+          },
+          renderStatusBarItems() {
+            return [{ [property]: 42 }] as any
+          },
+        }
+      },
+      id: 'sample.views.testing',
+      kind: 'virtualDom',
+    })
+
+    await rejects(createViewInstance('sample.views.testing', 1), new RegExp(`view status bar item 0 has invalid ${property}`))
+    deepStrictEqual(getStatusBarItems(), [])
+  })
+}
+
+test('renderStatusBarItems rejects invalid spinning', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          return [{ spinning: 'yes' }] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view status bar item 0 has invalid spinning/)
+  deepStrictEqual(getStatusBarItems(), [])
+})
+
+test('disposeViewInstance removes view status bar items when extension disposal throws', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'StatusBar.handleChange'(): Promise<void> {},
+  })
+  registerView({
+    create() {
+      return {
+        dispose() {
+          throw new Error('dispose failed')
+        },
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          return [{ name: 'status', text: 'Ready' }]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await rejects(disposeViewInstance(1), /dispose failed/)
+
+  deepStrictEqual(getStatusBarItems(), [])
+  await rejects(renderViewInstance(1), /view instance 1 not found/)
 })
 
 test('view context changes are reported after lifecycle updates', async () => {
