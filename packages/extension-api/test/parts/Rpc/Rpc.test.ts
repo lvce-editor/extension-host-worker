@@ -223,3 +223,48 @@ test('createRpc transfers a port and worker options', async () => {
   ])
   await rpc.dispose()
 })
+
+test('createRpc resolves worker options from a declared rpc id', async () => {
+  const invocations: unknown[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.createWebViewWorkerRpc2'(rpcInfo: unknown, port: MessagePort): Promise<void> {
+      invocations.push(['create', rpcInfo])
+      await PlainMessagePortRpc.create({
+        commandMap: {
+          'ImageConversion.convert'(): string {
+            return 'ok'
+          },
+        },
+        messagePort: port,
+      })
+    },
+    'Extensions.getRpcInfo'(id: string): unknown {
+      invocations.push(['get-info', id])
+      return {
+        contentSecurityPolicy: ["default-src 'none'", "script-src 'self' 'unsafe-eval'"],
+        name: 'Image Conversion Worker',
+        url: '/extensions/media-preview/imageConversionWorkerMain.js',
+      }
+    },
+  })
+
+  const rpc = await createRpc({ id: 'builtin.media-preview.image-conversion-worker' })
+
+  strictEqual(await rpc.invoke('ImageConversion.convert'), 'ok')
+  deepStrictEqual(invocations, [
+    ['get-info', 'builtin.media-preview.image-conversion-worker'],
+    [
+      'create',
+      {
+        contentSecurityPolicy: ["default-src 'none'", "script-src 'self' 'unsafe-eval'"],
+        name: 'Image Conversion Worker',
+        url: '/extensions/media-preview/imageConversionWorkerMain.js',
+      },
+    ],
+  ])
+  await rpc.dispose()
+})
+
+test('createRpc requires an id or url', async () => {
+  await rejects(createRpc({} as never), new TypeError('createRpc requires an id or url'))
+})
