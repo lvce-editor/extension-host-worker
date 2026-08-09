@@ -54,7 +54,7 @@ test('setSettingsSearchValue updates the settings search input', async () => {
 
   await setSettingsSearchValue('font size')
 
-  deepStrictEqual(invocations, [['Settings.handleInput', 'font size']])
+  deepStrictEqual(invocations, [['Settings.handleInput', 'font size', 2]])
 })
 
 test('setPreference invokes extension management worker', async () => {
