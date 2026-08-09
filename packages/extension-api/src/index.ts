@@ -7,6 +7,7 @@ export { getPreference, setPreference } from './parts/Preferences/Preferences.ts
 export { deleteSecret, getSecret, storeSecret } from './parts/SecretStorage/SecretStorage.ts'
 export { registerCommand } from './parts/CommandRegistry/CommandRegistry.ts'
 export { registerDebugProvider, resetDebugProviderRegistry } from './parts/Debug/Debug.ts'
+export { formatDocument, getDiagnostics, showCompletions } from './parts/Editor/Editor.ts'
 export {
   executeCompletionProvider,
   executeResolveCompletionItemProvider,
