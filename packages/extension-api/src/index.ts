@@ -72,6 +72,7 @@ export {
   resetSignatureHelpProviderRegistry,
 } from './parts/SignatureHelp/SignatureHelp.ts'
 export { getPlatform, type Platform } from './parts/Platform/Platform.ts'
+export { openProcessExplorer } from './parts/ProcessExplorer/ProcessExplorer.ts'
 export {
   openDebugConsole,
   openOutputView,
