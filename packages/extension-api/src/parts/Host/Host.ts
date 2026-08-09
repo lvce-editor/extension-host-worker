@@ -15,6 +15,10 @@ export const getWorkspaceFolder = async (): Promise<string> => {
   return (await executeCommand('Workspace.getPath')) as string
 }
 
+export const getRecentlyOpenedWorkspaceUris = async (): Promise<readonly string[]> => {
+  return (await executeCommand('RecentlyOpened.getRecentlyOpened')) as readonly string[]
+}
+
 export const getWorkspaceUri = async (): Promise<string> => {
   return (await executeCommand('Workspace.getUri')) as string
 }

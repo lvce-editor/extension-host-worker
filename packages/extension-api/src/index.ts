@@ -64,6 +64,7 @@ export {
 export {
   closeUri,
   confirm,
+  getRecentlyOpenedWorkspaceUris,
   getWorkspaceFolder,
   getWorkspaceUri,
   handleWorkspaceRefresh,

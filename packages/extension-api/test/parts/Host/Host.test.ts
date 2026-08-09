@@ -8,6 +8,7 @@ import {
 import {
   closeUri,
   confirm,
+  getRecentlyOpenedWorkspaceUris,
   getWorkspaceFolder,
   getWorkspaceUri,
   handleWorkspaceRefresh,
@@ -58,6 +59,9 @@ test('host helpers execute renderer commands through extension management', asyn
       if (id === 'Workspace.getUri') {
         return 'file:///workspace'
       }
+      if (id === 'RecentlyOpened.getRecentlyOpened') {
+        return ['file:///projects/one', 'remote-ssh://host/projects/two']
+      }
       if (id === 'ConfirmPrompt.prompt') {
         return true
       }
@@ -67,6 +71,7 @@ test('host helpers execute renderer commands through extension management', asyn
 
   strictEqual(await getWorkspaceFolder(), '/workspace')
   strictEqual(await getWorkspaceUri(), 'file:///workspace')
+  deepStrictEqual(await getRecentlyOpenedWorkspaceUris(), ['file:///projects/one', 'remote-ssh://host/projects/two'])
   strictEqual(await confirm('Discard changes?'), true)
   await handleWorkspaceRefresh()
   await openUri('/workspace/file.txt')
@@ -77,6 +82,7 @@ test('host helpers execute renderer commands through extension management', asyn
   deepStrictEqual(invocations, [
     ['Workspace.getPath'],
     ['Workspace.getUri'],
+    ['RecentlyOpened.getRecentlyOpened'],
     ['ConfirmPrompt.prompt', 'Discard changes?'],
     ['Layout.handleWorkspaceRefresh'],
     ['Main.openUri', '/workspace/file.txt'],
