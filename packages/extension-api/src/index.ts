@@ -3,7 +3,7 @@ export { getAccessToken, type GetAccessTokenOptions } from './parts/Authenticati
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showFileQuickPick, showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
-export { getPreference, setPreference } from './parts/Preferences/Preferences.ts'
+export { getPreference, openSettings, setPreference } from './parts/Preferences/Preferences.ts'
 export { deleteSecret, getSecret, storeSecret } from './parts/SecretStorage/SecretStorage.ts'
 export { registerCommand } from './parts/CommandRegistry/CommandRegistry.ts'
 export { registerDebugProvider, resetDebugProviderRegistry } from './parts/Debug/Debug.ts'
