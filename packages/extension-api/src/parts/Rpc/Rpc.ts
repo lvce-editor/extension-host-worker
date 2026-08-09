@@ -1,12 +1,21 @@
 import { MessagePortRpcParent, type Rpc, WebSocketRpcParent } from '@lvce-editor/rpc'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
-export interface CreateRpcOptions {
+interface CreateRpcBaseOptions {
   readonly commandMap?: Record<string, unknown>
-  readonly contentSecurityPolicy?: string
+}
+
+interface CreateDeclaredRpcOptions extends CreateRpcBaseOptions {
+  readonly id: string
+}
+
+interface CreateLegacyRpcOptions extends CreateRpcBaseOptions {
+  readonly contentSecurityPolicy?: readonly string[] | string
   readonly name?: string
   readonly url: string
 }
+
+export type CreateRpcOptions = CreateDeclaredRpcOptions | CreateLegacyRpcOptions
 
 export interface CreateNodeRpcOptions {
   readonly id: string
@@ -14,7 +23,37 @@ export interface CreateNodeRpcOptions {
   readonly legacyPath?: string
 }
 
-const sendMessagePortToWebWorker = async (port: MessagePort, contentSecurityPolicy: string, name: string, url: string): Promise<void> => {
+interface ResolvedRpcOptions {
+  readonly contentSecurityPolicy: readonly string[] | string
+  readonly name: string
+  readonly url: string
+}
+
+const resolveRpcOptions = async (options: CreateRpcOptions): Promise<ResolvedRpcOptions> => {
+  if ('id' in options && options.id) {
+    const info = (await ExtensionManagementWorker.invoke('Extensions.getRpcInfo', options.id)) as ResolvedRpcOptions
+    return {
+      contentSecurityPolicy: info.contentSecurityPolicy || '',
+      name: info.name || '',
+      url: info.url,
+    }
+  }
+  if ('url' in options && options.url) {
+    return {
+      contentSecurityPolicy: options.contentSecurityPolicy || '',
+      name: options.name || '',
+      url: options.url,
+    }
+  }
+  throw new TypeError('createRpc requires an id or url')
+}
+
+const sendMessagePortToWebWorker = async (
+  port: MessagePort,
+  contentSecurityPolicy: readonly string[] | string,
+  name: string,
+  url: string,
+): Promise<void> => {
   await ExtensionManagementWorker.invokeAndTransfer('Extensions.createWebViewWorkerRpc2', { contentSecurityPolicy, name, url }, port)
 }
 
@@ -30,7 +69,9 @@ const createMessagePortRpc = async (commandMap: Record<string, unknown>, send: (
   return rpcPromise
 }
 
-export const createRpc = async ({ commandMap = {}, contentSecurityPolicy = '', name = '', url }: CreateRpcOptions): Promise<Rpc> => {
+export const createRpc = async (options: CreateRpcOptions): Promise<Rpc> => {
+  const { commandMap = {} } = options
+  const { contentSecurityPolicy, name, url } = await resolveRpcOptions(options)
   return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, contentSecurityPolicy, name, url))
 }
 
