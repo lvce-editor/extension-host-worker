@@ -4,6 +4,7 @@ import { afterEach, test } from 'node:test'
 import {
   exists,
   getFileHash,
+  getFileHashes,
   mkdir,
   readAsObjectUrl,
   readDirWithFileTypes,
@@ -72,6 +73,22 @@ test('getFileHash reads the content hash through the file system worker', async 
 
   strictEqual(result, 'sample-hash')
   strictEqual(invokedUri, '/tmp/sample.txt')
+})
+
+test('getFileHashes reads content hashes in one file system worker request', async () => {
+  const uris = ['/tmp/first.txt', '/tmp/missing.txt', '/tmp/second.txt']
+  let invokedUris: readonly string[] = []
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.getFileHashes'(value: readonly string[]): Promise<readonly (string | null)[]> {
+      invokedUris = value
+      return ['first-hash', null, 'second-hash']
+    },
+  })
+
+  const result = await getFileHashes(uris)
+
+  deepStrictEqual(result, ['first-hash', null, 'second-hash'])
+  deepStrictEqual(invokedUris, uris)
 })
 
 test('readFile reads memfs files through the extension api host command', async () => {
