@@ -37,6 +37,7 @@ export {
 export {
   exists,
   getFileHash,
+  getFileHashes,
   mkdir,
   readAsObjectUrl,
   readDirWithFileTypes,

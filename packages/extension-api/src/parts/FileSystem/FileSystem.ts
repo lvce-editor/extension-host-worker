@@ -55,6 +55,10 @@ export const getFileHash = async (uri: string): Promise<string> => {
   return FileSystemWorker.invoke('FileSystem.getFileHash', uri)
 }
 
+export const getFileHashes = async (uris: readonly string[]): Promise<readonly (string | null)[]> => {
+  return FileSystemWorker.invoke('FileSystem.getFileHashes', uris)
+}
+
 export const readFile = async (uri: string): Promise<string> => {
   if (isMemory(uri)) {
     return ExtensionManagementWorker.invoke('ExtensionApi.readFile', uri)
