@@ -4,8 +4,11 @@ import type { VirtualDomViewInstance } from '../View/View.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { registerStatusBarItemProvider } from '../StatusBarItemProviderRegistry/StatusBarItemProviderRegistry.ts'
 
-const handlesByUid: Record<number, readonly StatusBarItemProviderHandle[]> = Object.create(null)
+const activeUidByViewId: Record<string, number> = Object.create(null)
+const handlesByViewId: Record<string, readonly StatusBarItemProviderHandle[]> = Object.create(null)
 const itemsByUid: Record<number, readonly StatusBarItem[]> = Object.create(null)
+const renderedUidsByViewId: Record<string, number[]> = Object.create(null)
+const viewIdByUid: Record<number, string> = Object.create(null)
 
 const stringProperties = ['ariaLabel', 'icon', 'name', 'onClick', 'text', 'title'] as const
 
@@ -58,24 +61,38 @@ const areItemsEqual = (oldItems: readonly StatusBarItem[], newItems: readonly St
   })
 }
 
-const disposeHandles = (uid: number): void => {
-  for (const handle of handlesByUid[uid] || []) {
+const disposeHandles = (viewId: string): void => {
+  for (const handle of handlesByViewId[viewId] || []) {
     handle.dispose()
   }
-  delete handlesByUid[uid]
+  delete handlesByViewId[viewId]
 }
 
-const replaceItems = (uid: number, viewId: string, items: readonly StatusBarItem[]): void => {
-  disposeHandles(uid)
-  itemsByUid[uid] = items
-  handlesByUid[uid] = items.map((_item, index) =>
+const replaceItems = (viewId: string, itemCount: number): void => {
+  disposeHandles(viewId)
+  handlesByViewId[viewId] = Array.from({ length: itemCount }, (_item, index) =>
     registerStatusBarItemProvider({
       getStatusBarItem() {
-        return itemsByUid[uid]?.[index]
+        return itemsByUid[activeUidByViewId[viewId]]?.[index]
       },
-      id: `view:${viewId}:${uid}:${index}`,
+      id: `view:${viewId}:${index}`,
     }),
   )
+}
+
+const refreshItems = async (viewId: string): Promise<void> => {
+  await Promise.all((handlesByViewId[viewId] || []).map((handle) => handle.refresh()))
+}
+
+const setActiveUid = (viewId: string, uid: number): void => {
+  const renderedUids = renderedUidsByViewId[viewId] || []
+  const index = renderedUids.indexOf(uid)
+  if (index !== -1) {
+    renderedUids.splice(index, 1)
+  }
+  renderedUids.push(uid)
+  renderedUidsByViewId[viewId] = renderedUids
+  activeUidByViewId[viewId] = uid
 }
 
 export const renderViewStatusBarItems = async (uid: number, viewId: string, instance: VirtualDomViewInstance): Promise<void> => {
@@ -84,24 +101,59 @@ export const renderViewStatusBarItems = async (uid: number, viewId: string, inst
   }
   const items = normalizeStatusBarItems(await instance.renderStatusBarItems())
   const oldItems = itemsByUid[uid] || []
-  if (areItemsEqual(oldItems, items)) {
-    return
-  }
-  if ((handlesByUid[uid]?.length || 0) !== items.length) {
-    replaceItems(uid, viewId, items)
-    return
-  }
+  const wasActive = activeUidByViewId[viewId] === uid
   itemsByUid[uid] = items
-  await Promise.all((handlesByUid[uid] || []).map((handle) => handle.refresh()))
+  viewIdByUid[uid] = viewId
+  setActiveUid(viewId, uid)
+  if (wasActive && areItemsEqual(oldItems, items)) {
+    return
+  }
+  if ((handlesByViewId[viewId]?.length || 0) !== items.length) {
+    replaceItems(viewId, items.length)
+    return
+  }
+  await refreshItems(viewId)
 }
 
 export const disposeViewStatusBarItems = (uid: number): void => {
-  disposeHandles(uid)
+  const viewId = viewIdByUid[uid]
+  if (!viewId) {
+    return
+  }
   delete itemsByUid[uid]
+  delete viewIdByUid[uid]
+  const renderedUids = renderedUidsByViewId[viewId] || []
+  const remainingUids = renderedUids.filter((renderedUid) => renderedUid !== uid)
+  if (remainingUids.length === 0) {
+    disposeHandles(viewId)
+    delete activeUidByViewId[viewId]
+    delete renderedUidsByViewId[viewId]
+    return
+  }
+  renderedUidsByViewId[viewId] = remainingUids
+  if (activeUidByViewId[viewId] !== uid) {
+    return
+  }
+  const activeUid = remainingUids.at(-1)!
+  const items = itemsByUid[activeUid] || []
+  activeUidByViewId[viewId] = activeUid
+  if ((handlesByViewId[viewId]?.length || 0) !== items.length) {
+    replaceItems(viewId, items.length)
+    return
+  }
+  void refreshItems(viewId)
 }
 
 export const resetViewStatusBarItems = (): void => {
+  for (const viewId of Object.keys(handlesByViewId)) {
+    disposeHandles(viewId)
+  }
   for (const uid of Object.keys(itemsByUid)) {
-    disposeViewStatusBarItems(Number(uid))
+    delete itemsByUid[Number(uid)]
+    delete viewIdByUid[Number(uid)]
+  }
+  for (const viewId of Object.keys(activeUidByViewId)) {
+    delete activeUidByViewId[viewId]
+    delete renderedUidsByViewId[viewId]
   }
 }
