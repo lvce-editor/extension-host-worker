@@ -807,6 +807,40 @@ test('renderStatusBarItems supports async results', async () => {
   await disposeViewInstance(1)
 })
 
+test('renderStatusBarItems only contributes items from the active view instance', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'StatusBar.handleChange'(): Promise<void> {},
+  })
+  registerView({
+    create(context) {
+      return {
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          return [{ name: 'image-dimensions', text: `${context?.uid}x${context?.uid}` }]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  await createViewInstance('sample.views.testing', 2)
+
+  deepStrictEqual(getStatusBarItems(), [{ name: 'image-dimensions', text: '2x2' }])
+
+  await renderViewInstance(1)
+  deepStrictEqual(getStatusBarItems(), [{ name: 'image-dimensions', text: '1x1' }])
+
+  await disposeViewInstance(1)
+  deepStrictEqual(getStatusBarItems(), [{ name: 'image-dimensions', text: '2x2' }])
+
+  await disposeViewInstance(2)
+  deepStrictEqual(getStatusBarItems(), [])
+})
+
 test('renderStatusBarItems propagates extension errors', async () => {
   registerView({
     create() {
