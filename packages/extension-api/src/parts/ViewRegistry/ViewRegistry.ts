@@ -572,6 +572,14 @@ export const renderViewInstance = async (uid: number): Promise<ViewRenderResult>
   return withRenderMetadata(uid, contextViewIds[uid], result, instance, contextChange)
 }
 
+export const setViewInstanceActive = async (uid: number, active: boolean): Promise<void> => {
+  getVirtualDomInstance(uid)
+  if (typeof active !== 'boolean') {
+    throw new ExtensionApiError('view instance active state must be a boolean')
+  }
+  await ViewStatusBarItems.setViewInstanceActive(uid, active)
+}
+
 export const disposeViewInstance = async (uid: number): Promise<void> => {
   const instance = instances[uid]
   const viewId = contextViewIds[uid]
@@ -650,6 +658,7 @@ const commandMap = {
   'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
   'ExtensionApi.renderViewInstance': renderViewInstance,
   'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
+  'ExtensionApi.setViewInstanceActive': setViewInstanceActive,
 }
 
 export const resetViewRegistry = (): void => {

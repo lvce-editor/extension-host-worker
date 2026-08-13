@@ -134,6 +134,7 @@ export {
   registerView,
   resetViewRegistry,
   saveViewInstanceState,
+  setViewInstanceActive,
 } from './parts/ViewRegistry/ViewRegistry.ts'
 export {
   createOutputChannel,
