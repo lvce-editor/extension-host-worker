@@ -17,6 +17,7 @@ import {
   renderViewInstance,
   resetViewRegistry,
   saveViewInstanceState,
+  setViewInstanceActive,
 } from '../../../src/parts/ViewRegistry/ViewRegistry.ts'
 
 interface MockRpcDisposable {
@@ -831,7 +832,17 @@ test('renderStatusBarItems only contributes items from the active view instance'
 
   deepStrictEqual(getStatusBarItems(), [{ name: 'image-dimensions', text: '2x2' }])
 
+  await setViewInstanceActive(2, false)
+  deepStrictEqual(getStatusBarItems(), [])
+
+  await setViewInstanceActive(1, true)
+  deepStrictEqual(getStatusBarItems(), [{ name: 'image-dimensions', text: '1x1' }])
+
+  await setViewInstanceActive(1, false)
   await renderViewInstance(1)
+  deepStrictEqual(getStatusBarItems(), [])
+
+  await setViewInstanceActive(1, true)
   deepStrictEqual(getStatusBarItems(), [{ name: 'image-dimensions', text: '1x1' }])
 
   await disposeViewInstance(1)
@@ -839,6 +850,23 @@ test('renderStatusBarItems only contributes items from the active view instance'
 
   await disposeViewInstance(2)
   deepStrictEqual(getStatusBarItems(), [])
+})
+
+test('setViewInstanceActive rejects invalid state', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+  await createViewInstance('sample.views.testing', 1)
+
+  await rejects(setViewInstanceActive(1, 'yes' as any), /view instance active state must be a boolean/)
 })
 
 test('renderStatusBarItems propagates extension errors', async () => {

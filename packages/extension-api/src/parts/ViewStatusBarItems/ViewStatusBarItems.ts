@@ -5,6 +5,7 @@ import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { registerStatusBarItemProvider } from '../StatusBarItemProviderRegistry/StatusBarItemProviderRegistry.ts'
 
 const activeUidByViewId: Record<string, number> = Object.create(null)
+const explicitActiveStateByUid: Record<number, boolean> = Object.create(null)
 const handlesByViewId: Record<string, readonly StatusBarItemProviderHandle[]> = Object.create(null)
 const itemsByUid: Record<number, readonly StatusBarItem[]> = Object.create(null)
 const renderedUidsByViewId: Record<string, number[]> = Object.create(null)
@@ -104,8 +105,38 @@ export const renderViewStatusBarItems = async (uid: number, viewId: string, inst
   const wasActive = activeUidByViewId[viewId] === uid
   itemsByUid[uid] = items
   viewIdByUid[uid] = viewId
+  if (explicitActiveStateByUid[uid] !== undefined && !explicitActiveStateByUid[uid]) {
+    return
+  }
   setActiveUid(viewId, uid)
   if (wasActive && areItemsEqual(oldItems, items)) {
+    return
+  }
+  if ((handlesByViewId[viewId]?.length || 0) !== items.length) {
+    replaceItems(viewId, items.length)
+    return
+  }
+  await refreshItems(viewId)
+}
+
+export const setViewInstanceActive = async (uid: number, active: boolean): Promise<void> => {
+  const viewId = viewIdByUid[uid]
+  if (!viewId) {
+    return
+  }
+  explicitActiveStateByUid[uid] = active
+  if (!active) {
+    if (activeUidByViewId[viewId] !== uid) {
+      return
+    }
+    disposeHandles(viewId)
+    delete activeUidByViewId[viewId]
+    return
+  }
+  const wasActive = activeUidByViewId[viewId] === uid
+  const items = itemsByUid[uid] || []
+  setActiveUid(viewId, uid)
+  if (wasActive && (handlesByViewId[viewId]?.length || 0) === items.length) {
     return
   }
   if ((handlesByViewId[viewId]?.length || 0) !== items.length) {
@@ -121,6 +152,7 @@ export const disposeViewStatusBarItems = (uid: number): void => {
     return
   }
   delete itemsByUid[uid]
+  delete explicitActiveStateByUid[uid]
   delete viewIdByUid[uid]
   const renderedUids = renderedUidsByViewId[viewId] || []
   const remainingUids = renderedUids.filter((renderedUid) => renderedUid !== uid)
@@ -150,6 +182,7 @@ export const resetViewStatusBarItems = (): void => {
   }
   for (const uid of Object.keys(itemsByUid)) {
     delete itemsByUid[Number(uid)]
+    delete explicitActiveStateByUid[Number(uid)]
     delete viewIdByUid[Number(uid)]
   }
   for (const viewId of Object.keys(activeUidByViewId)) {
