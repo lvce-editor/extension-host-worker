@@ -1,3 +1,4 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 import { getFileSystemProviderPathSeparator } from '../FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 
@@ -32,7 +33,7 @@ export const openUri = async (uri: string): Promise<void> => {
 }
 
 export const showNotification = async (type: NotificationType, message: string): Promise<void> => {
-  await executeCommand('Notification.create', type, message)
+  await ExtensionManagementWorker.invoke('Extensions.showNotification', type, message)
 }
 
 export const setWorkspaceUri = async (uri: string): Promise<void> => {

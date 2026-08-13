@@ -67,6 +67,9 @@ test('host helpers execute renderer commands through extension management', asyn
       }
       return undefined
     },
+    async 'Extensions.showNotification'(type: string, message: string): Promise<void> {
+      invocations.push(['Extensions.showNotification', type, message])
+    },
   })
 
   strictEqual(await getWorkspaceFolder(), '/workspace')
@@ -88,6 +91,6 @@ test('host helpers execute renderer commands through extension management', asyn
     ['Main.openUri', '/workspace/file.txt'],
     ['Main.closeTabsByUris', ['/workspace/file.txt']],
     ['Workspace.setUri', 'remote-ssh:///test-folder'],
-    ['Notification.create', 'info', 'File created successfully'],
+    ['Extensions.showNotification', 'info', 'File created successfully'],
   ])
 })
