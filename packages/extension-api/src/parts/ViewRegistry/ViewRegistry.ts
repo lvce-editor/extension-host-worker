@@ -588,7 +588,7 @@ export const disposeViewInstance = async (uid: number): Promise<void> => {
       await instance.dispose()
     }
   } finally {
-    ViewStatusBarItems.disposeViewStatusBarItems(uid)
+    await ViewStatusBarItems.disposeViewStatusBarItems(uid)
     try {
       await maybeClearContext(uid, viewId)
     } finally {

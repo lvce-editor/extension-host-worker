@@ -808,6 +808,47 @@ test('renderStatusBarItems supports async results', async () => {
   await disposeViewInstance(1)
 })
 
+test('disposeViewInstance waits for view status bar items to be removed from the host', async () => {
+  const { promise: removalPromise, resolve: resolveRemoval } = Promise.withResolvers<void>()
+  let statusBarChangeCount = 0
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'StatusBar.handleChange'(): Promise<void> {
+      statusBarChangeCount++
+      if (statusBarChangeCount > 1) {
+        await removalPromise
+      }
+    },
+  })
+  registerView({
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderStatusBarItems() {
+          return [{ name: 'image-size', text: '42 KB' }]
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  let disposed = false
+  const disposePromise = disposeViewInstance(1).then(() => {
+    disposed = true
+  })
+  await Promise.resolve()
+
+  strictEqual(statusBarChangeCount, 2)
+  strictEqual(disposed, false)
+
+  resolveRemoval()
+  await disposePromise
+  strictEqual(disposed, true)
+})
+
 test('renderStatusBarItems only contributes items from the active view instance', async () => {
   mockRpc = ExtensionManagementWorker.registerMockRpc({
     async 'StatusBar.handleChange'(): Promise<void> {},
