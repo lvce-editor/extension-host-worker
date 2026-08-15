@@ -62,15 +62,14 @@ const areItemsEqual = (oldItems: readonly StatusBarItem[], newItems: readonly St
   })
 }
 
-const disposeHandles = (viewId: string): void => {
-  for (const handle of handlesByViewId[viewId] || []) {
-    handle.dispose()
-  }
+const disposeHandles = async (viewId: string): Promise<void> => {
+  const handles = handlesByViewId[viewId] || []
   delete handlesByViewId[viewId]
+  await Promise.all(handles.map((handle) => handle.dispose()))
 }
 
-const replaceItems = (viewId: string, itemCount: number): void => {
-  disposeHandles(viewId)
+const replaceItems = async (viewId: string, itemCount: number): Promise<void> => {
+  await disposeHandles(viewId)
   handlesByViewId[viewId] = Array.from({ length: itemCount }, (_item, index) =>
     registerStatusBarItemProvider({
       getStatusBarItem() {
@@ -113,7 +112,7 @@ export const renderViewStatusBarItems = async (uid: number, viewId: string, inst
     return
   }
   if ((handlesByViewId[viewId]?.length || 0) !== items.length) {
-    replaceItems(viewId, items.length)
+    await replaceItems(viewId, items.length)
     return
   }
   await refreshItems(viewId)
@@ -129,8 +128,8 @@ export const setViewInstanceActive = async (uid: number, active: boolean): Promi
     if (activeUidByViewId[viewId] !== uid) {
       return
     }
-    disposeHandles(viewId)
     delete activeUidByViewId[viewId]
+    await disposeHandles(viewId)
     return
   }
   const wasActive = activeUidByViewId[viewId] === uid
@@ -140,13 +139,13 @@ export const setViewInstanceActive = async (uid: number, active: boolean): Promi
     return
   }
   if ((handlesByViewId[viewId]?.length || 0) !== items.length) {
-    replaceItems(viewId, items.length)
+    await replaceItems(viewId, items.length)
     return
   }
   await refreshItems(viewId)
 }
 
-export const disposeViewStatusBarItems = (uid: number): void => {
+export const disposeViewStatusBarItems = async (uid: number): Promise<void> => {
   const viewId = viewIdByUid[uid]
   if (!viewId) {
     return
@@ -157,9 +156,9 @@ export const disposeViewStatusBarItems = (uid: number): void => {
   const renderedUids = renderedUidsByViewId[viewId] || []
   const remainingUids = renderedUids.filter((renderedUid) => renderedUid !== uid)
   if (remainingUids.length === 0) {
-    disposeHandles(viewId)
     delete activeUidByViewId[viewId]
     delete renderedUidsByViewId[viewId]
+    await disposeHandles(viewId)
     return
   }
   renderedUidsByViewId[viewId] = remainingUids
@@ -170,15 +169,15 @@ export const disposeViewStatusBarItems = (uid: number): void => {
   const items = itemsByUid[activeUid] || []
   activeUidByViewId[viewId] = activeUid
   if ((handlesByViewId[viewId]?.length || 0) !== items.length) {
-    replaceItems(viewId, items.length)
+    await replaceItems(viewId, items.length)
     return
   }
-  void refreshItems(viewId)
+  await refreshItems(viewId)
 }
 
 export const resetViewStatusBarItems = (): void => {
   for (const viewId of Object.keys(handlesByViewId)) {
-    disposeHandles(viewId)
+    void disposeHandles(viewId)
   }
   for (const uid of Object.keys(itemsByUid)) {
     delete itemsByUid[Number(uid)]
