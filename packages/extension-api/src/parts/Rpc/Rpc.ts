@@ -26,6 +26,7 @@ export interface CreateNodeRpcOptions {
 interface ResolvedRpcOptions {
   readonly contentSecurityPolicy: readonly string[] | string
   readonly name: string
+  readonly traceId?: string
   readonly url: string
 }
 
@@ -35,6 +36,7 @@ const resolveRpcOptions = async (options: CreateRpcOptions): Promise<ResolvedRpc
     return {
       contentSecurityPolicy: info.contentSecurityPolicy || '',
       name: info.name || '',
+      traceId: options.id,
       url: info.url,
     }
   }
@@ -52,9 +54,14 @@ const sendMessagePortToWebWorker = async (
   port: MessagePort,
   contentSecurityPolicy: readonly string[] | string,
   name: string,
+  traceId: string | undefined,
   url: string,
 ): Promise<void> => {
-  await ExtensionManagementWorker.invokeAndTransfer('Extensions.createWebViewWorkerRpc2', { contentSecurityPolicy, name, url }, port)
+  await ExtensionManagementWorker.invokeAndTransfer(
+    'Extensions.createWebViewWorkerRpc2',
+    { contentSecurityPolicy, name, ...(traceId && { traceId }), url },
+    port,
+  )
 }
 
 const createMessagePortRpc = async (commandMap: Record<string, unknown>, send: (port: MessagePort) => Promise<void>): Promise<Rpc> => {
@@ -71,8 +78,8 @@ const createMessagePortRpc = async (commandMap: Record<string, unknown>, send: (
 
 export const createRpc = async (options: CreateRpcOptions): Promise<Rpc> => {
   const { commandMap = {} } = options
-  const { contentSecurityPolicy, name, url } = await resolveRpcOptions(options)
-  return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, contentSecurityPolicy, name, url))
+  const { contentSecurityPolicy, name, traceId, url } = await resolveRpcOptions(options)
+  return createMessagePortRpc(commandMap, (port) => sendMessagePortToWebWorker(port, contentSecurityPolicy, name, traceId, url))
 }
 
 interface WebSocketConnectionInfo {

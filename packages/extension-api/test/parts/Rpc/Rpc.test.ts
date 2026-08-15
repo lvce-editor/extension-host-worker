@@ -258,6 +258,7 @@ test('createRpc resolves worker options from a declared rpc id', async () => {
       {
         contentSecurityPolicy: ["default-src 'none'", "script-src 'self' 'unsafe-eval'"],
         name: 'Image Conversion Worker',
+        traceId: 'builtin.media-preview.image-conversion-worker',
         url: '/extensions/media-preview/imageConversionWorkerMain.js',
       },
     ],
