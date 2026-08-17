@@ -30,7 +30,7 @@
     "@lvce-editor/command": "^2.0.0",
     "@lvce-editor/rpc": "^6.4.0",
     "@lvce-editor/rpc-registry": "^9.24.0",
-    "@lvce-editor/virtual-dom-worker": "^10.0.0"
+    "@lvce-editor/virtual-dom-worker": "^11.2.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

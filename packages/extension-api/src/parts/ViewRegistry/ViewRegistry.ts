@@ -1,5 +1,5 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
+import { diffTree, validate as validateVirtualDom, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type {
   DomEventListener,
@@ -235,10 +235,13 @@ const getVirtualDomInstance = (uid: number): VirtualDomViewInstance => {
   return instance
 }
 
-const renderDom = async (instance: VirtualDomViewInstance): Promise<readonly VirtualDomNode[]> => {
+const renderDom = async (viewId: string, instance: VirtualDomViewInstance): Promise<readonly VirtualDomNode[]> => {
   const dom = await instance.render()
   if (!Array.isArray(dom)) {
     throw new ExtensionApiError('view render result must be an array')
+  }
+  if (!validateVirtualDom(dom)) {
+    throw new ExtensionApiError(`view ${viewId} render result must be valid virtual dom`)
   }
   return dom
 }
@@ -334,7 +337,7 @@ const normalizeViewScrollPosition = (scrollPosition: unknown): readonly [] | Vie
 
 const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
   const oldDom = renderedDoms[uid] || []
-  const newDom = await renderDom(instance)
+  const newDom = await renderDom(contextViewIds[uid], instance)
   renderedDoms[uid] = newDom
   const patches = diffTree(oldDom, newDom)
   return {
@@ -536,7 +539,7 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   instanceUids.add(uid)
   instanceUidsByView[viewId] = instanceUids
   contextViewIds[uid] = viewId
-  const dom = await renderDom(instance)
+  const dom = await renderDom(viewId, instance)
   renderedDoms[uid] = dom
   const result: ViewRenderResult = {
     dom,

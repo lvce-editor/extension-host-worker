@@ -353,6 +353,27 @@ test('createViewInstance renders initial virtual dom', async () => {
   strictEqual(result.type, 'setDom')
 })
 
+test('createViewInstance rejects invalid virtual dom', async () => {
+  registerView({
+    create() {
+      return {
+        render() {
+          return [
+            {
+              childCount: 0,
+              type: -1,
+            },
+          ] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await rejects(createViewInstance('sample.views.testing', 1), /view sample\.views\.testing render result must be valid virtual dom/)
+})
+
 test('createViewInstance passes requestRerender in context', async () => {
   let requestRerender: (() => Promise<void>) | undefined
   const invocations: unknown[] = []
@@ -667,6 +688,31 @@ test('renderViewInstance returns patches after state changes', async () => {
   const result = await renderViewInstance(1)
 
   strictEqual(result.type, 'setPatches')
+})
+
+test('renderViewInstance rejects invalid virtual dom before diffing', async () => {
+  let childCount = 0
+  registerView({
+    create() {
+      return {
+        render() {
+          return [
+            {
+              childCount,
+              type: 4,
+            },
+          ] as any
+        },
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+  })
+
+  await createViewInstance('sample.views.testing', 1)
+  childCount = 1
+
+  await rejects(renderViewInstance(1), /view sample\.views\.testing render result must be valid virtual dom/)
 })
 
 test('getCss is included after every view render', async () => {
