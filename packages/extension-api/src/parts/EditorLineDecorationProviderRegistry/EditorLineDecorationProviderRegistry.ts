@@ -2,10 +2,10 @@ import type { Disposable } from '../Disposable/Disposable.ts'
 import type { EditorLineDecoration } from '../EditorLineDecoration/EditorLineDecoration.ts'
 import type { EditorLineDecorationProvider } from '../EditorLineDecorationProvider/EditorLineDecorationProvider.ts'
 import type { EditorLineDecorationTextDocument } from '../EditorLineDecorationTextDocument/EditorLineDecorationTextDocument.ts'
+import type { RegisteredEditorLineDecorationProvider } from '../RegisteredEditorLineDecorationProvider/RegisteredEditorLineDecorationProvider.ts'
 import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
-import type { RegisteredEditorLineDecorationProvider } from '../RegisteredEditorLineDecorationProvider/RegisteredEditorLineDecorationProvider.ts'
 
 const validateEditorLineDecoration = (decoration: unknown): EditorLineDecoration | undefined => {
   if (decoration === undefined) {
