@@ -16,6 +16,14 @@ export {
   type EditorSelection,
 } from './parts/Editor/Editor.ts'
 export {
+  executeEditorLineDecorationProvider,
+  registerEditorLineDecorationProvider,
+  resetEditorLineDecorationProviderRegistry,
+  type EditorLineDecoration,
+  type EditorLineDecorationProvider,
+  type EditorLineDecorationTextDocument,
+} from './parts/EditorLineDecorationApi/EditorLineDecorationApi.ts'
+export {
   executeCompletionProvider,
   executeResolveCompletionItemProvider,
   getCompletionProviderRegistrySnapshot,
