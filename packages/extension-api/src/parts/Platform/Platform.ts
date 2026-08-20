@@ -2,6 +2,10 @@ import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 
 export type Platform = 'electron' | 'remote' | 'test' | 'web'
 
+export const getUserDataDir = async (): Promise<string> => {
+  return (await executeCommand('Platform.getUserDataDir')) as string
+}
+
 export const getPlatform = async (): Promise<Platform> => {
   const platform = await executeCommand('Layout.getPlatform')
   switch (platform) {
