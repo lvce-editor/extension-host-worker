@@ -1,10 +1,11 @@
-import { deepStrictEqual, rejects, strictEqual } from 'node:assert'
+import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert'
 import { afterEach, test } from 'node:test'
 import {
   executeLanguageProvider,
   executeOrganizeImportsProvider,
-  registerDefinitionProvider,
   registerCodeActionsProvider,
+  registerDefinitionProvider,
+  registerDocumentSymbolProvider,
   resetLanguageProviderRegistry,
 } from '../../../src/parts/LanguageProvider/LanguageProvider.ts'
 
@@ -37,6 +38,38 @@ test('dispose unregisters a language provider', async () => {
   await rejects(
     executeLanguageProvider('definition', 'provideDefinition', { languageId: 'typescript' }),
     /No definition provider found for typescript/,
+  )
+})
+
+test('registers and executes a document symbol provider', async () => {
+  const textDocument = { languageId: 'typescript', text: 'class App {}', uri: '/test.ts' }
+  const symbols = [
+    {
+      children: [],
+      endOffset: 12,
+      kind: 'class',
+      name: 'App',
+      selectionEndOffset: 9,
+      selectionStartOffset: 6,
+      startOffset: 0,
+    },
+  ]
+  registerDocumentSymbolProvider({
+    id: 'typescript.document-symbols',
+    languageId: 'typescript',
+    provideDocumentSymbols(actualTextDocument) {
+      strictEqual(actualTextDocument, textDocument)
+      return symbols
+    },
+  })
+
+  strictEqual(await executeLanguageProvider('document symbol', 'provideDocumentSymbols', textDocument), symbols)
+})
+
+test('document symbol provider registration requires provideDocumentSymbols', () => {
+  throws(
+    () => registerDocumentSymbolProvider({ id: 'typescript.document-symbols', languageId: 'typescript' } as any),
+    /document symbol provider typescript.document-symbols is missing provideDocumentSymbols function/,
   )
 })
 
