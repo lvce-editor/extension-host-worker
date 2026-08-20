@@ -1,7 +1,7 @@
 import { type DisposableMockRpc, ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { rejects, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { getPlatform } from '../../../src/parts/Platform/Platform.ts'
+import { getPlatform, getUserDataDir } from '../../../src/parts/Platform/Platform.ts'
 
 let mockRpc: DisposableMockRpc | undefined
 
@@ -45,4 +45,15 @@ test('throws for an unknown platform', async () => {
     message: 'Unknown platform: 99',
     name: 'TypeError',
   })
+})
+
+test('returns the user data directory URI', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string): Promise<string> {
+      strictEqual(id, 'Platform.getUserDataDir')
+      return 'file:///home/test/.config/lvce-oss'
+    },
+  })
+
+  strictEqual(await getUserDataDir(), 'file:///home/test/.config/lvce-oss')
 })
