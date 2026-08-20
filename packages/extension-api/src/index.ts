@@ -107,6 +107,7 @@ export {
   registerCodeActionsProvider,
   registerCommentProvider,
   registerDefinitionProvider,
+  registerDocumentSymbolProvider,
   registerImplementationProvider,
   registerReferenceProvider,
   registerRenameProvider,
@@ -115,7 +116,12 @@ export {
   registerTypeDefinitionProvider,
   resetLanguageProviderRegistry,
 } from './parts/LanguageProvider/LanguageProvider.ts'
-export type { LanguageProvider } from './parts/LanguageProvider/LanguageProvider.ts'
+export type {
+  DocumentSymbol,
+  DocumentSymbolProvider,
+  DocumentSymbolTextDocument,
+  LanguageProvider,
+} from './parts/LanguageProvider/LanguageProvider.ts'
 export {
   executeSourceControlAcceptInput,
   executeSourceControlAdd,
