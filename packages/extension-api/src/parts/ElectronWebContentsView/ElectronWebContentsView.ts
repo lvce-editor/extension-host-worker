@@ -13,8 +13,9 @@ export interface ElectronWebContentsViewStats {
 }
 
 export interface ElectronWebContentsView {
+  readonly click: (selector: string) => Promise<boolean>
   readonly dispose: () => Promise<void>
-  readonly executeJavaScript: <T = unknown>(code: string) => Promise<T>
+  readonly executeJavaScript: <T = unknown>(code: string, userGesture?: boolean) => Promise<T>
   readonly getStats: () => Promise<ElectronWebContentsViewStats>
   readonly loadUrl: (url: string) => Promise<void>
   readonly reload: () => Promise<void>
@@ -64,6 +65,9 @@ export const createElectronWebContentsView = async ({ url }: CreateElectronWebCo
   }
 
   return {
+    async click(selector: string): Promise<boolean> {
+      return (await rpc.invoke('ElectronWebContentsView.click', id, selector)) as boolean
+    },
     async dispose(): Promise<void> {
       if (disposed) {
         return
@@ -71,8 +75,8 @@ export const createElectronWebContentsView = async ({ url }: CreateElectronWebCo
       disposed = true
       await disposeAfterCreateError(rpc, id)
     },
-    async executeJavaScript<T = unknown>(code: string): Promise<T> {
-      return (await rpc.invoke('ElectronWebContentsView.insertJavaScript', id, code)) as T
+    async executeJavaScript<T = unknown>(code: string, userGesture = false): Promise<T> {
+      return (await rpc.invoke('ElectronWebContentsView.insertJavaScript', id, code, userGesture)) as T
     },
     async getStats(): Promise<ElectronWebContentsViewStats> {
       return (await rpc.invoke('ElectronWebContentsView.getStats', id)) as ElectronWebContentsViewStats
