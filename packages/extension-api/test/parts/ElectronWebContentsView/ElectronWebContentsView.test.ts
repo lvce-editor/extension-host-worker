@@ -45,6 +45,9 @@ const registerEmbedsMock = ({ failCreate = false, failLoad = false, invocations 
             invocations.push(['getStats', id])
             return { canGoBack: false, canGoForward: true, title: 'Example', url: 'https://example.com/' }
           },
+          'ElectronWebContentsView.hide'(id: number): void {
+            invocations.push(['hide', id])
+          },
           'ElectronWebContentsView.insertJavaScript'(id: number, code: string, userGesture: boolean): unknown {
             invocations.push(['executeJavaScript', id, code, userGesture])
             return 'Example'
@@ -82,6 +85,7 @@ test('creates a hidden web contents view and forwards operations', async () => {
     title: 'Example',
     url: 'https://example.com/',
   })
+  await view.hide()
   await view.reload()
   await view.loadUrl('https://example.com/next')
   await view.dispose()
@@ -95,6 +99,7 @@ test('creates a hidden web contents view and forwards operations', async () => {
     ['executeJavaScript', 42, 'document.title', false],
     ['executeJavaScript', 42, 'play()', true],
     ['getStats', 42],
+    ['hide', 42],
     ['reload', 42],
     ['loadUrl', 42, 'https://example.com/next'],
     ['dispose', 42],

@@ -17,6 +17,7 @@ export interface ElectronWebContentsView {
   readonly dispose: () => Promise<void>
   readonly executeJavaScript: <T = unknown>(code: string, userGesture?: boolean) => Promise<T>
   readonly getStats: () => Promise<ElectronWebContentsViewStats>
+  readonly hide: () => Promise<void>
   readonly loadUrl: (url: string) => Promise<void>
   readonly reload: () => Promise<void>
 }
@@ -80,6 +81,9 @@ export const createElectronWebContentsView = async ({ url }: CreateElectronWebCo
     },
     async getStats(): Promise<ElectronWebContentsViewStats> {
       return (await rpc.invoke('ElectronWebContentsView.getStats', id)) as ElectronWebContentsViewStats
+    },
+    async hide(): Promise<void> {
+      await rpc.invoke('ElectronWebContentsView.hide', id)
     },
     loadUrl,
     async reload(): Promise<void> {
