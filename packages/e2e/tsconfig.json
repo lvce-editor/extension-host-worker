@@ -25,5 +25,5 @@
     "composite": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["src", "test", "fixtures/**/*.ts", "../extension-api/src"]
+  "include": ["src", "test", "fixtures", "../extension-api/src"]
 }
