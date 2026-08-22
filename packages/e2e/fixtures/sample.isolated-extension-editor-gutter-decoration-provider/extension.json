@@ -1,0 +1,12 @@
+{
+  "id": "isolatedEditorGutterDecoration",
+  "name": "Sample Isolated Editor Gutter Decoration Provider",
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedEditorGutterDecoration.getDecorations"],
+  "commands": [
+    {
+      "id": "isolatedEditorGutterDecoration.getDecorations"
+    }
+  ]
+}

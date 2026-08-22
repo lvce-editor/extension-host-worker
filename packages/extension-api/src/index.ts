@@ -16,6 +16,15 @@ export {
   type EditorSelection,
 } from './parts/Editor/Editor.ts'
 export {
+  executeEditorGutterDecorationProvider,
+  registerEditorGutterDecorationProvider,
+  resetEditorGutterDecorationProviderRegistry,
+  type EditorGutterDecoration,
+  type EditorGutterDecorationProvider,
+  type EditorGutterDecorationTextDocument,
+  type EditorGutterDecorationType,
+} from './parts/EditorGutterDecorationApi/EditorGutterDecorationApi.ts'
+export {
   executeEditorLineDecorationProvider,
   registerEditorLineDecorationProvider,
   resetEditorLineDecorationProviderRegistry,
