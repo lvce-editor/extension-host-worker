@@ -17,6 +17,7 @@ export {
 } from './parts/Editor/Editor.ts'
 export {
   executeEditorGutterDecorationProvider,
+  refreshEditorGutterDecorations,
   registerEditorGutterDecorationProvider,
   resetEditorGutterDecorationProviderRegistry,
   type EditorGutterDecoration,
