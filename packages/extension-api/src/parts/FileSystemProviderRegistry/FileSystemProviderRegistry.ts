@@ -45,7 +45,7 @@ const getProvider = (id: string): RegisteredFileSystemProvider => {
   return provider
 }
 
-export const executeFileSystemProviderReadFile = async (id: string, uri: string): Promise<string> => {
+export const executeFileSystemProviderReadFile = async (id: string, uri: string): Promise<Blob | string> => {
   return getProvider(id).readFile(uri)
 }
 
