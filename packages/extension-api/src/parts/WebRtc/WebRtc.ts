@@ -1,6 +1,7 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 export interface StartWebRpcAudioStreamOptions {
+  readonly audioDebugPort?: MessagePort
   readonly elementLocator: string
   readonly ephemeralKey: string
   readonly port: MessagePort

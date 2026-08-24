@@ -84,6 +84,18 @@ test('executeFileSystemProviderReadFile rejects an unknown provider', async () =
   await rejects(executeFileSystemProviderReadFile('missing', 'file:///workspace/file.txt'), /file system provider missing not found/)
 })
 
+test('file system providers can return binary blobs', async () => {
+  const audio = new Blob(['recorded audio'], { type: 'audio/webm' })
+  registerFileSystemProvider({
+    id: 'audio-recordings',
+    readFile() {
+      return audio
+    },
+  })
+
+  strictEqual(await executeFileSystemProviderReadFile('audio-recordings', 'audio-recordings:///message.webm'), audio)
+})
+
 test('optional provider metadata uses writable posix defaults', async () => {
   registerFileSystemProvider({
     id: 'minimal',
