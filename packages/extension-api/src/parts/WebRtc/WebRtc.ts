@@ -1,6 +1,13 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
+export interface WebRtcAudioConstraints {
+  readonly autoGainControl?: boolean
+  readonly echoCancellation?: boolean
+  readonly noiseSuppression?: boolean
+}
+
 export interface StartWebRpcAudioStreamOptions {
+  readonly audioConstraints?: WebRtcAudioConstraints
   readonly audioDebugPort?: MessagePort
   readonly elementLocator: string
   readonly ephemeralKey: string
