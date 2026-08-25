@@ -4,6 +4,7 @@ import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 import { getPlatform } from '../Platform/Platform.ts'
 
 const MemfsPrefix = 'memfs://'
+const FilePrefix = 'file://'
 
 export interface ReadAsObjectUrlResult {
   readonly error: string
@@ -19,6 +20,10 @@ const isHttp = (uri: string): boolean => {
   return uri.startsWith('http://') || uri.startsWith('https://')
 }
 
+const isCustomFileSystemUri = (uri: string): boolean => {
+  return uri.includes('://') && !uri.startsWith(FilePrefix)
+}
+
 const getRemoteUrl = (uri: string): string => {
   const withoutPrefix = uri.startsWith('file://') ? uri.slice('file://'.length) : uri
   const normalized = withoutPrefix.replaceAll('\\', '/')
@@ -29,7 +34,7 @@ const getObjectUrl = async (uri: string): Promise<string> => {
   if (isHttp(uri)) {
     return uri
   }
-  if (isMemory(uri)) {
+  if (isMemory(uri) || isCustomFileSystemUri(uri)) {
     return (await executeCommand('Blob.getSrc', uri)) as string
   }
   const platform = await getPlatform()
