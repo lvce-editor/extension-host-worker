@@ -111,9 +111,6 @@ test('readAsObjectUrl reads a web file as a browser object URL', async () => {
   mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
     async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
       invocations.push([id, ...args])
-      if (id === 'Layout.getPlatform') {
-        return 1
-      }
       return 'blob:https://example.com/image-id'
     },
   })
@@ -125,7 +122,7 @@ test('readAsObjectUrl reads a web file as a browser object URL', async () => {
     objectUrl: 'blob:https://example.com/image-id',
     wasFound: true,
   })
-  deepStrictEqual(invocations, [['Layout.getPlatform'], ['Blob.getSrc', 'html:///workspace/image.png']])
+  deepStrictEqual(invocations, [['Blob.getSrc', 'html:///workspace/image.png']])
 })
 
 test('readAsObjectUrl reads a memfs file as a browser object URL', async () => {
@@ -145,6 +142,25 @@ test('readAsObjectUrl reads a memfs file as a browser object URL', async () => {
     wasFound: true,
   })
   deepStrictEqual(invocations, [['Blob.getSrc', 'memfs:///workspace/image.png']])
+})
+
+test('readAsObjectUrl reads a custom file system URI as a browser object URL on Electron', async () => {
+  const invocations: [string, ...unknown[]][] = []
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      return 'blob:https://example.com/audio-id'
+    },
+  })
+
+  const result = await readAsObjectUrl('gpt-voice-audio:///recording.webm')
+
+  deepStrictEqual(result, {
+    error: '',
+    objectUrl: 'blob:https://example.com/audio-id',
+    wasFound: true,
+  })
+  deepStrictEqual(invocations, [['Blob.getSrc', 'gpt-voice-audio:///recording.webm']])
 })
 
 test('readAsObjectUrl returns a remote URL for an Electron file', async () => {
