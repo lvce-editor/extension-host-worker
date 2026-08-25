@@ -37,8 +37,12 @@ test('getPreference invokes extension management worker', async () => {
 
 test('getConfigurationDefinitions returns enabled extension configuration definitions', async () => {
   mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string): Promise<unknown> {
+      strictEqual(id, 'Layout.getPlatform')
+      return 4
+    },
     async 'Extensions.getAllExtensions'(assetDir: string, platform: number): Promise<readonly unknown[]> {
-      deepStrictEqual([assetDir, platform], ['', 0])
+      deepStrictEqual([assetDir, platform], ['', 4])
       return [
         {
           configuration: {
