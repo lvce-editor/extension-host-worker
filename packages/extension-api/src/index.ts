@@ -258,4 +258,10 @@ export type {
   StatusBarItemProviderRegistrySnapshot,
 } from './parts/StatusBar/StatusBar.ts'
 export { setRemoteDescription, startWebRtcAudioStream, stopWebRtcAudioStream, readMicLevels } from './parts/WebRtc/WebRtc.ts'
-export type { SetRemoteDescriptionOptions, StartWebRpcAudioStreamOptions, MicLevelsResult, ReadMicLevelOptions } from './parts/WebRtc/WebRtc.ts'
+export type {
+  MicLevelsResult,
+  ReadMicLevelOptions,
+  SetRemoteDescriptionOptions,
+  StartWebRpcAudioStreamOptions,
+  WebRtcAudioConstraints,
+} from './parts/WebRtc/WebRtc.ts'
