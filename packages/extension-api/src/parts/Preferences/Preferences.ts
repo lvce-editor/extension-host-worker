@@ -3,6 +3,32 @@ import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 
 const ScriptInputSource = 2
 
+export interface ConfigurationDefinition {
+  readonly default?: unknown
+  readonly description?: string
+  readonly enum?: readonly string[]
+  readonly maximum?: number
+  readonly minimum?: number
+  readonly type?: string
+}
+
+interface ExtensionManifest {
+  readonly configuration?: Readonly<Record<string, ConfigurationDefinition>>
+  readonly disabled?: boolean
+}
+
+const getConfigurationEntries = (extension: ExtensionManifest): readonly (readonly [string, ConfigurationDefinition])[] => {
+  if (extension.disabled || !extension.configuration || typeof extension.configuration !== 'object') {
+    return []
+  }
+  return Object.entries(extension.configuration)
+}
+
+export const getConfigurationDefinitions = async (): Promise<Readonly<Record<string, ConfigurationDefinition>>> => {
+  const extensions = (await ExtensionManagementWorker.invoke('Extensions.getAllExtensions', '', 0)) as readonly ExtensionManifest[]
+  return Object.fromEntries(extensions.flatMap(getConfigurationEntries))
+}
+
 export const getPreference = async (key: string): Promise<unknown> => {
   return ExtensionManagementWorker.invoke('Extensions.getPreference', key)
 }
