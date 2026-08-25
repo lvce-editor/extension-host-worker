@@ -25,7 +25,8 @@ const getConfigurationEntries = (extension: ExtensionManifest): readonly (readon
 }
 
 export const getConfigurationDefinitions = async (): Promise<Readonly<Record<string, ConfigurationDefinition>>> => {
-  const extensions = (await ExtensionManagementWorker.invoke('Extensions.getAllExtensions', '', 0)) as readonly ExtensionManifest[]
+  const platform = (await executeCommand('Layout.getPlatform')) as number
+  const extensions = (await ExtensionManagementWorker.invoke('Extensions.getAllExtensions', '', platform)) as readonly ExtensionManifest[]
   return Object.fromEntries(extensions.flatMap(getConfigurationEntries))
 }
 
