@@ -44,20 +44,20 @@ test('readFile reads through the file system worker', async () => {
   strictEqual(invokedUri, '/tmp/sample.txt')
 })
 
-test('readFileAsBlob reads binary content through the file system worker', async () => {
-  let invokedUri = ''
+test('readFileAsBlob reads remote content through its registered file system provider', async () => {
+  const invocations: [string, ...unknown[]][] = []
   const blob = new Blob(['sample content'])
-  mockRpc = FileSystemWorker.registerMockRpc({
-    async 'FileSystem.readFileAsBlob'(uri: string): Promise<Blob> {
-      invokedUri = uri
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<Blob> {
+      invocations.push([id, ...args])
       return blob
     },
   })
 
-  const result = await readFileAsBlob('/tmp/sample.bin')
+  const result = await readFileAsBlob('remote-ssh:///workspace/image.png')
 
   strictEqual(result, blob)
-  strictEqual(invokedUri, '/tmp/sample.bin')
+  deepStrictEqual(invocations, [['FileSystem.getBlob', 'remote-ssh:///workspace/image.png']])
 })
 
 test('getFileHash reads the content hash through the file system worker', async () => {
