@@ -72,7 +72,7 @@ export const readFile = async (uri: string): Promise<string> => {
 }
 
 export const readFileAsBlob = async (uri: string): Promise<Blob> => {
-  return FileSystemWorker.invoke('FileSystem.readFileAsBlob', uri)
+  return (await executeCommand('FileSystem.getBlob', uri)) as Blob
 }
 
 export const readAsObjectUrl = async (uri: string): Promise<ReadAsObjectUrlResult> => {
