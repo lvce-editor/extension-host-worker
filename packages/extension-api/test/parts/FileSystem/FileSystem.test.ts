@@ -60,6 +60,27 @@ test('readFileAsBlob reads remote content through its registered file system pro
   deepStrictEqual(invocations, [['FileSystem.getBlob', 'remote-ssh:///workspace/image.png']])
 })
 
+test('readFileAsBlob falls back to the file system worker on older hosts', async () => {
+  const blob = new Blob(['sample content'])
+  let invokedUri = ''
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(): Promise<never> {
+      throw new Error('Command not found: FileSystem.getBlob')
+    },
+  })
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.readFileAsBlob'(uri: string): Promise<Blob> {
+      invokedUri = uri
+      return blob
+    },
+  })
+
+  const result = await readFileAsBlob('html:///workspace/image.png')
+
+  strictEqual(result, blob)
+  strictEqual(invokedUri, 'html:///workspace/image.png')
+})
+
 test('getFileHash reads the content hash through the file system worker', async () => {
   let invokedUri = ''
   mockRpc = FileSystemWorker.registerMockRpc({
