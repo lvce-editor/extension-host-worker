@@ -2,10 +2,6 @@ import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
-  registerFileSystemProvider,
-  resetFileSystemProviderRegistry,
-} from '../../../src/parts/FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
-import {
   closeUri,
   confirm,
   getRecentlyOpenedWorkspaceUris,
@@ -26,10 +22,9 @@ let mockRpc: MockRpcDisposable | undefined
 afterEach(() => {
   mockRpc?.[Symbol.dispose]()
   mockRpc = undefined
-  resetFileSystemProviderRegistry()
 })
 
-test('setWorkspaceUri forwards a registered provider path separator', async () => {
+test('setWorkspaceUri forwards the workspace uri', async () => {
   const invocations: unknown[][] = []
   mockRpc = ExtensionManagementWorker.registerMockRpc({
     async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
@@ -37,15 +32,9 @@ test('setWorkspaceUri forwards a registered provider path separator', async () =
       return undefined
     },
   })
-  registerFileSystemProvider({
-    id: 'remote-ssh',
-    pathSeparator: '/',
-    readFile: async () => '',
-  })
-
   await setWorkspaceUri('remote-ssh:///test-folder')
 
-  deepStrictEqual(invocations, [['Workspace.setUri', 'remote-ssh:///test-folder', '/']])
+  deepStrictEqual(invocations, [['Workspace.setUri', 'remote-ssh:///test-folder']])
 })
 
 test('host helpers execute renderer commands through extension management', async () => {

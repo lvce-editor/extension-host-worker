@@ -29,9 +29,6 @@ const assertFileSystemProvider = (provider: FileSystemProvider): void => {
       throw new ExtensionApiError(`file system provider ${provider.id} has invalid ${method} function`)
     }
   }
-  if (provider.pathSeparator !== undefined && typeof provider.pathSeparator !== 'string') {
-    throw new ExtensionApiError(`file system provider ${provider.id} has invalid pathSeparator`)
-  }
   if (provider.id in providers) {
     throw new ExtensionApiError(`file system provider ${provider.id} is already registered`)
   }
@@ -89,18 +86,6 @@ export const executeFileSystemProviderReadDirWithFileTypes = async (id: string, 
   return provider.readDirWithFileTypes(uri)
 }
 
-export const executeFileSystemProviderGetPathSeparator = (id: string): string => {
-  return getProvider(id).pathSeparator || '/'
-}
-
-export const getFileSystemProviderPathSeparator = (id: string): string | undefined => {
-  const provider = providers[id]
-  if (!provider) {
-    return undefined
-  }
-  return provider.pathSeparator || '/'
-}
-
 export const executeFileSystemProviderIsReadonly = async (id: string): Promise<boolean> => {
   const provider = getProvider(id)
   return provider.isReadonly ? provider.isReadonly() : false
@@ -120,7 +105,6 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
     id: provider.id,
     isReadonly: provider.isReadonly,
     mkdir: provider.mkdir,
-    pathSeparator: provider.pathSeparator,
     readDirWithFileTypes: provider.readDirWithFileTypes,
     readFile: (uri) => provider.readFile(uri),
     remove: provider.remove,
@@ -136,7 +120,6 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
 }
 
 const commandMap = {
-  'ExtensionApi.executeFileSystemProviderGetPathSeparator': executeFileSystemProviderGetPathSeparator,
   'ExtensionApi.executeFileSystemProviderIsReadonly': executeFileSystemProviderIsReadonly,
   'ExtensionApi.executeFileSystemProviderMkdir': executeFileSystemProviderMkdir,
   'ExtensionApi.executeFileSystemProviderReadDirWithFileTypes': executeFileSystemProviderReadDirWithFileTypes,
