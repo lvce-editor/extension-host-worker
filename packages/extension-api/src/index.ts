@@ -159,13 +159,16 @@ export {
   dispatchViewEvent,
   disposeViewInstance,
   executeViewProvider,
+  getViewInstanceState,
   getViewRegistrySnapshot,
   renderViewInstance,
   registerView,
   resetViewRegistry,
   saveViewInstanceState,
+  setViewInstanceState,
   setViewInstanceActive,
 } from './parts/ViewRegistry/ViewRegistry.ts'
+export * as ViewletStates from './parts/PublicViewletStates/PublicViewletStates.ts'
 export {
   createOutputChannel,
   getOutputChannelLogs,
@@ -179,6 +182,8 @@ export {
 } from './parts/StatusBar/StatusBar.ts'
 export type {
   RegisteredView,
+  InstanceView,
+  StatefulView,
   View,
   ViewAction,
   ViewCommand,

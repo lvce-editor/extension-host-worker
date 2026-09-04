@@ -3,12 +3,14 @@ import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/stric
 import { afterEach, beforeEach, test } from 'node:test'
 import type { VirtualDomViewInstance } from '../../../src/parts/View/View.ts'
 import { executeCommand, getCommandRegistrySnapshot } from '../../../src/parts/CommandRegistry/CommandRegistry.ts'
+import * as ViewletStates from '../../../src/parts/PublicViewletStates/PublicViewletStates.ts'
 import { getStatusBarItems } from '../../../src/parts/StatusBarItemProviderRegistry/StatusBarItemProviderRegistry.ts'
 import {
   createViewInstance,
   dispatchViewEvent,
   disposeViewInstance,
   executeViewProvider,
+  getViewInstanceState,
   getViewActions,
   getViewActionsDom,
   getViewMenuEntries,
@@ -18,6 +20,7 @@ import {
   resetViewRegistry,
   saveViewInstanceState,
   setViewInstanceActive,
+  setViewInstanceState,
 } from '../../../src/parts/ViewRegistry/ViewRegistry.ts'
 
 interface MockRpcDisposable {
@@ -351,6 +354,164 @@ test('createViewInstance renders initial virtual dom', async () => {
 
   const result = await createViewInstance('sample.views.testing', 1)
   strictEqual(result.type, 'setDom')
+})
+
+test('stateful view stores and renders its initial state', async () => {
+  registerView<{ readonly count: number; readonly uid: number }>({
+    createInitialState(context) {
+      return {
+        count: 1,
+        uid: context!.uid,
+      }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+    render(state) {
+      return [
+        {
+          childCount: 0,
+          text: `count:${state.count}`,
+          type: 4,
+        },
+      ]
+    },
+  })
+
+  deepStrictEqual(getViewRegistrySnapshot().views[0], {
+    displayName: undefined,
+    icon: undefined,
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+    name: undefined,
+    preferredLocation: 'sideBar',
+    stateful: true,
+    title: undefined,
+  })
+  deepStrictEqual(await createViewInstance('sample.views.testing', 7), {
+    dom: [
+      {
+        childCount: 0,
+        text: 'count:1',
+        type: 4,
+      },
+    ],
+    type: 'setDom',
+  })
+  deepStrictEqual(getViewInstanceState(7), { count: 1, uid: 7 })
+})
+
+test('stateful view events replace state before rendering', async () => {
+  registerView<{ readonly count: number }>({
+    createInitialState() {
+      return { count: 0 }
+    },
+    handleEvent(state) {
+      return { count: state.count + 1 }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+    render(state) {
+      return [{ childCount: 0, text: String(state.count), type: 4 }]
+    },
+  })
+  await createViewInstance('sample.views.testing', 1)
+
+  const result = await dispatchViewEvent(1, { type: 'click' })
+
+  deepStrictEqual(getViewInstanceState(1), { count: 1 })
+  strictEqual(result.type, 'setPatches')
+})
+
+test('setViewInstanceState replaces state and returns render patches', async () => {
+  registerView<{ readonly count: number }>({
+    createInitialState() {
+      return { count: 0 }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+    render(state) {
+      return [{ childCount: 0, text: String(state.count), type: 4 }]
+    },
+  })
+  await createViewInstance('sample.views.testing', 1)
+
+  const result = await setViewInstanceState(1, { count: 2 })
+
+  deepStrictEqual(getViewInstanceState(1), { count: 2 })
+  strictEqual(result.type, 'setPatches')
+})
+
+test('ViewletStates.set replaces managed state and requests a rerender', async () => {
+  const rerenderedUids: number[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.requestViewRerender'(uid: number): Promise<void> {
+      rerenderedUids.push(uid)
+    },
+  })
+  registerView<{ readonly count: number }>({
+    createInitialState() {
+      return { count: 0 }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+    render() {
+      return []
+    },
+  })
+  await createViewInstance('sample.views.testing', 1)
+
+  await ViewletStates.set(1, { count: 3 })
+
+  deepStrictEqual(ViewletStates.get(1), { count: 3 })
+  deepStrictEqual(rerenderedUids, [1])
+})
+
+test('disposing a stateful view removes its managed state', async () => {
+  registerView<{ readonly count: number }>({
+    createInitialState() {
+      return { count: 0 }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+    render() {
+      return []
+    },
+  })
+  await createViewInstance('sample.views.testing', 1)
+
+  await disposeViewInstance(1)
+
+  throws(() => ViewletStates.get(1), /view state 1 not found/)
+})
+
+test('stateful view command replaces the active state and requests a rerender', async () => {
+  const rerenderedUids: number[] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.requestViewRerender'(uid: number): Promise<void> {
+      rerenderedUids.push(uid)
+    },
+  })
+  registerView<{ readonly count: number }>({
+    commands: {
+      'sample.increment'(state) {
+        return { count: state.count + 1 }
+      },
+    },
+    createInitialState() {
+      return { count: 0 }
+    },
+    id: 'sample.views.testing',
+    kind: 'virtualDom',
+    render() {
+      return []
+    },
+  })
+  await createViewInstance('sample.views.testing', 1)
+
+  await executeCommand('sample.increment')
+
+  deepStrictEqual(getViewInstanceState(1), { count: 1 })
+  deepStrictEqual(rerenderedUids, [1])
 })
 
 test('createViewInstance rejects invalid virtual dom', async () => {
