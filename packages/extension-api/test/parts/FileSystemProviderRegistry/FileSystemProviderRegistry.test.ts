@@ -1,7 +1,6 @@
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
-  executeFileSystemProviderGetPathSeparator,
   executeFileSystemProviderIsReadonly,
   executeFileSystemProviderMkdir,
   executeFileSystemProviderReadDirWithFileTypes,
@@ -28,7 +27,6 @@ test('registerFileSystemProvider registers and executes provider operations', as
     mkdir(uri) {
       invocations.push(['mkdir', uri])
     },
-    pathSeparator: '/',
     readDirWithFileTypes(uri) {
       return [{ name: uri, type: 1 }]
     },
@@ -53,7 +51,6 @@ test('registerFileSystemProvider registers and executes provider operations', as
   deepStrictEqual(await executeFileSystemProviderReadDirWithFileTypes('git-file-before', 'file:///workspace'), [
     { name: 'file:///workspace', type: 1 },
   ])
-  strictEqual(executeFileSystemProviderGetPathSeparator('git-file-before'), '/')
   strictEqual(await executeFileSystemProviderIsReadonly('git-file-before'), true)
   await executeFileSystemProviderMkdir('git-file-before', 'file:///workspace/folder')
   await executeFileSystemProviderWriteFile('git-file-before', 'file:///workspace/file.txt', 'updated')
@@ -84,7 +81,19 @@ test('executeFileSystemProviderReadFile rejects an unknown provider', async () =
   await rejects(executeFileSystemProviderReadFile('missing', 'file:///workspace/file.txt'), /file system provider missing not found/)
 })
 
-test('optional provider metadata uses writable posix defaults', async () => {
+test('file system providers can return binary blobs', async () => {
+  const audio = new Blob(['recorded audio'], { type: 'audio/webm' })
+  registerFileSystemProvider({
+    id: 'audio-recordings',
+    readFile() {
+      return audio
+    },
+  })
+
+  strictEqual(await executeFileSystemProviderReadFile('audio-recordings', 'audio-recordings:///message.webm'), audio)
+})
+
+test('optional provider metadata uses writable defaults', async () => {
   registerFileSystemProvider({
     id: 'minimal',
     readFile() {
@@ -92,7 +101,6 @@ test('optional provider metadata uses writable posix defaults', async () => {
     },
   })
 
-  strictEqual(executeFileSystemProviderGetPathSeparator('minimal'), '/')
   strictEqual(await executeFileSystemProviderIsReadonly('minimal'), false)
   await rejects(executeFileSystemProviderReadDirWithFileTypes('minimal', 'file:///workspace'), /missing readDirWithFileTypes function/)
 })

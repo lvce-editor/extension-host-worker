@@ -27,6 +27,10 @@ const registerEmbedsMock = ({ failCreate = false, failLoad = false, invocations 
       invocations.push(['transfer', initialCommand])
       await PlainMessagePortRpc.create({
         commandMap: {
+          'ElectronWebContentsView.click'(id: number, selector: string): boolean {
+            invocations.push(['click', id, selector])
+            return true
+          },
           'ElectronWebContentsView.createWebContentsView'(restoreId: number, keyBindings: readonly string[]): number {
             invocations.push(['create', restoreId, keyBindings])
             if (failCreate) {
@@ -41,8 +45,11 @@ const registerEmbedsMock = ({ failCreate = false, failLoad = false, invocations 
             invocations.push(['getStats', id])
             return { canGoBack: false, canGoForward: true, title: 'Example', url: 'https://example.com/' }
           },
-          'ElectronWebContentsView.insertJavaScript'(id: number, code: string): unknown {
-            invocations.push(['executeJavaScript', id, code])
+          'ElectronWebContentsView.hide'(id: number): void {
+            invocations.push(['hide', id])
+          },
+          'ElectronWebContentsView.insertJavaScript'(id: number, code: string, userGesture: boolean): unknown {
+            invocations.push(['executeJavaScript', id, code, userGesture])
             return 'Example'
           },
           'ElectronWebContentsView.reload'(id: number): void {
@@ -69,13 +76,16 @@ test('creates a hidden web contents view and forwards operations', async () => {
     url: 'https://example.com',
   })
 
+  strictEqual(await view.click('.playButton'), true)
   strictEqual(await view.executeJavaScript<string>('document.title'), 'Example')
+  strictEqual(await view.executeJavaScript<string>('play()', true), 'Example')
   deepStrictEqual(await view.getStats(), {
     canGoBack: false,
     canGoForward: true,
     title: 'Example',
     url: 'https://example.com/',
   })
+  await view.hide()
   await view.reload()
   await view.loadUrl('https://example.com/next')
   await view.dispose()
@@ -85,8 +95,11 @@ test('creates a hidden web contents view and forwards operations', async () => {
     ['transfer', 'HandleMessagePortForEmbedsProcess.handleMessagePortForEmbedsProcess'],
     ['create', 0, []],
     ['loadUrl', 42, 'https://example.com'],
-    ['executeJavaScript', 42, 'document.title'],
+    ['click', 42, '.playButton'],
+    ['executeJavaScript', 42, 'document.title', false],
+    ['executeJavaScript', 42, 'play()', true],
     ['getStats', 42],
+    ['hide', 42],
     ['reload', 42],
     ['loadUrl', 42, 'https://example.com/next'],
     ['dispose', 42],

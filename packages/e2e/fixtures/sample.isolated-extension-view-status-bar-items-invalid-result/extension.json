@@ -1,0 +1,14 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onView:sample.views.statusBarItemsInvalidResult"],
+  "views": [
+    {
+      "id": "sample.views.statusBarItemsInvalidResult",
+      "title": "View Status Bar Items Invalid Result",
+      "icon": "symbol-error",
+      "kind": "virtualDom",
+      "preferredLocation": "preview"
+    }
+  ]
+}

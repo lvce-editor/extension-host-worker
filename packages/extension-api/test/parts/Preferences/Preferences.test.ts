@@ -1,7 +1,13 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { getPreference, setPreference } from '../../../src/parts/Preferences/Preferences.ts'
+import {
+  getConfigurationDefinitions,
+  getPreference,
+  openSettings,
+  setPreference,
+  setSettingsSearchValue,
+} from '../../../src/parts/Preferences/Preferences.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -27,6 +33,77 @@ test('getPreference invokes extension management worker', async () => {
 
   strictEqual(result, 16)
   strictEqual(invokedKey, 'editor.fontSize')
+})
+
+test('getConfigurationDefinitions returns enabled extension configuration definitions', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string): Promise<unknown> {
+      strictEqual(id, 'Layout.getPlatform')
+      return 4
+    },
+    async 'Extensions.getAllExtensions'(assetDir: string, platform: number): Promise<readonly unknown[]> {
+      deepStrictEqual([assetDir, platform], ['', 4])
+      return [
+        {
+          configuration: {
+            'gptvoice.tools.terminal.enabled': {
+              default: false,
+              description: 'Allow Gpt Voice to execute Bash commands in the opened workspace.',
+              type: 'boolean',
+            },
+          },
+        },
+        {
+          configuration: {
+            'sample.disabled': {
+              default: true,
+              type: 'boolean',
+            },
+          },
+          disabled: true,
+        },
+        {},
+      ]
+    },
+  })
+
+  const result = await getConfigurationDefinitions()
+
+  deepStrictEqual(result, {
+    'gptvoice.tools.terminal.enabled': {
+      default: false,
+      description: 'Allow Gpt Voice to execute Bash commands in the opened workspace.',
+      type: 'boolean',
+    },
+  })
+})
+
+test('openSettings opens the settings UI', async () => {
+  const invocations: unknown[][] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      return undefined
+    },
+  })
+
+  await openSettings()
+
+  deepStrictEqual(invocations, [['Preferences.openSettingsUi']])
+})
+
+test('setSettingsSearchValue updates the settings search input', async () => {
+  const invocations: unknown[][] = []
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      return undefined
+    },
+  })
+
+  await setSettingsSearchValue('font size')
+
+  deepStrictEqual(invocations, [['Settings.handleInput', 'font size', 2]])
 })
 
 test('setPreference invokes extension management worker', async () => {

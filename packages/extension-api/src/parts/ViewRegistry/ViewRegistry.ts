@@ -1,5 +1,5 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import { diffTree, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
+import { diffTree, validate as validateVirtualDom, type VirtualDomNode } from '@lvce-editor/virtual-dom-worker'
 import type { Disposable } from '../Disposable/Disposable.ts'
 import type {
   DomEventListener,
@@ -18,6 +18,7 @@ import type {
 import { registerCommand } from '../CommandRegistry/CommandRegistry.ts'
 import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
+import * as ViewStatusBarItems from '../ViewStatusBarItems/ViewStatusBarItems.ts'
 
 const views: Record<string, View<any>> = Object.create(null)
 const instances: Record<number, VirtualDomViewInstance> = Object.create(null)
@@ -234,10 +235,13 @@ const getVirtualDomInstance = (uid: number): VirtualDomViewInstance => {
   return instance
 }
 
-const renderDom = async (instance: VirtualDomViewInstance): Promise<readonly VirtualDomNode[]> => {
+const renderDom = async (viewId: string, instance: VirtualDomViewInstance): Promise<readonly VirtualDomNode[]> => {
   const dom = await instance.render()
   if (!Array.isArray(dom)) {
     throw new ExtensionApiError('view render result must be an array')
+  }
+  if (!validateVirtualDom(dom)) {
+    throw new ExtensionApiError(`view ${viewId} render result must be valid virtual dom`)
   }
   return dom
 }
@@ -333,7 +337,7 @@ const normalizeViewScrollPosition = (scrollPosition: unknown): readonly [] | Vie
 
 const renderPatches = async (uid: number, instance: VirtualDomViewInstance): Promise<ViewRenderResult> => {
   const oldDom = renderedDoms[uid] || []
-  const newDom = await renderDom(instance)
+  const newDom = await renderDom(contextViewIds[uid], instance)
   renderedDoms[uid] = newDom
   const patches = diffTree(oldDom, newDom)
   return {
@@ -484,6 +488,8 @@ const withScrollPosition = async (result: ViewRenderResult, instance: VirtualDom
 }
 
 const withRenderMetadata = async (
+  uid: number,
+  viewId: string,
   result: ViewRenderResult,
   instance: VirtualDomViewInstance,
   contextChange: ContextChange,
@@ -492,7 +498,9 @@ const withRenderMetadata = async (
   const resultWithFocus = await withFocusSelector(resultWithCss, instance, contextChange)
   const resultWithSelections = await withSelections(resultWithFocus, instance)
   const resultWithScrollPosition = await withScrollPosition(resultWithSelections, instance)
-  return withTitle(resultWithScrollPosition, instance)
+  const resultWithTitle = await withTitle(resultWithScrollPosition, instance)
+  await ViewStatusBarItems.renderViewStatusBarItems(uid, viewId, instance)
+  return resultWithTitle
 }
 
 const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
@@ -531,14 +539,14 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   instanceUids.add(uid)
   instanceUidsByView[viewId] = instanceUids
   contextViewIds[uid] = viewId
-  const dom = await renderDom(instance)
+  const dom = await renderDom(viewId, instance)
   renderedDoms[uid] = dom
   const result: ViewRenderResult = {
     dom,
     type: 'setDom',
   }
   const contextChange = await maybeNotifyContextChanged(uid, viewId, instance)
-  return withRenderMetadata(result, instance, contextChange)
+  return withRenderMetadata(uid, viewId, result, instance, contextChange)
 }
 
 export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<ViewRenderResult> => {
@@ -557,31 +565,46 @@ export const dispatchViewEvent = async (uid: number, event: ViewEvent): Promise<
   }
   const result = await renderPatches(uid, instance)
   const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return withRenderMetadata(result, instance, contextChange)
+  return withRenderMetadata(uid, contextViewIds[uid], result, instance, contextChange)
 }
 
 export const renderViewInstance = async (uid: number): Promise<ViewRenderResult> => {
   const instance = getVirtualDomInstance(uid)
   const result = await renderPatches(uid, instance)
   const contextChange = await maybeNotifyContextChanged(uid, contextViewIds[uid], instance)
-  return withRenderMetadata(result, instance, contextChange)
+  return withRenderMetadata(uid, contextViewIds[uid], result, instance, contextChange)
+}
+
+export const setViewInstanceActive = async (uid: number, active: boolean): Promise<void> => {
+  getVirtualDomInstance(uid)
+  if (typeof active !== 'boolean') {
+    throw new ExtensionApiError('view instance active state must be a boolean')
+  }
+  await ViewStatusBarItems.setViewInstanceActive(uid, active)
 }
 
 export const disposeViewInstance = async (uid: number): Promise<void> => {
   const instance = instances[uid]
-  if (instance && typeof instance.dispose === 'function') {
-    await instance.dispose()
-  }
-  await maybeClearContext(uid, contextViewIds[uid])
   const viewId = contextViewIds[uid]
-  const instanceUids = instanceUidsByView[viewId]
-  instanceUids?.delete(uid)
-  if (instanceUids?.size === 0) {
-    delete instanceUidsByView[viewId]
+  try {
+    if (instance && typeof instance.dispose === 'function') {
+      await instance.dispose()
+    }
+  } finally {
+    await ViewStatusBarItems.disposeViewStatusBarItems(uid)
+    try {
+      await maybeClearContext(uid, viewId)
+    } finally {
+      const instanceUids = instanceUidsByView[viewId]
+      instanceUids?.delete(uid)
+      if (instanceUids?.size === 0) {
+        delete instanceUidsByView[viewId]
+      }
+      delete instances[uid]
+      delete renderedDoms[uid]
+      delete contextViewIds[uid]
+    }
   }
-  delete instances[uid]
-  delete renderedDoms[uid]
-  delete contextViewIds[uid]
 }
 
 export const saveViewInstanceState = async (uid: number): Promise<unknown> => {
@@ -638,9 +661,11 @@ const commandMap = {
   'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
   'ExtensionApi.renderViewInstance': renderViewInstance,
   'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
+  'ExtensionApi.setViewInstanceActive': setViewInstanceActive,
 }
 
 export const resetViewRegistry = (): void => {
+  ViewStatusBarItems.resetViewStatusBarItems()
   for (const id of Object.keys(views)) {
     for (const disposable of viewCommandDisposables[id] || []) {
       disposable.dispose()

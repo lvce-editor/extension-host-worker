@@ -30,7 +30,7 @@ afterEach(() => {
   mockRpc = undefined
 })
 
-test('registerStatusBarItemProvider registers and returns items', () => {
+test('registerStatusBarItemProvider registers and returns items', async () => {
   const handle = registerStatusBarItemProvider({
     getStatusBarItem() {
       return {
@@ -48,7 +48,7 @@ test('registerStatusBarItemProvider registers and returns items', () => {
   strictEqual(getStatusBarItems()[0]?.spinning, true)
   strictEqual(getStatusBarItems()[0]?.text, 'Ready')
 
-  handle.dispose()
+  await handle.dispose()
   strictEqual(getStatusBarItemProviderRegistrySnapshot().providers.length, 0)
 })
 

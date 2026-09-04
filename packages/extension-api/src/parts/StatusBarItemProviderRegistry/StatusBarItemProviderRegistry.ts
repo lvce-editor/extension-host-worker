@@ -35,9 +35,9 @@ export const registerStatusBarItemProvider = (provider: StatusBarItemProvider): 
   ExtensionApiCommandRegistry.registerCommandMap(commandMap)
   void NotifyStatusBarChange.notifyStatusBarChange(registeredProvider.id)
   return {
-    dispose(): void {
+    async dispose(): Promise<void> {
       registry.deleteProvider(registeredProvider.id)
-      void NotifyStatusBarChange.notifyStatusBarChange(registeredProvider.id)
+      await NotifyStatusBarChange.notifyStatusBarChange(registeredProvider.id)
     },
     async refresh(): Promise<void> {
       await NotifyStatusBarChange.notifyStatusBarChange(registeredProvider.id)

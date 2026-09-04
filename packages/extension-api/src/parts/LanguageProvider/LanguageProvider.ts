@@ -8,6 +8,28 @@ export interface LanguageProvider {
   readonly [key: string]: unknown
 }
 
+export interface DocumentSymbol {
+  readonly children?: readonly DocumentSymbol[]
+  readonly detail?: string
+  readonly endOffset: number
+  readonly kind: number | string
+  readonly name: string
+  readonly selectionEndOffset: number
+  readonly selectionStartOffset: number
+  readonly startOffset: number
+}
+
+export interface DocumentSymbolTextDocument {
+  readonly documentId?: number
+  readonly languageId: string
+  readonly text: string
+  readonly uri: string
+}
+
+export interface DocumentSymbolProvider extends LanguageProvider {
+  readonly provideDocumentSymbols: (textDocument: DocumentSymbolTextDocument) => Promise<readonly DocumentSymbol[]> | readonly DocumentSymbol[]
+}
+
 type ProviderMethod = (...args: readonly unknown[]) => unknown
 
 const providers: Record<string, LanguageProvider[]> = Object.create(null)
@@ -88,6 +110,8 @@ export const registerCodeActionsProvider = (provider: LanguageProvider): Disposa
   registerProvider('code action', provider, ['provideCodeActions'])
 export const registerCommentProvider = (provider: LanguageProvider): Disposable => registerProvider('comment', provider, ['provideComment'])
 export const registerDefinitionProvider = (provider: LanguageProvider): Disposable => registerProvider('definition', provider, ['provideDefinition'])
+export const registerDocumentSymbolProvider = (provider: DocumentSymbolProvider): Disposable =>
+  registerProvider('document symbol', provider, ['provideDocumentSymbols'])
 export const registerImplementationProvider = (provider: LanguageProvider): Disposable =>
   registerProvider('implementation', provider, ['provideImplementations'])
 export const registerReferenceProvider = (provider: LanguageProvider): Disposable => registerProvider('reference', provider, ['provideReferences'])

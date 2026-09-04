@@ -2,11 +2,9 @@ import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
-  registerFileSystemProvider,
-  resetFileSystemProviderRegistry,
-} from '../../../src/parts/FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
-import {
+  closeUri,
   confirm,
+  getRecentlyOpenedWorkspaceUris,
   getWorkspaceFolder,
   getWorkspaceUri,
   handleWorkspaceRefresh,
@@ -24,10 +22,9 @@ let mockRpc: MockRpcDisposable | undefined
 afterEach(() => {
   mockRpc?.[Symbol.dispose]()
   mockRpc = undefined
-  resetFileSystemProviderRegistry()
 })
 
-test('setWorkspaceUri forwards a registered provider path separator', async () => {
+test('setWorkspaceUri forwards the workspace uri', async () => {
   const invocations: unknown[][] = []
   mockRpc = ExtensionManagementWorker.registerMockRpc({
     async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
@@ -35,15 +32,9 @@ test('setWorkspaceUri forwards a registered provider path separator', async () =
       return undefined
     },
   })
-  registerFileSystemProvider({
-    id: 'remote-ssh',
-    pathSeparator: '/',
-    readFile: async () => '',
-  })
-
   await setWorkspaceUri('remote-ssh:///test-folder')
 
-  deepStrictEqual(invocations, [['Workspace.setUri', 'remote-ssh:///test-folder', '/']])
+  deepStrictEqual(invocations, [['Workspace.setUri', 'remote-ssh:///test-folder']])
 })
 
 test('host helpers execute renderer commands through extension management', async () => {
@@ -57,28 +48,38 @@ test('host helpers execute renderer commands through extension management', asyn
       if (id === 'Workspace.getUri') {
         return 'file:///workspace'
       }
+      if (id === 'RecentlyOpened.getRecentlyOpened') {
+        return ['file:///projects/one', 'remote-ssh://host/projects/two']
+      }
       if (id === 'ConfirmPrompt.prompt') {
         return true
       }
       return undefined
     },
+    async 'Extensions.showNotification'(type: string, message: string): Promise<void> {
+      invocations.push(['Extensions.showNotification', type, message])
+    },
   })
 
   strictEqual(await getWorkspaceFolder(), '/workspace')
   strictEqual(await getWorkspaceUri(), 'file:///workspace')
+  deepStrictEqual(await getRecentlyOpenedWorkspaceUris(), ['file:///projects/one', 'remote-ssh://host/projects/two'])
   strictEqual(await confirm('Discard changes?'), true)
   await handleWorkspaceRefresh()
   await openUri('/workspace/file.txt')
+  await closeUri('/workspace/file.txt')
   await setWorkspaceUri('remote-ssh:///test-folder')
   await showNotification('info', 'File created successfully')
 
   deepStrictEqual(invocations, [
     ['Workspace.getPath'],
     ['Workspace.getUri'],
+    ['RecentlyOpened.getRecentlyOpened'],
     ['ConfirmPrompt.prompt', 'Discard changes?'],
     ['Layout.handleWorkspaceRefresh'],
     ['Main.openUri', '/workspace/file.txt'],
+    ['Main.closeTabsByUris', ['/workspace/file.txt']],
     ['Workspace.setUri', 'remote-ssh:///test-folder'],
-    ['Notification.create', 'info', 'File created successfully'],
+    ['Extensions.showNotification', 'info', 'File created successfully'],
   ])
 })

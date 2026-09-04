@@ -4,10 +4,12 @@ import { afterEach, test } from 'node:test'
 import {
   exists,
   getFileHash,
+  getFileHashes,
   mkdir,
   readAsObjectUrl,
   readDirWithFileTypes,
   readFile,
+  readFileAsBlob,
   remove,
   stat,
   writeFile,
@@ -42,6 +44,43 @@ test('readFile reads through the file system worker', async () => {
   strictEqual(invokedUri, '/tmp/sample.txt')
 })
 
+test('readFileAsBlob reads remote content through its registered file system provider', async () => {
+  const invocations: [string, ...unknown[]][] = []
+  const blob = new Blob(['sample content'])
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<Blob> {
+      invocations.push([id, ...args])
+      return blob
+    },
+  })
+
+  const result = await readFileAsBlob('remote-ssh:///workspace/image.png')
+
+  strictEqual(result, blob)
+  deepStrictEqual(invocations, [['FileSystem.getBlob', 'remote-ssh:///workspace/image.png']])
+})
+
+test('readFileAsBlob falls back to the file system worker on older hosts', async () => {
+  const blob = new Blob(['sample content'])
+  let invokedUri = ''
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(): Promise<never> {
+      throw new Error('Command not found: FileSystem.getBlob')
+    },
+  })
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.readFileAsBlob'(uri: string): Promise<Blob> {
+      invokedUri = uri
+      return blob
+    },
+  })
+
+  const result = await readFileAsBlob('html:///workspace/image.png')
+
+  strictEqual(result, blob)
+  strictEqual(invokedUri, 'html:///workspace/image.png')
+})
+
 test('getFileHash reads the content hash through the file system worker', async () => {
   let invokedUri = ''
   mockRpc = FileSystemWorker.registerMockRpc({
@@ -55,6 +94,22 @@ test('getFileHash reads the content hash through the file system worker', async 
 
   strictEqual(result, 'sample-hash')
   strictEqual(invokedUri, '/tmp/sample.txt')
+})
+
+test('getFileHashes reads content hashes in one file system worker request', async () => {
+  const uris = ['/tmp/first.txt', '/tmp/missing.txt', '/tmp/second.txt']
+  let invokedUris: readonly string[] = []
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.getFileHashes'(value: readonly string[]): Promise<readonly (string | null)[]> {
+      invokedUris = value
+      return ['first-hash', null, 'second-hash']
+    },
+  })
+
+  const result = await getFileHashes(uris)
+
+  deepStrictEqual(result, ['first-hash', null, 'second-hash'])
+  deepStrictEqual(invokedUris, uris)
 })
 
 test('readFile reads memfs files through the extension api host command', async () => {
@@ -77,9 +132,6 @@ test('readAsObjectUrl reads a web file as a browser object URL', async () => {
   mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
     async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
       invocations.push([id, ...args])
-      if (id === 'Layout.getPlatform') {
-        return 1
-      }
       return 'blob:https://example.com/image-id'
     },
   })
@@ -91,7 +143,7 @@ test('readAsObjectUrl reads a web file as a browser object URL', async () => {
     objectUrl: 'blob:https://example.com/image-id',
     wasFound: true,
   })
-  deepStrictEqual(invocations, [['Layout.getPlatform'], ['Blob.getSrc', 'html:///workspace/image.png']])
+  deepStrictEqual(invocations, [['Blob.getSrc', 'html:///workspace/image.png']])
 })
 
 test('readAsObjectUrl reads a memfs file as a browser object URL', async () => {
@@ -111,6 +163,25 @@ test('readAsObjectUrl reads a memfs file as a browser object URL', async () => {
     wasFound: true,
   })
   deepStrictEqual(invocations, [['Blob.getSrc', 'memfs:///workspace/image.png']])
+})
+
+test('readAsObjectUrl reads a custom file system URI as a browser object URL on Electron', async () => {
+  const invocations: [string, ...unknown[]][] = []
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string, ...args: readonly unknown[]): Promise<unknown> {
+      invocations.push([id, ...args])
+      return 'blob:https://example.com/audio-id'
+    },
+  })
+
+  const result = await readAsObjectUrl('gpt-voice-audio:///recording.webm')
+
+  deepStrictEqual(result, {
+    error: '',
+    objectUrl: 'blob:https://example.com/audio-id',
+    wasFound: true,
+  })
+  deepStrictEqual(invocations, [['Blob.getSrc', 'gpt-voice-audio:///recording.webm']])
 })
 
 test('readAsObjectUrl returns a remote URL for an Electron file', async () => {

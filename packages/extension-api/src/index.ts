@@ -2,11 +2,44 @@ export { activate } from './parts/Activation/Activation.ts'
 export { getAccessToken, type GetAccessTokenOptions } from './parts/Authentication/Authentication.ts'
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
-export { showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
-export { getPreference, setPreference } from './parts/Preferences/Preferences.ts'
+export { showFileQuickPick, showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
+export {
+  getConfigurationDefinitions,
+  getPreference,
+  openSettings,
+  setPreference,
+  setSettingsSearchValue,
+  type ConfigurationDefinition,
+} from './parts/Preferences/Preferences.ts'
 export { deleteSecret, getSecret, storeSecret } from './parts/SecretStorage/SecretStorage.ts'
 export { registerCommand } from './parts/CommandRegistry/CommandRegistry.ts'
 export { registerDebugProvider, resetDebugProviderRegistry } from './parts/Debug/Debug.ts'
+export {
+  formatDocument,
+  getDiagnostics,
+  getEditorSelections,
+  setEditorSelections,
+  showCompletions,
+  type EditorSelection,
+} from './parts/Editor/Editor.ts'
+export {
+  executeEditorGutterDecorationProvider,
+  refreshEditorGutterDecorations,
+  registerEditorGutterDecorationProvider,
+  resetEditorGutterDecorationProviderRegistry,
+  type EditorGutterDecoration,
+  type EditorGutterDecorationProvider,
+  type EditorGutterDecorationTextDocument,
+  type EditorGutterDecorationType,
+} from './parts/EditorGutterDecorationApi/EditorGutterDecorationApi.ts'
+export {
+  executeEditorLineDecorationProvider,
+  registerEditorLineDecorationProvider,
+  resetEditorLineDecorationProviderRegistry,
+  type EditorLineDecoration,
+  type EditorLineDecorationProvider,
+  type EditorLineDecorationTextDocument,
+} from './parts/EditorLineDecorationApi/EditorLineDecorationApi.ts'
 export {
   executeCompletionProvider,
   executeResolveCompletionItemProvider,
@@ -29,10 +62,12 @@ export {
 export {
   exists,
   getFileHash,
+  getFileHashes,
   mkdir,
   readAsObjectUrl,
   readDirWithFileTypes,
   readFile,
+  readFileAsBlob,
   remove,
   stat,
   writeFile,
@@ -40,7 +75,6 @@ export {
 } from './parts/FileSystem/FileSystem.ts'
 export { registerFileChangeHandler, type FileChangeHandler, type FileChanges } from './parts/FileChangeHandler/FileChangeHandler.ts'
 export {
-  executeFileSystemProviderGetPathSeparator,
   executeFileSystemProviderIsReadonly,
   executeFileSystemProviderMkdir,
   executeFileSystemProviderReadDirWithFileTypes,
@@ -53,7 +87,9 @@ export {
   resetFileSystemProviderRegistry,
 } from './parts/FileSystemProviderRegistry/FileSystemProviderRegistry.ts'
 export {
+  closeUri,
   confirm,
+  getRecentlyOpenedWorkspaceUris,
   getWorkspaceFolder,
   getWorkspaceUri,
   handleWorkspaceRefresh,
@@ -69,7 +105,17 @@ export {
   registerSignatureHelpProvider,
   resetSignatureHelpProviderRegistry,
 } from './parts/SignatureHelp/SignatureHelp.ts'
-export { getPlatform, type Platform } from './parts/Platform/Platform.ts'
+export { getPlatform, getUserDataDir, type Platform } from './parts/Platform/Platform.ts'
+export { focusNextTab, focusPreviousTab } from './parts/MainArea/MainArea.ts'
+export { openProcessExplorer } from './parts/ProcessExplorer/ProcessExplorer.ts'
+export {
+  openDebugConsole,
+  openOutputView,
+  openProblemsView,
+  type OpenDebugConsoleOptions,
+  type OpenOutputViewOptions,
+  type OpenProblemsViewOptions,
+} from './parts/Panel/Panel.ts'
 export { getLanguageServerRegistrySnapshot, registerLanguageServer, resetLanguageServerRegistry } from './parts/LanguageServer/LanguageServer.ts'
 export {
   registerBraceCompletionProvider,
@@ -77,6 +123,7 @@ export {
   registerCodeActionsProvider,
   registerCommentProvider,
   registerDefinitionProvider,
+  registerDocumentSymbolProvider,
   registerImplementationProvider,
   registerReferenceProvider,
   registerRenameProvider,
@@ -85,7 +132,12 @@ export {
   registerTypeDefinitionProvider,
   resetLanguageProviderRegistry,
 } from './parts/LanguageProvider/LanguageProvider.ts'
-export type { LanguageProvider } from './parts/LanguageProvider/LanguageProvider.ts'
+export type {
+  DocumentSymbol,
+  DocumentSymbolProvider,
+  DocumentSymbolTextDocument,
+  LanguageProvider,
+} from './parts/LanguageProvider/LanguageProvider.ts'
 export {
   executeSourceControlAcceptInput,
   executeSourceControlAdd,
@@ -112,6 +164,7 @@ export {
   registerView,
   resetViewRegistry,
   saveViewInstanceState,
+  setViewInstanceActive,
 } from './parts/ViewRegistry/ViewRegistry.ts'
 export {
   createOutputChannel,
@@ -203,5 +256,11 @@ export type {
   StatusBarItemProviderHandle,
   StatusBarItemProviderRegistrySnapshot,
 } from './parts/StatusBar/StatusBar.ts'
-export { setRemoteDescription, startWebRtcAudioStream, stopWebRtcAudioStream } from './parts/WebRtc/WebRtc.ts'
-export type { SetRemoteDescriptionOptions, StartWebRpcAudioStreamOptions } from './parts/WebRtc/WebRtc.ts'
+export { setRemoteDescription, startWebRtcAudioStream, stopWebRtcAudioStream, readMicLevels } from './parts/WebRtc/WebRtc.ts'
+export type {
+  MicLevelsResult,
+  ReadMicLevelOptions,
+  SetRemoteDescriptionOptions,
+  StartWebRpcAudioStreamOptions,
+  WebRtcAudioConstraints,
+} from './parts/WebRtc/WebRtc.ts'
