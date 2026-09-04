@@ -65,7 +65,7 @@ export const getFileHashes = async (uris: readonly string[]): Promise<readonly (
 }
 
 export const readFile = async (uri: string): Promise<string> => {
-  if (isMemory(uri)) {
+  if (isCustomFileSystemUri(uri)) {
     return ExtensionManagementWorker.invoke('ExtensionApi.readFile', uri)
   }
   return FileSystemWorker.readFile(uri)

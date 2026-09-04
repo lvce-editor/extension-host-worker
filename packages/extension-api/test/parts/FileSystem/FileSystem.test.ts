@@ -127,6 +127,21 @@ test('readFile reads memfs files through the extension api host command', async 
   strictEqual(invokedUri, 'memfs:///workspace/.prettierignore')
 })
 
+test('readFile reads custom file system files through the extension api host command', async () => {
+  let invokedUri = ''
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'ExtensionApi.readFile'(uri: string): Promise<string> {
+      invokedUri = uri
+      return '{"type":"object"}'
+    },
+  })
+
+  const result = await readFile('live-component-state:///schemas/7.json')
+
+  strictEqual(result, '{"type":"object"}')
+  strictEqual(invokedUri, 'live-component-state:///schemas/7.json')
+})
+
 test('readAsObjectUrl reads a web file as a browser object URL', async () => {
   const invocations: [string, ...unknown[]][] = []
   mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
