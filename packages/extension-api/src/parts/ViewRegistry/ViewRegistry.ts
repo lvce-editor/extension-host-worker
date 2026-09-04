@@ -5,6 +5,7 @@ import type {
   DomEventListener,
   MenuEntry,
   RegisteredView,
+  StatefulView,
   View,
   ViewAction,
   ViewContext,
@@ -18,6 +19,7 @@ import type {
 import { registerCommand } from '../CommandRegistry/CommandRegistry.ts'
 import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
 import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
+import * as ViewletStates from '../ViewletStates/ViewletStates.ts'
 import * as ViewStatusBarItems from '../ViewStatusBarItems/ViewStatusBarItems.ts'
 
 const views: Record<string, View<any>> = Object.create(null)
@@ -27,6 +29,8 @@ const renderedDoms: Record<number, readonly VirtualDomNode[]> = Object.create(nu
 const contexts: Record<number, Readonly<Record<string, boolean>>> = Object.create(null)
 const contextViewIds: Record<number, string> = Object.create(null)
 const viewCommandDisposables: Record<string, readonly Disposable[]> = Object.create(null)
+
+const isStatefulView = (view: View<any>): view is StatefulView<any> => typeof view.createInitialState === 'function'
 
 interface ContextChange {
   readonly changed: boolean
@@ -113,8 +117,12 @@ const assertView = (view: View<any>): void => {
   if (typeof view.id !== 'string' || view.id.length === 0) {
     throw new ExtensionApiError('view is missing id')
   }
-  if (typeof view.create !== 'function') {
+  const candidate = view as any
+  if (typeof candidate.create !== 'function' && typeof candidate.createInitialState !== 'function') {
     throw new ExtensionApiError(`view ${view.id} is missing create function`)
+  }
+  if (typeof candidate.createInitialState === 'function' && typeof candidate.render !== 'function') {
+    throw new ExtensionApiError(`view ${view.id} is missing render function`)
   }
   if (view.id in views) {
     throw new ExtensionApiError(`view ${view.id} is already registered`)
@@ -135,6 +143,7 @@ const toRegisteredView = (view: View<any>): RegisteredView => {
     id: view.id,
     name: view.name,
     preferredLocation: view.preferredLocation || 'sideBar',
+    ...(isStatefulView(view) && { stateful: true }),
     title: displayName,
   }
   if (view.kind) {
@@ -165,9 +174,15 @@ const executeViewCommand = async (view: View<any>, commandId: string, args: read
   }
   const [uid, instance] = activeInstance
   const command = view.commands![commandId]
-  const newInstance = await command(instance, ...args)
-  assertVirtualDomViewInstance(view.id, newInstance)
-  instances[uid] = newInstance
+  if (isStatefulView(view)) {
+    const newState = await command(ViewletStates.get(uid), ...args)
+    assertViewState(view.id, newState)
+    ViewletStates.replace(uid, newState)
+  } else {
+    const newInstance = await command(instance, ...args)
+    assertVirtualDomViewInstance(view.id, newInstance)
+    instances[uid] = newInstance
+  }
   await ExtensionManagementWorker.invoke('Extensions.requestViewRerender', uid)
 }
 
@@ -215,7 +230,7 @@ export const executeViewProvider = (id: string): unknown => {
   if (!view) {
     throw new ExtensionApiError(`view ${id} not found`)
   }
-  return view.create()
+  return isStatefulView(view) ? view.createInitialState() : view.create()
 }
 
 const assertVirtualDomViewInstance: (id: string, instance: unknown) => asserts instance is VirtualDomViewInstance = (id, instance) => {
@@ -225,6 +240,65 @@ const assertVirtualDomViewInstance: (id: string, instance: unknown) => asserts i
   if (typeof (instance as VirtualDomViewInstance).render !== 'function') {
     throw new ExtensionApiError(`view ${id} instance is missing render function`)
   }
+}
+
+const assertViewState = (viewId: string, state: unknown): void => {
+  if (!state || typeof state !== 'object' || Array.isArray(state)) {
+    throw new ExtensionApiError(`view ${viewId} state must be an object`)
+  }
+}
+
+const createStatefulViewInstance = (view: StatefulView<any>, uid: number): VirtualDomViewInstance => {
+  const instance: Record<string, unknown> = {
+    render() {
+      return view.render(ViewletStates.get(uid))
+    },
+  }
+  if (view.dispose) {
+    instance.dispose = () => view.dispose!(ViewletStates.get(uid))
+  }
+  if (view.getContext) {
+    instance.getContext = () => view.getContext!(ViewletStates.get(uid))
+  }
+  if (view.getCss) {
+    instance.getCss = () => view.getCss!(ViewletStates.get(uid))
+  }
+  if (view.getMenuEntries) {
+    instance.getMenuEntries = (menuId: string) => view.getMenuEntries!(ViewletStates.get(uid), menuId)
+  }
+  if (view.handleEvent) {
+    instance.handleEvent = async (event: ViewEvent) => {
+      const newState = await view.handleEvent!(ViewletStates.get(uid), event)
+      assertViewState(view.id, newState)
+      ViewletStates.replace(uid, newState)
+    }
+  }
+  if (view.renderActions) {
+    instance.renderActions = () => view.renderActions!(ViewletStates.get(uid))
+  }
+  if (view.renderActionsDom) {
+    instance.renderActionsDom = () => view.renderActionsDom!(ViewletStates.get(uid))
+  }
+  if (view.renderFocus) {
+    instance.renderFocus = (oldContext: Readonly<Record<string, boolean>>, newContext: Readonly<Record<string, boolean>>) =>
+      view.renderFocus!(ViewletStates.get(uid), oldContext, newContext)
+  }
+  if (view.renderScrollPosition) {
+    instance.renderScrollPosition = () => view.renderScrollPosition!(ViewletStates.get(uid))
+  }
+  if (view.renderSelections) {
+    instance.renderSelections = () => view.renderSelections!(ViewletStates.get(uid))
+  }
+  if (view.renderStatusBarItems) {
+    instance.renderStatusBarItems = () => view.renderStatusBarItems!(ViewletStates.get(uid))
+  }
+  if (view.renderTitle) {
+    instance.renderTitle = () => view.renderTitle!(ViewletStates.get(uid))
+  }
+  if (view.saveState) {
+    instance.saveState = () => view.saveState!(ViewletStates.get(uid))
+  }
+  return instance as unknown as VirtualDomViewInstance
 }
 
 const getVirtualDomInstance = (uid: number): VirtualDomViewInstance => {
@@ -519,7 +593,7 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
   if (view.kind !== 'virtualDom') {
     throw new ExtensionApiError(`view ${viewId} is not a virtual dom view`)
   }
-  const instance = await view.create({
+  const viewContext = {
     ...context,
     requestRerender() {
       return ExtensionManagementWorker.invoke('Extensions.requestViewRerender', uid) as Promise<void>
@@ -532,7 +606,18 @@ export const createViewInstance = async (viewId: string, uid: number, context?: 
     },
     uid,
     viewId,
-  })
+  }
+  let instance: VirtualDomViewInstance
+  if (isStatefulView(view)) {
+    const initialState = await view.createInitialState(viewContext)
+    assertViewState(viewId, initialState)
+    ViewletStates.initialize(uid, initialState)
+    instance = createStatefulViewInstance(view, uid)
+  } else {
+    const createdInstance = await view.create(viewContext)
+    assertVirtualDomViewInstance(viewId, createdInstance)
+    instance = createdInstance
+  }
   assertVirtualDomViewInstance(viewId, instance)
   instances[uid] = instance
   const instanceUids = instanceUidsByView[viewId] || new Set<number>()
@@ -603,6 +688,7 @@ export const disposeViewInstance = async (uid: number): Promise<void> => {
       delete instances[uid]
       delete renderedDoms[uid]
       delete contextViewIds[uid]
+      ViewletStates.remove(uid)
     }
   }
 }
@@ -613,6 +699,25 @@ export const saveViewInstanceState = async (uid: number): Promise<unknown> => {
     return undefined
   }
   return instance.saveState()
+}
+
+export const getViewInstanceState = (uid: number): unknown => {
+  getVirtualDomInstance(uid)
+  return ViewletStates.get(uid)
+}
+
+export const setViewInstanceState = async (uid: number, newState: unknown): Promise<ViewRenderResult> => {
+  getVirtualDomInstance(uid)
+  const viewId = contextViewIds[uid]
+  assertViewState(viewId, newState)
+  const oldState = ViewletStates.get(uid)
+  ViewletStates.replace(uid, newState)
+  try {
+    return await renderViewInstance(uid)
+  } catch (error) {
+    ViewletStates.replace(uid, oldState)
+    throw error
+  }
 }
 
 export const getViewMenuEntries = async (uid: number, menuId: string): Promise<readonly MenuEntry[]> => {
@@ -657,15 +762,18 @@ const commandMap = {
   'ExtensionApi.executeViewProvider': executeViewProvider,
   'ExtensionApi.getViewActions': getViewActions,
   'ExtensionApi.getViewActionsDom': getViewActionsDom,
+  'ExtensionApi.getViewInstanceState': getViewInstanceState,
   'ExtensionApi.getViewMenuEntries': getViewMenuEntries,
   'ExtensionApi.getViewRegistrySnapshot': getViewRegistrySnapshot,
   'ExtensionApi.renderViewInstance': renderViewInstance,
   'ExtensionApi.saveViewInstanceState': saveViewInstanceState,
   'ExtensionApi.setViewInstanceActive': setViewInstanceActive,
+  'ExtensionApi.setViewInstanceState': setViewInstanceState,
 }
 
 export const resetViewRegistry = (): void => {
   ViewStatusBarItems.resetViewStatusBarItems()
+  ViewletStates.reset()
   for (const id of Object.keys(views)) {
     for (const disposable of viewCommandDisposables[id] || []) {
       disposable.dispose()

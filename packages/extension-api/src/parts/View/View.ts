@@ -77,9 +77,8 @@ export type ViewCommand<State = VirtualDomViewInstance, Args extends readonly an
   ...args: Args
 ) => State | Promise<State>
 
-export interface View<State = unknown> {
+interface ViewBase<State> {
   readonly commands?: Readonly<Record<string, ViewCommand<State>>>
-  readonly create: (context?: ViewContext) => State | Promise<State>
   readonly displayName?: string
   readonly eventListeners?: readonly DomEventListener[]
   readonly icon?: string
@@ -90,6 +89,36 @@ export interface View<State = unknown> {
   readonly title?: string
 }
 
+export interface InstanceView<State = unknown> extends ViewBase<State> {
+  readonly create: (context?: ViewContext) => State | Promise<State>
+  readonly createInitialState?: never
+}
+
+export interface StatefulView<State = unknown> extends ViewBase<State> {
+  readonly create?: never
+  readonly createInitialState: (context?: ViewContext) => State | Promise<State>
+  readonly dispose?: (state: State) => unknown
+  readonly getContext?: (state: State) => Readonly<Record<string, boolean>>
+  readonly getCss?: (state: State) => string | Promise<string>
+  readonly getMenuEntries?: (state: State, menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
+  readonly handleEvent?: (state: State, event: ViewEvent) => State | Promise<State>
+  readonly render: (state: State) => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
+  readonly renderActions?: (state: State) => readonly ViewAction[] | Promise<readonly ViewAction[]>
+  readonly renderActionsDom?: (state: State) => readonly VirtualDomNode[]
+  readonly renderFocus?: (
+    state: State,
+    oldContext: Readonly<Record<string, boolean>>,
+    newContext: Readonly<Record<string, boolean>>,
+  ) => string | Promise<string>
+  readonly renderScrollPosition?: (state: State) => readonly [] | ViewScrollPosition | Promise<readonly [] | ViewScrollPosition>
+  readonly renderSelections?: (state: State) => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
+  readonly renderStatusBarItems?: (state: State) => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
+  readonly renderTitle?: (state: State) => string | Promise<string>
+  readonly saveState?: (state: State) => unknown
+}
+
+export type View<State = unknown> = InstanceView<State> | StatefulView<State>
+
 export interface RegisteredView {
   readonly displayName?: string
   readonly eventListeners?: readonly DomEventListener[]
@@ -98,6 +127,7 @@ export interface RegisteredView {
   readonly kind?: ViewKind
   readonly name?: string
   readonly preferredLocation: ViewPreferredLocation
+  readonly stateful?: boolean
   readonly title?: string
 }
 
