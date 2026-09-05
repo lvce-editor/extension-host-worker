@@ -89,9 +89,11 @@ interface ViewBase<State> {
   readonly title?: string
 }
 
-export interface InstanceView<State = unknown> extends ViewBase<State> {
+export interface InstanceView<State = unknown, ComponentState = unknown> extends ViewBase<State> {
   readonly create: (context?: ViewContext) => State | Promise<State>
   readonly createInitialState?: never
+  readonly getComponentState?: (instance: State) => ComponentState | Promise<ComponentState>
+  readonly setComponentState?: (instance: State, state: ComponentState) => void | Promise<void>
 }
 
 export interface StatefulView<State = unknown> extends ViewBase<State> {
@@ -117,7 +119,7 @@ export interface StatefulView<State = unknown> extends ViewBase<State> {
   readonly saveState?: (state: State) => unknown
 }
 
-export type View<State = unknown> = InstanceView<State> | StatefulView<State>
+export type View<State = unknown, ComponentState = unknown> = InstanceView<State, ComponentState> | StatefulView<State>
 
 export interface RegisteredView {
   readonly displayName?: string

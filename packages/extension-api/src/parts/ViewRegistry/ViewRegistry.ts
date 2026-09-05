@@ -22,7 +22,7 @@ import { ExtensionApiError } from '../ExtensionApiError/ExtensionApiError.ts'
 import * as ViewletStates from '../ViewletStates/ViewletStates.ts'
 import * as ViewStatusBarItems from '../ViewStatusBarItems/ViewStatusBarItems.ts'
 
-const views: Record<string, View<any>> = Object.create(null)
+const views: Record<string, View<any, any>> = Object.create(null)
 const instances: Record<number, VirtualDomViewInstance> = Object.create(null)
 const instanceUidsByView: Record<string, Set<number>> = Object.create(null)
 const renderedDoms: Record<number, readonly VirtualDomNode[]> = Object.create(null)
@@ -30,7 +30,7 @@ const contexts: Record<number, Readonly<Record<string, boolean>>> = Object.creat
 const contextViewIds: Record<number, string> = Object.create(null)
 const viewCommandDisposables: Record<string, readonly Disposable[]> = Object.create(null)
 
-const isStatefulView = (view: View<any>): view is StatefulView<any> => typeof view.createInitialState === 'function'
+const isStatefulView = (view: View<any, any>): view is StatefulView<any> => typeof view.createInitialState === 'function'
 
 interface ContextChange {
   readonly changed: boolean
@@ -80,7 +80,7 @@ const assertEventListener: (viewId: string, listener: unknown, index: number) =>
   }
 }
 
-const assertEventListeners = (view: View<any>): void => {
+const assertEventListeners = (view: View<any, any>): void => {
   if (view.eventListeners === undefined) {
     return
   }
@@ -92,7 +92,7 @@ const assertEventListeners = (view: View<any>): void => {
   }
 }
 
-const assertCommands = (view: View<any>): void => {
+const assertCommands = (view: View<any, any>): void => {
   if (view.commands === undefined) {
     return
   }
@@ -110,7 +110,7 @@ const assertCommands = (view: View<any>): void => {
   }
 }
 
-const assertView = (view: View<any>): void => {
+const assertView = (view: View<any, any>): void => {
   if (!view) {
     throw new ExtensionApiError('view is not defined')
   }
@@ -124,6 +124,13 @@ const assertView = (view: View<any>): void => {
   if (typeof candidate.createInitialState === 'function' && typeof candidate.render !== 'function') {
     throw new ExtensionApiError(`view ${view.id} is missing render function`)
   }
+  if (
+    !isStatefulView(view) &&
+    (view.getComponentState !== undefined || view.setComponentState !== undefined) &&
+    (typeof view.getComponentState !== 'function' || typeof view.setComponentState !== 'function')
+  ) {
+    throw new ExtensionApiError(`view ${view.id} component state requires getComponentState and setComponentState`)
+  }
   if (view.id in views) {
     throw new ExtensionApiError(`view ${view.id} is already registered`)
   }
@@ -134,7 +141,7 @@ const assertView = (view: View<any>): void => {
   assertEventListeners(view)
 }
 
-const toRegisteredView = (view: View<any>): RegisteredView => {
+const toRegisteredView = (view: View<any, any>): RegisteredView => {
   const displayName = view.displayName || view.name || view.title
   const registeredView: RegisteredView = {
     displayName,
@@ -143,7 +150,7 @@ const toRegisteredView = (view: View<any>): RegisteredView => {
     id: view.id,
     name: view.name,
     preferredLocation: view.preferredLocation || 'sideBar',
-    ...(isStatefulView(view) && { stateful: true }),
+    ...((isStatefulView(view) || typeof view.getComponentState === 'function') && { stateful: true }),
     title: displayName,
   }
   if (view.kind) {
@@ -167,7 +174,7 @@ const getActiveViewInstance = (viewId: string): [number, VirtualDomViewInstance]
   return [uid, instances[uid]]
 }
 
-const executeViewCommand = async (view: View<any>, commandId: string, args: readonly unknown[]): Promise<void> => {
+const executeViewCommand = async (view: View<any, any>, commandId: string, args: readonly unknown[]): Promise<void> => {
   const activeInstance = getActiveViewInstance(view.id)
   if (!activeInstance) {
     return
@@ -186,7 +193,7 @@ const executeViewCommand = async (view: View<any>, commandId: string, args: read
   await ExtensionManagementWorker.invoke('Extensions.requestViewRerender', uid)
 }
 
-const registerViewCommands = (view: View<any>): readonly Disposable[] => {
+const registerViewCommands = (view: View<any, any>): readonly Disposable[] => {
   const disposables: Disposable[] = []
   try {
     for (const id of Object.keys(view.commands || {})) {
@@ -208,7 +215,7 @@ const registerViewCommands = (view: View<any>): readonly Disposable[] => {
   return disposables
 }
 
-export const registerView = <State>(view: View<State>): Disposable => {
+export const registerView = <State, ComponentState = unknown>(view: View<State, ComponentState>): Disposable => {
   assertView(view)
   const commandDisposables = registerViewCommands(view)
   views[view.id] = view
@@ -702,14 +709,29 @@ export const saveViewInstanceState = async (uid: number): Promise<unknown> => {
 }
 
 export const getViewInstanceState = (uid: number): unknown => {
-  getVirtualDomInstance(uid)
+  const instance = getVirtualDomInstance(uid)
+  const view = views[contextViewIds[uid]]
+  if (!isStatefulView(view) && view.getComponentState) {
+    return view.getComponentState(instance)
+  }
   return ViewletStates.get(uid)
 }
 
 export const setViewInstanceState = async (uid: number, newState: unknown): Promise<ViewRenderResult> => {
-  getVirtualDomInstance(uid)
+  const instance = getVirtualDomInstance(uid)
   const viewId = contextViewIds[uid]
+  const view = views[viewId]
   assertViewState(viewId, newState)
+  if (!isStatefulView(view) && view.getComponentState && view.setComponentState) {
+    const oldState = structuredClone(await view.getComponentState(instance))
+    try {
+      await view.setComponentState(instance, newState)
+      return await renderViewInstance(uid)
+    } catch (error) {
+      await view.setComponentState(instance, oldState)
+      throw error
+    }
+  }
   const oldState = ViewletStates.get(uid)
   ViewletStates.replace(uid, newState)
   try {
