@@ -124,9 +124,13 @@ const assertView = (view: View<any, any>): void => {
   if (typeof candidate.createInitialState === 'function' && typeof candidate.render !== 'function') {
     throw new ExtensionApiError(`view ${view.id} is missing render function`)
   }
-  if (!isStatefulView(view) && (view.getComponentState !== undefined || view.setComponentState !== undefined) && (typeof view.getComponentState !== 'function' || typeof view.setComponentState !== 'function')) {
-      throw new ExtensionApiError(`view ${view.id} component state requires getComponentState and setComponentState`)
-    }
+  if (
+    !isStatefulView(view) &&
+    (view.getComponentState !== undefined || view.setComponentState !== undefined) &&
+    (typeof view.getComponentState !== 'function' || typeof view.setComponentState !== 'function')
+  ) {
+    throw new ExtensionApiError(`view ${view.id} component state requires getComponentState and setComponentState`)
+  }
   if (view.id in views) {
     throw new ExtensionApiError(`view ${view.id} is already registered`)
   }
