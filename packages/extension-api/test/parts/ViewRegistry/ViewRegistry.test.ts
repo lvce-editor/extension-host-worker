@@ -1891,3 +1891,87 @@ test('disposeViewInstance disposes and removes instance', async () => {
   strictEqual(disposed, true)
   await rejects(async () => dispatchViewEvent(1, { type: 'click' }), /view instance 1 not found/)
 })
+
+interface ComponentStateInstance extends VirtualDomViewInstance {
+  readonly state: { count: number }
+}
+
+test('instance views expose current state and apply edits to the selected instance', async () => {
+  registerView<ComponentStateInstance, { count: number }>({
+    create() {
+      const state = { count: 1 }
+      return {
+        handleEvent() {
+          state.count++
+        },
+        render() {
+          return [{ childCount: 0, text: String(state.count), type: 4 }]
+        },
+        state,
+      }
+    },
+    async getComponentState(instance) {
+      return instance.state
+    },
+    id: 'sample.views.instance-state',
+    kind: 'virtualDom',
+    async setComponentState(instance, state) {
+      Object.assign(instance.state, state)
+    },
+  })
+  strictEqual(getViewRegistrySnapshot().views[0].stateful, true)
+  await createViewInstance('sample.views.instance-state', 1)
+  await createViewInstance('sample.views.instance-state', 2)
+  await dispatchViewEvent(1, { type: 'click' })
+  deepStrictEqual(await getViewInstanceState(1), { count: 2 })
+
+  const result = await setViewInstanceState(1, { count: 5 })
+  strictEqual(result.type, 'setPatches')
+  deepStrictEqual(await getViewInstanceState(1), { count: 5 })
+  deepStrictEqual(await getViewInstanceState(2), { count: 1 })
+  await dispatchViewEvent(1, { type: 'click' })
+  deepStrictEqual(await getViewInstanceState(1), { count: 6 })
+  await rejects(setViewInstanceState(1, []), /state must be an object/)
+  await disposeViewInstance(1)
+  throws(() => getViewInstanceState(1))
+})
+
+test('instance state edits restore a snapshot after a failed render', async () => {
+  registerView<ComponentStateInstance, { count: number }>({
+    create() {
+      const state = { count: 1 }
+      return {
+        render() {
+          if (state.count < 0) {
+            throw new Error('invalid count')
+          }
+          return [{ childCount: 0, text: String(state.count), type: 4 }]
+        },
+        state,
+      }
+    },
+    getComponentState(instance) {
+      return instance.state
+    },
+    id: 'sample.views.instance-state',
+    kind: 'virtualDom',
+    setComponentState(instance, state) {
+      Object.assign(instance.state, state)
+    },
+  })
+  await createViewInstance('sample.views.instance-state', 1)
+  await rejects(setViewInstanceState(1, { count: -1 }), /invalid count/)
+  deepStrictEqual(getViewInstanceState(1), { count: 1 })
+})
+
+test('instance views must supply both component state accessors', () => {
+  const create = () => ({ render: () => [] })
+  throws(
+    () => registerView({ create, getComponentState: () => ({}), id: 'sample.views.read-only', kind: 'virtualDom' }),
+    /component state requires getComponentState and setComponentState/,
+  )
+  throws(
+    () => registerView({ create, id: 'sample.views.write-only', kind: 'virtualDom', setComponentState() {} }),
+    /component state requires getComponentState and setComponentState/,
+  )
+})
