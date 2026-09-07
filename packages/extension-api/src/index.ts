@@ -269,3 +269,7 @@ export type {
   StartWebRpcAudioStreamOptions,
   WebRtcAudioConstraints,
 } from './parts/WebRtc/WebRtc.ts'
+
+export { registerPortProvider } from './parts/PortProviderRegistry/PortProviderRegistry.ts'
+export type { PortProvider } from './parts/PortProvider/PortProvider.ts'
+export type { ForwardedPort } from './parts/ForwardedPort/ForwardedPort.ts'
