@@ -51,7 +51,7 @@ const savedToken = await getSecret('access-token')
 await deleteSecret('access-token')
 ```
 
-### Workspace ports
+## Workspace ports
 
 Declare `"onPorts:codespaces"` in the extension's `activation` array and register a provider after activating the API:
 
