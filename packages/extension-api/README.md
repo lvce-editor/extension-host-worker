@@ -50,3 +50,20 @@ await storeSecret('access-token', token)
 const savedToken = await getSecret('access-token')
 await deleteSecret('access-token')
 ```
+
+## Workspace ports
+
+Declare `"onPorts:codespaces"` in the extension's `activation` array and register a provider after activating the API:
+
+```ts
+import { registerPortProvider } from '@lvce-editor/api'
+
+const registration = registerPortProvider({
+  scheme: 'codespaces',
+  async providePorts(workspaceUri) {
+    return [{ port: 3000, forwardedAddress: 'https://my-codespace-3000.app.github.dev/', origin: 'devcontainer.json' }]
+  },
+})
+```
+
+Ports queries matching extensions with the current workspace URI. Each extension may register one provider per scheme. Return an empty array when no ports are available, and dispose the registration when deactivating. The provider supplies addresses; the API does not create tunnels or change their visibility. Results from disposed registrations are discarded.
