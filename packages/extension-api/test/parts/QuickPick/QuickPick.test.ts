@@ -80,3 +80,15 @@ test('showQuickInput preserves cancellation', async () => {
 
   strictEqual(await showQuickInput(), undefined)
 })
+
+test('showQuickPick forwards the freeform text type', async () => {
+  let invokedOptions: unknown
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'ExtensionHostQuickPick.showQuickPick'(options: unknown): Promise<unknown> {
+      invokedOptions = options
+      return 'Ada'
+    },
+  })
+  strictEqual(await showQuickPick({ items: [], type: 'text' }), 'Ada')
+  deepStrictEqual(invokedOptions, { items: [], type: 'text' })
+})

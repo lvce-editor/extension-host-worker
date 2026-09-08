@@ -7,6 +7,7 @@ export const showFileQuickPick = async (): Promise<void> => {
   await executeCommand('QuickPick.showFile')
 }
 
+/** Shows a freeform text field without a results list. Returns undefined on cancellation. */
 export const showQuickInput = async (options: ShowQuickInputOptions = {}): Promise<string | undefined> => {
   return ExtensionManagementWorker.invoke('ExtensionHostQuickPick.showQuickInput', options) as Promise<string | undefined>
 }

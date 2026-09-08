@@ -4,4 +4,6 @@ export interface ShowQuickPickOptions {
   readonly acceptInput?: boolean
   readonly items: readonly QuickPickItem[]
   readonly placeholder?: string
+  /** Text accepts freeform input without a results list; select filters items (the default). */
+  readonly type?: 'text' | 'select'
 }
