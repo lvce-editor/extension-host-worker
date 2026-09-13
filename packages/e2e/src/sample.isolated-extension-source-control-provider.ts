@@ -11,6 +11,11 @@ export const test: Test = async ({ Command, Extension }) => {
     throw new Error(`Expected isolated changed files, got ${JSON.stringify(changedFiles)}`)
   }
 
+  const progress = await Command.execute('ExtensionHost.executeCommand', 'isolatedSourceControl.getProgress')
+  if (progress !== true) {
+    throw new Error(`Expected isolated source control progress, got ${JSON.stringify(progress)}`)
+  }
+
   const groups = await Command.execute('ExtensionHost.executeCommand', 'isolatedSourceControl.getGroups', '/workspace')
   if (
     JSON.stringify(groups) !==

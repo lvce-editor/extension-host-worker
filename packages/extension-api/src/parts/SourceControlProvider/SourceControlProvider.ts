@@ -10,6 +10,7 @@ export interface SourceControlProvider {
   readonly getFileBeforeUri?: (uri: string) => string | Promise<string>
   readonly getFileDecorations?: (uris: readonly string[]) => unknown | Promise<unknown>
   readonly getGroups?: (cwd: string) => unknown | Promise<unknown>
+  readonly getProgress?: () => boolean | Promise<boolean>
   readonly id: string
   readonly isActive?: (scheme: string, root: string) => boolean | Promise<boolean>
 }

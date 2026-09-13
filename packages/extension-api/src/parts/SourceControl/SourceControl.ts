@@ -10,6 +10,7 @@ export {
   executeSourceControlGetFileBeforeUri,
   executeSourceControlGetFileDecorations,
   executeSourceControlGetGroups,
+  executeSourceControlGetProgress,
   executeSourceControlIsActive,
   getSourceControlProviderRegistrySnapshot,
   registerSourceControlProvider,

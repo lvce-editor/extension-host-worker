@@ -13,7 +13,8 @@
     "onCommand:isolatedSourceControl.getFileDecorations",
     "onCommand:isolatedSourceControl.acceptInput",
     "onCommand:isolatedSourceControl.add",
-    "onCommand:isolatedSourceControl.discard"
+    "onCommand:isolatedSourceControl.discard",
+    "onCommand:isolatedSourceControl.getProgress"
   ],
   "commands": [
     {
@@ -45,6 +46,9 @@
     },
     {
       "id": "isolatedSourceControl.discard"
+    },
+    {
+      "id": "isolatedSourceControl.getProgress"
     }
   ],
   "sourceControlProviders": [

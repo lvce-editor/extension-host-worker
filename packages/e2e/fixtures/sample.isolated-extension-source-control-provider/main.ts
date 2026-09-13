@@ -9,6 +9,7 @@ import {
   executeSourceControlGetFileBefore,
   executeSourceControlGetFileDecorations,
   executeSourceControlGetGroups,
+  executeSourceControlGetProgress,
   executeSourceControlIsActive,
   registerCommand,
   registerSourceControlProvider,
@@ -67,6 +68,9 @@ const activate = async (): Promise<void> => {
         },
       ]
     },
+    getProgress() {
+      return true
+    },
     id: providerId,
     isActive(scheme, root) {
       return scheme === 'file' && root === '/workspace'
@@ -77,6 +81,12 @@ const activate = async (): Promise<void> => {
       return executeSourceControlGetChangedFiles(providerId)
     },
     id: 'isolatedSourceControl.getChangedFiles',
+  })
+  registerCommand({
+    execute() {
+      return executeSourceControlGetProgress(providerId)
+    },
+    id: 'isolatedSourceControl.getProgress',
   })
   registerCommand({
     execute(cwd: string) {

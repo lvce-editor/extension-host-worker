@@ -150,6 +150,7 @@ export {
   executeSourceControlGetFileBeforeUri,
   executeSourceControlGetFileDecorations,
   executeSourceControlGetGroups,
+  executeSourceControlGetProgress,
   executeSourceControlIsActive,
   registerSourceControlProvider,
   resetSourceControlProviderRegistry,

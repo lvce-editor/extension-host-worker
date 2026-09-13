@@ -18,6 +18,7 @@ const optionalMethods = [
   'getFileBeforeUri',
   'getFileDecorations',
   'getGroups',
+  'getProgress',
   'isActive',
 ]
 
@@ -93,6 +94,9 @@ const mapSourceControlProvider = (provider: SourceControlProvider): RegisteredSo
   }
   if (provider.getGroups) {
     registeredProvider.getGroups = (cwd) => provider.getGroups!(cwd)
+  }
+  if (provider.getProgress) {
+    registeredProvider.getProgress = () => provider.getProgress!()
   }
   if (provider.isActive) {
     registeredProvider.isActive = (scheme, root) => provider.isActive!(scheme, root)
@@ -181,6 +185,10 @@ export const executeSourceControlGetGroups = async (id: string, cwd: string): Pr
   ]
 }
 
+export const executeSourceControlGetProgress = async (id: string): Promise<boolean> => {
+  return Boolean(await getProvider(id).getProgress?.())
+}
+
 export const executeSourceControlIsActive = async (id: string, scheme: string, root: string): Promise<boolean> => {
   return Boolean(await getProvider(id).isActive?.(scheme, root))
 }
@@ -205,6 +213,7 @@ const commandMap = {
   'ExtensionApi.executeSourceControlGetFileBeforeUri': executeSourceControlGetFileBeforeUri,
   'ExtensionApi.executeSourceControlGetFileDecorations': executeSourceControlGetFileDecorations,
   'ExtensionApi.executeSourceControlGetGroups': executeSourceControlGetGroups,
+  'ExtensionApi.executeSourceControlGetProgress': executeSourceControlGetProgress,
   'ExtensionApi.executeSourceControlIsActive': executeSourceControlIsActive,
   'ExtensionApi.getSourceControlProviderRegistrySnapshot': getSourceControlProviderRegistrySnapshot,
 }
