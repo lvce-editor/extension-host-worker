@@ -2,6 +2,7 @@ import { rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
   executeSourceControlGetFileBeforeUri,
+  executeSourceControlGetProgress,
   registerSourceControlProvider,
   resetSourceControlProviderRegistry,
 } from '../../../src/parts/SourceControlProviderRegistry/SourceControlProviderRegistry.ts'
@@ -66,4 +67,47 @@ test('registerSourceControlProvider rejects an invalid getFileBeforeUri', () => 
       id: 'git',
     })
   }, /source control provider git has invalid getFileBeforeUri function/)
+})
+
+test('progress reflects the current provider state on every query', async () => {
+  let busy = true
+  registerSourceControlProvider({
+    getChangedFiles: () => [],
+    getProgress: async () => busy,
+    id: 'git',
+  })
+  strictEqual(await executeSourceControlGetProgress('git'), true)
+  busy = false
+  strictEqual(await executeSourceControlGetProgress('git'), false)
+})
+
+test('providers without progress support are idle', async () => {
+  registerSourceControlProvider({ getChangedFiles: () => [], id: 'legacy' })
+  strictEqual(await executeSourceControlGetProgress('legacy'), false)
+})
+
+test('progress errors propagate and disposed providers cannot be queried', async () => {
+  const handle = registerSourceControlProvider({
+    getChangedFiles: () => [],
+    getProgress: async () => {
+      throw new Error('unavailable')
+    },
+    id: 'git',
+  })
+  await rejects(executeSourceControlGetProgress('git'), /unavailable/)
+  handle.dispose()
+  await rejects(executeSourceControlGetProgress('git'), /not found/)
+})
+
+test('registration rejects an invalid progress method', () => {
+  throws(
+    () =>
+      registerSourceControlProvider({
+        getChangedFiles: () => [],
+        // @ts-expect-error testing invalid provider shape
+        getProgress: true,
+        id: 'git',
+      }),
+    /invalid getProgress function/,
+  )
 })
