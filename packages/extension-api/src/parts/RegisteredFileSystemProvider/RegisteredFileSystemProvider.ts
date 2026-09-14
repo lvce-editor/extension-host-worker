@@ -8,5 +8,6 @@ export interface RegisteredFileSystemProvider {
   readonly readFile: (uri: string) => Blob | Promise<Blob | string> | string
   readonly remove?: (uri: string) => void | Promise<void>
   readonly rename?: (oldUri: string, newUri: string) => void | Promise<void>
+  readonly stat?: (uri: string) => number | Promise<number>
   readonly writeFile?: (uri: string, content: string) => void | Promise<void>
 }

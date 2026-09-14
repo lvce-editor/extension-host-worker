@@ -7,6 +7,7 @@ import {
   executeFileSystemProviderReadFile,
   executeFileSystemProviderRemove,
   executeFileSystemProviderRename,
+  executeFileSystemProviderStat,
   executeFileSystemProviderWriteFile,
   getFileSystemProviderRegistrySnapshot,
   registerFileSystemProvider,
@@ -39,6 +40,10 @@ test('registerFileSystemProvider registers and executes provider operations', as
     rename(oldUri, newUri) {
       invocations.push(['rename', oldUri, newUri])
     },
+    stat(uri) {
+      invocations.push(['stat', uri])
+      return 3
+    },
     writeFile(uri, content) {
       invocations.push(['writeFile', uri, content])
     },
@@ -56,11 +61,13 @@ test('registerFileSystemProvider registers and executes provider operations', as
   await executeFileSystemProviderWriteFile('git-file-before', 'file:///workspace/file.txt', 'updated')
   await executeFileSystemProviderRename('git-file-before', 'file:///workspace/file.txt', 'file:///workspace/renamed.txt')
   await executeFileSystemProviderRemove('git-file-before', 'file:///workspace/renamed.txt')
+  strictEqual(await executeFileSystemProviderStat('git-file-before', 'file:///workspace/link'), 3)
   deepStrictEqual(invocations, [
     ['mkdir', 'file:///workspace/folder'],
     ['writeFile', 'file:///workspace/file.txt', 'updated'],
     ['rename', 'file:///workspace/file.txt', 'file:///workspace/renamed.txt'],
     ['remove', 'file:///workspace/renamed.txt'],
+    ['stat', 'file:///workspace/link'],
   ])
 
   disposable.dispose()
@@ -144,4 +151,5 @@ test('missing writable operations reject clearly', async () => {
     /missing rename function/,
   )
   await rejects(executeFileSystemProviderWriteFile('read-only', 'file:///workspace/file.txt', 'updated'), /missing writeFile function/)
+  await rejects(executeFileSystemProviderStat('read-only', 'file:///workspace/link'), /missing stat function/)
 })
