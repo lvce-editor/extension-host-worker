@@ -86,6 +86,14 @@ export const executeFileSystemProviderReadDirWithFileTypes = async (id: string, 
   return provider.readDirWithFileTypes(uri)
 }
 
+export const executeFileSystemProviderStat = async (id: string, uri: string): Promise<number> => {
+  const provider = getProvider(id)
+  if (!provider.stat) {
+    throw new ExtensionApiError(`file system provider ${id} is missing stat function`)
+  }
+  return provider.stat(uri)
+}
+
 export const executeFileSystemProviderIsReadonly = async (id: string): Promise<boolean> => {
   const provider = getProvider(id)
   return provider.isReadonly ? provider.isReadonly() : false
@@ -109,6 +117,7 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
     readFile: (uri) => provider.readFile(uri),
     remove: provider.remove,
     rename: provider.rename,
+    stat: provider.stat,
     writeFile: provider.writeFile,
   }
   ExtensionApiCommandRegistry.registerCommandMap(commandMap)
@@ -126,6 +135,7 @@ const commandMap = {
   'ExtensionApi.executeFileSystemProviderReadFile': executeFileSystemProviderReadFile,
   'ExtensionApi.executeFileSystemProviderRemove': executeFileSystemProviderRemove,
   'ExtensionApi.executeFileSystemProviderRename': executeFileSystemProviderRename,
+  'ExtensionApi.executeFileSystemProviderStat': executeFileSystemProviderStat,
   'ExtensionApi.executeFileSystemProviderWriteFile': executeFileSystemProviderWriteFile,
   'ExtensionApi.getFileSystemProviderRegistrySnapshot': getFileSystemProviderRegistrySnapshot,
 }
