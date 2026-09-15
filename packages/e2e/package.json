@@ -3,8 +3,8 @@
   "version": "0.0.0-dev",
   "main": "index.js",
   "scripts": {
-    "e2e": "test-with-playwright --only-extension=. --test-path=.",
-    "e2e:headless": "test-with-playwright --only-extension=. --test-path=. --headless",
+    "e2e": "test-with-playwright --only-extension=. --test-path=. --server-path=../server/src/startServer.js",
+    "e2e:headless": "test-with-playwright --only-extension=. --test-path=. --headless --server-path=../server/src/startServer.js",
     "type-check": "tsc"
   },
   "type": "module",
