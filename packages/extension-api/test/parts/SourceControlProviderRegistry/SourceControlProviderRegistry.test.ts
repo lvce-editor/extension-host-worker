@@ -1,6 +1,7 @@
 import { rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
+  executeSourceControlGetCurrentBranch,
   executeSourceControlGetFileBeforeUri,
   executeSourceControlGetProgress,
   registerSourceControlProvider,
@@ -84,6 +85,20 @@ test('progress reflects the current provider state on every query', async () => 
 test('providers without progress support are idle', async () => {
   registerSourceControlProvider({ getChangedFiles: () => [], id: 'legacy' })
   strictEqual(await executeSourceControlGetProgress('legacy'), false)
+})
+
+test('current branch is optional provider metadata', async () => {
+  registerSourceControlProvider({
+    getChangedFiles: () => [],
+    getCurrentBranch: async (cwd) => `feature/test:${cwd}`,
+    id: 'git',
+  })
+  strictEqual(await executeSourceControlGetCurrentBranch('git', '/test/workspace'), 'feature/test:/test/workspace')
+})
+
+test('providers without current branch metadata return undefined', async () => {
+  registerSourceControlProvider({ getChangedFiles: () => [], id: 'legacy' })
+  strictEqual(await executeSourceControlGetCurrentBranch('legacy', '/test/workspace'), undefined)
 })
 
 test('progress errors propagate and disposed providers cannot be queried', async () => {

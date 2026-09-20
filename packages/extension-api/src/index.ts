@@ -145,6 +145,7 @@ export {
   executeSourceControlGenerateCommitMessage,
   executeSourceControlGetBadgeCount,
   executeSourceControlGetChangedFiles,
+  executeSourceControlGetCurrentBranch,
   executeSourceControlGetFeatures,
   executeSourceControlGetFileBefore,
   executeSourceControlGetFileBeforeUri,
