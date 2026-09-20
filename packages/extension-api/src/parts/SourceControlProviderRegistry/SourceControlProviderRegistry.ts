@@ -13,6 +13,7 @@ const optionalMethods = [
   'discard',
   'generateCommitMessage',
   'getBadgeCount',
+  'getCurrentBranch',
   'getFeatures',
   'getFileBefore',
   'getFileBeforeUri',
@@ -80,6 +81,9 @@ const mapSourceControlProvider = (provider: SourceControlProvider): RegisteredSo
   if (provider.getBadgeCount) {
     registeredProvider.getBadgeCount = () => provider.getBadgeCount!()
   }
+  if (provider.getCurrentBranch) {
+    registeredProvider.getCurrentBranch = (cwd) => provider.getCurrentBranch!(cwd)
+  }
   if (provider.getFeatures) {
     registeredProvider.getFeatures = () => provider.getFeatures!()
   }
@@ -133,6 +137,10 @@ export const executeSourceControlGenerateCommitMessage = async (id: string): Pro
 
 export const executeSourceControlGetChangedFiles = async (id: string): Promise<readonly unknown[]> => {
   return getProvider(id).getChangedFiles()
+}
+
+export const executeSourceControlGetCurrentBranch = async (id: string, cwd: string): Promise<string | undefined> => {
+  return getProvider(id).getCurrentBranch?.(cwd)
 }
 
 export const executeSourceControlGetBadgeCount = async (id: string): Promise<number> => {
@@ -208,6 +216,7 @@ const commandMap = {
   'ExtensionApi.executeSourceControlGenerateCommitMessage': executeSourceControlGenerateCommitMessage,
   'ExtensionApi.executeSourceControlGetBadgeCount': executeSourceControlGetBadgeCount,
   'ExtensionApi.executeSourceControlGetChangedFiles': executeSourceControlGetChangedFiles,
+  'ExtensionApi.executeSourceControlGetCurrentBranch': executeSourceControlGetCurrentBranch,
   'ExtensionApi.executeSourceControlGetFeatures': executeSourceControlGetFeatures,
   'ExtensionApi.executeSourceControlGetFileBefore': executeSourceControlGetFileBefore,
   'ExtensionApi.executeSourceControlGetFileBeforeUri': executeSourceControlGetFileBeforeUri,
