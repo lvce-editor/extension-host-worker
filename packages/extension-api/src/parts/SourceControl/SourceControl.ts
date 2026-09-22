@@ -3,6 +3,7 @@ export {
   executeSourceControlAdd,
   executeSourceControlDiscard,
   executeSourceControlGenerateCommitMessage,
+  executeSourceControlGetDefaultCommitMessage,
   executeSourceControlGetBadgeCount,
   executeSourceControlGetChangedFiles,
   executeSourceControlGetCurrentBranch,

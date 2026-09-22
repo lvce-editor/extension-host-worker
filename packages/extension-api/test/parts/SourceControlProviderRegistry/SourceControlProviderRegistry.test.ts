@@ -2,6 +2,7 @@ import { rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
   executeSourceControlGetCurrentBranch,
+  executeSourceControlGetDefaultCommitMessage,
   executeSourceControlGetFileBeforeUri,
   executeSourceControlGetProgress,
   registerSourceControlProvider,
@@ -99,6 +100,20 @@ test('current branch is optional provider metadata', async () => {
 test('providers without current branch metadata return undefined', async () => {
   registerSourceControlProvider({ getChangedFiles: () => [], id: 'legacy' })
   strictEqual(await executeSourceControlGetCurrentBranch('legacy', '/test/workspace'), undefined)
+})
+
+test('default commit message is optional provider metadata', async () => {
+  registerSourceControlProvider({
+    getChangedFiles: () => [],
+    getDefaultCommitMessage: async (cwd) => `Merge branch into ${cwd}`,
+    id: 'git',
+  })
+  strictEqual(await executeSourceControlGetDefaultCommitMessage('git', '/test/workspace'), 'Merge branch into /test/workspace')
+})
+
+test('providers without default commit message metadata return undefined', async () => {
+  registerSourceControlProvider({ getChangedFiles: () => [], id: 'legacy' })
+  strictEqual(await executeSourceControlGetDefaultCommitMessage('legacy', '/test/workspace'), undefined)
 })
 
 test('progress errors propagate and disposed providers cannot be queried', async () => {
