@@ -6,6 +6,7 @@ export interface RegisteredSourceControlProvider {
   readonly getBadgeCount?: () => number | Promise<number>
   readonly getChangedFiles: () => readonly unknown[] | Promise<readonly unknown[]>
   readonly getCurrentBranch?: (cwd: string) => string | Promise<string>
+  readonly getDefaultCommitMessage?: (cwd: string) => string | Promise<string>
   readonly getFeatures?: () => unknown | Promise<unknown>
   readonly getFileBefore?: (uri: string) => unknown | Promise<unknown>
   readonly getFileBeforeUri?: (uri: string) => string | Promise<string>

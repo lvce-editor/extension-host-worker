@@ -12,6 +12,7 @@ const optionalMethods = [
   'add',
   'discard',
   'generateCommitMessage',
+  'getDefaultCommitMessage',
   'getBadgeCount',
   'getCurrentBranch',
   'getFeatures',
@@ -78,6 +79,9 @@ const mapSourceControlProvider = (provider: SourceControlProvider): RegisteredSo
   if (provider.generateCommitMessage) {
     registeredProvider.generateCommitMessage = () => provider.generateCommitMessage!()
   }
+  if (provider.getDefaultCommitMessage) {
+    registeredProvider.getDefaultCommitMessage = (cwd) => provider.getDefaultCommitMessage!(cwd)
+  }
   if (provider.getBadgeCount) {
     registeredProvider.getBadgeCount = () => provider.getBadgeCount!()
   }
@@ -133,6 +137,10 @@ export const executeSourceControlDiscard = async (id: string, path: string): Pro
 
 export const executeSourceControlGenerateCommitMessage = async (id: string): Promise<unknown> => {
   return getProvider(id).generateCommitMessage?.()
+}
+
+export const executeSourceControlGetDefaultCommitMessage = async (id: string, cwd: string): Promise<string | undefined> => {
+  return getProvider(id).getDefaultCommitMessage?.(cwd)
 }
 
 export const executeSourceControlGetChangedFiles = async (id: string): Promise<readonly unknown[]> => {
@@ -217,6 +225,7 @@ const commandMap = {
   'ExtensionApi.executeSourceControlGetBadgeCount': executeSourceControlGetBadgeCount,
   'ExtensionApi.executeSourceControlGetChangedFiles': executeSourceControlGetChangedFiles,
   'ExtensionApi.executeSourceControlGetCurrentBranch': executeSourceControlGetCurrentBranch,
+  'ExtensionApi.executeSourceControlGetDefaultCommitMessage': executeSourceControlGetDefaultCommitMessage,
   'ExtensionApi.executeSourceControlGetFeatures': executeSourceControlGetFeatures,
   'ExtensionApi.executeSourceControlGetFileBefore': executeSourceControlGetFileBefore,
   'ExtensionApi.executeSourceControlGetFileBeforeUri': executeSourceControlGetFileBeforeUri,
