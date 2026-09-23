@@ -27,8 +27,8 @@ test('getColorThemeNames returns enabled extension theme ids', async () => {
           colorThemes: [{ id: 'theme.one', label: 'Theme One' }],
         },
         {
-          disabled: true,
           colorThemes: [{ id: 'theme.disabled', label: 'Disabled Theme' }],
+          disabled: true,
         },
         {},
         {
