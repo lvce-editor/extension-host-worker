@@ -1,6 +1,6 @@
 import type { RegisteredStatusBarItemProvider } from '../RegisteredStatusBarItemProvider/RegisteredStatusBarItemProvider.ts'
 import type { StatusBarItem } from '../StatusBarItem/StatusBarItem.ts'
-import type { StatusBarItemProvider } from '../StatusBarItemProvider/StatusBarItemProvider.ts'
+import type { StatusBarItemContextMenuItem, StatusBarItemProvider } from '../StatusBarItemProvider/StatusBarItemProvider.ts'
 import type { StatusBarItemProviderHandle } from '../StatusBarItemProviderHandle/StatusBarItemProviderHandle.ts'
 import type { StatusBarItemProviderRegistrySnapshot } from '../StatusBarItemProviderRegistrySnapshot/StatusBarItemProviderRegistrySnapshot.ts'
 import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/ExtensionApiCommandRegistry.ts'
@@ -10,6 +10,7 @@ import { createProviderRegistry } from '../ProviderRegistry/ProviderRegistry.ts'
 const registry = createProviderRegistry<StatusBarItemProvider, RegisteredStatusBarItemProvider>({
   mapProvider(provider) {
     return {
+      ...(provider.getContextMenuItems && { getContextMenuItems: provider.getContextMenuItems }),
       getStatusBarItem(): StatusBarItem | undefined {
         return provider.getStatusBarItem()
       },
@@ -20,11 +21,23 @@ const registry = createProviderRegistry<StatusBarItemProvider, RegisteredStatusB
   requiredMethods: ['getStatusBarItem'],
 })
 
-const getStatusBarItem = (provider: RegisteredStatusBarItemProvider): StatusBarItem | undefined => {
-  return provider.getStatusBarItem()
+type StatusBarItemWithProviderId = StatusBarItem & { readonly providerId?: string }
+
+const getStatusBarItem = (provider: RegisteredStatusBarItemProvider): StatusBarItemWithProviderId | undefined => {
+  const item = provider.getStatusBarItem()
+  if (!item || !provider.getContextMenuItems) {
+    return item
+  }
+  return { ...item, providerId: provider.id }
 }
 
-const isStatusBarItem = (item: StatusBarItem | undefined): item is StatusBarItem => {
+export const getStatusBarItemContextMenuItems = (providerId: string): readonly StatusBarItemContextMenuItem[] => {
+  const provider = registry.getProviders().find((candidate) => candidate.id === providerId)
+  const items = provider?.getContextMenuItems?.()
+  return Array.isArray(items) ? items : []
+}
+
+const isStatusBarItem = (item: StatusBarItemWithProviderId | undefined): item is StatusBarItemWithProviderId => {
   return item !== undefined
 }
 
@@ -47,7 +60,7 @@ export const registerStatusBarItemProvider = (provider: StatusBarItemProvider): 
 
 export const getStatusBarItemProviders = registry.getProviders
 
-export const getStatusBarItems = (): readonly StatusBarItem[] => {
+export const getStatusBarItems = (): readonly StatusBarItemWithProviderId[] => {
   return registry.getProviders().map(getStatusBarItem).filter(isStatusBarItem)
 }
 
@@ -60,6 +73,7 @@ export const getStatusBarItemProviderRegistrySnapshot = (): StatusBarItemProvide
 }
 
 const commandMap = {
+  'ExtensionApi.getStatusBarItemContextMenuItems': getStatusBarItemContextMenuItems,
   'ExtensionApi.getStatusBarItems': getStatusBarItems,
 }
 

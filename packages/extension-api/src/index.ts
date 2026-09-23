@@ -259,6 +259,7 @@ export type {
 export type { ShowQuickPickOptions } from './parts/ShowQuickPickOptions/ShowQuickPickOptions.ts'
 export type {
   StatusBarItem,
+  StatusBarItemContextMenuItem,
   StatusBarItemProvider,
   StatusBarItemProviderHandle,
   StatusBarItemProviderRegistrySnapshot,
