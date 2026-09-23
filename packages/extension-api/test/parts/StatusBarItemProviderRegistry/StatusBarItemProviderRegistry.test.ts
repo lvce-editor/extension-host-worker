@@ -3,6 +3,7 @@ import { deepStrictEqual, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, beforeEach, test } from 'node:test'
 import {
   getStatusBarItemProviderRegistrySnapshot,
+  getStatusBarItemContextMenuItems,
   getStatusBarItems,
   registerStatusBarItemProvider,
   resetStatusBarItemProviderRegistry,
@@ -47,9 +48,25 @@ test('registerStatusBarItemProvider registers and returns items', async () => {
   strictEqual(getStatusBarItems()[0]?.ariaLabel, 'Sample status is ready')
   strictEqual(getStatusBarItems()[0]?.spinning, true)
   strictEqual(getStatusBarItems()[0]?.text, 'Ready')
+  strictEqual(getStatusBarItems()[0]?.providerId, 'sample.status')
 
   await handle.dispose()
   strictEqual(getStatusBarItemProviderRegistrySnapshot().providers.length, 0)
+})
+
+test('getStatusBarItemContextMenuItems calls the matching provider on demand', () => {
+  registerStatusBarItemProvider({
+    getContextMenuItems() {
+      return [{ command: 'sample.command', id: 'sample-action', label: 'Sample action' }]
+    },
+    getStatusBarItem() {
+      return { name: 'sample.status' }
+    },
+    id: 'sample.status',
+  })
+
+  deepStrictEqual(getStatusBarItemContextMenuItems('sample.status'), [{ command: 'sample.command', id: 'sample-action', label: 'Sample action' }])
+  deepStrictEqual(getStatusBarItemContextMenuItems('missing'), [])
 })
 
 test('getStatusBarItems filters undefined provider items', () => {
