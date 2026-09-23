@@ -21,11 +21,14 @@ const registry = createProviderRegistry<StatusBarItemProvider, RegisteredStatusB
   requiredMethods: ['getStatusBarItem'],
 })
 
-type StatusBarItemWithProviderId = StatusBarItem & { readonly providerId: string }
+type StatusBarItemWithProviderId = StatusBarItem & { readonly providerId?: string }
 
 const getStatusBarItem = (provider: RegisteredStatusBarItemProvider): StatusBarItemWithProviderId | undefined => {
   const item = provider.getStatusBarItem()
-  return item ? { ...item, providerId: provider.id } : undefined
+  if (!item || !provider.getContextMenuItems) {
+    return item
+  }
+  return { ...item, providerId: provider.id }
 }
 
 export const getStatusBarItemContextMenuItems = (providerId: string): readonly StatusBarItemContextMenuItem[] => {

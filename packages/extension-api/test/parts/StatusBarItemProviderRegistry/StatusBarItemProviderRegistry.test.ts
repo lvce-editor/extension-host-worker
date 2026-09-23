@@ -33,6 +33,9 @@ afterEach(() => {
 
 test('registerStatusBarItemProvider registers and returns items', async () => {
   const handle = registerStatusBarItemProvider({
+    getContextMenuItems() {
+      return []
+    },
     getStatusBarItem() {
       return {
         ariaLabel: 'Sample status is ready',
