@@ -9,9 +9,17 @@ import {
   getOutputChannelRegistrySnapshot,
   resetOutputChannelRegistry,
 } from '../../../src/parts/OutputChannel/OutputChannel.ts'
+import * as OutputChannelStorage from '../../../src/parts/OutputChannelStorage/OutputChannelStorage.ts'
+
+const originalLocationDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'location')
 
 afterEach(() => {
   resetOutputChannelRegistry()
+  if (originalLocationDescriptor) {
+    Object.defineProperty(globalThis, 'location', originalLocationDescriptor)
+  } else {
+    Reflect.deleteProperty(globalThis, 'location')
+  }
 })
 
 test('createOutputChannel registers an output channel', () => {
@@ -214,6 +222,28 @@ test('multiple channels invoke with their own ids', async () => {
 
   strictEqual(await first.getLogs(), 'one')
   strictEqual(await second.getLogs(), 'two')
+})
+
+test('output channel storage isolates matching ids across extension paths in one database', async () => {
+  Object.defineProperty(globalThis, 'location', { configurable: true, value: { pathname: '/extensions/first' } })
+  await OutputChannelStorage.clear('shared-output')
+  await OutputChannelStorage.append('shared-output', 'first')
+
+  Object.defineProperty(globalThis, 'location', { configurable: true, value: { pathname: '/extensions/second' } })
+  await OutputChannelStorage.clear('shared-output')
+  await OutputChannelStorage.append('shared-output', 'second')
+  await OutputChannelStorage.replace('shared-output', 'replaced second')
+
+  strictEqual(await OutputChannelStorage.getLogs('shared-output'), 'replaced second')
+
+  Object.defineProperty(globalThis, 'location', { configurable: true, value: { pathname: '/extensions/first' } })
+  strictEqual(await OutputChannelStorage.getLogs('shared-output'), 'first')
+  await OutputChannelStorage.clear('shared-output')
+  strictEqual(await OutputChannelStorage.getLogs('shared-output'), '')
+
+  const databases = await indexedDB.databases()
+  const outputDatabases = databases.map(({ name }) => name).filter((name) => name?.includes('output'))
+  deepStrictEqual(outputDatabases, ['lvce-output-channels'])
 })
 
 test('resetOutputChannelRegistry clears registered output channels', () => {
