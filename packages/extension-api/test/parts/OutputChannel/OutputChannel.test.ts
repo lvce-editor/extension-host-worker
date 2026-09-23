@@ -1,7 +1,6 @@
 import { deepStrictEqual, rejects, strictEqual, throws } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import 'fake-indexeddb/auto'
-import * as OutputChannelStorage from '../../../src/parts/OutputChannelStorage/OutputChannelStorage.ts'
 import {
   activateOutputChannels,
   clearOutputChannel,
@@ -10,6 +9,7 @@ import {
   getOutputChannelRegistrySnapshot,
   resetOutputChannelRegistry,
 } from '../../../src/parts/OutputChannel/OutputChannel.ts'
+import * as OutputChannelStorage from '../../../src/parts/OutputChannelStorage/OutputChannelStorage.ts'
 
 const originalLocationDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'location')
 
@@ -241,7 +241,8 @@ test('output channel storage isolates matching ids across extension paths in one
   await OutputChannelStorage.clear('shared-output')
   strictEqual(await OutputChannelStorage.getLogs('shared-output'), '')
 
-  const outputDatabases = (await indexedDB.databases()).map(({ name }) => name).filter((name) => name?.includes('output'))
+  const databases = await indexedDB.databases()
+  const outputDatabases = databases.map(({ name }) => name).filter((name) => name?.includes('output'))
   deepStrictEqual(outputDatabases, ['lvce-output-channels'])
 })
 

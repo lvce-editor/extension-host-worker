@@ -4,8 +4,8 @@ const objectStoreName = 'chunks'
 const extensionPathChannelIdIndexName = 'extensionPath-channelId'
 
 interface OutputChunk {
-  readonly extensionPath: string
   readonly channelId: string
+  readonly extensionPath: string
   readonly text: string
 }
 
@@ -61,7 +61,7 @@ export const append = async (channelId: string, text: string): Promise<void> => 
   const database = await getDatabase()
   const transaction = database.transaction(objectStoreName, 'readwrite')
   const extensionPath = getExtensionPath()
-  transaction.objectStore(objectStoreName).add({ extensionPath, channelId, text } satisfies OutputChunk)
+  transaction.objectStore(objectStoreName).add({ channelId, extensionPath, text } satisfies OutputChunk)
   await waitForTransaction(transaction)
 }
 
@@ -94,7 +94,7 @@ export const replace = async (channelId: string, text: string): Promise<void> =>
   const objectStore = transaction.objectStore(objectStoreName)
   const extensionPath = getExtensionPath()
   deleteChannelChunks(objectStore, extensionPath, channelId, () => {
-    objectStore.add({ extensionPath, channelId, text } satisfies OutputChunk)
+    objectStore.add({ channelId, extensionPath, text } satisfies OutputChunk)
   })
   await waitForTransaction(transaction)
 }
