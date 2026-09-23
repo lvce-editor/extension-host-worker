@@ -66,6 +66,7 @@ test('host helpers execute renderer commands through extension management', asyn
   deepStrictEqual(await getRecentlyOpenedWorkspaceUris(), ['file:///projects/one', 'remote-ssh://host/projects/two'])
   strictEqual(await confirm('Discard changes?'), true)
   await handleWorkspaceRefresh()
+  await handleWorkspaceRefresh({ reloadAll: true })
   await openUri('/workspace/file.txt')
   await closeUri('/workspace/file.txt')
   await setWorkspaceUri('remote-ssh:///test-folder')
@@ -77,6 +78,7 @@ test('host helpers execute renderer commands through extension management', asyn
     ['RecentlyOpened.getRecentlyOpened'],
     ['ConfirmPrompt.prompt', 'Discard changes?'],
     ['Layout.handleWorkspaceRefresh'],
+    ['Layout.handleWorkspaceRefresh', { reloadAll: true }],
     ['Main.openUri', '/workspace/file.txt'],
     ['Main.closeTabsByUris', ['/workspace/file.txt']],
     ['Workspace.setUri', 'remote-ssh:///test-folder'],

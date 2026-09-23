@@ -23,8 +23,8 @@ export const getWorkspaceUri = async (): Promise<string> => {
   return (await executeCommand('Workspace.getUri')) as string
 }
 
-export const handleWorkspaceRefresh = async (): Promise<void> => {
-  await executeCommand('Layout.handleWorkspaceRefresh')
+export const handleWorkspaceRefresh = async (changes?: { readonly reloadAll?: boolean }): Promise<void> => {
+  await executeCommand('Layout.handleWorkspaceRefresh', ...(changes ? [changes] : []))
 }
 
 export const openUri = async (uri: string): Promise<void> => {
