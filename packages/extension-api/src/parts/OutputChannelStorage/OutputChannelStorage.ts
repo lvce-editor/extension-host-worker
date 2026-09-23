@@ -1,30 +1,30 @@
-const databasePrefix = 'lvce-editor-extension-output'
+const databaseName = 'lvce-output-channels'
 const databaseVersion = 1
 const objectStoreName = 'chunks'
-const channelIdIndexName = 'channelId'
+const extensionPathChannelIdIndexName = 'extensionPath-channelId'
 
 interface OutputChunk {
+  readonly extensionPath: string
   readonly channelId: string
   readonly text: string
 }
 
 let databasePromise: Promise<IDBDatabase> | undefined
 
-const getDatabaseName = (): string => {
-  const extensionPath = typeof location === 'undefined' ? 'test' : location.pathname
-  return `${databasePrefix}:${extensionPath}`
+const getExtensionPath = (): string => {
+  return typeof location === 'undefined' ? 'test' : location.pathname
 }
 
 const openDatabase = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(getDatabaseName(), databaseVersion)
+    const request = indexedDB.open(databaseName, databaseVersion)
     request.onerror = () => reject(request.error)
     request.onupgradeneeded = () => {
       const database = request.result
       const objectStore = database.createObjectStore(objectStoreName, {
         autoIncrement: true,
       })
-      objectStore.createIndex(channelIdIndexName, 'channelId')
+      objectStore.createIndex(extensionPathChannelIdIndexName, ['extensionPath', 'channelId'])
     }
     request.onsuccess = () => resolve(request.result)
   })
@@ -43,9 +43,9 @@ const waitForTransaction = (transaction: IDBTransaction): Promise<void> => {
   })
 }
 
-const deleteChannelChunks = (objectStore: IDBObjectStore, channelId: string, onComplete: () => void = () => {}): void => {
-  const index = objectStore.index(channelIdIndexName)
-  const request = index.openKeyCursor(IDBKeyRange.only(channelId))
+const deleteChannelChunks = (objectStore: IDBObjectStore, extensionPath: string, channelId: string, onComplete: () => void = () => {}): void => {
+  const index = objectStore.index(extensionPathChannelIdIndexName)
+  const request = index.openKeyCursor(IDBKeyRange.only([extensionPath, channelId]))
   request.onsuccess = () => {
     const cursor = request.result
     if (!cursor) {
@@ -60,21 +60,26 @@ const deleteChannelChunks = (objectStore: IDBObjectStore, channelId: string, onC
 export const append = async (channelId: string, text: string): Promise<void> => {
   const database = await getDatabase()
   const transaction = database.transaction(objectStoreName, 'readwrite')
-  transaction.objectStore(objectStoreName).add({ channelId, text } satisfies OutputChunk)
+  const extensionPath = getExtensionPath()
+  transaction.objectStore(objectStoreName).add({ extensionPath, channelId, text } satisfies OutputChunk)
   await waitForTransaction(transaction)
 }
 
 export const clear = async (channelId: string): Promise<void> => {
   const database = await getDatabase()
   const transaction = database.transaction(objectStoreName, 'readwrite')
-  deleteChannelChunks(transaction.objectStore(objectStoreName), channelId)
+  deleteChannelChunks(transaction.objectStore(objectStoreName), getExtensionPath(), channelId)
   await waitForTransaction(transaction)
 }
 
 export const getLogs = async (channelId: string): Promise<string> => {
   const database = await getDatabase()
   const transaction = database.transaction(objectStoreName, 'readonly')
-  const request = transaction.objectStore(objectStoreName).index(channelIdIndexName).getAll(IDBKeyRange.only(channelId))
+  const extensionPath = getExtensionPath()
+  const request = transaction
+    .objectStore(objectStoreName)
+    .index(extensionPathChannelIdIndexName)
+    .getAll(IDBKeyRange.only([extensionPath, channelId]))
   const chunks = await new Promise<readonly OutputChunk[]>((resolve, reject) => {
     request.onerror = () => reject(request.error)
     request.onsuccess = () => resolve(request.result)
@@ -87,8 +92,9 @@ export const replace = async (channelId: string, text: string): Promise<void> =>
   const database = await getDatabase()
   const transaction = database.transaction(objectStoreName, 'readwrite')
   const objectStore = transaction.objectStore(objectStoreName)
-  deleteChannelChunks(objectStore, channelId, () => {
-    objectStore.add({ channelId, text } satisfies OutputChunk)
+  const extensionPath = getExtensionPath()
+  deleteChannelChunks(objectStore, extensionPath, channelId, () => {
+    objectStore.add({ extensionPath, channelId, text } satisfies OutputChunk)
   })
   await waitForTransaction(transaction)
 }
