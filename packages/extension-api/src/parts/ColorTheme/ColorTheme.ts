@@ -19,10 +19,6 @@ const getColorThemeIds = (extension: ExtensionManifest): readonly string[] => {
 
 export const getColorThemeNames = async (): Promise<readonly string[]> => {
   const platform = (await executeCommand('Layout.getPlatform')) as number
-  const extensions = (await ExtensionManagementWorker.invoke(
-    'Extensions.getAllExtensions',
-    '',
-    platform,
-  )) as readonly ExtensionManifest[]
+  const extensions = (await ExtensionManagementWorker.invoke('Extensions.getAllExtensions', '', platform)) as readonly ExtensionManifest[]
   return extensions.flatMap(getColorThemeIds)
 }
