@@ -1,6 +1,6 @@
 import { ExtensionManagementWorker, FileSystemWorker } from '@lvce-editor/rpc-registry'
-import { deepStrictEqual, strictEqual } from 'node:assert/strict'
-import { afterEach, test } from 'node:test'
+import { deepStrictEqual, rejects, strictEqual } from 'node:assert/strict'
+import { afterEach, mock, test } from 'node:test'
 import {
   exists,
   getFileHash,
@@ -27,6 +27,7 @@ afterEach(() => {
   mockRpc?.[Symbol.dispose]()
   mockExtensionManagementRpc = undefined
   mockRpc = undefined
+  mock.restoreAll()
 })
 
 test('readFile reads through the file system worker', async () => {
@@ -75,10 +76,10 @@ test('readFileAsBlob reads core file systems through the file system worker', as
     },
   })
 
-  const result = await readFileAsBlob('html:///workspace/image.png')
+  const result = await readFileAsBlob('file:///workspace/image.png')
 
   strictEqual(result, blob)
-  strictEqual(invokedUri, 'html:///workspace/image.png')
+  strictEqual(invokedUri, 'file:///workspace/image.png')
 })
 
 test('readFileAsBlob falls back to the legacy file system worker method', async () => {
@@ -99,10 +100,10 @@ test('readFileAsBlob falls back to the legacy file system worker method', async 
     },
   })
 
-  const result = await readFileAsBlob('html:///workspace/image.png')
+  const result = await readFileAsBlob('file:///workspace/image.png')
 
   strictEqual(result, blob)
-  strictEqual(invokedUri, 'html:///workspace/image.png')
+  strictEqual(invokedUri, 'file:///workspace/image.png')
 })
 
 test('getFileHash reads the content hash through the file system worker', async () => {
@@ -381,4 +382,44 @@ test('writeFile writes through the file system worker', async () => {
 
   strictEqual(invokedUri, '/tmp/sample.txt')
   strictEqual(invokedContent, 'sample content')
+})
+
+for (const content of ['sample image bytes', '']) {
+  test(`readFileAsBlob reads native folder content through an isolated-extension-safe blob URL (${content.length} bytes)`, async () => {
+    const blob = new Blob([content])
+    const url = URL.createObjectURL(blob)
+    const revoke = mock.method(URL, 'revokeObjectURL')
+    mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+      async 'Extensions.executeCommand'(id: string, uri: string): Promise<string> {
+        strictEqual(id, 'Blob.getSrc')
+        strictEqual(uri, 'html:///workspace/image.png')
+        return url
+      },
+    })
+    const result = await readFileAsBlob('html:///workspace/image.png')
+    strictEqual(result.size, blob.size)
+    strictEqual(await result.text(), content)
+    deepStrictEqual(
+      revoke.mock.calls.map((call) => call.arguments),
+      [[url]],
+    )
+  })
+}
+
+test('readFileAsBlob releases the native folder blob URL when reading fails', async () => {
+  const url = URL.createObjectURL(new Blob(['image']))
+  const revoke = mock.method(URL, 'revokeObjectURL')
+  mock.method(globalThis, 'fetch', async () => {
+    throw new Error('read failed')
+  })
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(): Promise<string> {
+      return url
+    },
+  })
+  await rejects(readFileAsBlob('html:///workspace/image.png'), /read failed/)
+  deepStrictEqual(
+    revoke.mock.calls.map((call) => call.arguments),
+    [[url]],
+  )
 })
