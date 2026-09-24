@@ -75,7 +75,11 @@ export const readFileAsBlob = async (uri: string): Promise<Blob> => {
   try {
     return (await executeCommand('FileSystem.getBlob', uri)) as Blob
   } catch {
-    return FileSystemWorker.invoke('FileSystem.readFileAsBlob', uri)
+    try {
+      return await FileSystemWorker.invoke('FileSystem.getBlob', uri)
+    } catch {
+      return FileSystemWorker.invoke('FileSystem.readFileAsBlob', uri)
+    }
   }
 }
 
