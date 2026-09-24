@@ -60,7 +60,28 @@ test('readFileAsBlob reads remote content through its registered file system pro
   deepStrictEqual(invocations, [['FileSystem.getBlob', 'remote-ssh:///workspace/image.png']])
 })
 
-test('readFileAsBlob falls back to the file system worker on older hosts', async () => {
+test('readFileAsBlob reads core file systems through the file system worker', async () => {
+  const blob = new Blob(['sample content'])
+  let invokedUri = ''
+  mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(): Promise<never> {
+      throw new Error('no file system provider found')
+    },
+  })
+  mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.getBlob'(uri: string): Promise<Blob> {
+      invokedUri = uri
+      return blob
+    },
+  })
+
+  const result = await readFileAsBlob('html:///workspace/image.png')
+
+  strictEqual(result, blob)
+  strictEqual(invokedUri, 'html:///workspace/image.png')
+})
+
+test('readFileAsBlob falls back to the legacy file system worker method', async () => {
   const blob = new Blob(['sample content'])
   let invokedUri = ''
   mockExtensionManagementRpc = ExtensionManagementWorker.registerMockRpc({
@@ -69,6 +90,9 @@ test('readFileAsBlob falls back to the file system worker on older hosts', async
     },
   })
   mockRpc = FileSystemWorker.registerMockRpc({
+    async 'FileSystem.getBlob'(): Promise<never> {
+      throw new Error('Command not found: FileSystem.getBlob')
+    },
     async 'FileSystem.readFileAsBlob'(uri: string): Promise<Blob> {
       invokedUri = uri
       return blob
