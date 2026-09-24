@@ -1,6 +1,7 @@
 import type { FileSystemDirent } from '../FileSystemDirent/FileSystemDirent.ts'
 
 export interface RegisteredFileSystemProvider {
+  readonly getOpenExternalPath?: (uri: string) => string | Promise<string>
   readonly id: string
   readonly isReadonly?: () => boolean | Promise<boolean>
   readonly mkdir?: (uri: string) => void | Promise<void>
