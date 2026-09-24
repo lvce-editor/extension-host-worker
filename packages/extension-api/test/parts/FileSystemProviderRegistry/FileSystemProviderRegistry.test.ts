@@ -5,6 +5,7 @@ import {
   executeFileSystemProviderMkdir,
   executeFileSystemProviderReadDirWithFileTypes,
   executeFileSystemProviderReadFile,
+  executeFileSystemProviderGetOpenExternalPath,
   executeFileSystemProviderRemove,
   executeFileSystemProviderRename,
   executeFileSystemProviderStat,
@@ -21,6 +22,9 @@ afterEach(() => {
 test('registerFileSystemProvider registers and executes provider operations', async () => {
   const invocations: unknown[][] = []
   const disposable = registerFileSystemProvider({
+    getOpenExternalPath(uri) {
+      return `external:${uri}`
+    },
     id: 'git-file-before',
     isReadonly() {
       return true
@@ -53,6 +57,7 @@ test('registerFileSystemProvider registers and executes provider operations', as
     providers: [{ id: 'git-file-before' }],
   })
   strictEqual(await executeFileSystemProviderReadFile('git-file-before', 'file:///workspace/file.txt'), 'before:file:///workspace/file.txt')
+  strictEqual(await executeFileSystemProviderGetOpenExternalPath('git-file-before', 'file:///workspace'), 'external:file:///workspace')
   deepStrictEqual(await executeFileSystemProviderReadDirWithFileTypes('git-file-before', 'file:///workspace'), [
     { name: 'file:///workspace', type: 1 },
   ])
@@ -152,4 +157,5 @@ test('missing writable operations reject clearly', async () => {
   )
   await rejects(executeFileSystemProviderWriteFile('read-only', 'file:///workspace/file.txt', 'updated'), /missing writeFile function/)
   await rejects(executeFileSystemProviderStat('read-only', 'file:///workspace/link'), /missing stat function/)
+  await rejects(executeFileSystemProviderGetOpenExternalPath('read-only', 'read-only:///workspace'), /missing getOpenExternalPath function/)
 })
