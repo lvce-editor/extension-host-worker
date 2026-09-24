@@ -72,6 +72,15 @@ export const readFile = async (uri: string): Promise<string> => {
 }
 
 export const readFileAsBlob = async (uri: string): Promise<Blob> => {
+  if (uri.startsWith('html://')) {
+    const url = await getObjectUrl(uri)
+    try {
+      const response = await fetch(url)
+      return await response.blob()
+    } finally {
+      URL.revokeObjectURL(url)
+    }
+  }
   try {
     return (await executeCommand('FileSystem.getBlob', uri)) as Blob
   } catch {
