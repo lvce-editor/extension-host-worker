@@ -3,12 +3,27 @@ import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 
 export type NotificationType = 'error' | 'info' | 'warning'
 
+export interface ConfirmOptions {
+  readonly cancelMessage?: string
+  readonly confirmMessage?: string
+  readonly title?: string
+}
+
+export interface ShowErrorMessageOptions {
+  readonly confirmMessage?: string
+  readonly title?: string
+}
+
 export const closeUri = async (uri: string): Promise<void> => {
   await executeCommand('Main.closeTabsByUris', [uri])
 }
 
-export const confirm = async (message: string): Promise<boolean> => {
-  return Boolean(await executeCommand('ConfirmPrompt.prompt', message))
+export const confirm = async (message: string, options?: ConfirmOptions): Promise<boolean> => {
+  return Boolean(await executeCommand('ConfirmPrompt.prompt', message, ...(options ? [options] : [])))
+}
+
+export const showErrorMessage = async (message: string, options: ShowErrorMessageOptions = {}): Promise<void> => {
+  await executeCommand('ConfirmPrompt.showErrorMessage', { ...options, message })
 }
 
 export const getWorkspaceFolder = async (): Promise<string> => {
