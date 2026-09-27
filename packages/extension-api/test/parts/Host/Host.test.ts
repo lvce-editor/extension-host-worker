@@ -66,7 +66,7 @@ test('host helpers execute renderer commands through extension management', asyn
   strictEqual(await getWorkspaceUri(), 'file:///workspace')
   deepStrictEqual(await getRecentlyOpenedWorkspaceUris(), ['file:///projects/one', 'remote-ssh://host/projects/two'])
   strictEqual(await confirm('Discard changes?'), true)
-  strictEqual(await confirm('Discard changes?', { title: 'Editor', confirmMessage: 'Discard', cancelMessage: 'Keep' }), true)
+  strictEqual(await confirm('Discard changes?', { cancelMessage: 'Keep', confirmMessage: 'Discard', title: 'Editor' }), true)
   await showErrorMessage('WSL is not installed.', { title: 'WSL' })
   await handleWorkspaceRefresh()
   await handleWorkspaceRefresh({ reloadAll: true })
@@ -80,7 +80,7 @@ test('host helpers execute renderer commands through extension management', asyn
     ['Workspace.getUri'],
     ['RecentlyOpened.getRecentlyOpened'],
     ['ConfirmPrompt.prompt', 'Discard changes?'],
-    ['ConfirmPrompt.prompt', 'Discard changes?', { title: 'Editor', confirmMessage: 'Discard', cancelMessage: 'Keep' }],
+    ['ConfirmPrompt.prompt', 'Discard changes?', { cancelMessage: 'Keep', confirmMessage: 'Discard', title: 'Editor' }],
     ['ConfirmPrompt.showErrorMessage', { message: 'WSL is not installed.', title: 'WSL' }],
     ['Layout.handleWorkspaceRefresh'],
     ['Layout.handleWorkspaceRefresh', { reloadAll: true }],

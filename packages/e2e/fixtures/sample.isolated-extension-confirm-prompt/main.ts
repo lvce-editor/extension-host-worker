@@ -6,7 +6,7 @@ const activate = async (): Promise<void> => {
     id: 'isolatedConfirmPromptSample',
     async execute(): Promise<void> {
       await showErrorMessage('WSL is not installed.', { title: 'WSL' })
-      const confirmed = await confirm('Continue?', { title: 'WSL', confirmMessage: 'Continue', cancelMessage: 'Cancel' })
+      const confirmed = await confirm('Continue?', { cancelMessage: 'Cancel', confirmMessage: 'Continue', title: 'WSL' })
       await showErrorMessage(confirmed ? 'Confirmed' : 'Cancelled', { title: 'Confirmation result' })
     },
   })
