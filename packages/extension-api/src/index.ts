@@ -97,8 +97,11 @@ export {
   handleWorkspaceRefresh,
   openUri,
   setWorkspaceUri,
+  showErrorMessage,
   showNotification,
+  type ConfirmOptions,
   type NotificationType,
+  type ShowErrorMessageOptions,
 } from './parts/Host/Host.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export {

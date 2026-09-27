@@ -1,5 +1,5 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
-import { deepStrictEqual, strictEqual } from 'node:assert/strict'
+import { deepStrictEqual, rejects, strictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
 import {
   closeUri,
@@ -10,6 +10,7 @@ import {
   handleWorkspaceRefresh,
   openUri,
   setWorkspaceUri,
+  showErrorMessage,
   showNotification,
 } from '../../../src/parts/Host/Host.ts'
 
@@ -65,6 +66,8 @@ test('host helpers execute renderer commands through extension management', asyn
   strictEqual(await getWorkspaceUri(), 'file:///workspace')
   deepStrictEqual(await getRecentlyOpenedWorkspaceUris(), ['file:///projects/one', 'remote-ssh://host/projects/two'])
   strictEqual(await confirm('Discard changes?'), true)
+  strictEqual(await confirm('Discard changes?', { title: 'Editor', confirmMessage: 'Discard', cancelMessage: 'Keep' }), true)
+  await showErrorMessage('WSL is not installed.', { title: 'WSL' })
   await handleWorkspaceRefresh()
   await handleWorkspaceRefresh({ reloadAll: true })
   await openUri('/workspace/file.txt')
@@ -77,6 +80,8 @@ test('host helpers execute renderer commands through extension management', asyn
     ['Workspace.getUri'],
     ['RecentlyOpened.getRecentlyOpened'],
     ['ConfirmPrompt.prompt', 'Discard changes?'],
+    ['ConfirmPrompt.prompt', 'Discard changes?', { title: 'Editor', confirmMessage: 'Discard', cancelMessage: 'Keep' }],
+    ['ConfirmPrompt.showErrorMessage', { message: 'WSL is not installed.', title: 'WSL' }],
     ['Layout.handleWorkspaceRefresh'],
     ['Layout.handleWorkspaceRefresh', { reloadAll: true }],
     ['Main.openUri', '/workspace/file.txt'],
@@ -84,4 +89,25 @@ test('host helpers execute renderer commands through extension management', asyn
     ['Workspace.setUri', 'remote-ssh:///test-folder'],
     ['Extensions.showNotification', 'info', 'File created successfully'],
   ])
+})
+
+test('confirm preserves a cancelled result', async () => {
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(): Promise<unknown> {
+      return false
+    },
+  })
+
+  strictEqual(await confirm('Continue?'), false)
+})
+
+test('showErrorMessage propagates transport errors', async () => {
+  const error = new Error('Dialog transport failed')
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(): Promise<unknown> {
+      throw error
+    },
+  })
+
+  await rejects(showErrorMessage('WSL is not installed.', { title: 'WSL' }), error)
 })
