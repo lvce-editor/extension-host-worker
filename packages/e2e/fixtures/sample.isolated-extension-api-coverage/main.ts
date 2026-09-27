@@ -1,5 +1,6 @@
 import {
   activate,
+  confirm,
   executeFileSystemProviderReadFile,
   getFileSystemProviderRegistrySnapshot,
   getLanguageServerRegistrySnapshot,
@@ -136,6 +137,9 @@ const cases: Readonly<Record<string, CoverageCase>> = {
   'host-platform': async () => {
     const platform: Platform = await getPlatform()
     return ['electron', 'remote', 'test', 'web'].includes(platform)
+  },
+  'host-confirm-prompt': async () => {
+    return confirm('Continue?', { cancelMessage: 'Cancel', confirmMessage: 'Continue', title: 'WSL' })
   },
   'host-workspace-folder': async () => {
     return typeof (await getWorkspaceFolder()) === 'string'
