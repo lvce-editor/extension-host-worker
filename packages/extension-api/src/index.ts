@@ -1,5 +1,6 @@
 export { activate } from './parts/Activation/Activation.ts'
 export { getColorThemeNames } from './parts/ColorTheme/ColorTheme.ts'
+export { markdownToVirtualDom } from './parts/Markdown/Markdown.ts'
 export { getAccessToken, type GetAccessTokenOptions } from './parts/Authentication/Authentication.ts'
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
