@@ -86,7 +86,7 @@ export const executeLanguageProvider = async (
   return (method as ProviderMethod)(textDocument, ...args)
 }
 
-export const executeOrganizeImportsProvider = async (textDocument: { readonly languageId: string }): Promise<unknown> => {
+export const executeSourceActionProvider = async (textDocument: { readonly languageId: string }, kind: string): Promise<unknown> => {
   const provider = getProvider('code action', textDocument.languageId)
   if (!provider) {
     throw new ExtensionApiError(`No code action provider found for ${textDocument.languageId}`)
@@ -96,12 +96,15 @@ export const executeOrganizeImportsProvider = async (textDocument: { readonly la
   if (!Array.isArray(actions)) {
     throw new ExtensionApiError('invalid code action result: code actions must be of type array')
   }
-  const action = actions.find((candidate) => candidate && typeof candidate === 'object' && candidate.kind === 'source.organizeImports')
+  const action = actions.find((candidate) => candidate && typeof candidate === 'object' && candidate.kind === kind)
   if (!action || typeof action.execute !== 'function') {
     return []
   }
   return action.execute(textDocument)
 }
+
+export const executeOrganizeImportsProvider = (textDocument: { readonly languageId: string }): Promise<unknown> =>
+  executeSourceActionProvider(textDocument, 'source.organizeImports')
 
 export const registerBraceCompletionProvider = (provider: LanguageProvider): Disposable =>
   registerProvider('brace completion', provider, ['provideBraceCompletion'])
@@ -125,6 +128,7 @@ export const registerTypeDefinitionProvider = (provider: LanguageProvider): Disp
 const commandMap = {
   'ExtensionApi.executeLanguageProvider': executeLanguageProvider,
   'ExtensionApi.executeOrganizeImportsProvider': executeOrganizeImportsProvider,
+  'ExtensionApi.executeSourceActionProvider': executeSourceActionProvider,
 }
 
 export const resetLanguageProviderRegistry = (): void => {
