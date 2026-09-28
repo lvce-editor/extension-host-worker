@@ -67,3 +67,34 @@ const registration = registerPortProvider({
 ```
 
 Ports queries matching extensions with the current workspace URI. Each extension may register one provider per scheme. Return an empty array when no ports are available, and dispose the registration when deactivating. The provider supplies addresses; the API does not create tunnels or change their visibility. Results from disposed registrations are discarded.
+
+## Authentication providers
+
+Extensions can contribute a functional authentication provider with session callbacks. The provider's stable `id` and display `label` identify it; requested scopes are passed to the callbacks, and session results include an account, access token, and granted scopes.
+
+```ts
+import { activate, registerAuthenticationProvider } from '@lvce-editor/api'
+
+await activate()
+const registration = registerAuthenticationProvider({
+  id: 'example',
+  label: 'Example Account',
+  async getSessions(scopes) {
+    return []
+  },
+  async createSession(scopes) {
+    return {
+      id: 'account-session',
+      accessToken: 'token',
+      account: { id: 'account', label: 'Example Account' },
+      scopes,
+    }
+  },
+  async removeSession(sessionId) {},
+})
+
+// Dispose the contribution when the extension deactivates.
+registration.dispose()
+```
+
+The editor can call `executeAuthenticationProviderGetSessions`, `executeAuthenticationProviderCreateSession`, and `executeAuthenticationProviderRemoveSession` by provider id. Session callbacks are responsible for account selection, consent, token storage, and revocation.

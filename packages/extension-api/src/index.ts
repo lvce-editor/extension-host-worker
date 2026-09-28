@@ -2,6 +2,16 @@ export { activate } from './parts/Activation/Activation.ts'
 export { getColorThemeNames } from './parts/ColorTheme/ColorTheme.ts'
 export { markdownToVirtualDom } from './parts/Markdown/Markdown.ts'
 export { getAccessToken, type GetAccessTokenOptions } from './parts/Authentication/Authentication.ts'
+export {
+  executeAuthenticationProviderCreateSession,
+  executeAuthenticationProviderGetSessions,
+  executeAuthenticationProviderRemoveSession,
+  getAuthenticationProviderRegistrySnapshot,
+  registerAuthenticationProvider,
+  resetAuthenticationProviderRegistry,
+} from './parts/AuthenticationProviderRegistry/AuthenticationProviderRegistry.ts'
+export type { AuthenticationAccount, AuthenticationProvider, AuthenticationSession } from './parts/AuthenticationProvider/AuthenticationProvider.ts'
+export type { AuthenticationProviderRegistrySnapshot } from './parts/AuthenticationProviderRegistrySnapshot/AuthenticationProviderRegistrySnapshot.ts'
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showFileQuickPick, showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
