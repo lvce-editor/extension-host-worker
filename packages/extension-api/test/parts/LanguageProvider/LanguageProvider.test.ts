@@ -3,6 +3,7 @@ import { afterEach, test } from 'node:test'
 import {
   executeLanguageProvider,
   executeOrganizeImportsProvider,
+  executeSourceActionProvider,
   registerCodeActionsProvider,
   registerDefinitionProvider,
   registerDocumentSymbolProvider,
@@ -92,4 +93,55 @@ test('executes organize imports inside the isolated worker', async () => {
   })
   deepStrictEqual(await executeOrganizeImportsProvider({ languageId: 'typescript' }), [{ inserted: 'import { x } from ./x' }])
   strictEqual(executionCount, 1)
+})
+
+test('executes the requested source action with the current document', async () => {
+  const textDocument = { languageId: 'typescript', text: 'export const c = a + 1', uri: '/c.ts' }
+  const edits = [{ inserted: "import { a } from './a'" }]
+  registerCodeActionsProvider({
+    id: 'typescript.code-actions',
+    languageId: 'typescript',
+    provideCodeActions(actualDocument: unknown) {
+      strictEqual(actualDocument, textDocument)
+      return [
+        {
+          execute() {
+            throw new Error('wrong action')
+          },
+          kind: 'source.organizeImports',
+        },
+        {
+          execute(actualDocument: unknown) {
+            strictEqual(actualDocument, textDocument)
+            return edits
+          },
+          kind: 'source.addMissingImports',
+        },
+      ]
+    },
+  })
+  strictEqual(await executeSourceActionProvider(textDocument, 'source.addMissingImports'), edits)
+  deepStrictEqual(await executeSourceActionProvider(textDocument, 'source.unknown'), [])
+})
+
+test('ignores source actions without an executable handler', async () => {
+  registerCodeActionsProvider({
+    id: 'typescript.code-actions',
+    languageId: 'typescript',
+    provideCodeActions() {
+      return [{ kind: 'source.addMissingImports' }]
+    },
+  })
+  deepStrictEqual(await executeSourceActionProvider({ languageId: 'typescript' }, 'source.addMissingImports'), [])
+})
+
+test('rejects invalid source action provider results', async () => {
+  registerCodeActionsProvider({
+    id: 'typescript.code-actions',
+    languageId: 'typescript',
+    provideCodeActions() {
+      return null
+    },
+  })
+  await rejects(executeSourceActionProvider({ languageId: 'typescript' }, 'source.addMissingImports'), /code actions must be of type array/)
 })
