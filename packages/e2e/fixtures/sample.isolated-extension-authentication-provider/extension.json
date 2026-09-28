@@ -1,0 +1,12 @@
+{
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedAbout.getSessions"],
+  "commands": [
+    { "id": "isolatedAbout.getAuthenticationProviderRegistrySnapshot" },
+    { "id": "isolatedAbout.getSessions" },
+    { "id": "isolatedAbout.createSession" },
+    { "id": "isolatedAbout.removeSession" },
+    { "id": "isolatedAbout.getOtherProviderSessions" }
+  ]
+}
