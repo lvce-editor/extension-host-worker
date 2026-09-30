@@ -29,8 +29,8 @@ test('preparePrettyError asks the renderer to format the serialized error', asyn
     [
       'ErrorHandling.preparePrettyError',
       {
-        codeFrame: undefined,
         code: undefined,
+        codeFrame: undefined,
         constructor: { name: 'Error' },
         message: 'Syntax error',
         name: 'Error',
@@ -54,10 +54,10 @@ test('preparePrettyError returns the original diagnostic when formatting is unav
 
   deepStrictEqual(prettyError, {
     code: undefined,
+    codeFrame: undefined,
     constructor: undefined,
     message: 'could not parse',
     name: undefined,
     stack: 'SyntaxError: could not parse',
-    codeFrame: undefined,
   })
 })

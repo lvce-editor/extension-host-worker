@@ -8,8 +8,8 @@ export interface PrettyError {
 }
 
 interface ErrorLike {
-  readonly codeFrame?: string
   readonly code?: string
+  readonly codeFrame?: string
   readonly constructor?: { readonly name?: string }
   readonly errorMessage?: string
   readonly errorStack?: string
@@ -21,8 +21,8 @@ interface ErrorLike {
 const serializeError = (error: unknown): ErrorLike => {
   if (error instanceof Error) {
     return {
-      codeFrame: (error as Error & { codeFrame?: string }).codeFrame,
       code: (error as Error & { code?: string }).code,
+      codeFrame: (error as Error & { codeFrame?: string }).codeFrame,
       constructor: { name: error.constructor.name },
       message: error.message,
       name: error.name,
@@ -33,8 +33,8 @@ const serializeError = (error: unknown): ErrorLike => {
     const value = error as ErrorLike
     const constructorName = Object.hasOwn(value, 'constructor') ? value.constructor?.name : undefined
     return {
-      codeFrame: value.codeFrame,
       code: value.code,
+      codeFrame: value.codeFrame,
       constructor: constructorName ? { name: constructorName } : undefined,
       message: value.message || value.errorMessage,
       name: value.name || constructorName,
