@@ -114,6 +114,7 @@ export {
   type NotificationType,
   type ShowErrorMessageOptions,
 } from './parts/Host/Host.ts'
+export { preparePrettyError } from './parts/PrettyError/PrettyError.ts'
 export { executeHoverProvider, getHoverProviderRegistrySnapshot, registerHoverProvider, resetHoverProviderRegistry } from './parts/Hover/Hover.ts'
 export {
   executeSignatureHelpProvider,
