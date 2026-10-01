@@ -63,8 +63,6 @@ export interface VirtualDomViewInstance {
   readonly handleEvent?: (event: ViewEvent) => unknown
   /** Whether this document has edits that have not been saved. */
   readonly isDirty?: () => boolean
-  /** Persist committed edits. Reject on failure and retain dirty state until persistence succeeds. */
-  readonly save?: () => void | Promise<void>
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly renderActions?: () => readonly ViewAction[] | Promise<readonly ViewAction[]>
   readonly renderActionsDom?: () => readonly VirtualDomNode[]
@@ -73,6 +71,8 @@ export interface VirtualDomViewInstance {
   readonly renderSelections?: () => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
   readonly renderStatusBarItems?: () => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
   readonly renderTitle?: () => string | Promise<string>
+  /** Persist committed edits. Reject on failure and retain dirty state until persistence succeeds. */
+  readonly save?: () => void | Promise<void>
   readonly saveState?: () => unknown
 }
 
@@ -109,7 +109,6 @@ export interface StatefulView<State = unknown> extends ViewBase<State> {
   readonly getMenuEntries?: (state: State, menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
   readonly handleEvent?: (state: State, event: ViewEvent) => State | Promise<State>
   readonly isDirty?: (state: State) => boolean
-  readonly save?: (state: State) => State | Promise<State>
   readonly render: (state: State) => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly renderActions?: (state: State) => readonly ViewAction[] | Promise<readonly ViewAction[]>
   readonly renderActionsDom?: (state: State) => readonly VirtualDomNode[]
@@ -122,6 +121,7 @@ export interface StatefulView<State = unknown> extends ViewBase<State> {
   readonly renderSelections?: (state: State) => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
   readonly renderStatusBarItems?: (state: State) => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
   readonly renderTitle?: (state: State) => string | Promise<string>
+  readonly save?: (state: State) => State | Promise<State>
   readonly saveState?: (state: State) => unknown
 }
 
@@ -147,21 +147,21 @@ export interface ViewRenderResultDom {
   readonly css?: string
   readonly dom: readonly VirtualDomNode[]
   readonly focusSelector?: string
+  readonly modified?: boolean
   readonly scrollPosition?: ViewScrollPosition
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
-  readonly modified?: boolean
   readonly type: 'setDom'
 }
 
 export interface ViewRenderResultPatches {
   readonly css?: string
   readonly focusSelector?: string
+  readonly modified?: boolean
   readonly patches: readonly unknown[]
   readonly scrollPosition?: ViewScrollPosition
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
-  readonly modified?: boolean
   readonly type: 'setPatches'
 }
 

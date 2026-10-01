@@ -1994,10 +1994,13 @@ test('document views report dirty state and save committed edits through the eve
     id: 'document',
     kind: 'virtualDom',
   })
-  strictEqual((await createViewInstance('document', 1)).modified, false)
-  strictEqual((await dispatchViewEvent(1, { type: 'input' })).modified, true)
+  const result1 = await createViewInstance('document', 1)
+  strictEqual(result1.modified, false)
+  const result2 = await dispatchViewEvent(1, { type: 'input' })
+  strictEqual(result2.modified, true)
   strictEqual(persisted, '')
-  strictEqual((await dispatchViewEvent(1, { handler: 'save', type: 'command' })).modified, false)
+  const result3 = await dispatchViewEvent(1, { handler: 'save', type: 'command' })
+  strictEqual(result3.modified, false)
   strictEqual(persisted, 'edited')
 })
 
@@ -2015,7 +2018,8 @@ test('failed document saves reject and retain dirty state', async () => {
   })
   await createViewInstance('document', 1)
   await rejects(dispatchViewEvent(1, { handler: 'save', type: 'command' }), /disk full/)
-  strictEqual((await renderViewInstance(1)).modified, true)
+  const result4 = await renderViewInstance(1)
+  strictEqual(result4.modified, true)
 })
 
 test('stateful document views expose save and dirty state', async () => {
@@ -2027,8 +2031,10 @@ test('stateful document views expose save and dirty state', async () => {
     render: () => [],
     save: async (state) => ({ ...state, modified: false }),
   })
-  strictEqual((await createViewInstance('document', 1)).modified, true)
-  strictEqual((await dispatchViewEvent(1, { handler: 'save', type: 'command' })).modified, false)
+  const result5 = await createViewInstance('document', 1)
+  strictEqual(result5.modified, true)
+  const result6 = await dispatchViewEvent(1, { handler: 'save', type: 'command' })
+  strictEqual(result6.modified, false)
 })
 
 test('invalid dirty state is rejected', async () => {
