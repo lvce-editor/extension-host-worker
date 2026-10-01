@@ -1975,3 +1975,67 @@ test('instance views must supply both component state accessors', () => {
     /component state requires getComponentState and setComponentState/,
   )
 })
+
+test('document views report dirty state and save committed edits through the event dispatcher', async () => {
+  let modified = false
+  let persisted = ''
+  registerView({
+    create: () => ({
+      handleEvent() {
+        modified = true
+      },
+      isDirty: () => modified,
+      render: () => [],
+      async save() {
+        persisted = 'edited'
+        modified = false
+      },
+    }),
+    id: 'document',
+    kind: 'virtualDom',
+  })
+  strictEqual((await createViewInstance('document', 1)).modified, false)
+  strictEqual((await dispatchViewEvent(1, { type: 'input' })).modified, true)
+  strictEqual(persisted, '')
+  strictEqual((await dispatchViewEvent(1, { handler: 'save', type: 'command' })).modified, false)
+  strictEqual(persisted, 'edited')
+})
+
+test('failed document saves reject and retain dirty state', async () => {
+  registerView({
+    create: () => ({
+      isDirty: () => true,
+      render: () => [],
+      async save() {
+        throw new Error('disk full')
+      },
+    }),
+    id: 'document',
+    kind: 'virtualDom',
+  })
+  await createViewInstance('document', 1)
+  await rejects(dispatchViewEvent(1, { handler: 'save', type: 'command' }), /disk full/)
+  strictEqual((await renderViewInstance(1)).modified, true)
+})
+
+test('stateful document views expose save and dirty state', async () => {
+  registerView({
+    createInitialState: () => ({ modified: true }),
+    id: 'document',
+    isDirty: (state) => state.modified,
+    kind: 'virtualDom',
+    render: () => [],
+    save: async (state) => ({ ...state, modified: false }),
+  })
+  strictEqual((await createViewInstance('document', 1)).modified, true)
+  strictEqual((await dispatchViewEvent(1, { handler: 'save', type: 'command' })).modified, false)
+})
+
+test('invalid dirty state is rejected', async () => {
+  registerView({
+    create: () => ({ isDirty: () => 'yes', render: () => [] }),
+    id: 'document',
+    kind: 'virtualDom',
+  })
+  await rejects(createViewInstance('document', 1), /view isDirty result must be a boolean/)
+})

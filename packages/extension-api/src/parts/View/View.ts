@@ -61,6 +61,10 @@ export interface VirtualDomViewInstance {
   readonly getCss?: () => string | Promise<string>
   readonly getMenuEntries?: (menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
   readonly handleEvent?: (event: ViewEvent) => unknown
+  /** Whether this document has edits that have not been saved. */
+  readonly isDirty?: () => boolean
+  /** Persist committed edits. Reject on failure and retain dirty state until persistence succeeds. */
+  readonly save?: () => void | Promise<void>
   readonly render: () => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly renderActions?: () => readonly ViewAction[] | Promise<readonly ViewAction[]>
   readonly renderActionsDom?: () => readonly VirtualDomNode[]
@@ -104,6 +108,8 @@ export interface StatefulView<State = unknown> extends ViewBase<State> {
   readonly getCss?: (state: State) => string | Promise<string>
   readonly getMenuEntries?: (state: State, menuId: string) => readonly MenuEntry[] | Promise<readonly MenuEntry[]>
   readonly handleEvent?: (state: State, event: ViewEvent) => State | Promise<State>
+  readonly isDirty?: (state: State) => boolean
+  readonly save?: (state: State) => State | Promise<State>
   readonly render: (state: State) => readonly VirtualDomNode[] | Promise<readonly VirtualDomNode[]>
   readonly renderActions?: (state: State) => readonly ViewAction[] | Promise<readonly ViewAction[]>
   readonly renderActionsDom?: (state: State) => readonly VirtualDomNode[]
@@ -144,6 +150,7 @@ export interface ViewRenderResultDom {
   readonly scrollPosition?: ViewScrollPosition
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
+  readonly modified?: boolean
   readonly type: 'setDom'
 }
 
@@ -154,6 +161,7 @@ export interface ViewRenderResultPatches {
   readonly scrollPosition?: ViewScrollPosition
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
+  readonly modified?: boolean
   readonly type: 'setPatches'
 }
 
