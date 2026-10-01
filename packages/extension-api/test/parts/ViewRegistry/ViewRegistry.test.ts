@@ -1975,3 +1975,73 @@ test('instance views must supply both component state accessors', () => {
     /component state requires getComponentState and setComponentState/,
   )
 })
+
+test('document views report dirty state and save committed edits through the event dispatcher', async () => {
+  let modified = false
+  let persisted = ''
+  registerView({
+    create: () => ({
+      handleEvent() {
+        modified = true
+      },
+      isDirty: () => modified,
+      render: () => [],
+      async save() {
+        persisted = 'edited'
+        modified = false
+      },
+    }),
+    id: 'document',
+    kind: 'virtualDom',
+  })
+  const result1 = await createViewInstance('document', 1)
+  strictEqual(result1.modified, false)
+  const result2 = await dispatchViewEvent(1, { type: 'input' })
+  strictEqual(result2.modified, true)
+  strictEqual(persisted, '')
+  const result3 = await dispatchViewEvent(1, { handler: 'save', type: 'command' })
+  strictEqual(result3.modified, false)
+  strictEqual(persisted, 'edited')
+})
+
+test('failed document saves reject and retain dirty state', async () => {
+  registerView({
+    create: () => ({
+      isDirty: () => true,
+      render: () => [],
+      async save() {
+        throw new Error('disk full')
+      },
+    }),
+    id: 'document',
+    kind: 'virtualDom',
+  })
+  await createViewInstance('document', 1)
+  await rejects(dispatchViewEvent(1, { handler: 'save', type: 'command' }), /disk full/)
+  const result4 = await renderViewInstance(1)
+  strictEqual(result4.modified, true)
+})
+
+test('stateful document views expose save and dirty state', async () => {
+  registerView({
+    createInitialState: () => ({ modified: true }),
+    id: 'document',
+    isDirty: (state) => state.modified,
+    kind: 'virtualDom',
+    render: () => [],
+    save: async (state) => ({ ...state, modified: false }),
+  })
+  const result5 = await createViewInstance('document', 1)
+  strictEqual(result5.modified, true)
+  const result6 = await dispatchViewEvent(1, { handler: 'save', type: 'command' })
+  strictEqual(result6.modified, false)
+})
+
+test('invalid dirty state is rejected', async () => {
+  registerView({
+    create: () => ({ isDirty: () => 'yes', render: () => [] }),
+    id: 'document',
+    kind: 'virtualDom',
+  })
+  await rejects(createViewInstance('document', 1), /view isDirty result must be a boolean/)
+})

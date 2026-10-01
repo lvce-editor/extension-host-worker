@@ -280,6 +280,16 @@ const createStatefulViewInstance = (view: StatefulView<any>, uid: number): Virtu
       ViewletStates.replace(uid, newState)
     }
   }
+  if (view.isDirty) {
+    instance.isDirty = () => view.isDirty!(ViewletStates.get(uid))
+  }
+  if (view.save) {
+    instance.save = async () => {
+      const newState = await view.save!(ViewletStates.get(uid))
+      assertViewState(view.id, newState)
+      ViewletStates.replace(uid, newState)
+    }
+  }
   if (view.renderActions) {
     instance.renderActions = () => view.renderActions!(ViewletStates.get(uid))
   }
@@ -581,7 +591,14 @@ const withRenderMetadata = async (
   const resultWithScrollPosition = await withScrollPosition(resultWithSelections, instance)
   const resultWithTitle = await withTitle(resultWithScrollPosition, instance)
   await ViewStatusBarItems.renderViewStatusBarItems(uid, viewId, instance)
-  return resultWithTitle
+  if (typeof instance.isDirty !== 'function') {
+    return resultWithTitle
+  }
+  const modified = instance.isDirty()
+  if (typeof modified !== 'boolean') {
+    throw new ExtensionApiError('view isDirty result must be a boolean')
+  }
+  return { ...resultWithTitle, modified }
 }
 
 const maybeClearContext = async (uid: number, viewId: string): Promise<void> => {
