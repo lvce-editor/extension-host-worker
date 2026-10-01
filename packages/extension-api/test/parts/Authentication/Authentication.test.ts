@@ -24,8 +24,10 @@ test('getAccessToken invokes extension management worker', async () => {
     }),
     'token-1',
   )
+  strictEqual(await getAccessToken({ refresh: 'always' }), 'token-1')
   deepStrictEqual(mockRpc.invocations, [
     ['Extensions.getAccessToken', {}],
     ['Extensions.getAccessToken', { refresh: 'if-needed' }],
+    ['Extensions.getAccessToken', { refresh: 'always' }],
   ])
 })
