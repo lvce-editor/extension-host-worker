@@ -19,12 +19,7 @@ const getType = (value: unknown): string => {
 }
 
 const sanitizeCompletionItem = (item: Record<string, unknown>): CompletionItem => {
-  const sanitizedItem: Record<string, unknown> = {}
-  for (const [key, value] of Object.entries(item)) {
-    if (typeof value !== 'function') {
-      sanitizedItem[key] = value
-    }
-  }
+  const sanitizedItem = Object.fromEntries(Object.entries(item).filter(([, value]) => typeof value !== 'function'))
   const { kind: itemKind, type } = item
   let kind = 0
   if (typeof itemKind === 'number') {
