@@ -1,0 +1,25 @@
+{
+  "id": "sample.isolated-extension-diagnostic-provider-prototype-pollution",
+  "name": "Sample Isolated Extension Diagnostic Provider Prototype Pollution",
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedDiagnosticPrototypePollution.getDiagnostics"],
+  "commands": [
+    {
+      "id": "isolatedDiagnosticPrototypePollution.getDiagnostics",
+      "label": "Get Prototype Pollution Diagnostics"
+    }
+  ],
+  "diagnosticProviders": [
+    {
+      "id": "isolatedDiagnosticPrototypePollution",
+      "languageId": "javascript"
+    }
+  ],
+  "languages": [
+    {
+      "id": "javascript",
+      "extensions": [".js"]
+    }
+  ]
+}

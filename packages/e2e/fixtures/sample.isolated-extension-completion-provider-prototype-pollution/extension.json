@@ -1,0 +1,19 @@
+{
+  "id": "sample.isolated-extension-completion-provider-prototype-pollution",
+  "name": "Sample Isolated Extension Completion Provider Prototype Pollution",
+  "browser": "main.ts",
+  "isolated": true,
+  "activation": ["onCommand:isolatedCompletionPrototypePollution.getCompletions"],
+  "commands": [
+    {
+      "id": "isolatedCompletionPrototypePollution.getCompletions",
+      "label": "Get Prototype Pollution Completions"
+    }
+  ],
+  "completionProviders": [
+    {
+      "id": "isolatedCompletionPrototypePollution",
+      "languageId": "javascript"
+    }
+  ]
+}
