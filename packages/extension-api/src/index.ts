@@ -228,6 +228,7 @@ export type {
   CompletionProviderRegistrySnapshot,
   RegisteredCompletionProvider,
 } from './parts/Completion/Completion.ts'
+export { DiagnosticTag } from './parts/Diagnostic/Diagnostic.ts'
 export type {
   Diagnostic,
   DiagnosticProvider,

@@ -2,7 +2,7 @@ export { executeDiagnosticProvider } from '../ExecuteDiagnosticProvider/ExecuteD
 export { getDiagnosticProviderRegistrySnapshot } from '../GetDiagnosticProviderRegistrySnapshot/GetDiagnosticProviderRegistrySnapshot.ts'
 export { registerDiagnosticProvider } from '../RegisterDiagnosticProvider/RegisterDiagnosticProvider.ts'
 export { resetDiagnosticProviderRegistry } from '../ResetDiagnosticProviderRegistry/ResetDiagnosticProviderRegistry.ts'
-export type { Diagnostic } from '../DiagnosticResult/DiagnosticResult.ts'
+export { DiagnosticTag, type Diagnostic } from '../DiagnosticResult/DiagnosticResult.ts'
 export type { DiagnosticProvider } from '../DiagnosticProvider/DiagnosticProvider.ts'
 export type { DiagnosticProviderRegistrySnapshot } from '../DiagnosticProviderRegistrySnapshot/DiagnosticProviderRegistrySnapshot.ts'
 export type { RegisteredDiagnosticProvider } from '../RegisteredDiagnosticProvider/RegisteredDiagnosticProvider.ts'
