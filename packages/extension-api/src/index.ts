@@ -294,3 +294,4 @@ export type {
 export { registerPortProvider } from './parts/PortProviderRegistry/PortProviderRegistry.ts'
 export type { PortProvider } from './parts/PortProvider/PortProvider.ts'
 export type { ForwardedPort } from './parts/ForwardedPort/ForwardedPort.ts'
+export { getCacheFileHandle } from './parts/Cache/Cache.ts'
