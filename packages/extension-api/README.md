@@ -98,3 +98,17 @@ registration.dispose()
 ```
 
 The editor can call `executeAuthenticationProviderGetSessions`, `executeAuthenticationProviderCreateSession`, and `executeAuthenticationProviderRemoveSession` by provider id. Session callbacks are responsible for account selection, consent, token storage, and revocation.
+
+## Synchronous file caches
+
+`getCacheFileHandle(name)` returns a cloneable OPFS `FileSystemFileHandle` in a
+namespace assigned to the calling extension. Names contain 1–80 lowercase ASCII
+letters, digits or hyphens and start with a letter or digit. Reopening the same
+name preserves data across extension-worker restarts.
+
+A dedicated worker may open the handle with `createSyncAccessHandle()` and read
+cached bytes synchronously. Use its default exclusive lock, close it on disposal,
+and fall back to uncached reads when storage or locking is unavailable. The
+extension controls its cache format, size limits, integrity checks and source
+invalidation. A cache file must never be treated as authoritative source data.
+This API requires a runtime with `Extensions.getCacheFileHandle` support.
