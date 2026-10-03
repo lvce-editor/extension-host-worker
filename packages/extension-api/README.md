@@ -112,3 +112,23 @@ and fall back to uncached reads when storage or locking is unavailable. The
 extension controls its cache format, size limits, integrity checks and source
 invalidation. A cache file must never be treated as authoritative source data.
 This API requires a runtime with `Extensions.getCacheFileHandle` support.
+
+## Extension cache storage
+
+`getCacheStorageItem`, `setCacheStorageItem` and `removeCacheStorageItem` use a
+cache namespace bound to the calling extension. Cache keys may be shared by
+different extensions without colliding. Reads return `null` for a missing item
+and otherwise include its Blob, response headers and status. Writes accept a
+Blob and optional response headers; check the returned `success` field because
+cache storage may be unavailable or full. Keep source data authoritative and
+fall back to uncached behavior when a cache operation fails.
+
+```ts
+import { getCacheStorageItem, setCacheStorageItem } from '@lvce-editor/api'
+
+await setCacheStorageItem('image/preview.webp', previewBlob, { 'Content-Type': previewBlob.type })
+const cachedPreview = await getCacheStorageItem('image/preview.webp')
+```
+
+The API requires a runtime with `Extensions.sendMessagePortToCacheWorker`
+support.

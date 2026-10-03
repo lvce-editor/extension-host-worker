@@ -295,3 +295,5 @@ export { registerPortProvider } from './parts/PortProviderRegistry/PortProviderR
 export type { PortProvider } from './parts/PortProvider/PortProvider.ts'
 export type { ForwardedPort } from './parts/ForwardedPort/ForwardedPort.ts'
 export { getCacheFileHandle } from './parts/Cache/Cache.ts'
+export { getCacheStorageItem, removeCacheStorageItem, setCacheStorageItem } from './parts/CacheStorage/CacheStorage.ts'
+export type { CacheStorageItem, CacheStorageWriteResult } from './parts/CacheStorage/CacheStorage.ts'
