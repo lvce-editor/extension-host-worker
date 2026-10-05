@@ -81,6 +81,9 @@ export const executeLanguageProvider = async (
   }
   const method = provider[methodName]
   if (typeof method !== 'function') {
+    if (kind === 'rename' && methodName === 'prepareRename') {
+      return undefined
+    }
     throw new ExtensionApiError(`${kind} provider ${provider.id} is missing ${methodName} function`)
   }
   return (method as ProviderMethod)(textDocument, ...args)

@@ -7,6 +7,7 @@ import {
   registerCodeActionsProvider,
   registerDefinitionProvider,
   registerDocumentSymbolProvider,
+  registerRenameProvider,
   resetLanguageProviderRegistry,
 } from '../../../src/parts/LanguageProvider/LanguageProvider.ts'
 
@@ -40,6 +41,43 @@ test('dispose unregisters a language provider', async () => {
     executeLanguageProvider('definition', 'provideDefinition', { languageId: 'typescript' }),
     /No definition provider found for typescript/,
   )
+})
+
+test('executes the rename preparation provider', async () => {
+  const textDocument = { languageId: 'typescript', text: 'const value = 1', uri: '/test.ts' }
+  const preparation = { placeholder: 'value', range: { end: 11, start: 6 } }
+  registerRenameProvider({
+    id: 'typescript.rename',
+    languageId: 'typescript',
+    prepareRename(actualTextDocument: unknown, offset: unknown) {
+      strictEqual(actualTextDocument, textDocument)
+      strictEqual(offset, 8)
+      return preparation
+    },
+    provideRename() {},
+  })
+  strictEqual(await executeLanguageProvider('rename', 'prepareRename', textDocument, 8), preparation)
+})
+
+test('returns undefined when a rename provider does not support preparation', async () => {
+  registerRenameProvider({
+    id: 'typescript.rename',
+    languageId: 'typescript',
+    provideRename() {},
+  })
+  strictEqual(await executeLanguageProvider('rename', 'prepareRename', { languageId: 'typescript' }, 0), undefined)
+})
+
+test('propagates errors from the rename preparation provider', async () => {
+  registerRenameProvider({
+    id: 'typescript.rename',
+    languageId: 'typescript',
+    prepareRename() {
+      throw new Error('prepare failed')
+    },
+    provideRename() {},
+  })
+  await rejects(executeLanguageProvider('rename', 'prepareRename', { languageId: 'typescript' }, 0), /prepare failed/)
 })
 
 test('registers and executes a document symbol provider', async () => {
