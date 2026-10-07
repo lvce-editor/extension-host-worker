@@ -2045,3 +2045,73 @@ test('invalid dirty state is rejected', async () => {
   })
   await rejects(createViewInstance('document', 1), /view isDirty result must be a boolean/)
 })
+
+test('workbench layout travels with initial DOM and event patches', async () => {
+  let enabled = false
+  registerView({
+    id: 'sample.views.layout',
+    kind: 'virtualDom',
+    create() {
+      return {
+        handleEvent() {
+          enabled = !enabled
+        },
+        render() {
+          return [{ type: 4, childCount: 0, text: enabled ? 'AI-native' : 'IDE' }]
+        },
+        renderWorkbenchLayout() {
+          return enabled ? 'ai-native' : 'ide'
+        },
+      }
+    },
+  })
+  const initial = await createViewInstance('sample.views.layout', 1)
+  strictEqual(initial.type, 'setDom')
+  strictEqual(initial.workbenchLayout, 'ide')
+  const entered = await dispatchViewEvent(1, { type: 'click' })
+  strictEqual(entered.type, 'setPatches')
+  strictEqual(entered.workbenchLayout, 'ai-native')
+  const exited = await dispatchViewEvent(1, { type: 'click' })
+  strictEqual(exited.workbenchLayout, 'ide')
+})
+
+test('stateful views render layout from the current state', async () => {
+  registerView({
+    id: 'sample.views.layout',
+    kind: 'virtualDom',
+    createInitialState() {
+      return { enabled: false }
+    },
+    handleEvent(state) {
+      return { enabled: !state.enabled }
+    },
+    render() {
+      return []
+    },
+    renderWorkbenchLayout(state) {
+      return state.enabled ? 'ai-native' : undefined
+    },
+  })
+  const initial = await createViewInstance('sample.views.layout', 1)
+  strictEqual('workbenchLayout' in initial, false)
+  strictEqual((await dispatchViewEvent(1, { type: 'click' })).workbenchLayout, 'ai-native')
+  strictEqual((await dispatchViewEvent(1, { type: 'click' })).workbenchLayout, undefined)
+})
+
+test('invalid workbench layout metadata is rejected', async () => {
+  registerView({
+    id: 'sample.views.layout',
+    kind: 'virtualDom',
+    create() {
+      return {
+        render() {
+          return []
+        },
+        renderWorkbenchLayout() {
+          return 'invalid'
+        },
+      } as unknown as VirtualDomViewInstance
+    },
+  })
+  await rejects(createViewInstance('sample.views.layout', 1), /view renderWorkbenchLayout result must be ide, ai-native or undefined/)
+})

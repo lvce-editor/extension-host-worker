@@ -5,6 +5,9 @@ export type ViewKind = 'virtualDom'
 
 export type ViewPreferredLocation = 'preview' | 'sideBar'
 
+/** Layout requested by a sidebar view as part of its visual update. */
+export type ViewWorkbenchLayout = 'ide' | 'ai-native'
+
 export interface ViewContext {
   readonly requestRerender: () => Promise<void>
   readonly showContextMenu: (menuId: string, x: number, y: number) => Promise<void>
@@ -70,6 +73,8 @@ export interface VirtualDomViewInstance {
   readonly renderScrollPosition?: () => readonly [] | ViewScrollPosition | Promise<readonly [] | ViewScrollPosition>
   readonly renderSelections?: () => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
   readonly renderStatusBarItems?: () => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
+  /** Commit the owning sidebar layout together with this render. Undefined leaves it unchanged. */
+  readonly renderWorkbenchLayout?: () => ViewWorkbenchLayout | undefined | Promise<ViewWorkbenchLayout | undefined>
   readonly renderTitle?: () => string | Promise<string>
   /** Persist committed edits. Reject on failure and retain dirty state until persistence succeeds. */
   readonly save?: () => void | Promise<void>
@@ -120,6 +125,7 @@ export interface StatefulView<State = unknown> extends ViewBase<State> {
   readonly renderScrollPosition?: (state: State) => readonly [] | ViewScrollPosition | Promise<readonly [] | ViewScrollPosition>
   readonly renderSelections?: (state: State) => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
   readonly renderStatusBarItems?: (state: State) => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
+  readonly renderWorkbenchLayout?: (state: State) => ViewWorkbenchLayout | undefined | Promise<ViewWorkbenchLayout | undefined>
   readonly renderTitle?: (state: State) => string | Promise<string>
   readonly save?: (state: State) => State | Promise<State>
   readonly saveState?: (state: State) => unknown
@@ -151,6 +157,7 @@ export interface ViewRenderResultDom {
   readonly scrollPosition?: ViewScrollPosition
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
+  readonly workbenchLayout?: ViewWorkbenchLayout
   readonly type: 'setDom'
 }
 
@@ -162,6 +169,7 @@ export interface ViewRenderResultPatches {
   readonly scrollPosition?: ViewScrollPosition
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
+  readonly workbenchLayout?: ViewWorkbenchLayout
   readonly type: 'setPatches'
 }
 
