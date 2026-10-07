@@ -207,6 +207,7 @@ export type {
   ViewAction,
   ViewCommand,
   ViewContext,
+  ViewWorkbenchLayout,
   ViewEvent,
   ViewKind,
   ViewPreferredLocation,

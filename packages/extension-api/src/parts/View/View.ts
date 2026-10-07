@@ -5,6 +5,9 @@ export type ViewKind = 'virtualDom'
 
 export type ViewPreferredLocation = 'preview' | 'sideBar'
 
+/** Layout requested by a sidebar view as part of its visual update. */
+export type ViewWorkbenchLayout = 'ide' | 'ai-native'
+
 export interface ViewContext {
   readonly requestRerender: () => Promise<void>
   readonly showContextMenu: (menuId: string, x: number, y: number) => Promise<void>
@@ -71,6 +74,8 @@ export interface VirtualDomViewInstance {
   readonly renderSelections?: () => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
   readonly renderStatusBarItems?: () => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
   readonly renderTitle?: () => string | Promise<string>
+  /** Commit the owning sidebar layout together with this render. Undefined leaves it unchanged. */
+  readonly renderWorkbenchLayout?: () => ViewWorkbenchLayout | undefined | Promise<ViewWorkbenchLayout | undefined>
   /** Persist committed edits. Reject on failure and retain dirty state until persistence succeeds. */
   readonly save?: () => void | Promise<void>
   readonly saveState?: () => unknown
@@ -121,6 +126,7 @@ export interface StatefulView<State = unknown> extends ViewBase<State> {
   readonly renderSelections?: (state: State) => readonly ViewSelection[] | Promise<readonly ViewSelection[]>
   readonly renderStatusBarItems?: (state: State) => readonly StatusBarItem[] | Promise<readonly StatusBarItem[]>
   readonly renderTitle?: (state: State) => string | Promise<string>
+  readonly renderWorkbenchLayout?: (state: State) => ViewWorkbenchLayout | undefined | Promise<ViewWorkbenchLayout | undefined>
   readonly save?: (state: State) => State | Promise<State>
   readonly saveState?: (state: State) => unknown
 }
@@ -152,6 +158,7 @@ export interface ViewRenderResultDom {
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
   readonly type: 'setDom'
+  readonly workbenchLayout?: ViewWorkbenchLayout
 }
 
 export interface ViewRenderResultPatches {
@@ -163,6 +170,7 @@ export interface ViewRenderResultPatches {
   readonly selections?: readonly ViewSelection[]
   readonly title?: string
   readonly type: 'setPatches'
+  readonly workbenchLayout?: ViewWorkbenchLayout
 }
 
 export type ViewRenderResult = ViewRenderResultDom | ViewRenderResultPatches
