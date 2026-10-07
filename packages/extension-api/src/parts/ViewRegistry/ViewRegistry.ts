@@ -255,6 +255,12 @@ const assertViewState = (viewId: string, state: unknown): void => {
   }
 }
 
+const addWorkbenchLayoutRenderer = (view: StatefulView<any>, uid: number, instance: any): void => {
+  if (view.renderWorkbenchLayout) {
+    instance.renderWorkbenchLayout = () => view.renderWorkbenchLayout!(ViewletStates.get(uid))
+  }
+}
+
 const createStatefulViewInstance = (view: StatefulView<any>, uid: number): VirtualDomViewInstance => {
   const instance: Record<string, unknown> = {
     render() {
@@ -309,9 +315,7 @@ const createStatefulViewInstance = (view: StatefulView<any>, uid: number): Virtu
   if (view.renderStatusBarItems) {
     instance.renderStatusBarItems = () => view.renderStatusBarItems!(ViewletStates.get(uid))
   }
-  if (view.renderWorkbenchLayout) {
-    instance.renderWorkbenchLayout = () => view.renderWorkbenchLayout!(ViewletStates.get(uid))
-  }
+  addWorkbenchLayoutRenderer(view, uid, instance)
   if (view.renderTitle) {
     instance.renderTitle = () => view.renderTitle!(ViewletStates.get(uid))
   }
