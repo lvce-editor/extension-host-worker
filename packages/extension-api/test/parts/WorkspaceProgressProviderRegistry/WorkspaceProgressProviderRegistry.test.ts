@@ -41,7 +41,8 @@ test('registers, queries, refreshes, and disposes a workspace progress provider'
   deepStrictEqual(await getWorkspaceProgressData(), [{ message, status: 'in-progress' }])
 
   await handle.dispose()
-  strictEqual((await getWorkspaceProgressData()).length, 0)
+  const remainingProgressData = await getWorkspaceProgressData()
+  strictEqual(remainingProgressData.length, 0)
 })
 
 test('rejects duplicate ids and invalid progress data without returning it', async () => {
@@ -55,5 +56,6 @@ test('rejects duplicate ids and invalid progress data without returning it', asy
     () => registerWorkspaceProgressProvider({ getProgressData: () => ({ message: '', status: 'idle' }), id: 'sample.workspace' }),
     /already registered/,
   )
-  deepStrictEqual(await getWorkspaceProgressData(), [])
+  const progressData = await getWorkspaceProgressData()
+  deepStrictEqual(progressData, [])
 })

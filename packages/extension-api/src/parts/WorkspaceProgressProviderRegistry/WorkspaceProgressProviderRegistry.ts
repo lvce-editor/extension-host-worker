@@ -1,7 +1,7 @@
+import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import type { WorkspaceProgressData, WorkspaceProgressStatus } from '../WorkspaceProgressData/WorkspaceProgressData.ts'
 import type { WorkspaceProgressProvider } from '../WorkspaceProgressProvider/WorkspaceProgressProvider.ts'
 import type { WorkspaceProgressProviderHandle } from '../WorkspaceProgressProviderHandle/WorkspaceProgressProviderHandle.ts'
-import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 
 const providers: Record<string, WorkspaceProgressProvider> = Object.create(null)
 const validStatuses = new Set<WorkspaceProgressStatus>(['idle', 'in-progress', 'finished', 'error'])
