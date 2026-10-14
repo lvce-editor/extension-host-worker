@@ -3,6 +3,8 @@ import * as ExtensionApiCommandRegistry from '../ExtensionApiCommandRegistry/Ext
 
 export interface FileSystemWatchOptions {
   readonly exclude?: readonly string[]
+  /** Defaults to true. Set false to observe only immediate children of the roots. */
+  readonly recursive?: boolean
   readonly roots: readonly string[]
 }
 
