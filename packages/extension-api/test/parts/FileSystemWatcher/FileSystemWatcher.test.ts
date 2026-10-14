@@ -73,3 +73,17 @@ test('invalid handlers do not start a backend watch', async () => {
   // @ts-expect-error invalid handler
   await rejects(createFileSystemWatcher({ roots: ['file:///workspace'] }, undefined), /handler must be a function/)
 })
+
+test('shallow watcher options reach the backend unchanged', async () => {
+  const options = { recursive: false, roots: ['file:///workspace'] }
+  let observed: unknown
+  using _rpc = ExtensionManagementWorker.registerMockRpc({
+    'Extensions.createFileSystemWatcher'(_id: number, value: unknown): void {
+      observed = value
+    },
+    'Extensions.disposeFileSystemWatcher'(): void {},
+  })
+  const watcher = await createFileSystemWatcher(options, () => {})
+  deepStrictEqual(observed, options)
+  await watcher.dispose()
+})
