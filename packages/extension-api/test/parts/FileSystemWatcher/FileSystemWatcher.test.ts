@@ -75,7 +75,7 @@ test('invalid handlers do not start a backend watch', async () => {
 })
 
 test('shallow watcher options reach the backend unchanged', async () => {
-  const options = { recursive: false, roots: ['file:///workspace'] }
+  const options = { childNames: ['tsconfig.json'], recursive: false, roots: ['file:///workspace'] }
   let observed: unknown
   using _rpc = ExtensionManagementWorker.registerMockRpc({
     'Extensions.createFileSystemWatcher'(_id: number, value: unknown): void {
