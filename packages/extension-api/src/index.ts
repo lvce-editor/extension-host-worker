@@ -309,3 +309,11 @@ export type {
   WorkspaceProgressProvider,
   WorkspaceProgressProviderHandle,
 } from './parts/WorkspaceProgress/WorkspaceProgress.ts'
+
+export {
+  createFileSystemWatcher,
+  type FileSystemWatcher,
+  type FileSystemWatchOptions,
+  type FileSystemWatchEvent,
+  type FileSystemWatchHandler,
+} from './parts/FileSystemWatcher/FileSystemWatcher.ts'
