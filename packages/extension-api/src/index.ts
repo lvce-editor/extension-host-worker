@@ -317,3 +317,14 @@ export {
   type FileSystemWatchEvent,
   type FileSystemWatchHandler,
 } from './parts/FileSystemWatcher/FileSystemWatcher.ts'
+
+export {
+  registerEditorTextDecorationProvider,
+  executeEditorTextDecorationProvider,
+  refreshEditorTextDecorations,
+  resetEditorTextDecorationProviderRegistry,
+  type EditorTextDecoration,
+  type EditorTextDecorationRange,
+  type EditorTextDecorationProvider,
+  type EditorTextDecorationTextDocument,
+} from './parts/EditorTextDecorationApi/EditorTextDecorationApi.ts'

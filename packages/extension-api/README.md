@@ -132,3 +132,9 @@ const cachedPreview = await getCacheStorageItem('image/preview.webp')
 
 The API requires a runtime with `Extensions.sendMessagePortToCacheWorker`
 support.
+
+## Inline text decorations
+
+`registerEditorTextDecorationProvider({ id, provideEditorTextDecorations })` registers an independently owned underline provider. Add `onEditorTextDecoration` to the extension activation events. The provider receives `{ uri, languageId, text, selections }` and returns an array of `{ startRowIndex, startColumnIndex, endRowIndex, endColumnIndex, color, thickness? }`. Coordinates are zero-based UTF-16 positions with an exclusive end. Selections are normalized in document order. Empty ranges draw nothing; out-of-document ranges are ignored. Colors are six-digit hex strings and thickness is an integer from 1 to 4 pixels (default 2). Arbitrary CSS is not accepted.
+
+Call `await refreshEditorTextDecorations()` to replace the active editor's provider results after changing extension state. Returning `[]` clears that provider's underlines. Dispose the registration and refresh to remove its output; disposal is idempotent. Results from disposed providers are discarded, including in-flight requests. Providers are queried again after document edits, and own their range tracking policy; they must calculate ranges against the supplied text. Underlines are independent of built-in links, diagnostic squiggles, line decorations and gutter decorations. Restarting an extension requires a refresh (the sample playground recreates the preview editor when rebuilding).
