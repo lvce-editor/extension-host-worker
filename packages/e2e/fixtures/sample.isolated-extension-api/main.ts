@@ -1,7 +1,7 @@
-import { activate as activateExtensionApi, getWorkspaceUri, path, registerStatusBarItemProvider } from '@lvce-editor/api'
+import { activate as activateExtensionApi, path, registerStatusBarItemProvider } from '@lvce-editor/api'
 
 await activateExtensionApi()
-const greetingUri = path.join(await getWorkspaceUri(), 'greeting.txt')
+const greetingUri = path.join('file:///workspace/', 'greeting.txt')
 
 const statusBarProvider = {
   id: 'isolated-extension-api',
