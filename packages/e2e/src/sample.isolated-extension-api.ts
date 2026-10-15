@@ -8,5 +8,5 @@ export const test: Test = async ({ expect, Extension, Locator }) => {
 
   const item = Locator('.StatusBarItem[name="isolated-extension-api"]')
   await expect(item).toBeVisible()
-  await expect(item).toHaveText('isolated api')
+  await expect(item).toContainText('greeting.txt')
 }
