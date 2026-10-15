@@ -1,10 +1,13 @@
-import { activate as activateExtensionApi, registerStatusBarItemProvider } from '@lvce-editor/api'
+import { activate as activateExtensionApi, getWorkspaceUri, path, registerStatusBarItemProvider } from '@lvce-editor/api'
+
+await activateExtensionApi()
+const greetingUri = path.join(await getWorkspaceUri(), 'greeting.txt')
 
 const statusBarProvider = {
   id: 'isolated-extension-api',
   getStatusBarItem() {
     return {
-      text: 'isolated api',
+      text: greetingUri,
       icon: '',
       name: 'isolated-extension-api',
       onClick: '',
@@ -12,9 +15,4 @@ const statusBarProvider = {
   },
 }
 
-const activate = async (): Promise<void> => {
-  await activateExtensionApi()
-  registerStatusBarItemProvider(statusBarProvider)
-}
-
-await activate()
+registerStatusBarItemProvider(statusBarProvider)
