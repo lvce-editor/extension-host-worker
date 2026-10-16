@@ -3,6 +3,13 @@ import type { ShowQuickInputOptions } from '../ShowQuickInputOptions/ShowQuickIn
 import type { ShowQuickPickOptions } from '../ShowQuickPickOptions/ShowQuickPickOptions.ts'
 import { executeCommand } from '../ExecuteCommand/ExecuteCommand.ts'
 
+/** Opens the editor color picker, optionally starting with a color value. */
+export const openColorPicker = async (initialColor?: string): Promise<void> => {
+  if (initialColor !== undefined && typeof initialColor !== 'string') {
+    throw new TypeError('initialColor must be a string')
+  }
+  await executeCommand('Editor.openColorPicker', initialColor)
+}
 export const showFileQuickPick = async (): Promise<void> => {
   await executeCommand('QuickPick.showFile')
 }

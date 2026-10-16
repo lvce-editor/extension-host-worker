@@ -16,7 +16,7 @@ export { createElectronWebContentsView } from './parts/ElectronWebContentsView/E
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showDialog } from './parts/Dialog/Dialog.ts'
 export type { ShowDialogOptions } from './parts/ShowDialogOptions/ShowDialogOptions.ts'
-export { showFileQuickPick, showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
+export { openColorPicker, showFileQuickPick, showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
 export {
   getConfigurationDefinitions,
   getPreference,
