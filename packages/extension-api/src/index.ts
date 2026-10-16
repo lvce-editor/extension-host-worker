@@ -14,6 +14,8 @@ export type { AuthenticationAccount, AuthenticationProvider, AuthenticationSessi
 export type { AuthenticationProviderRegistrySnapshot } from './parts/AuthenticationProviderRegistrySnapshot/AuthenticationProviderRegistrySnapshot.ts'
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
+export { showDialog } from './parts/Dialog/Dialog.ts'
+export type { ShowDialogOptions } from './parts/ShowDialogOptions/ShowDialogOptions.ts'
 export { showFileQuickPick, showQuickInput, showQuickPick } from './parts/QuickPick/QuickPick.ts'
 export {
   getConfigurationDefinitions,
