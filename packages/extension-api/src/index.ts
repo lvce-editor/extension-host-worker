@@ -1,4 +1,5 @@
 export { activate } from './parts/Activation/Activation.ts'
+export { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 export { getColorThemeNames } from './parts/ColorTheme/ColorTheme.ts'
 export { markdownToVirtualDom } from './parts/Markdown/Markdown.ts'
 export { getAccessToken, type GetAccessTokenOptions } from './parts/Authentication/Authentication.ts'
