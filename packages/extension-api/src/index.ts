@@ -336,3 +336,13 @@ export {
 } from './parts/EditorTextDecorationApi/EditorTextDecorationApi.ts'
 export { registerEditorKeymap } from './parts/EditorKeymap/EditorKeymap.ts'
 export type { EditorKeyBinding, EditorKeymap, EditorKeymapHandle, EditorKeymapMode } from './parts/EditorKeymap/EditorKeymap.ts'
+export { runInTerminal } from './parts/RunInTerminal/RunInTerminal.ts'
+export type { TerminalExecution } from './parts/TerminalExecution/TerminalExecution.ts'
+export {
+  registerExplorerContextMenuProvider,
+  getExplorerContextMenuEntries,
+  resetExplorerContextMenuProviders,
+} from './parts/ExplorerContextMenu/ExplorerContextMenu.ts'
+export type { ExplorerContext } from './parts/ExplorerContext/ExplorerContext.ts'
+export type { ExplorerContextMenuEntry } from './parts/ExplorerContextMenuEntry/ExplorerContextMenuEntry.ts'
+export type { ExplorerContextMenuProvider } from './parts/ExplorerContextMenuProvider/ExplorerContextMenuProvider.ts'

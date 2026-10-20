@@ -138,3 +138,19 @@ support.
 `registerEditorTextDecorationProvider({ id, provideEditorTextDecorations })` registers an independently owned underline provider. Add `onEditorTextDecoration` to the extension activation events. The provider receives `{ uri, languageId, text, selections }` and returns an array of `{ startRowIndex, startColumnIndex, endRowIndex, endColumnIndex, color, thickness? }`. Coordinates are zero-based UTF-16 positions with an exclusive end. Selections are normalized in document order. Empty ranges draw nothing; out-of-document ranges are ignored. Colors are six-digit hex strings and thickness is an integer from 1 to 4 pixels (default 2). Arbitrary CSS is not accepted.
 
 Call `await refreshEditorTextDecorations()` to replace the active editor's provider results after changing extension state. Returning `[]` clears that provider's underlines. Dispose the registration and refresh to remove its output; disposal is idempotent. Results from disposed providers are discarded, including in-flight requests. Providers are queried again after document edits, and own their range tracking policy; they must calculate ranges against the supplied text. Underlines are independent of built-in links, diagnostic squiggles, line decorations and gutter decorations. Restarting an extension requires a refresh (for example, refresh the preview after reloading its extension).
+
+### Integrated terminal execution
+
+Declare `"permissions": ["terminal.execute"]` in `extension.json`, then call
+`runInTerminal({ command: 'node', args: ['/workspace/example.js'], cwd: '/workspace' })`.
+Arguments are passed separately to the process; do not build a shell command string.
+The host binds permission checks to the calling extension. Missing or malformed
+permissions, disabled extensions and disposed runtimes are rejected.
+
+### Explorer context menus
+
+Activate on `onExplorerContextMenu` and call `registerExplorerContextMenuProvider`.
+Its `provideMenuEntries({ uri, isDirectory })` callback returns `{ id, label, command }`
+items for the clicked resource. Register the command with `registerCommand` and
+list it in the manifest's `commands`; it receives the clicked URI as its argument.
+Dispose the provider to remove its contributions.
