@@ -56,7 +56,7 @@ test('executes active editor commands', async () => {
 })
 
 test('getActiveEditor returns the application editor snapshot or undefined', async () => {
-  let activeEditor: { id: number; uri: string } | undefined = { id: 42, uri: 'memfs:///preview.css' }
+  let activeEditor: { id: number; uri: string } | null | undefined = { id: 42, uri: 'memfs:///preview.css' }
   mockRpc = ExtensionManagementWorker.registerMockRpc({
     async 'Extensions.executeCommand'(id: string): Promise<unknown> {
       deepStrictEqual(id, 'GetActiveEditor.getActiveEditorInfo')
@@ -65,5 +65,7 @@ test('getActiveEditor returns the application editor snapshot or undefined', asy
   })
   deepStrictEqual(await getActiveEditor(), activeEditor)
   activeEditor = undefined
+  deepStrictEqual(await getActiveEditor(), undefined)
+  activeEditor = null
   deepStrictEqual(await getActiveEditor(), undefined)
 })

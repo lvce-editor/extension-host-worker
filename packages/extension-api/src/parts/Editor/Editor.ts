@@ -51,5 +51,6 @@ export interface ActiveEditor {
 
 /** Returns the active editor in this application, or undefined if there is none. */
 export const getActiveEditor = async (): Promise<ActiveEditor | undefined> => {
-  return (await executeCommand('GetActiveEditor.getActiveEditorInfo')) as ActiveEditor | undefined
+  const editor = (await executeCommand('GetActiveEditor.getActiveEditorInfo')) as ActiveEditor | null | undefined
+  return editor ?? undefined
 }
