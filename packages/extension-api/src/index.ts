@@ -334,3 +334,5 @@ export {
   type EditorTextDecorationProvider,
   type EditorTextDecorationTextDocument,
 } from './parts/EditorTextDecorationApi/EditorTextDecorationApi.ts'
+export { registerEditorKeymap } from './parts/EditorKeymap/EditorKeymap.ts'
+export type { EditorKeyBinding, EditorKeymap, EditorKeymapHandle, EditorKeymapMode } from './parts/EditorKeymap/EditorKeymap.ts'
