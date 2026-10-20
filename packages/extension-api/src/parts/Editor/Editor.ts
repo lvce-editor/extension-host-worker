@@ -43,3 +43,13 @@ export const setEditorSelections = async (selections: readonly EditorSelection[]
 export const showCompletions = async (): Promise<void> => {
   await executeCommand('Editor.openCompletion')
 }
+
+export interface ActiveEditor {
+  readonly id: number
+  readonly uri: string
+}
+
+/** Returns the active editor in this application, or undefined if there is none. */
+export const getActiveEditor = async (): Promise<ActiveEditor | undefined> => {
+  return (await executeCommand('GetActiveEditor.getActiveEditorInfo')) as ActiveEditor | undefined
+}

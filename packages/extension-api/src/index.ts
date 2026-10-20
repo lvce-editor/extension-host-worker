@@ -31,10 +31,12 @@ export { registerCommand } from './parts/CommandRegistry/CommandRegistry.ts'
 export { registerDebugProvider, resetDebugProviderRegistry } from './parts/Debug/Debug.ts'
 export {
   formatDocument,
+  getActiveEditor,
   getDiagnostics,
   getEditorSelections,
   setEditorSelections,
   showCompletions,
+  type ActiveEditor,
   type EditorSelection,
 } from './parts/Editor/Editor.ts'
 export {
