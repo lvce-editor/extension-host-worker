@@ -79,6 +79,20 @@ test('registerFileSystemProvider registers and executes provider operations', as
   deepStrictEqual(getFileSystemProviderRegistrySnapshot(), { providers: [] })
 })
 
+test('executeFileSystemProviderReadFile forwards an explicit encoding', async () => {
+  const invocations: unknown[][] = []
+  registerFileSystemProvider({
+    id: 'encoding-test',
+    readFile(uri, encoding) {
+      invocations.push([uri, encoding])
+      return 'content'
+    },
+  })
+
+  strictEqual(await executeFileSystemProviderReadFile('encoding-test', 'test:///file', 'binary'), 'content')
+  deepStrictEqual(invocations, [['test:///file', 'binary']])
+})
+
 test('registerFileSystemProvider rejects a missing readFile function', () => {
   throws(() => {
     registerFileSystemProvider({

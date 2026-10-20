@@ -42,8 +42,9 @@ const getProvider = (id: string): RegisteredFileSystemProvider => {
   return provider
 }
 
-export const executeFileSystemProviderReadFile = async (id: string, uri: string): Promise<Blob | string> => {
-  return getProvider(id).readFile(uri)
+export const executeFileSystemProviderReadFile = async (id: string, uri: string, encoding?: string): Promise<Blob | string> => {
+  const provider = getProvider(id)
+  return encoding === undefined ? provider.readFile(uri) : provider.readFile(uri, encoding)
 }
 
 export const executeFileSystemProviderGetOpenExternalPath = async (id: string, uri: string): Promise<string> => {
@@ -123,7 +124,7 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
     isReadonly: provider.isReadonly,
     mkdir: provider.mkdir,
     readDirWithFileTypes: provider.readDirWithFileTypes,
-    readFile: (uri) => provider.readFile(uri),
+    readFile: (uri, encoding) => (encoding === undefined ? provider.readFile(uri) : provider.readFile(uri, encoding)),
     remove: provider.remove,
     rename: provider.rename,
     stat: provider.stat,

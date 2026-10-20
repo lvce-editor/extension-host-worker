@@ -6,7 +6,7 @@ export interface FileSystemProvider {
   readonly isReadonly?: () => boolean | Promise<boolean>
   readonly mkdir?: (uri: string) => void | Promise<void>
   readonly readDirWithFileTypes?: (uri: string) => readonly FileSystemDirent[] | Promise<readonly FileSystemDirent[]>
-  readonly readFile: (uri: string) => Blob | Promise<Blob | string> | string
+  readonly readFile: (uri: string, encoding?: string) => Blob | Promise<Blob | string> | string
   readonly remove?: (uri: string) => void | Promise<void>
   readonly rename?: (oldUri: string, newUri: string) => void | Promise<void>
   readonly stat?: (uri: string) => number | Promise<number>
