@@ -1,7 +1,14 @@
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import { deepStrictEqual } from 'node:assert/strict'
 import { afterEach, test } from 'node:test'
-import { formatDocument, getDiagnostics, getEditorSelections, setEditorSelections, showCompletions } from '../../../src/parts/Editor/Editor.ts'
+import {
+  formatDocument,
+  getActiveEditor,
+  getDiagnostics,
+  getEditorSelections,
+  setEditorSelections,
+  showCompletions,
+} from '../../../src/parts/Editor/Editor.ts'
 
 interface MockRpcDisposable {
   [Symbol.dispose](): void
@@ -46,4 +53,17 @@ test('executes active editor commands', async () => {
     ['GetActiveEditor.setSelections', [9, 4, 10, 12]],
     ['Editor.openCompletion'],
   ])
+})
+
+test('getActiveEditor returns the application editor snapshot or undefined', async () => {
+  let activeEditor: { id: number; uri: string } | undefined = { id: 42, uri: 'memfs:///preview.css' }
+  mockRpc = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.executeCommand'(id: string): Promise<unknown> {
+      deepStrictEqual(id, 'GetActiveEditor.getActiveEditorInfo')
+      return activeEditor
+    },
+  })
+  deepStrictEqual(await getActiveEditor(), activeEditor)
+  activeEditor = undefined
+  deepStrictEqual(await getActiveEditor(), undefined)
 })
