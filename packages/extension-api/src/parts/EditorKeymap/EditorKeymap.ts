@@ -24,8 +24,9 @@ export interface EditorKeymapHandle {
   dispose(): Promise<void>
 }
 
-/** Install one modal keymap in this application's text editors. Other inputs and modified shortcuts retain their normal behavior. */
-export const registerEditorKeymap = async (keymap: EditorKeymap): Promise<EditorKeymapHandle> => {
+/** Pass an extension id to enable its static extension.json keyMap contribution.
+ * Install one modal keymap in this application's text editors. Other inputs and modified shortcuts retain their normal behavior. */
+export const registerEditorKeymap = async (keymap: EditorKeymap | string): Promise<EditorKeymapHandle> => {
   const id = await executeCommand('EditorKeymap.register', keymap)
   let disposed = false
   return {
