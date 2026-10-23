@@ -46,6 +46,10 @@ export const openUri = async (uri: string): Promise<void> => {
   await executeCommand('Main.openUri', uri)
 }
 
+export const openUrisInThreeColumns = async (uris: readonly [string, string, string]): Promise<void> => {
+  await executeCommand('Main.openUrisInThreeColumns', uris)
+}
+
 export const showNotification = async (type: NotificationType, message: string): Promise<void> => {
   await ExtensionManagementWorker.invoke('Extensions.showNotification', type, message)
 }

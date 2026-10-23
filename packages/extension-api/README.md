@@ -68,6 +68,18 @@ const registration = registerPortProvider({
 
 Ports queries matching extensions with the current workspace URI. Each extension may register one provider per scheme. Return an empty array when no ports are available, and dispose the registration when deactivating. The provider supplies addresses; the API does not create tunnels or change their visibility. Results from disposed registrations are discarded.
 
+## Editor layouts
+
+Open three URIs in left-to-right editor columns with one command:
+
+```ts
+import { openUrisInThreeColumns } from '@lvce-editor/api'
+
+await openUrisInThreeColumns(['file:///workspace/index.html', 'file:///workspace/styles.css', 'file:///workspace/main.js'])
+```
+
+The API sets the three-column layout before opening the files. Existing tabs are reused, and a file that cannot be opened uses the editor's normal error state.
+
 ## Authentication providers
 
 Extensions can contribute a functional authentication provider with session callbacks. The provider's stable `id` and display `label` identify it; requested scopes are passed to the callbacks, and session results include an account, access token, and granted scopes.
