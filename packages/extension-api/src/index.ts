@@ -112,6 +112,7 @@ export {
   getWorkspaceUri,
   handleWorkspaceRefresh,
   openUri,
+  openUrisInThreeColumns,
   setWorkspaceUri,
   showErrorMessage,
   showNotification,

@@ -9,6 +9,7 @@ import {
   getWorkspaceUri,
   handleWorkspaceRefresh,
   openUri,
+  openUrisInThreeColumns,
   setWorkspaceUri,
   showErrorMessage,
   showNotification,
@@ -71,6 +72,7 @@ test('host helpers execute renderer commands through extension management', asyn
   await handleWorkspaceRefresh()
   await handleWorkspaceRefresh({ reloadAll: true })
   await openUri('/workspace/file.txt')
+  await openUrisInThreeColumns(['/workspace/index.html', '/workspace/styles.css', '/workspace/main.js'])
   await closeUri('/workspace/file.txt')
   await setWorkspaceUri('remote-ssh:///test-folder')
   await showNotification('info', 'File created successfully')
@@ -85,6 +87,7 @@ test('host helpers execute renderer commands through extension management', asyn
     ['Layout.handleWorkspaceRefresh'],
     ['Layout.handleWorkspaceRefresh', { reloadAll: true }],
     ['Main.openUri', '/workspace/file.txt'],
+    ['Main.openUrisInThreeColumns', ['/workspace/index.html', '/workspace/styles.css', '/workspace/main.js']],
     ['Main.closeTabsByUris', ['/workspace/file.txt']],
     ['Workspace.setUri', 'remote-ssh:///test-folder'],
     ['Extensions.showNotification', 'info', 'File created successfully'],
