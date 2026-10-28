@@ -33,6 +33,26 @@ test('executeHoverProvider returns hover from matching provider', async () => {
   strictEqual(hover?.documentation, 'sample:2')
 })
 
+test('executeHoverProvider preserves documentation format', async () => {
+  registerHoverProvider({
+    id: 'sample.hover',
+    languageId: 'sample',
+    provideHover() {
+      return {
+        documentation: 'http://localhost:3001',
+        documentationFormat: 'plaintext',
+      }
+    },
+  })
+
+  const hover = await executeHoverProvider(textDocument, 2)
+
+  deepStrictEqual(hover, {
+    documentation: 'http://localhost:3001',
+    documentationFormat: 'plaintext',
+  })
+})
+
 test('executeHoverProvider allows undefined hover result', async () => {
   registerHoverProvider({
     id: 'sample.hover',
