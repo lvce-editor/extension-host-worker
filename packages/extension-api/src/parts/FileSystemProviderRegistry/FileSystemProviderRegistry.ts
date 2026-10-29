@@ -24,7 +24,7 @@ const assertFileSystemProvider = (provider: FileSystemProvider): void => {
   if (provider.isReadonly !== undefined && typeof provider.isReadonly !== 'function') {
     throw new ExtensionApiError(`file system provider ${provider.id} has invalid isReadonly function`)
   }
-  for (const method of ['getOpenExternalPath', 'mkdir', 'remove', 'rename', 'writeFile'] as const) {
+  for (const method of ['getDirectoryVersion', 'getOpenExternalPath', 'mkdir', 'remove', 'rename', 'writeFile'] as const) {
     if (provider[method] !== undefined && typeof provider[method] !== 'function') {
       throw new ExtensionApiError(`file system provider ${provider.id} has invalid ${method} function`)
     }
@@ -95,6 +95,11 @@ export const executeFileSystemProviderReadDirWithFileTypes = async (id: string, 
   return provider.readDirWithFileTypes(uri)
 }
 
+export const executeFileSystemProviderGetDirectoryVersion = async (id: string, uri: string): Promise<string | null> => {
+  const provider = getProvider(id)
+  return provider.getDirectoryVersion ? provider.getDirectoryVersion(uri) : null
+}
+
 export const executeFileSystemProviderStat = async (id: string, uri: string): Promise<number> => {
   const provider = getProvider(id)
   if (!provider.stat) {
@@ -119,6 +124,7 @@ export const getFileSystemProviderRegistrySnapshot = (): FileSystemProviderRegis
 export const registerFileSystemProvider = (provider: FileSystemProvider): Disposable => {
   assertFileSystemProvider(provider)
   providers[provider.id] = {
+    getDirectoryVersion: provider.getDirectoryVersion,
     getOpenExternalPath: provider.getOpenExternalPath,
     id: provider.id,
     isReadonly: provider.isReadonly,
@@ -139,6 +145,7 @@ export const registerFileSystemProvider = (provider: FileSystemProvider): Dispos
 }
 
 const commandMap = {
+  'ExtensionApi.executeFileSystemProviderGetDirectoryVersion': executeFileSystemProviderGetDirectoryVersion,
   'ExtensionApi.executeFileSystemProviderGetOpenExternalPath': executeFileSystemProviderGetOpenExternalPath,
   'ExtensionApi.executeFileSystemProviderIsReadonly': executeFileSystemProviderIsReadonly,
   'ExtensionApi.executeFileSystemProviderMkdir': executeFileSystemProviderMkdir,

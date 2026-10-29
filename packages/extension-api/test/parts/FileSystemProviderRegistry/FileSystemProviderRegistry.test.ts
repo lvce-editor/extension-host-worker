@@ -8,6 +8,7 @@ import {
   executeFileSystemProviderGetOpenExternalPath,
   executeFileSystemProviderRemove,
   executeFileSystemProviderRename,
+  executeFileSystemProviderGetDirectoryVersion,
   executeFileSystemProviderStat,
   executeFileSystemProviderWriteFile,
   getFileSystemProviderRegistrySnapshot,
@@ -172,4 +173,23 @@ test('missing writable operations reject clearly', async () => {
   await rejects(executeFileSystemProviderWriteFile('read-only', 'file:///workspace/file.txt', 'updated'), /missing writeFile function/)
   await rejects(executeFileSystemProviderStat('read-only', 'file:///workspace/link'), /missing stat function/)
   await rejects(executeFileSystemProviderGetOpenExternalPath('read-only', 'read-only:///workspace'), /missing getOpenExternalPath function/)
+})
+
+test('optional directory versions preserve numeric stat and unsupported providers', async () => {
+  registerFileSystemProvider({ id: 'plain', readFile: () => '', stat: () => 3 })
+  strictEqual(await executeFileSystemProviderGetDirectoryVersion('plain', 'plain:///workspace'), null)
+  strictEqual(await executeFileSystemProviderStat('plain', 'plain:///workspace'), 3)
+  const calls: string[] = []
+  registerFileSystemProvider({
+    getDirectoryVersion: (uri) => {
+      calls.push(uri)
+      return 'connection:version'
+    },
+    id: 'cached',
+    readFile: () => '',
+    stat: () => 3,
+  })
+  strictEqual(await executeFileSystemProviderGetDirectoryVersion('cached', 'cached://host/workspace'), 'connection:version')
+  deepStrictEqual(calls, ['cached://host/workspace'])
+  strictEqual(await executeFileSystemProviderStat('cached', 'cached://host/workspace'), 3)
 })
