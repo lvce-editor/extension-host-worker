@@ -1,6 +1,10 @@
 import type { FileSystemDirent } from '../FileSystemDirent/FileSystemDirent.ts'
 
 export interface RegisteredFileSystemProvider {
+  /** Opaque directory listing version scoped to the filesystem identity. Return null when unavailable.
+   * Must change on entry creation, removal, rename or replacement. Never use a file type as a version.
+   */
+  readonly getDirectoryVersion?: (uri: string) => string | null | Promise<string | null>
   readonly getOpenExternalPath?: (uri: string) => string | Promise<string>
   readonly id: string
   readonly isReadonly?: () => boolean | Promise<boolean>
