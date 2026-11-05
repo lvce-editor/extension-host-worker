@@ -14,6 +14,7 @@ export {
 export type { AuthenticationAccount, AuthenticationProvider, AuthenticationSession } from './parts/AuthenticationProvider/AuthenticationProvider.ts'
 export type { AuthenticationProviderRegistrySnapshot } from './parts/AuthenticationProviderRegistrySnapshot/AuthenticationProviderRegistrySnapshot.ts'
 export { createElectronWebContentsView } from './parts/ElectronWebContentsView/ElectronWebContentsView.ts'
+export { writeClipboardText } from './parts/Clipboard/Clipboard.ts'
 export { executeCommand } from './parts/ExecuteCommand/ExecuteCommand.ts'
 export { showDialog } from './parts/Dialog/Dialog.ts'
 export type { ShowDialogOptions } from './parts/ShowDialogOptions/ShowDialogOptions.ts'
